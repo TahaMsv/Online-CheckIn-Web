@@ -1,6 +1,10 @@
 import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:onlinecheckin/widgets/CountryListPicker/country.dart';
+import 'package:onlinecheckin/widgets/CountryListPicker/country_picker_dropdown.dart';
+import 'package:onlinecheckin/widgets/CountryListPicker/utils/utils.dart';
 import '../../screens/enterScreen/EnterScreenController.dart';
 import '../../global/MainModel.dart';
 import '../../utility/Constants.dart';
@@ -40,6 +44,99 @@ class EnterScreenView extends StatelessWidget {
                   height: 710,
                   width: 400,
                   color: Colors.white,
+                  child: Column(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        child: CountryPickerDropdown(
+                          initialValue: 'GB-NIR',
+                          itemBuilder: _buildDropdownItem,
+                          // itemFilter:  ['AR', 'DE', 'GB', 'CN'].contains(c.isoCode),
+                          priorityList: [
+                            CountryPickerUtils.getCountryByIsoCode('GB'),
+                            CountryPickerUtils.getCountryByIsoCode('CN'),
+                          ],
+                          sortComparator: (Country a, Country b) =>
+                              a.isoCode.compareTo(b.isoCode),
+                          onValuePicked: (Country country) {
+                            print("${country.name}");
+                          },
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 1,
+                        color: Color(0xffebebeb),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(),
+                              Container(
+                                height: 300,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Online Check-in",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xff424242),
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 15),
+                                          child: Text(
+                                            "Input Requested info in order to continue",
+                                            style: TextStyle(
+                                              color: Color(0xff808080),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      height: 100,
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          UserTextInput(
+                                            controller: myEnterScreenController
+                                                .ticketNumberC,
+                                            hint:
+                                                "Reservation ID / Ticket Number",
+                                          ),
+                                          UserTextInput(
+                                            controller:
+                                                myEnterScreenController.usernameC,
+                                            hint: "Lastname",
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    CheckInButton()
+                                  ],
+                                ),
+                              ),
+                              CopyRightText(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ))
           ],
         ),
@@ -47,6 +144,98 @@ class EnterScreenView extends StatelessWidget {
     );
   }
 }
+
+class UserTextInput extends StatelessWidget {
+  const UserTextInput({
+    Key? key,
+    required this.controller,
+    required this.hint,
+  }) : super(key: key);
+
+  final TextEditingController controller;
+  final String hint;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40,
+      decoration: BoxDecoration(
+          border: Border.all(
+            color: Color(0xffeaeaea),
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(5))),
+      child: TextField(
+        textAlignVertical: TextAlignVertical.center,
+        controller: controller,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.all(10.0),
+          border: InputBorder.none,
+          hintText: hint,
+        ),
+      ),
+    );
+  }
+}
+
+class CheckInButton extends StatelessWidget {
+  const CheckInButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40,
+      width: double.infinity,
+      decoration: BoxDecoration(
+          border: Border.all(
+            color: Color(0xffeaeaea),
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(5))),
+      child: Expanded(
+        child: ElevatedButton(
+          onPressed: null,
+          child: Text("Check-in"),
+          style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all(Colors.white),
+              backgroundColor: MaterialStateProperty.all(Color(0xff4c6ef6)),
+              textStyle:
+                  MaterialStateProperty.all(TextStyle(color: Colors.white))),
+        ),
+      ),
+    );
+  }
+}
+
+class CopyRightText extends StatelessWidget {
+  const CopyRightText({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Container(
+            margin: EdgeInsets.only(bottom: 20),
+            child: Text("© Copyright 2021 Abomis All rights reserved")),
+      ],
+    );
+  }
+}
+
+Widget _buildDropdownItem(Country country) => Container(
+      child: Row(
+        children: <Widget>[
+          CountryPickerUtils.getDefaultFlagImage(country),
+          SizedBox(
+            width: 8.0,
+          ),
+          Text("+${country.phoneCode}(${country.isoCode})"),
+        ],
+      ),
+    );
 
 class BackgroundImage extends StatelessWidget {
   const BackgroundImage({

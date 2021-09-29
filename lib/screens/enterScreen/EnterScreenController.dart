@@ -11,6 +11,8 @@ class EnterScreenController extends MainController {
     return _instance;
   }
 
+  TextEditingController ticketNumberC = TextEditingController();
+  TextEditingController usernameC = TextEditingController();
 
 
   @override
