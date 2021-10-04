@@ -49,7 +49,7 @@ class StepsScreenView extends StatelessWidget {
                         child: Column(children: [
                           Container(
                             height: height * 0.77,
-
+                            child: Center(),
                           ),
                           BottomOfPage(height: height),
                         ]),
@@ -77,8 +77,7 @@ class LeftSideOFPage extends StatelessWidget {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(
-              color: Colors.black.withOpacity(0.1)),
+          border: Border.all(color: Colors.black.withOpacity(0.1)),
           shape: BoxShape.rectangle,
         ),
         height: height * 0.9,
