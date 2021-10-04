@@ -37,109 +37,145 @@ class EnterScreenView extends StatelessWidget {
           children: [
             BackgroundImage(width: width, height: height),
             LeftSide(),
-            Positioned(
-                top: 25,
-                right: 30,
-                child: Container(
-                  height: 710,
-                  width: 400,
-                  color: Colors.white,
-                  child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        child: CountryPickerDropdown(
-                          initialValue: 'GB-NIR',
-                          itemBuilder: _buildDropdownItem,
-                          // itemFilter:  ['AR', 'DE', 'GB', 'CN'].contains(c.isoCode),
-                          priorityList: [
-                            CountryPickerUtils.getCountryByIsoCode('GB'),
-                            CountryPickerUtils.getCountryByIsoCode('CN'),
-                          ],
-                          sortComparator: (Country a, Country b) =>
-                              a.isoCode.compareTo(b.isoCode),
-                          onValuePicked: (Country country) {
-                            print("${country.name}");
-                          },
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        height: 1,
-                        color: Color(0xffebebeb),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 30),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(),
-                              Container(
-                                height: 300,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Online Check-in",
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xff424242),
-                                          ),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(top: 15),
-                                          child: Text(
-                                            "Input Requested info in order to continue",
-                                            style: TextStyle(
-                                              color: Color(0xff808080),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Container(
-                                      height: 100,
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          UserTextInput(
-                                            controller: myEnterScreenController
-                                                .ticketNumberC,
-                                            hint:
-                                                "Reservation ID / Ticket Number",
-                                          ),
-                                          UserTextInput(
-                                            controller:
-                                                myEnterScreenController.usernameC,
-                                            hint: "Lastname",
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    CheckInButton()
-                                  ],
-                                ),
-                              ),
-                              CopyRightText(),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ))
+            CheckInForm(myEnterScreenController: myEnterScreenController)
           ],
         ),
+      ),
+    );
+  }
+}
+
+class CheckInForm extends StatelessWidget {
+  const CheckInForm({
+    Key? key,
+    required this.myEnterScreenController,
+  }) : super(key: key);
+
+  final EnterScreenController myEnterScreenController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+        top: 25,
+        right: 30,
+        child: Container(
+          height: 710,
+          width: 400,
+          color: Colors.white,
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              LanguagePicker(),
+              Divider(),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(),
+                      Container(
+                        height: 300,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Online Check-in",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff424242),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 15),
+                                  child: Text(
+                                    "Input Requested info in order to continue",
+                                    style: TextStyle(
+                                      color: Color(0xff808080),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              height: 100,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  UserTextInput(
+                                    controller: myEnterScreenController
+                                        .ticketNumberC,
+                                    hint:
+                                        "Reservation ID / Ticket Number",
+                                  ),
+                                  UserTextInput(
+                                    controller:
+                                        myEnterScreenController.usernameC,
+                                    hint: "Lastname",
+                                  ),
+                                ],
+                              ),
+                            ),
+                            CheckInButton()
+                          ],
+                        ),
+                      ),
+                      CopyRightText(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ));
+  }
+}
+
+class Divider extends StatelessWidget {
+  const Divider({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 1,
+      color: Color(0xffebebeb),
+    );
+  }
+}
+
+class LanguagePicker extends StatelessWidget {
+  const LanguagePicker({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: CountryPickerDropdown(
+        initialValue: 'GB-NIR',
+        itemBuilder: _buildDropdownItem,
+        // itemFilter:  ['AR', 'DE', 'GB', 'CN'].contains(c.isoCode),
+        priorityList: [
+          CountryPickerUtils.getCountryByIsoCode('GB'),
+          CountryPickerUtils.getCountryByIsoCode('CN'),
+        ],
+        sortComparator: (Country a, Country b) =>
+            a.isoCode.compareTo(b.isoCode),
+        onValuePicked: (Country country) {
+          print("${country.name}");
+        },
       ),
     );
   }
@@ -332,56 +368,84 @@ class LeftSide extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Container(
-                    child: ElevatedButton(
-                      onPressed: null,
-                      child: Row(
-                        children: [
-                          Transform(
-                            alignment: Alignment.center,
-                            transform: Matrix4.rotationY(math.pi),
-                            child: Icon(
-                              Icons.arrow_right_alt,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 18),
-                            child: Text(
-                              "Previous",
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    margin: EdgeInsets.only(right: 85),
-                  ),
-                  ElevatedButton(
-                    onPressed: null,
-                    child: Row(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(right: 18),
-                          child: Text(
-                            "Next",
-                            style: TextStyle(fontSize: 12, color: Colors.white),
-                          ),
-                        ),
-                        Icon(
-                          Icons.arrow_right_alt,
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ),
+                  PrevButton(),
+                  NextButton(),
                 ],
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class NextButton extends StatelessWidget {
+  const NextButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.white.withOpacity(0)),
+      ),
+      onPressed: null,
+      child: Row(
+        children: [
+          Container(
+            margin: EdgeInsets.only(right: 18),
+            child: Text(
+              "Next",
+              style: TextStyle(fontSize: 12, color: Colors.white),
+            ),
+          ),
+          Icon(
+            Icons.arrow_right_alt,
+            color: Colors.white,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PrevButton extends StatelessWidget {
+  const PrevButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.white.withOpacity(0)),
+        ),
+        onPressed: null,
+        child: Row(
+          children: [
+            Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(math.pi),
+              child: Icon(
+                Icons.arrow_right_alt,
+                color: Colors.white,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 18),
+              child: Text(
+                "Previous",
+                style:
+                    TextStyle(fontSize: 12, color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
+      margin: EdgeInsets.only(right: 85),
     );
   }
 }

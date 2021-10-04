@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onlinecheckin/screens/enterScreen/EnterScreenView.dart';
+import 'package:onlinecheckin/screens/stepsScreen/stepsScreenView.dart';
 import 'screens/homeScreen/HomeView.dart';
 import 'utility/Constants.dart';
 import 'package:get/get.dart';
@@ -16,11 +17,12 @@ class MyApp extends StatelessWidget {
       enableLog: false,
       debugShowCheckedModeBanner: false,
       theme: AppConfig.themeLight,
-      initialRoute: RouteNames.enter,
+      initialRoute: RouteNames.steps,
       getPages: [
         GetPage(name: RouteNames.initialRoute , page:()=> SplashView(_model)),
         GetPage(name: RouteNames.home , page:()=> HomeView(_model)),
         GetPage(name: RouteNames.enter , page:()=> EnterScreenView(_model)),
+        GetPage(name: RouteNames.steps , page:()=> StepsScreenView(_model)),
       ],
     );
   }

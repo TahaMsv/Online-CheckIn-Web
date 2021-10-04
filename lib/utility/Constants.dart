@@ -6,6 +6,7 @@ class RouteNames {
   static const splash = '/splashScreen';
   static const home = '/homeScreen';
   static const enter = '/enterScreen';
+  static const steps = '/stepsScreen';
 
 }
 
