@@ -5,11 +5,20 @@ import '../../global/MainModel.dart';
 
 class StepsScreenController extends MainController {
   StepsScreenController._();
+
   static final StepsScreenController _instance = StepsScreenController._();
+
   factory StepsScreenController(MainModel model) {
     _instance.model = model;
     return _instance;
   }
+
+  TextEditingController ticketNumberC = TextEditingController();
+  TextEditingController lastNameC = TextEditingController();
+
+  RxInt _step = 5.obs;
+
+  int get step => _step.value;
 
   @override
   void onInit() {
@@ -28,6 +37,4 @@ class StepsScreenController extends MainController {
     print("StepsScreenController Ready");
     super.onReady();
   }
-
-
 }

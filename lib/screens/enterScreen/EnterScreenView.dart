@@ -2,9 +2,10 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:onlinecheckin/widgets/CountryListPicker/country.dart';
-import 'package:onlinecheckin/widgets/CountryListPicker/country_picker_dropdown.dart';
-import 'package:onlinecheckin/widgets/CountryListPicker/utils/utils.dart';
+import '../../widgets/CountryListPicker/UserTextInput.dart';
+import '../../widgets/CountryListPicker/country.dart';
+import '../../widgets/CountryListPicker/country_picker_dropdown.dart';
+import '../../widgets/CountryListPicker/utils/utils.dart';
 import '../../screens/enterScreen/EnterScreenController.dart';
 import '../../global/MainModel.dart';
 import '../../utility/Constants.dart';
@@ -181,37 +182,7 @@ class LanguagePicker extends StatelessWidget {
   }
 }
 
-class UserTextInput extends StatelessWidget {
-  const UserTextInput({
-    Key? key,
-    required this.controller,
-    required this.hint,
-  }) : super(key: key);
 
-  final TextEditingController controller;
-  final String hint;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 40,
-      decoration: BoxDecoration(
-          border: Border.all(
-            color: Color(0xffeaeaea),
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(5))),
-      child: TextField(
-        textAlignVertical: TextAlignVertical.center,
-        controller: controller,
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.all(10.0),
-          border: InputBorder.none,
-          hintText: hint,
-        ),
-      ),
-    );
-  }
-}
 
 class CheckInButton extends StatelessWidget {
   const CheckInButton({
