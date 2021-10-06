@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:onlinecheckin/screens/rulesStepScreen/RulesStepView.dart';
 import '../../screens/safetyStepScreen/SafetyStepView.dart';
 import '../../screens/travellersStepScreen/TravellersStepView.dart';
 import '../../widgets/MtDottedLine.dart';
@@ -15,7 +16,6 @@ import '../../widgets/CountryListPicker/utils/utils.dart';
 import '../../global/MainModel.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-
 
 class StepsScreenView extends StatelessWidget {
   final StepsScreenController myStepsScreenController;
@@ -56,7 +56,7 @@ class StepsScreenView extends StatelessWidget {
                                 child: myStepsScreenController.step == 0
                                     ? MyDottedLine(
                                         lineLength: double.infinity,
-                                  color: Color(0xff48c0a2),
+                                        color: Color(0xff48c0a2),
                                       )
                                     : Container(
                                         height: 1,
@@ -82,7 +82,9 @@ class StepsScreenView extends StatelessWidget {
                                 ? TravellersStepView(model)
                                 : myStepsScreenController.step == 1
                                     ? SafetyStepView(model)
-                                    : Container(),
+                                    : myStepsScreenController.step == 2
+                                        ? RulesStepView(model)
+                                        : Container(),
                           ),
                           BottomOfPage(height: height),
                         ],
@@ -157,7 +159,7 @@ class StepWidget extends StatelessWidget {
         step == index
             ? MyDottedLine(
                 lineLength: 25,
-          color: Color(0xff48c0a2),
+                color: Color(0xff48c0a2),
               )
             : Container(
                 height: 1,
@@ -196,8 +198,6 @@ class StepWidget extends StatelessWidget {
     );
   }
 }
-
-
 
 class LeftSideOFPage extends StatelessWidget {
   const LeftSideOFPage({
