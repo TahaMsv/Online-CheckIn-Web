@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import '../../widgets/CountryListPicker/UserTextInput.dart';
+import '../../widgets/UserTextInput.dart';
 import '../../widgets/CountryListPicker/country.dart';
 import '../../widgets/CountryListPicker/country_picker_dropdown.dart';
 import '../../widgets/CountryListPicker/utils/utils.dart';

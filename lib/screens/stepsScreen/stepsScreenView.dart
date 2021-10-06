@@ -1,20 +1,21 @@
-import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import '../../screens/safetyStepScreen/SafetyStepView.dart';
+import '../../screens/travellersStepScreen/TravellersStepView.dart';
+import '../../widgets/MtDottedLine.dart';
+import '../../widgets/MyElevatedButton.dart';
 import '../../screens/stepsScreen/stepsScreenController.dart';
-import '../../widgets/CountryListPicker/UserTextInput.dart';
 import '../../widgets/CountryListPicker/country.dart';
 import '../../widgets/CountryListPicker/country_picker_dropdown.dart';
 import '../../widgets/CountryListPicker/utils/utils.dart';
 import '../../global/MainModel.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:dotted_line/dotted_line.dart';
+
 
 class StepsScreenView extends StatelessWidget {
   final StepsScreenController myStepsScreenController;
@@ -55,6 +56,7 @@ class StepsScreenView extends StatelessWidget {
                                 child: myStepsScreenController.step == 0
                                     ? MyDottedLine(
                                         lineLength: double.infinity,
+                                  color: Color(0xff48c0a2),
                                       )
                                     : Container(
                                         height: 1,
@@ -74,10 +76,13 @@ class StepsScreenView extends StatelessWidget {
                             ],
                           ),
                           Container(
+                            color: Colors.white,
                             height: height * 0.77,
-                            child: AddToTravellersForm(
-                                myStepsScreenController:
-                                    myStepsScreenController),
+                            child: myStepsScreenController.step == 0
+                                ? TravellersStepView(model)
+                                : myStepsScreenController.step == 1
+                                    ? SafetyStepView(model)
+                                    : Container(),
                           ),
                           BottomOfPage(height: height),
                         ],
@@ -152,6 +157,7 @@ class StepWidget extends StatelessWidget {
         step == index
             ? MyDottedLine(
                 lineLength: 25,
+          color: Color(0xff48c0a2),
               )
             : Container(
                 height: 1,
@@ -191,105 +197,7 @@ class StepWidget extends StatelessWidget {
   }
 }
 
-class MyDottedLine extends StatelessWidget {
-  const MyDottedLine({
-    Key? key,
-    this.lineLength,
-  }) : super(key: key);
 
-  final lineLength;
-
-  @override
-  Widget build(BuildContext context) {
-    return DottedLine(
-      direction: Axis.horizontal,
-      lineLength: lineLength,
-      lineThickness: 1.0,
-      dashLength: 1.0,
-      dashColor: Color(0xff48c0a2),
-      dashRadius: 0.0,
-      dashGapLength: 4.0,
-      dashGapColor: Colors.transparent,
-      dashGapRadius: 0.0,
-    );
-  }
-}
-
-class AddToTravellersForm extends StatelessWidget {
-  const AddToTravellersForm({
-    Key? key,
-    required this.myStepsScreenController,
-  }) : super(key: key);
-
-  final StepsScreenController myStepsScreenController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        height: 300,
-        width: 350,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Add Travellers",
-              style: TextStyle(
-                fontSize: 20,
-                color: Color(0xff424242),
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              "Add all passengers to the list on the left here",
-              style: TextStyle(
-                fontSize: 17,
-                color: Color(0xff808080),
-              ),
-            ),
-            SizedBox(
-              height: 35,
-            ),
-            UserTextInput(
-              controller: myStepsScreenController.ticketNumberC,
-              hint: "Reservation ID / Ticket Number",
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            UserTextInput(
-              controller: myStepsScreenController.lastNameC,
-              hint: "Lastname",
-            ),
-            SizedBox(
-              height: 35,
-            ),
-            AddToTravellersButton(),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AddToTravellersButton extends StatelessWidget {
-  const AddToTravellersButton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MyElevatedButton(
-      height: 40,
-      width: double.infinity,
-      buttonText: "Add to Travellers",
-      bgColor: Color(0xff00bfa2),
-    );
-  }
-}
 
 class LeftSideOFPage extends StatelessWidget {
   const LeftSideOFPage({
@@ -517,38 +425,6 @@ class BottomOfPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class MyElevatedButton extends StatelessWidget {
-  const MyElevatedButton({
-    Key? key,
-    required this.height,
-    required this.width,
-    required this.buttonText,
-    required this.bgColor,
-  }) : super(key: key);
-
-  final double height;
-  final double width;
-  final String buttonText;
-  final Color bgColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      child: ElevatedButton(
-        onPressed: null,
-        child: Text(buttonText),
-        style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(Colors.white),
-            backgroundColor: MaterialStateProperty.all(bgColor),
-            textStyle:
-                MaterialStateProperty.all(TextStyle(color: Colors.white))),
       ),
     );
   }

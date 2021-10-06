@@ -13,10 +13,7 @@ class StepsScreenController extends MainController {
     return _instance;
   }
 
-  TextEditingController ticketNumberC = TextEditingController();
-  TextEditingController lastNameC = TextEditingController();
-
-  RxInt _step = 5.obs;
+  RxInt _step = 1.obs;
 
   int get step => _step.value;
 
