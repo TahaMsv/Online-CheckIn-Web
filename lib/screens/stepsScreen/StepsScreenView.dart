@@ -6,11 +6,12 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:onlinecheckin/screens/passportStepScreen/PassportStepView.dart';
 import 'package:onlinecheckin/screens/rulesStepScreen/RulesStepView.dart';
+import 'package:onlinecheckin/screens/visaStepScreen/VisaStepView.dart';
 import '../../screens/safetyStepScreen/SafetyStepView.dart';
 import '../../screens/travellersStepScreen/TravellersStepView.dart';
 import '../../widgets/MtDottedLine.dart';
 import '../../widgets/MyElevatedButton.dart';
-import '../../screens/stepsScreen/stepsScreenController.dart';
+import '../../screens/stepsScreen/StepsScreenController.dart';
 import '../../widgets/CountryListPicker/country.dart';
 import '../../widgets/CountryListPicker/country_picker_dropdown.dart';
 import '../../widgets/CountryListPicker/utils/utils.dart';
@@ -89,7 +90,9 @@ class StepsScreenView extends StatelessWidget {
                                         ? RulesStepView(model)
                                         : myStepsScreenController.step == 3
                                             ? PassportStepView(model)
-                                            : Container(),
+                                            : myStepsScreenController.step == 4
+                                                ? VisaStepView(model)
+                                                : Container(),
                           ),
                           BottomOfPage(height: height),
                         ],

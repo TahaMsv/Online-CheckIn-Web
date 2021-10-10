@@ -10,6 +10,7 @@ class RouteNames {
   static const safety = '/safetyScreen';
   static const rules = '/rulesScreen';
   static const passport = '/passportScreen';
+  static const visa = '/visaScreen';
 
 }
 
