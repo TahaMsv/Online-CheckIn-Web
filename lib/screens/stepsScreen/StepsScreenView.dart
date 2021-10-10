@@ -142,12 +142,13 @@ class StepWidget extends StatelessWidget {
     Icons.person_pin,
   ];
 
-  var bgColor;
-  var frColor;
-  var borderColor;
+
 
   @override
   Widget build(BuildContext context) {
+    var bgColor;
+    var frColor;
+    var borderColor;
     if (step < index) {
       bgColor = Color(0xffffffff);
       frColor = Color(0xffdbdbdb);
