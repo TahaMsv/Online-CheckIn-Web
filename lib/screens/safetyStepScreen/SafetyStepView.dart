@@ -22,7 +22,6 @@ class SafetyStepView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-        padding: EdgeInsets.only(left: 40, right: 40, top: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

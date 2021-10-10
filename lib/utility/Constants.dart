@@ -7,6 +7,9 @@ class RouteNames {
   static const home = '/homeScreen';
   static const enter = '/enterScreen';
   static const steps = '/stepsScreen';
+  static const safety = '/safetyScreen';
+  static const rules = '/rulesScreen';
+  static const passport = '/passportScreen';
 
 }
 

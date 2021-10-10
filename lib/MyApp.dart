@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:onlinecheckin/screens/enterScreen/EnterScreenView.dart';
-import 'package:onlinecheckin/screens/stepsScreen/stepsScreenView.dart';
+import 'screens/passportStepScreen/PassportStepView.dart';
+import 'screens/enterScreen/EnterScreenView.dart';
+import 'screens/rulesStepScreen/RulesStepView.dart';
+import 'screens/safetyStepScreen/SafetyStepView.dart';
+import 'screens/stepsScreen/stepsScreenView.dart';
 import 'screens/homeScreen/HomeView.dart';
 import 'utility/Constants.dart';
 import 'package:get/get.dart';
@@ -23,6 +26,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: RouteNames.home , page:()=> HomeView(_model)),
         GetPage(name: RouteNames.enter , page:()=> EnterScreenView(_model)),
         GetPage(name: RouteNames.steps , page:()=> StepsScreenView(_model)),
+        GetPage(name: RouteNames.safety , page:()=> SafetyStepView(_model)),
+        GetPage(name: RouteNames.rules , page:()=> RulesStepView(_model)),
+        GetPage(name: RouteNames.passport , page:()=> PassportStepView(_model)),
       ],
     );
   }

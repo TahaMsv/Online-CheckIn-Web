@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:onlinecheckin/screens/passportStepScreen/PassportStepView.dart';
 import 'package:onlinecheckin/screens/rulesStepScreen/RulesStepView.dart';
 import '../../screens/safetyStepScreen/SafetyStepView.dart';
 import '../../screens/travellersStepScreen/TravellersStepView.dart';
@@ -78,13 +79,17 @@ class StepsScreenView extends StatelessWidget {
                           Container(
                             color: Colors.white,
                             height: height * 0.77,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 50, horizontal: 30),
                             child: myStepsScreenController.step == 0
                                 ? TravellersStepView(model)
                                 : myStepsScreenController.step == 1
                                     ? SafetyStepView(model)
                                     : myStepsScreenController.step == 2
                                         ? RulesStepView(model)
-                                        : Container(),
+                                        : myStepsScreenController.step == 3
+                                            ? PassportStepView(model)
+                                            : Container(),
                           ),
                           BottomOfPage(height: height),
                         ],

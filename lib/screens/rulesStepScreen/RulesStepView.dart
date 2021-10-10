@@ -80,7 +80,7 @@ class RulesStepView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-        padding: EdgeInsets.only(left: 50, right: 50, top: 30),
+
         height: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
