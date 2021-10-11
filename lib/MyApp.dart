@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:onlinecheckin/screens/visaStepScreen/VisaStepView.dart';
+import 'screens/paymentStepScreen/PaymentStepView.dart';
+import 'screens/visaStepScreen/VisaStepView.dart';
 import 'screens/passportStepScreen/PassportStepView.dart';
 import 'screens/enterScreen/EnterScreenView.dart';
 import 'screens/rulesStepScreen/RulesStepView.dart';
@@ -29,9 +30,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: RouteNames.steps, page: () => StepsScreenView(_model)),
         GetPage(name: RouteNames.safety, page: () => SafetyStepView(_model)),
         GetPage(name: RouteNames.rules, page: () => RulesStepView(_model)),
-        GetPage(
-            name: RouteNames.passport, page: () => PassportStepView(_model)),
+        GetPage(name: RouteNames.passport, page: () => PassportStepView(_model)),
         GetPage(name: RouteNames.visa, page: () => VisaStepView(_model)),
+        GetPage(name: RouteNames.payment, page: () => PaymentStepView(_model)),
       ],
     );
   }

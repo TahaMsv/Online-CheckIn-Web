@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:onlinecheckin/widgets/MtDottedLine.dart';
+import '../../widgets/MtDottedLine.dart';
+import '../../widgets/StepsScreenTitle.dart';
 import '../../global/MainModel.dart';
 import 'package:get/get.dart';
 import 'SafetyStepController.dart';
@@ -189,12 +190,9 @@ class AdviseSegment extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "The Standard For Safer Travel",
-            style: TextStyle(
-                color: Color(0xff424242),
-                fontWeight: FontWeight.bold,
-                fontSize: 18),
+          StepsScreenTitle(
+            title:   "The Standard For Safer Travel",
+            description:"",
           ),
           Container(
             margin: EdgeInsets.only(top: 20),

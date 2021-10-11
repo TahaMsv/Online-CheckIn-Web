@@ -11,6 +11,7 @@ class RouteNames {
   static const rules = '/rulesScreen';
   static const passport = '/passportScreen';
   static const visa = '/visaScreen';
+  static const payment = '/paymentScreen';
 
 }
 

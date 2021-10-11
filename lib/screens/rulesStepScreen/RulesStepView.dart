@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import '../../widgets/StepsScreenTitle.dart';
 import '../../screens/rulesStepScreen/RulesStepController.dart';
 import '../../widgets/MtDottedLine.dart';
 import '../../global/MainModel.dart';
@@ -85,28 +86,9 @@ class RulesStepView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  "Dangerous Goods",
-                  style: TextStyle(
-                      fontSize: 17,
-                      color: Color(0xff424242),
-                      fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  "Every items can become dangerous when transported by air. Example of dangerous goods are:",
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: Color(0xff424242),
-                      fontWeight: FontWeight.w400),
-                  overflow: TextOverflow.clip,
-                ),
-              ],
+            StepsScreenTitle(
+              title: "Dangerous Goods",
+              description:          "Every items can become dangerous when transported by air. Example of dangerous goods are:",
             ),
             SizedBox(
               height: 20,

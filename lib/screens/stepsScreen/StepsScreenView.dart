@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:onlinecheckin/screens/passportStepScreen/PassportStepView.dart';
-import 'package:onlinecheckin/screens/rulesStepScreen/RulesStepView.dart';
-import 'package:onlinecheckin/screens/visaStepScreen/VisaStepView.dart';
+import 'package:onlinecheckin/screens/paymentStepScreen/PaymentStepView.dart';
+import '../../screens/passportStepScreen/PassportStepView.dart';
+import '../../screens/rulesStepScreen/RulesStepView.dart';
+import '../../screens/visaStepScreen/VisaStepView.dart';
 import '../../screens/safetyStepScreen/SafetyStepView.dart';
 import '../../screens/travellersStepScreen/TravellersStepView.dart';
 import '../../widgets/MtDottedLine.dart';
@@ -22,8 +23,7 @@ import 'package:provider/provider.dart';
 class StepsScreenView extends StatelessWidget {
   final StepsScreenController myStepsScreenController;
 
-  StepsScreenView(MainModel model)
-      : myStepsScreenController = Get.put(StepsScreenController(model));
+  StepsScreenView(MainModel model) : myStepsScreenController = Get.put(StepsScreenController(model));
 
   @override
   Widget build(BuildContext context) {
@@ -65,10 +65,7 @@ class StepsScreenView extends StatelessWidget {
                                         color: Color(0xff48c0a2),
                                       ),
                               ),
-                              for (int i = 0; i <= 8; i++)
-                                StepWidget(
-                                    step: myStepsScreenController.step,
-                                    index: i),
+                              for (int i = 0; i <= 8; i++) StepWidget(step: myStepsScreenController.step, index: i),
                               Expanded(
                                 child: Container(
                                   height: 1,
@@ -80,8 +77,7 @@ class StepsScreenView extends StatelessWidget {
                           Container(
                             color: Colors.white,
                             height: height * 0.77,
-                            padding: EdgeInsets.symmetric(
-                                vertical: 50, horizontal: 30),
+                            padding: EdgeInsets.symmetric(vertical: 50, horizontal: 30),
                             child: myStepsScreenController.step == 0
                                 ? TravellersStepView(model)
                                 : myStepsScreenController.step == 1
@@ -92,9 +88,11 @@ class StepsScreenView extends StatelessWidget {
                                             ? PassportStepView(model)
                                             : myStepsScreenController.step == 4
                                                 ? VisaStepView(model)
-                                                : Container(),
+                                                : myStepsScreenController.step == 7
+                                                    ? PaymentStepView(model)
+                                                    : Container(),
                           ),
-                          BottomOfPage(height: height),
+                          BottomOfPage(height: height, step: myStepsScreenController.step),
                         ],
                       ),
                     ),
@@ -141,8 +139,6 @@ class StepWidget extends StatelessWidget {
     Icons.person_pin,
     Icons.person_pin,
   ];
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -381,8 +377,7 @@ class LanguagePicker extends StatelessWidget {
           CountryPickerUtils.getCountryByIsoCode('GB'),
           CountryPickerUtils.getCountryByIsoCode('CN'),
         ],
-        sortComparator: (Country a, Country b) =>
-            a.isoCode.compareTo(b.isoCode),
+        sortComparator: (Country a, Country b) => a.isoCode.compareTo(b.isoCode),
         onValuePicked: (Country country) {
           print("${country.name}");
         },
@@ -407,9 +402,21 @@ class BottomOfPage extends StatelessWidget {
   const BottomOfPage({
     Key? key,
     required this.height,
+    required this.step,
   }) : super(key: key);
 
   final double height;
+  final int step;
+  static const buttonText = [
+    "Check Pandemic Safety",
+    "Check Rules",
+    "Add Passports",
+    "Add Visa",
+    "Select Upgrades",
+    "Select Seats",
+    "Payment",
+    "Get Boarding Pass",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -426,12 +433,14 @@ class BottomOfPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             PreviousButton(),
-            MyElevatedButton(
-              height: 40,
-              width: 300,
-              buttonText: "Check Pandemic Safety",
-              bgColor: Color(0xff4c6ef6),
-            ),
+            step == 8
+                ? Container()
+                : MyElevatedButton(
+                    height: 40,
+                    width: 300,
+                    buttonText: buttonText[step],
+                    bgColor: Color(0xff4c6ef6),
+                  ),
           ],
         ),
       ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import '../../widgets/StepsScreenTitle.dart';
 import '../../screens/passportStepScreen/PassportStepController.dart';
 import '../../screens/rulesStepScreen/RulesStepController.dart';
 import '../../global/MainModel.dart';
@@ -11,8 +12,7 @@ import 'package:get/get.dart';
 class PassportStepView extends StatelessWidget {
   final PassportStepController myPassportStepController;
 
-  PassportStepView(MainModel model)
-      : myPassportStepController = Get.put(PassportStepController(model));
+  PassportStepView(MainModel model) : myPassportStepController = Get.put(PassportStepController(model));
 
   @override
   Widget build(BuildContext context) {
@@ -81,29 +81,13 @@ class PassportStepView extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                "Passport",
-                style: TextStyle(
-                    color: Color(0xff424242),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17),
-              ),
-              SizedBox(
-                width: 15,
-              ),
-              Text(
-                "Enter passport data (DOCS) for all the passengers.",
-                style: TextStyle(
-                    color: Color(0xff424242),
-                    fontWeight: FontWeight.w400,
-                    fontSize: 15),
-              ),
-            ],
+          StepsScreenTitle(
+            title: "Passport",
+            description: "Enter passport data (DOCS) for all the passengers.",
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Expanded(
             child: GridView.count(
               crossAxisCount: 4,
@@ -162,9 +146,7 @@ class InfoCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.warning_amber_sharp,
-                color: info["isComplete"]
-                    ? Colors.white.withOpacity(0)
-                    : Color(0xfff86f6f),
+                color: info["isComplete"] ? Colors.white.withOpacity(0) : Color(0xfff86f6f),
                 size: 20,
               )
             ],

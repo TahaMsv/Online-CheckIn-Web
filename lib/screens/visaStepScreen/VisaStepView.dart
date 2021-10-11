@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import '../../widgets/StepsScreenTitle.dart';
 import '../../screens/visaStepScreen/VisaStepController.dart';
 import '../../screens/passportStepScreen/PassportStepController.dart';
 import '../../screens/rulesStepScreen/RulesStepController.dart';
@@ -82,27 +83,9 @@ class VisaStepView extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                "Visa",
-                style: TextStyle(
-                    color: Color(0xff424242),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17),
-              ),
-              SizedBox(
-                width: 15,
-              ),
-              Text(
-                "Enter visa data (DOCO) for all the passengers.",
-                style: TextStyle(
-                    color: Color(0xff424242),
-                    fontWeight: FontWeight.w400,
-                    fontSize: 15),
-              ),
-            ],
+          StepsScreenTitle(
+            title: "Visa",
+            description: "Enter visa data (DOCO) for all the passengers.",
           ),
           SizedBox(height: 10,),
           Expanded(

@@ -3,16 +3,18 @@ class UserTextInput extends StatelessWidget {
   const UserTextInput({
     Key? key,
     required this.controller,
-    required this.hint,
-  }) : super(key: key);
+    required this.hint, this.height=40,
+  }
+  ) : super(key: key);
 
   final TextEditingController controller;
   final String hint;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
+      height: height,
       decoration: BoxDecoration(
           border: Border.all(
             color: Color(0xffeaeaea),
