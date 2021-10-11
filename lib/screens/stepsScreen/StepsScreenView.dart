@@ -5,6 +5,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:onlinecheckin/screens/paymentStepScreen/PaymentStepView.dart';
+import 'package:onlinecheckin/screens/upgradesStepScreen/UpgradesStepView.dart';
 import '../../screens/passportStepScreen/PassportStepView.dart';
 import '../../screens/rulesStepScreen/RulesStepView.dart';
 import '../../screens/visaStepScreen/VisaStepView.dart';
@@ -88,9 +89,11 @@ class StepsScreenView extends StatelessWidget {
                                             ? PassportStepView(model)
                                             : myStepsScreenController.step == 4
                                                 ? VisaStepView(model)
-                                                : myStepsScreenController.step == 7
-                                                    ? PaymentStepView(model)
-                                                    : Container(),
+                                                : myStepsScreenController.step == 5
+                                                    ? UpgradesStepView(model)
+                                                    : myStepsScreenController.step == 7
+                                                        ? PaymentStepView(model)
+                                                        : Container(),
                           ),
                           BottomOfPage(height: height, step: myStepsScreenController.step),
                         ],

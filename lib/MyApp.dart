@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'screens/upgradesStepScreen/UpgradesStepView.dart';
 import 'screens/paymentStepScreen/PaymentStepView.dart';
 import 'screens/visaStepScreen/VisaStepView.dart';
 import 'screens/passportStepScreen/PassportStepView.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: RouteNames.passport, page: () => PassportStepView(_model)),
         GetPage(name: RouteNames.visa, page: () => VisaStepView(_model)),
         GetPage(name: RouteNames.payment, page: () => PaymentStepView(_model)),
+        GetPage(name: RouteNames.upgrades, page: () => UpgradesStepView(_model)),
       ],
     );
   }

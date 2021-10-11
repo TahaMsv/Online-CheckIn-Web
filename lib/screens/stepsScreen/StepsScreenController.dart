@@ -13,7 +13,7 @@ class StepsScreenController extends MainController {
     return _instance;
   }
 
-  RxInt _step = 7.obs;
+  RxInt _step = 5.obs;
 
   int get step => _step.value;
 
