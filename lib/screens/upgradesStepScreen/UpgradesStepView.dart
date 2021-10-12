@@ -49,7 +49,6 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
   final scrollDirection = Axis.horizontal;
 
   late AutoScrollController controller;
-  late List<List<int>> randomList;
 
   var winesList = [
     "",
@@ -63,7 +62,8 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
     "",
     "",
   ];
-  var currIndex = 0;
+  var leftIndex = 0;
+  var rightIndex = 2;
 
   @override
   void initState() {
@@ -97,8 +97,10 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                 children: [
                   IconButton(
                     onPressed: () async {
-                      if (currIndex >= 0) {
-                        await controller.scrollToIndex(currIndex--, preferPosition: AutoScrollPosition.begin);
+                      if (leftIndex >= 1) {
+                        await controller.scrollToIndex(leftIndex - 1, preferPosition: AutoScrollPosition.begin);
+                        leftIndex--;
+                        rightIndex--;
                       }
                     },
                     icon: Icon(
@@ -111,27 +113,19 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                   ),
                   Expanded(
                     child: Container(
-                      color: Colors.blue,
-                      child: ListView(
+                      child: ListView.builder(
+                        shrinkWrap: true,
                         scrollDirection: scrollDirection,
                         controller: controller,
-                        children: <Widget>[
-                          ...List.generate(winesList.length, (index) {
-                            return AutoScrollTag(
-                              key: ValueKey(index),
-                              controller: controller,
-                              index: index,
-                              child: Container(
-                                height: 100,
-                                width: 400,
-                                color: Colors.red,
-                                margin: EdgeInsets.all(10),
-                                child: Center(child: Text('index: $index')),
-                              ),
-                              highlightColor: Colors.black.withOpacity(0.1),
-                            );
-                          }),
-                        ],
+                        itemBuilder: (ctx, index) {
+                          return AutoScrollTag(
+                            key: ValueKey(index),
+                            controller: controller,
+                            index: index,
+                            child: UpgradeItemWidget(),
+                            highlightColor: Colors.black.withOpacity(0.1),
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -140,8 +134,10 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                   ),
                   IconButton(
                     onPressed: () async {
-                      if (currIndex < winesList.length - 1) {
-                        await controller.scrollToIndex(currIndex++, preferPosition: AutoScrollPosition.begin);
+                      if (rightIndex < winesList.length - 1) {
+                        await controller.scrollToIndex(rightIndex, preferPosition: AutoScrollPosition.begin);
+                        leftIndex++;
+                        rightIndex++;
                       }
                     },
                     icon: Icon(
@@ -155,6 +151,78 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class UpgradeItemWidget extends StatelessWidget {
+  const UpgradeItemWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+          // height: 100,
+          width: 350,
+          color: Colors.red,
+          margin: EdgeInsets.only(left: 10, right: 10),
+          child: Stack(
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 90, right: 20, top: 20, bottom: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Sparkling Wine",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xff424242),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "Starts from \$14.00",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xff424242),
+                            fontWeight: FontWeight.w300,
+                          ),
+                        )
+                      ],
+                    ),
+                    Text(
+                      "Sparkling wine is a wine with significant levels of carbon dioxide in it. Making it fizzy",
+                      overflow: TextOverflow.clip,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xff424242),
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    Container(
+                      width: 80,
+                      height: 30,
+                      color: Colors.amber,
+                    )
+                  ],
+                ),
+              ),
+              Positioned(
+                  left: 0,
+                  child: Container(
+                    width: 70,
+                    height: 200,
+                    color: Colors.green,
+                  ))
+            ],
+          )),
     );
   }
 }
@@ -184,18 +252,7 @@ class Entertainment extends StatelessWidget {
             SizedBox(
               height: 15,
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                Container(
-                  height: 150,
-                  width: 280,
-                  color: Colors.red,
-                ),
-              ],
-            )
+            UpgradeItemWidget()
           ],
         ),
       ),
