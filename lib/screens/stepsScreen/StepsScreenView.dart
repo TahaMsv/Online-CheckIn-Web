@@ -1,11 +1,11 @@
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:onlinecheckin/screens/paymentStepScreen/PaymentStepView.dart';
-import 'package:onlinecheckin/screens/upgradesStepScreen/UpgradesStepView.dart';
+import '../../screens/paymentStepScreen/PaymentStepView.dart';
+import '../../screens/receiptStepScreen/ReceipStepView.dart';
+import '../../screens/upgradesStepScreen/UpgradesStepView.dart';
 import '../../screens/passportStepScreen/PassportStepView.dart';
 import '../../screens/rulesStepScreen/RulesStepView.dart';
 import '../../screens/visaStepScreen/VisaStepView.dart';
@@ -48,55 +48,59 @@ class StepsScreenView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     LeftSideOFPage(height: height),
-                    Container(
-                      width: width * 0.80,
-                      height: height * 0.9,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: myStepsScreenController.step == 0
-                                    ? MyDottedLine(
-                                        lineLength: double.infinity,
-                                        color: Color(0xff48c0a2),
-                                      )
-                                    : Container(
-                                        height: 1,
-                                        color: Color(0xff48c0a2),
-                                      ),
-                              ),
-                              for (int i = 0; i <= 8; i++) StepWidget(step: myStepsScreenController.step, index: i),
-                              Expanded(
-                                child: Container(
-                                  height: 1,
-                                  color: Color(0xffdbdbdb),
+                    Obx(
+                      () => Container(
+                        width: width * 0.80,
+                        height: height * 0.9,
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: myStepsScreenController.step == 0
+                                      ? MyDottedLine(
+                                          lineLength: double.infinity,
+                                          color: Color(0xff48c0a2),
+                                        )
+                                      : Container(
+                                          height: 1,
+                                          color: Color(0xff48c0a2),
+                                        ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Container(
-                            color: Colors.white,
-                            height: height * 0.77,
-                            padding: EdgeInsets.symmetric(vertical: 50, horizontal: 30),
-                            child: myStepsScreenController.step == 0
-                                ? TravellersStepView(model)
-                                : myStepsScreenController.step == 1
-                                    ? SafetyStepView(model)
-                                    : myStepsScreenController.step == 2
-                                        ? RulesStepView(model)
-                                        : myStepsScreenController.step == 3
-                                            ? PassportStepView(model)
-                                            : myStepsScreenController.step == 4
-                                                ? VisaStepView(model)
-                                                : myStepsScreenController.step == 5
-                                                    ? UpgradesStepView(model)
-                                                    : myStepsScreenController.step == 7
-                                                        ? PaymentStepView(model)
-                                                        : Container(),
-                          ),
-                          BottomOfPage(height: height, step: myStepsScreenController.step),
-                        ],
+                                for (int i = 0; i <= 8; i++) StepWidget(step: myStepsScreenController.step, index: i),
+                                Expanded(
+                                  child: Container(
+                                    height: 1,
+                                    color: Color(0xffdbdbdb),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              color: Colors.white,
+                              height: height * 0.77,
+                              padding: EdgeInsets.symmetric(vertical: 50, horizontal: 30),
+                              child: myStepsScreenController.step == 0
+                                  ? TravellersStepView(model)
+                                  : myStepsScreenController.step == 1
+                                      ? SafetyStepView(model)
+                                      : myStepsScreenController.step == 2
+                                          ? RulesStepView(model)
+                                          : myStepsScreenController.step == 3
+                                              ? PassportStepView(model)
+                                              : myStepsScreenController.step == 4
+                                                  ? VisaStepView(model)
+                                                  : myStepsScreenController.step == 5
+                                                      ? UpgradesStepView(model)
+                                                      : myStepsScreenController.step == 7
+                                                          ? PaymentStepView(model)
+                                                          : myStepsScreenController.step == 8
+                                                              ? ReceiptStepView(model)
+                                                              : Container(),
+                            ),
+                            BottomOfPage(height: height, myStepsScreenController: myStepsScreenController),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -405,11 +409,12 @@ class BottomOfPage extends StatelessWidget {
   const BottomOfPage({
     Key? key,
     required this.height,
-    required this.step,
+    required this.myStepsScreenController,
   }) : super(key: key);
 
   final double height;
-  final int step;
+  final StepsScreenController myStepsScreenController;
+
   static const buttonText = [
     "Check Pandemic Safety",
     "Check Rules",
@@ -420,6 +425,14 @@ class BottomOfPage extends StatelessWidget {
     "Payment",
     "Get Boarding Pass",
   ];
+
+  void increaseStep() {
+    int currStep = myStepsScreenController.step;
+    if (currStep < 8) {
+      print("here");
+      myStepsScreenController.setStep(currStep + 1);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -435,17 +448,57 @@ class BottomOfPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            PreviousButton(),
-            step == 8
-                ? Container()
-                : MyElevatedButton(
-                    height: 40,
-                    width: 300,
-                    buttonText: buttonText[step],
-                    bgColor: Color(0xff4c6ef6),
-                  ),
+            PreviousButton(
+              myStepsScreenController: myStepsScreenController,
+            ),
+            myStepsScreenController.step == 8
+                ? ReceiptStepButtons()
+                : MyElevatedButton(height: 40, width: 300, buttonText: buttonText[myStepsScreenController.step], bgColor: Color(0xff4c6ef6), function: increaseStep),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ReceiptStepButtons extends StatelessWidget {
+  const ReceiptStepButtons({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          MyElevatedButton(
+            height: 40,
+            width: 100,
+            buttonText: "Download",
+            bgColor: Color(0xff424242),
+            function: () {},
+          ),
+          SizedBox(
+            width: 15,
+          ),
+          MyElevatedButton(
+            height: 40,
+            width: 100,
+            buttonText: "Print",
+            bgColor: Color(0xff48c0a2),
+            function: () {},
+          ),
+          SizedBox(
+            width: 15,
+          ),
+          MyElevatedButton(
+            height: 40,
+            width: 200,
+            buttonText: "Sent to Mobile",
+            bgColor: Color(0xff4c6ef6),
+            function: () {},
+          ),
+        ],
       ),
     );
   }
@@ -454,7 +507,9 @@ class BottomOfPage extends StatelessWidget {
 class PreviousButton extends StatelessWidget {
   const PreviousButton({
     Key? key,
+    required this.myStepsScreenController,
   }) : super(key: key);
+  final StepsScreenController myStepsScreenController;
 
   @override
   Widget build(BuildContext context) {
@@ -468,7 +523,12 @@ class PreviousButton extends StatelessWidget {
             EdgeInsets.symmetric(vertical: 0),
           ),
         ),
-        onPressed: null,
+        onPressed: () {
+          int currStep = myStepsScreenController.step;
+          if (currStep > 0) {
+            myStepsScreenController.setStep(currStep - 1);
+          }
+        },
         child: Row(
           children: [
             Icon(

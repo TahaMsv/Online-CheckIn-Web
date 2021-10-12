@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import '../screens/receiptStepScreen/ReceiptStepModel.dart';
 import '../screens/upgradesStepScreen/UpgradesStepModel.dart';
 import '../screens/paymentStepScreen/PaymentStepModel.dart';
 import '../screens/visaStepScreen/VisaStepModel.dart';
@@ -22,7 +23,8 @@ class MainModel
         PassportStepScreenModel,
         VisaStepScreenModel,
         PaymentStepScreenModel,
-        UpgradesStepScreenModel {
+        UpgradesStepScreenModel,
+        ReceiptStepScreenModel {
   bool _loading = false;
 
   bool get loading => _loading;

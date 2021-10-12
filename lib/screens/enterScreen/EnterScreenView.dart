@@ -16,8 +16,7 @@ import 'package:provider/provider.dart';
 class EnterScreenView extends StatelessWidget {
   final EnterScreenController myEnterScreenController;
 
-  EnterScreenView(MainModel model)
-      : myEnterScreenController = Get.put(EnterScreenController(model));
+  EnterScreenView(MainModel model) : myEnterScreenController = Get.put(EnterScreenController(model));
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +34,7 @@ class EnterScreenView extends StatelessWidget {
         width: width,
         height: height,
         child: Stack(
-          children: [
-            BackgroundImage(width: width, height: height),
-            LeftSide(),
-            CheckInForm(myEnterScreenController: myEnterScreenController)
-          ],
+          children: [BackgroundImage(width: width, height: height), LeftSide(), CheckInForm(myEnterScreenController: myEnterScreenController)],
         ),
       ),
     );
@@ -80,12 +75,10 @@ class CheckInForm extends StatelessWidget {
                         height: 300,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   "Online Check-in",
@@ -112,14 +105,11 @@ class CheckInForm extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   UserTextInput(
-                                    controller: myEnterScreenController
-                                        .ticketNumberC,
-                                    hint:
-                                        "Reservation ID / Ticket Number",
+                                    controller: myEnterScreenController.ticketNumberC,
+                                    hint: "Reservation ID / Ticket Number",
                                   ),
                                   UserTextInput(
-                                    controller:
-                                        myEnterScreenController.usernameC,
+                                    controller: myEnterScreenController.usernameC,
                                     hint: "Lastname",
                                   ),
                                 ],
@@ -172,8 +162,7 @@ class LanguagePicker extends StatelessWidget {
           CountryPickerUtils.getCountryByIsoCode('GB'),
           CountryPickerUtils.getCountryByIsoCode('CN'),
         ],
-        sortComparator: (Country a, Country b) =>
-            a.isoCode.compareTo(b.isoCode),
+        sortComparator: (Country a, Country b) => a.isoCode.compareTo(b.isoCode),
         onValuePicked: (Country country) {
           print("${country.name}");
         },
@@ -181,8 +170,6 @@ class LanguagePicker extends StatelessWidget {
     );
   }
 }
-
-
 
 class CheckInButton extends StatelessWidget {
   const CheckInButton({
@@ -201,13 +188,19 @@ class CheckInButton extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(5))),
       child: Expanded(
         child: ElevatedButton(
-          onPressed: null,
+          onPressed: () {
+            Get.toNamed(RouteNames.steps);
+          },
           child: Text("Check-in"),
           style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all(Colors.white),
-              backgroundColor: MaterialStateProperty.all(Color(0xff4c6ef6)),
-              textStyle:
-                  MaterialStateProperty.all(TextStyle(color: Colors.white))),
+            foregroundColor: MaterialStateProperty.all(Colors.white),
+            backgroundColor: MaterialStateProperty.all(
+              Color(0xff4c6ef6),
+            ),
+            textStyle: MaterialStateProperty.all(
+              TextStyle(color: Colors.white),
+            ),
+          ),
         ),
       ),
     );
@@ -224,9 +217,7 @@ class CopyRightText extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Container(
-            margin: EdgeInsets.only(bottom: 20),
-            child: Text("© Copyright 2021 Abomis All rights reserved")),
+        Container(margin: EdgeInsets.only(bottom: 20), child: Text("© Copyright 2021 Abomis All rights reserved")),
       ],
     );
   }
@@ -295,17 +286,11 @@ class LeftSide extends StatelessWidget {
                 children: [
                   Text(
                     "Ready to go?",
-                    style: TextStyle(
-                        fontSize: 23,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 23, color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     "There are a few things to know before boarding.",
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -409,8 +394,7 @@ class PrevButton extends StatelessWidget {
               margin: EdgeInsets.only(left: 18),
               child: Text(
                 "Previous",
-                style:
-                    TextStyle(fontSize: 12, color: Colors.white),
+                style: TextStyle(fontSize: 12, color: Colors.white),
               ),
             ),
           ],

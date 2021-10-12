@@ -13,9 +13,14 @@ class StepsScreenController extends MainController {
     return _instance;
   }
 
-  RxInt _step = 5.obs;
+  RxInt _step = 0.obs;
 
   int get step => _step.value;
+
+  void setStep(int newStep) {
+    _step.value = newStep;
+    print(_step);
+  }
 
   @override
   void onInit() {

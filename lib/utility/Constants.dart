@@ -13,6 +13,7 @@ class RouteNames {
   static const visa = '/visaScreen';
   static const payment = '/paymentScreen';
   static const upgrades = '/upgradesScreen';
+  static const receipt = '/receiptScreen';
 
 }
 

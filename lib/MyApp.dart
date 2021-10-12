@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'screens/receiptStepScreen/ReceipStepView.dart';
 import 'screens/upgradesStepScreen/UpgradesStepView.dart';
 import 'screens/paymentStepScreen/PaymentStepView.dart';
 import 'screens/visaStepScreen/VisaStepView.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       enableLog: false,
       debugShowCheckedModeBanner: false,
       theme: AppConfig.themeLight,
-      initialRoute: RouteNames.steps,
+      initialRoute: RouteNames.enter,
       getPages: [
         GetPage(name: RouteNames.initialRoute, page: () => SplashView(_model)),
         GetPage(name: RouteNames.home, page: () => HomeView(_model)),
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: RouteNames.visa, page: () => VisaStepView(_model)),
         GetPage(name: RouteNames.payment, page: () => PaymentStepView(_model)),
         GetPage(name: RouteNames.upgrades, page: () => UpgradesStepView(_model)),
+        GetPage(name: RouteNames.receipt, page: () => ReceiptStepView(_model)),
       ],
     );
   }
