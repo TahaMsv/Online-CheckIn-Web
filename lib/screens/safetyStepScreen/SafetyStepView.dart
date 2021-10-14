@@ -84,37 +84,35 @@ class CommitmentSegment extends StatelessWidget {
           ),
           Container(
             margin: EdgeInsets.only(top: 30),
-            child: Flexible(
-              child: RichText(
-                overflow: TextOverflow.clip,
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "Please read our ",
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Color(0xff3b3b3b),
-                          fontWeight: FontWeight.w400),
-                    ),
-                    TextSpan(
-                      text: "travel policy",
-                      style: new TextStyle(color: Colors.blue),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          // launch(
-                          //     'https://docs.flutter.io/flutter/services/UrlLauncher-class.html');
-                        },
-                    ),
-                    TextSpan(
-                      text:
-                          " to delay or cancel your trip if you are unable to accept the above commitments.",
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Color(0xff3b3b3b),
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ],
-                ),
+            child: RichText(
+              overflow: TextOverflow.clip,
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Please read our ",
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Color(0xff3b3b3b),
+                        fontWeight: FontWeight.w400),
+                  ),
+                  TextSpan(
+                    text: "travel policy",
+                    style: new TextStyle(color: Colors.blue),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        // launch(
+                        //     'https://docs.flutter.io/flutter/services/UrlLauncher-class.html');
+                      },
+                  ),
+                  TextSpan(
+                    text:
+                        " to delay or cancel your trip if you are unable to accept the above commitments.",
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Color(0xff3b3b3b),
+                        fontWeight: FontWeight.w400),
+                  ),
+                ],
               ),
             ),
           ),

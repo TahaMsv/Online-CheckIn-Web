@@ -29,6 +29,9 @@ class UpgradesStepView extends StatelessWidget {
             height: 10,
           ),
           WinesAndDrinksList(),
+          SizedBox(
+            height: 10,
+          ),
           Entertainment(),
         ],
       ),
@@ -162,68 +165,66 @@ class UpgradeItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-          // height: 100,
-          width: 350,
-          color: Colors.red,
-          margin: EdgeInsets.only(left: 10, right: 10),
-          child: Stack(
-            children: [
-              Container(
-                padding: EdgeInsets.only(left: 90, right: 20, top: 20, bottom: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Sparkling Wine",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color(0xff424242),
-                            fontWeight: FontWeight.bold,
-                          ),
+    return Container(
+        // height: 100,
+        width: 350,
+        color: Colors.red,
+        margin: EdgeInsets.only(left: 10, right: 10),
+        child: Stack(
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 90, right: 20, top: 20, bottom: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Sparkling Wine",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Color(0xff424242),
+                          fontWeight: FontWeight.bold,
                         ),
-                        Text(
-                          "Starts from \$14.00",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color(0xff424242),
-                            fontWeight: FontWeight.w300,
-                          ),
-                        )
-                      ],
-                    ),
-                    Text(
-                      "Sparkling wine is a wine with significant levels of carbon dioxide in it. Making it fizzy",
-                      overflow: TextOverflow.clip,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xff424242),
-                        fontWeight: FontWeight.w300,
                       ),
+                      Text(
+                        "Starts from \$14.00",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Color(0xff424242),
+                          fontWeight: FontWeight.w300,
+                        ),
+                      )
+                    ],
+                  ),
+                  Text(
+                    "Sparkling wine is a wine with significant levels of carbon dioxide in it. Making it fizzy",
+                    overflow: TextOverflow.clip,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xff424242),
+                      fontWeight: FontWeight.w300,
                     ),
-                    Container(
-                      width: 80,
-                      height: 30,
-                      color: Colors.amber,
-                    )
-                  ],
-                ),
+                  ),
+                  Container(
+                    width: 80,
+                    height: 30,
+                    color: Colors.amber,
+                  )
+                ],
               ),
-              Positioned(
-                  left: 0,
-                  child: Container(
-                    width: 70,
-                    height: 200,
-                    color: Colors.green,
-                  ))
-            ],
-          )),
-    );
+            ),
+            Positioned(
+                left: 0,
+                child: Container(
+                  width: 70,
+                  height: 200,
+                  color: Colors.green,
+                ))
+          ],
+        ));
   }
 }
 
