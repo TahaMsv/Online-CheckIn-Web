@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: AppConfig.themeLight,
       initialRoute: RouteNames.enter,
       getPages: [
-        GetPage(name: RouteNames.initialRoute, page: () => SplashView(_model)),
+        // GetPage(name: RouteNames.initialRoute, page: () => SplashView(_model)),
         GetPage(name: RouteNames.home, page: () => HomeView(_model)),
         GetPage(name: RouteNames.enter, page: () => EnterScreenView(_model)),
         GetPage(name: RouteNames.steps, page: () => StepsScreenView(_model)),

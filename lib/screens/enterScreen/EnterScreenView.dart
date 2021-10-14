@@ -34,7 +34,11 @@ class EnterScreenView extends StatelessWidget {
         width: width,
         height: height,
         child: Stack(
-          children: [BackgroundImage(width: width, height: height), LeftSide(), CheckInForm(myEnterScreenController: myEnterScreenController)],
+          children: [
+            BackgroundImage(width: width, height: height),
+            LeftSide(),
+            CheckInForm(myEnterScreenController: myEnterScreenController),
+          ],
         ),
       ),
     );
@@ -182,24 +186,25 @@ class CheckInButton extends StatelessWidget {
       height: 40,
       width: double.infinity,
       decoration: BoxDecoration(
-          border: Border.all(
-            color: Color(0xffeaeaea),
+        border: Border.all(
+          color: Color(0xffeaeaea),
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(5),
+        ),
+      ),
+      child: ElevatedButton(
+        onPressed: () {
+          Get.toNamed(RouteNames.steps);
+        },
+        child: Text("Check-in"),
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all(Colors.white),
+          backgroundColor: MaterialStateProperty.all(
+            Color(0xff4c6ef6),
           ),
-          borderRadius: BorderRadius.all(Radius.circular(5))),
-      child: Expanded(
-        child: ElevatedButton(
-          onPressed: () {
-            Get.toNamed(RouteNames.steps);
-          },
-          child: Text("Check-in"),
-          style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(Colors.white),
-            backgroundColor: MaterialStateProperty.all(
-              Color(0xff4c6ef6),
-            ),
-            textStyle: MaterialStateProperty.all(
-              TextStyle(color: Colors.white),
-            ),
+          textStyle: MaterialStateProperty.all(
+            TextStyle(color: Colors.white),
           ),
         ),
       ),
