@@ -96,7 +96,7 @@ class VisaStepView extends StatelessWidget {
               children: travellers.map(
                     (value) {
                   return InfoCard(
-                    info: value,
+                    info: value, myVisaStepController: myVisaStepController,
                   );
                 },
               ).toList(),
@@ -111,11 +111,11 @@ class VisaStepView extends StatelessWidget {
 class InfoCard extends StatelessWidget {
   const InfoCard({
     Key? key,
-    required this.info,
+    required this.info, required this.myVisaStepController,
   }) : super(key: key);
 
   final dynamic info;
-
+  final VisaStepController myVisaStepController;
   @override
   Widget build(BuildContext context) {
     Color textColor;
@@ -204,7 +204,7 @@ class InfoCard extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          info["isComplete"] ? EditVisaInfo() : AddVisaInfo(),
+          info["isComplete"] ? EditVisaInfo() : AddVisaInfo(myVisaStepController: myVisaStepController,),
         ],
       ),
     );
@@ -213,30 +213,35 @@ class InfoCard extends StatelessWidget {
 
 class AddVisaInfo extends StatelessWidget {
   const AddVisaInfo({
-    Key? key,
+    Key? key, required this.myVisaStepController,
   }) : super(key: key);
-
+  final VisaStepController myVisaStepController;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(
-          Icons.add_circle_outline_rounded,
-          color: Color(0xff4d6fff),
-          size: 18,
-        ),
-        SizedBox(
-          width: 5,
-        ),
-        Text(
-          "Add Visa Info",
-          style: TextStyle(
+    return GestureDetector(
+      onTap: (){
+        myVisaStepController.showDOCOPopup();
+      },
+      child: Row(
+        children: [
+          Icon(
+            Icons.add_circle_outline_rounded,
             color: Color(0xff4d6fff),
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
+            size: 18,
           ),
-        ),
-      ],
+          SizedBox(
+            width: 5,
+          ),
+          Text(
+            "Add Visa Info",
+            style: TextStyle(
+              color: Color(0xff4d6fff),
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:onlinecheckin/widgets/MyElevatedButton.dart';
+import 'package:onlinecheckin/widgets/UserTextInput.dart';
 import '../../widgets/StepsScreenTitle.dart';
 import '../../screens/passportStepScreen/PassportStepController.dart';
 import '../../screens/rulesStepScreen/RulesStepController.dart';
@@ -97,6 +99,7 @@ class PassportStepView extends StatelessWidget {
                 (value) {
                   return InfoCard(
                     info: value,
+                    myPassportStepController: myPassportStepController,
                   );
                 },
               ).toList(),
@@ -112,9 +115,11 @@ class InfoCard extends StatelessWidget {
   const InfoCard({
     Key? key,
     required this.info,
+    required this.myPassportStepController,
   }) : super(key: key);
 
   final dynamic info;
+  final PassportStepController myPassportStepController;
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +190,11 @@ class InfoCard extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          info["isComplete"] ? EditIPassInfo() : AddPassInfo(),
+          info["isComplete"]
+              ? EditIPassInfo()
+              : AddPassInfo(
+                  myPassportStepController: myPassportStepController,
+                ),
         ],
       ),
     );
@@ -195,29 +204,37 @@ class InfoCard extends StatelessWidget {
 class AddPassInfo extends StatelessWidget {
   const AddPassInfo({
     Key? key,
+    required this.myPassportStepController,
   }) : super(key: key);
+
+  final PassportStepController myPassportStepController;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(
-          Icons.add_circle_outline_rounded,
-          color: Color(0xff4d6fff),
-          size: 18,
-        ),
-        SizedBox(
-          width: 5,
-        ),
-        Text(
-          "Add Passport Info",
-          style: TextStyle(
+    return GestureDetector(
+      onTap: () {
+        myPassportStepController.showDOCSPopup();
+      },
+      child: Row(
+        children: [
+          Icon(
+            Icons.add_circle_outline_rounded,
             color: Color(0xff4d6fff),
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
+            size: 18,
           ),
-        ),
-      ],
+          SizedBox(
+            width: 5,
+          ),
+          Text(
+            "Add Passport Info",
+            style: TextStyle(
+              color: Color(0xff4d6fff),
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

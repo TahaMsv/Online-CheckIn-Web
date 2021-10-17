@@ -83,6 +83,7 @@ class AddToTravellersButton extends StatelessWidget {
       width: double.infinity,
       buttonText: "Add to Travellers",
       bgColor: Color(0xff00bfa2),
+      fgColor: Colors.white,
       function: (){},
     );
   }

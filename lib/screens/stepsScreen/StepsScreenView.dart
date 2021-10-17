@@ -451,7 +451,14 @@ class BottomOfPage extends StatelessWidget {
             ),
             myStepsScreenController.step == 8
                 ? ReceiptStepButtons()
-                : MyElevatedButton(height: 40, width: 300, buttonText: buttonText[myStepsScreenController.step], bgColor: Color(0xff4c6ef6), function: increaseStep),
+                : MyElevatedButton(
+                    height: 40,
+                    width: 300,
+                    buttonText: buttonText[myStepsScreenController.step],
+                    bgColor: Color(0xff4c6ef6),
+                    fgColor: Colors.white,
+                    function: increaseStep,
+                  ),
           ],
         ),
       ),
@@ -474,6 +481,7 @@ class ReceiptStepButtons extends StatelessWidget {
             width: 100,
             buttonText: "Download",
             bgColor: Color(0xff424242),
+            fgColor: Colors.white,
             function: () {},
           ),
           SizedBox(
@@ -484,6 +492,7 @@ class ReceiptStepButtons extends StatelessWidget {
             width: 100,
             buttonText: "Print",
             bgColor: Color(0xff48c0a2),
+            fgColor: Colors.white,
             function: () {},
           ),
           SizedBox(
@@ -494,6 +503,7 @@ class ReceiptStepButtons extends StatelessWidget {
             width: 200,
             buttonText: "Sent to Mobile",
             bgColor: Color(0xff4c6ef6),
+            fgColor: Colors.white,
             function: () {},
           ),
         ],
