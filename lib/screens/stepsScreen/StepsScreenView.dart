@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import '../../screens/seatsStepScreen/SeatsStepView.dart';
 import '../../screens/paymentStepScreen/PaymentStepView.dart';
 import '../../screens/receiptStepScreen/ReceipStepView.dart';
 import '../../screens/upgradesStepScreen/UpgradesStepView.dart';
@@ -46,7 +47,12 @@ class StepsScreenView extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  LeftSideOFPage(height: height),
+                  Obx(
+                    () => LeftSideOFPage(
+                      height: height,
+                      step: myStepsScreenController.step,
+                    ),
+                  ),
                   Obx(
                     () => Container(
                       width: width * 0.80,
@@ -91,11 +97,13 @@ class StepsScreenView extends StatelessWidget {
                                                 ? VisaStepView(model)
                                                 : myStepsScreenController.step == 5
                                                     ? UpgradesStepView(model)
-                                                    : myStepsScreenController.step == 7
-                                                        ? PaymentStepView(model)
-                                                        : myStepsScreenController.step == 8
-                                                            ? ReceiptStepView(model)
-                                                            : Container(),
+                                                    : myStepsScreenController.step == 6
+                                                        ? SeatsStepView(model)
+                                                        : myStepsScreenController.step == 7
+                                                            ? PaymentStepView(model)
+                                                            : myStepsScreenController.step == 8
+                                                                ? ReceiptStepView(model)
+                                                                : Container(),
                           ),
                           BottomOfPage(height: height, myStepsScreenController: myStepsScreenController),
                         ],
@@ -213,9 +221,11 @@ class LeftSideOFPage extends StatelessWidget {
   const LeftSideOFPage({
     Key? key,
     required this.height,
+    required this.step,
   }) : super(key: key);
 
   final double height;
+  final int step;
 
   @override
   Widget build(BuildContext context) {
@@ -229,12 +239,37 @@ class LeftSideOFPage extends StatelessWidget {
         height: height * 0.9 - 13.5,
         child: Column(
           children: [
-            TravellersTitleWidget(),
+            Expanded(
+              child: Row(
+                children: [
+                  TitleWidget(
+                    title: "Travellers",
+                    width: 200,
+                  ),
+                  Container(
+                    width: 2,
+                    height: double.infinity,
+                    color: Color(0xffededed),
+                  ),
+                  TitleWidget(
+                    title: "Seat",
+                    width: 100,
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 1,
+              color: Color(0xffeaeaea),
+            ),
             Container(
               height: height * 0.9 - 65 - 13.5,
               child: ListView.builder(
                 itemCount: 20,
-                itemBuilder: (ctx, index) => TravellerItem(),
+                itemBuilder: (ctx, index) => TravellerItem(
+                  step: step,
+                ),
               ),
             ),
           ],
@@ -246,11 +281,19 @@ class LeftSideOFPage extends StatelessWidget {
 }
 
 class TravellerItem extends StatelessWidget {
+  const TravellerItem({
+    Key? key,
+    required this.step,
+  }) : super(key: key);
+  final int step;
+
   @override
   Widget build(BuildContext context) {
+    var showSeat = false;
+    if (step == 6 || step == 8) showSeat = true;
     return Container(
       height: 60,
-      width: double.infinity,
+      width: showSeat ? 200 : double.infinity,
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       decoration: BoxDecoration(
         border: BorderDirectional(
@@ -260,19 +303,19 @@ class TravellerItem extends StatelessWidget {
           ),
         ),
       ),
-      child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "Mr. Jack Taylor",
-              style: TextStyle(
-                color: Color(0xff424242),
-                fontSize: 13,
-                fontWeight: FontWeight.w300,
-              ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            "Mr. Jack Taylor",
+            style: TextStyle(
+              color: Color(0xff424242),
+              fontSize: 13,
+              fontWeight: FontWeight.w300,
             ),
+          ),
+          if (step == 0)
             IconButton(
               onPressed: null,
               icon: Icon(
@@ -280,15 +323,14 @@ class TravellerItem extends StatelessWidget {
                 color: Colors.red,
               ),
             )
-          ],
-        ),
+        ],
       ),
     );
   }
 }
 
-class TravellersTitleWidget extends StatelessWidget {
-  const TravellersTitleWidget({
+class SeatWidget extends StatelessWidget {
+  const SeatWidget({
     Key? key,
   }) : super(key: key);
 
@@ -296,9 +338,10 @@ class TravellersTitleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 60,
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      width: 100,
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       decoration: BoxDecoration(
+        color: Colors.blue,
         border: BorderDirectional(
           bottom: BorderSide(
             width: 1,
@@ -306,8 +349,47 @@ class TravellersTitleWidget extends StatelessWidget {
           ),
         ),
       ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "5E",
+            style: TextStyle(
+              fontSize: 20,
+              color: Color(0xfff5ad2f),
+            ),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.edit,
+              color: Colors.blue,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TitleWidget extends StatelessWidget {
+  const TitleWidget({
+    Key? key,
+    required this.title,
+    required this.width,
+  }) : super(key: key);
+
+  final String title;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 60,
+      width: width,
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       child: Text(
-        "Travellers",
+        title,
         style: TextStyle(
           color: Color(0xff424242),
           fontSize: 17,
