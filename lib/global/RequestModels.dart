@@ -1,16 +1,36 @@
-class RequestModelLogin {
-  final String username;
-  final String password;
+class RequestModelGetToken {
+  final String execution;
+  final dynamic token;
+  final Map<String,dynamic> request;
 
-  RequestModelLogin({required this.username,required this.password});
-
-  factory RequestModelLogin.fromJson(Map<String, dynamic> json) => RequestModelLogin(
-    username: json["Username"],
-    password: json["Password"],
-  );
+  RequestModelGetToken({
+    required  this.execution,
+    required  this.token,
+    required this.request,
+  });
 
   Map<String, dynamic> toJson() => {
-    "Username": username,
-    "Password": password,
+    "Execution": execution,
+    "Token": token,
+    "Request": request,
+   };
+}
+
+
+class RequestModelGetInformation{
+  final String execution;
+  final dynamic token;
+  final Map<String,dynamic> request;
+
+  RequestModelGetInformation({
+    required this.execution,
+    required this.token,
+    required this.request,
+  });
+
+  Map<String, dynamic> toJson() => {
+    "Execution": execution,
+    "Token": token,
+    "Request": request,
   };
 }

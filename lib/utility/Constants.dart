@@ -20,9 +20,11 @@ class RouteNames {
 
 class Apis {
   Apis._();
-  static const baseUrl = 'http://www.google.com';
+  static const baseUrl = 'https://onlinecheckinapi.abomis.com/';
   static const login = '/api/login';
   static const signUp = '/api/signUp';
+  static const getTokenUrl = 'api/Execute';
+  static const getInformation = 'api/Execute';
 }
 
 class MyTheme {

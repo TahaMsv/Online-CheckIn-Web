@@ -36,86 +36,90 @@ class StepsScreenView extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: Container(
-        width: width,
-        height: height,
-        color: Colors.white,
-        child: ListView(
-          children: [
-            TopOfPage(height: height, width: width),
-            Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: model.loading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Container(
+              width: width,
+              height: height,
+              color: Colors.white,
+              child: ListView(
                 children: [
-                  Obx(
-                    () => LeftSideOFPage(
-                      height: height,
-                      step: myStepsScreenController.step,
-                    ),
-                  ),
-                  Obx(
-                    () => Container(
-                      width: width * 0.80,
-                      height: height * 0.9,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: myStepsScreenController.step == 0
-                                    ? MyDottedLine(
-                                        lineLength: double.infinity,
-                                        color: Color(0xff48c0a2),
-                                      )
-                                    : Container(
+                  TopOfPage(height: height, width: width),
+                  Container(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Obx(
+                          () => LeftSideOFPage(
+                            height: height,
+                            step: myStepsScreenController.step,
+                          ),
+                        ),
+                        Obx(
+                          () => Container(
+                            width: width * 0.80,
+                            height: height * 0.9,
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: myStepsScreenController.step == 0
+                                          ? MyDottedLine(
+                                              lineLength: double.infinity,
+                                              color: Color(0xff48c0a2),
+                                            )
+                                          : Container(
+                                              height: 1,
+                                              color: Color(0xff48c0a2),
+                                            ),
+                                    ),
+                                    for (int i = 0; i <= 8; i++) StepWidget(step: myStepsScreenController.step, index: i),
+                                    Expanded(
+                                      child: Container(
                                         height: 1,
-                                        color: Color(0xff48c0a2),
+                                        color: Color(0xffdbdbdb),
                                       ),
-                              ),
-                              for (int i = 0; i <= 8; i++) StepWidget(step: myStepsScreenController.step, index: i),
-                              Expanded(
-                                child: Container(
-                                  height: 1,
-                                  color: Color(0xffdbdbdb),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                                Container(
+                                  color: Colors.white,
+                                  height: height * 0.77,
+                                  padding: EdgeInsets.symmetric(vertical: 50, horizontal: 30),
+                                  child: myStepsScreenController.step == 0
+                                      ? TravellersStepView(model)
+                                      : myStepsScreenController.step == 1
+                                          ? SafetyStepView(model)
+                                          : myStepsScreenController.step == 2
+                                              ? RulesStepView(model)
+                                              : myStepsScreenController.step == 3
+                                                  ? PassportStepView(model)
+                                                  : myStepsScreenController.step == 4
+                                                      ? VisaStepView(model)
+                                                      : myStepsScreenController.step == 5
+                                                          ? UpgradesStepView(model)
+                                                          : myStepsScreenController.step == 6
+                                                              ? SeatsStepView(model)
+                                                              : myStepsScreenController.step == 7
+                                                                  ? PaymentStepView(model)
+                                                                  : myStepsScreenController.step == 8
+                                                                      ? ReceiptStepView(model)
+                                                                      : Container(),
+                                ),
+                                BottomOfPage(height: height, myStepsScreenController: myStepsScreenController),
+                              ],
+                            ),
                           ),
-                          Container(
-                            color: Colors.white,
-                            height: height * 0.77,
-                            padding: EdgeInsets.symmetric(vertical: 50, horizontal: 30),
-                            child: myStepsScreenController.step == 0
-                                ? TravellersStepView(model)
-                                : myStepsScreenController.step == 1
-                                    ? SafetyStepView(model)
-                                    : myStepsScreenController.step == 2
-                                        ? RulesStepView(model)
-                                        : myStepsScreenController.step == 3
-                                            ? PassportStepView(model)
-                                            : myStepsScreenController.step == 4
-                                                ? VisaStepView(model)
-                                                : myStepsScreenController.step == 5
-                                                    ? UpgradesStepView(model)
-                                                    : myStepsScreenController.step == 6
-                                                        ? SeatsStepView(model)
-                                                        : myStepsScreenController.step == 7
-                                                            ? PaymentStepView(model)
-                                                            : myStepsScreenController.step == 8
-                                                                ? ReceiptStepView(model)
-                                                                : Container(),
-                          ),
-                          BottomOfPage(height: height, myStepsScreenController: myStepsScreenController),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }

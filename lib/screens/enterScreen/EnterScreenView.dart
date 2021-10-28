@@ -119,7 +119,9 @@ class CheckInForm extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            CheckInButton()
+                            CheckInButton(
+                              myEnterScreenController: myEnterScreenController,
+                            )
                           ],
                         ),
                       ),
@@ -178,7 +180,9 @@ class LanguagePicker extends StatelessWidget {
 class CheckInButton extends StatelessWidget {
   const CheckInButton({
     Key? key,
+    required this.myEnterScreenController,
   }) : super(key: key);
+  final EnterScreenController myEnterScreenController;
 
   @override
   Widget build(BuildContext context) {
@@ -194,8 +198,11 @@ class CheckInButton extends StatelessWidget {
         ),
       ),
       child: ElevatedButton(
-        onPressed: () {
-          Get.toNamed(RouteNames.steps);
+        onPressed: () async {
+          bool isValid = await myEnterScreenController.loginValidation();
+          if (isValid) {
+            Get.toNamed(RouteNames.steps);
+          } else {}
         },
         child: Text("Check-in"),
         style: ButtonStyle(

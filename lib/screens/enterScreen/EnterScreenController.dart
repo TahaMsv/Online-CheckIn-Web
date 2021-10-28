@@ -1,11 +1,18 @@
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart' hide Response;
+
+// import 'package:network_manager/network_manager.dart';
+import 'package:onlinecheckin/utility/Constants.dart';
+import '../../utility/DataProvider.dart';
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
+import 'package:dio/dio.dart';
 
 class EnterScreenController extends MainController {
   EnterScreenController._();
+
   static final EnterScreenController _instance = EnterScreenController._();
+
   factory EnterScreenController(MainModel model) {
     _instance.model = model;
     return _instance;
@@ -14,10 +21,30 @@ class EnterScreenController extends MainController {
   TextEditingController ticketNumberC = TextEditingController();
   TextEditingController usernameC = TextEditingController();
 
+  Future<bool> loginValidation() async {
+    Response response = await DioClient.getToken(
+      execution: "[OnlineCheckin].[Authenticate]",
+      token: null,
+      request: {"Code": "9999999999", "Code2": "2999", "UrlType": 4},
+    );
+
+    if (response.statusCode == 200) {
+      String? token = response.data["Body"]["Token"];
+      if (token != null) {
+        model.setToken(token);
+        print(token);
+        print("ok validation");
+      }
+      return Future<bool>.value(true);
+    }
+    print("not ok validation");
+    return Future<bool>.value(false);
+  }
 
   @override
   void onInit() {
     print("EnterScreenController Init");
+    // initializeApp();
     super.onInit();
   }
 
@@ -33,5 +60,47 @@ class EnterScreenController extends MainController {
     super.onReady();
   }
 
+// initializeApp() async {
+//   await initializeNetworkManager(baseURL: Apis.baseUrl);
+//   // await initializePreferencesSettings();
+//   //
+//   // await initializeRoute();
+//   //
+//   // initializeLocalNotification();
+//   //
+//   // initializeFlutterFire();
+// }
+
+// initializeNetworkManager({required String baseURL}) {
+//   print("baseurl: "+baseURL);
+//   NetworkOption.initialize(
+//       baseUrl: baseURL,
+//       timeout: 30000,
+//       token: null,
+//       headers: {
+//       'Content-Type': 'application/json',
+//       // "Authorization": token,
+//       },
+//       onStartDefault: () {
+//         print("Start");
+//         model.setLoading(true);
+//       },
+//       onEndDefault: () {
+//         print("End");
+//         model.setLoading(false);
+//       },
+//       onSuccessDefault: (res) {
+//         print("Success");
+//       },
+//       onFailedDefault: (NetworkResponse res) {
+//         print("Failed");
+//       },
+//       errorMsgExtractor: (res) {
+//         return res["Message"] ?? "Unknown Error";
+//       },
+//       successMsgExtractor: (res) {
+//         return res["Message"] ?? "Done";
+//       });
+// }
 
 }
