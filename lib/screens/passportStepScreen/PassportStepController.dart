@@ -107,6 +107,8 @@ class PassportStepController extends MainController {
                 child: UserTextInput(
                   controller: documentNoC,
                   hint: "Document No.",
+                  errorText: "",
+                  isEmpty: true,
                 ),
               )
             ],
@@ -188,7 +190,7 @@ class PassportStepController extends MainController {
               SizedBox(
                 width: 20,
               ),
-              SelectingDateWidget(hint:"Entry Date"),
+              SelectingDateWidget(hint: "Entry Date"),
             ],
           ),
           SizedBox(
@@ -232,7 +234,7 @@ class PassportStepController extends MainController {
               SizedBox(
                 width: 20,
               ),
-              SelectingDateWidget(hint:"Date of Birth"),
+              SelectingDateWidget(hint: "Date of Birth"),
             ],
           ),
           SizedBox(
@@ -277,5 +279,3 @@ class PassportStepController extends MainController {
     super.onReady();
   }
 }
-
-

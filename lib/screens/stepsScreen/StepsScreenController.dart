@@ -29,6 +29,18 @@ class StepsScreenController extends MainController {
     print(_step);
   }
 
+  RxList<String> travellers = <String>[].obs;
+
+  void addToTravellers(String lastName) {
+    travellers.add(lastName);
+  }
+
+  void removeFromTravellers(int index) {
+    if (index < travellers.length && index >= 0) {
+      travellers.removeAt(index);
+    }
+  }
+
   getInformation() async {
     model.setLoading(true);
     String token = model.token;

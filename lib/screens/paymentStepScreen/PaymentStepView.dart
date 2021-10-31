@@ -191,21 +191,40 @@ class BillingAddress extends StatelessWidget {
             controller: myPaymentStepController.addressC,
             hint: "Address",
             height: 90,
+            errorText: "",
+            isEmpty: true,
           ),
           SizedBox(
             height: 20,
           ),
-          UserTextInput(controller: myPaymentStepController.billingAddressCardNumberC, hint: "Card Number"),
+          UserTextInput(
+            controller: myPaymentStepController.billingAddressCardNumberC,
+            hint: "Card Number",
+            errorText: "",
+            isEmpty: true,
+          ),
           SizedBox(
             height: 20,
           ),
           Row(
             children: [
-              Expanded(child: UserTextInput(controller: myPaymentStepController.countryC, hint: "Card Number")),
+              Expanded(
+                  child: UserTextInput(
+                controller: myPaymentStepController.countryC,
+                hint: "Card Number",
+                errorText: "",
+                isEmpty: true,
+              )),
               SizedBox(
                 width: 10,
               ),
-              Expanded(child: UserTextInput(controller: myPaymentStepController.provinceC, hint: "Province / State")),
+              Expanded(
+                  child: UserTextInput(
+                controller: myPaymentStepController.provinceC,
+                hint: "Province / State",
+                errorText: "",
+                isEmpty: true,
+              )),
             ],
           ),
           SizedBox(
@@ -213,11 +232,23 @@ class BillingAddress extends StatelessWidget {
           ),
           Row(
             children: [
-              Expanded(child: UserTextInput(controller: myPaymentStepController.cityC, hint: "City")),
+              Expanded(
+                  child: UserTextInput(
+                controller: myPaymentStepController.cityC,
+                hint: "City",
+                errorText: "",
+                isEmpty: true,
+              )),
               SizedBox(
                 width: 10,
               ),
-              Expanded(child: UserTextInput(controller: myPaymentStepController.postalC, hint: "Postal / Zip Code")),
+              Expanded(
+                  child: UserTextInput(
+                controller: myPaymentStepController.postalC,
+                hint: "Postal / Zip Code",
+                errorText: "",
+                isEmpty: true,
+              )),
             ],
           ),
         ],
@@ -259,21 +290,43 @@ class CardInfo extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          UserTextInput(controller: myPaymentStepController.cardHolderNameC, hint: "Cardholder Name"),
+          UserTextInput(
+            controller: myPaymentStepController.cardHolderNameC,
+            hint: "Cardholder Name",
+            errorText: "",
+            isEmpty: true,
+          ),
           SizedBox(
             height: 20,
           ),
-          UserTextInput(controller: myPaymentStepController.cardNumberC, hint: "Card Number"),
+          UserTextInput(
+            controller: myPaymentStepController.cardNumberC,
+            hint: "Card Number",
+            errorText: "",
+            isEmpty: true,
+          ),
           SizedBox(
             height: 20,
           ),
           Row(
             children: [
-              Expanded(child: UserTextInput(controller: myPaymentStepController.expiryMonthC, hint: "Expiry Month")),
+              Expanded(
+                  child: UserTextInput(
+                controller: myPaymentStepController.expiryMonthC,
+                hint: "Expiry Month",
+                errorText: "",
+                isEmpty: true,
+              )),
               SizedBox(
                 width: 10,
               ),
-              Expanded(child: UserTextInput(controller: myPaymentStepController.expiryYearC, hint: "Expiry Year")),
+              Expanded(
+                  child: UserTextInput(
+                controller: myPaymentStepController.expiryYearC,
+                hint: "Expiry Year",
+                errorText: "",
+                isEmpty: true,
+              )),
             ],
           ),
           SizedBox(
@@ -281,7 +334,13 @@ class CardInfo extends StatelessWidget {
           ),
           Row(
             children: [
-              Expanded(child: UserTextInput(controller: myPaymentStepController.cvv2C, hint: "CVV2")),
+              Expanded(
+                  child: UserTextInput(
+                controller: myPaymentStepController.cvv2C,
+                hint: "CVV2",
+                errorText: "",
+                isEmpty: true,
+              )),
               SizedBox(
                 width: 10,
               ),

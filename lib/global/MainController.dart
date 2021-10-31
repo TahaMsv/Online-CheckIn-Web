@@ -9,4 +9,5 @@ class MainController extends GetxController {
     mainModel = model;
   }
   MainController({this.mainModel});
+
 }

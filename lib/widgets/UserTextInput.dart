@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+
 class UserTextInput extends StatelessWidget {
   const UserTextInput({
     Key? key,
     required this.controller,
-    required this.hint, this.height=40,
-  }
-  ) : super(key: key);
+    required this.hint,
+    this.height = 40,
+     this.errorText="",
+     this.isEmpty=true,
+  }) : super(key: key);
 
   final TextEditingController controller;
   final String hint;
+  final String errorText;
+  final bool isEmpty;
   final double height;
 
   @override
@@ -27,6 +32,7 @@ class UserTextInput extends StatelessWidget {
           contentPadding: EdgeInsets.all(10.0),
           border: InputBorder.none,
           hintText: hint,
+          errorText: isEmpty ? errorText : null,
         ),
       ),
     );

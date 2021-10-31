@@ -111,10 +111,14 @@ class CheckInForm extends StatelessWidget {
                                   UserTextInput(
                                     controller: myEnterScreenController.ticketNumberC,
                                     hint: "Reservation ID / Ticket Number",
+                                    errorText: "",
+                                    isEmpty: true,
                                   ),
                                   UserTextInput(
                                     controller: myEnterScreenController.usernameC,
                                     hint: "Lastname",
+                                    errorText: "",
+                                    isEmpty: true,
                                   ),
                                 ],
                               ),

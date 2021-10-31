@@ -100,6 +100,8 @@ class VisaStepController extends MainController {
                 child: UserTextInput(
                   controller: documentNoC,
                   hint: "Document No.",
+                  errorText: "",
+                  isEmpty: true,
                 ),
               )
             ],
@@ -153,6 +155,8 @@ class VisaStepController extends MainController {
                 child: UserTextInput(
                   controller: destinationC,
                   hint: "Destination",
+                  errorText: "",
+                  isEmpty: true,
                 ),
               )
             ],

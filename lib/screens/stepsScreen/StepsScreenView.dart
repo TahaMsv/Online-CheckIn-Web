@@ -55,6 +55,7 @@ class StepsScreenView extends StatelessWidget {
                           () => LeftSideOFPage(
                             height: height,
                             step: myStepsScreenController.step,
+                            myStepsScreenController: myStepsScreenController,
                           ),
                         ),
                         Obx(
@@ -226,10 +227,12 @@ class LeftSideOFPage extends StatelessWidget {
     Key? key,
     required this.height,
     required this.step,
+    required this.myStepsScreenController,
   }) : super(key: key);
 
   final double height;
   final int step;
+  final StepsScreenController myStepsScreenController;
 
   @override
   Widget build(BuildContext context) {
@@ -267,12 +270,16 @@ class LeftSideOFPage extends StatelessWidget {
               height: 1,
               color: Color(0xffeaeaea),
             ),
-            Container(
-              height: height * 0.9 - 65 - 13.5,
-              child: ListView.builder(
-                itemCount: 20,
-                itemBuilder: (ctx, index) => TravellerItem(
-                  step: step,
+            Obx(
+              () => Container(
+                height: height * 0.9 - 65 - 13.5,
+                child: ListView.builder(
+                  itemCount: myStepsScreenController.travellers.length,
+                  itemBuilder: (ctx, index) => TravellerItem(
+                    step: step,
+                    index: index,
+                    myStepsScreenController: myStepsScreenController,
+                  ),
                 ),
               ),
             ),
@@ -288,8 +295,12 @@ class TravellerItem extends StatelessWidget {
   const TravellerItem({
     Key? key,
     required this.step,
+    required this.index,
+    required this.myStepsScreenController,
   }) : super(key: key);
   final int step;
+  final int index;
+  final StepsScreenController myStepsScreenController;
 
   @override
   Widget build(BuildContext context) {
@@ -312,7 +323,7 @@ class TravellerItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "Mr. Jack Taylor",
+            myStepsScreenController.travellers[index],
             style: TextStyle(
               color: Color(0xff424242),
               fontSize: 13,
@@ -321,7 +332,7 @@ class TravellerItem extends StatelessWidget {
           ),
           if (step == 0)
             IconButton(
-              onPressed: null,
+              onPressed: () => myStepsScreenController.removeFromTravellers(index),
               icon: Icon(
                 Icons.close,
                 color: Colors.red,

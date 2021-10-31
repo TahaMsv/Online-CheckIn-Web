@@ -9,9 +9,7 @@ import 'TravellersStepController.dart';
 class TravellersStepView extends StatelessWidget {
   final TravellersStepScreenController myTravellersStepScreenController;
 
-  TravellersStepView(MainModel model)
-      : myTravellersStepScreenController =
-  Get.put(TravellersStepScreenController(model));
+  TravellersStepView(MainModel model) : myTravellersStepScreenController = Get.put(TravellersStepScreenController(model));
 
   @override
   Widget build(BuildContext context) {
@@ -48,21 +46,31 @@ class TravellersStepView extends StatelessWidget {
               SizedBox(
                 height: 35,
               ),
-              UserTextInput(
-                controller: myTravellersStepScreenController.ticketNumberC,
-                hint: "Reservation ID / Ticket Number",
+              Obx(
+                () => UserTextInput(
+                  controller: myTravellersStepScreenController.ticketNumberC,
+                  hint: "Reservation ID / Ticket Number",
+                  errorText: "Reservation ID / Ticket Number can't be empty",
+                  isEmpty: myTravellersStepScreenController.isTicketNumberEmpty.value,
+                ),
               ),
               SizedBox(
                 height: 20,
               ),
-              UserTextInput(
-                controller: myTravellersStepScreenController.lastNameC,
-                hint: "Lastname",
+              Obx(
+                () => UserTextInput(
+                  controller: myTravellersStepScreenController.lastNameC,
+                  hint: "Lastname",
+                  errorText: "Lastname can't be empty",
+                  isEmpty: myTravellersStepScreenController.isLastNameEmpty.value,
+                ),
               ),
               SizedBox(
                 height: 35,
               ),
-              AddToTravellersButton(),
+              AddToTravellersButton(
+                myTravellersStepScreenController: myTravellersStepScreenController,
+              ),
             ],
           ),
         ),
@@ -74,7 +82,9 @@ class TravellersStepView extends StatelessWidget {
 class AddToTravellersButton extends StatelessWidget {
   const AddToTravellersButton({
     Key? key,
+    required this.myTravellersStepScreenController,
   }) : super(key: key);
+  final TravellersStepScreenController myTravellersStepScreenController;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +94,7 @@ class AddToTravellersButton extends StatelessWidget {
       buttonText: "Add to Travellers",
       bgColor: Color(0xff00bfa2),
       fgColor: Colors.white,
-      function: (){},
+      function: myTravellersStepScreenController.addTraveller,
     );
   }
 }
