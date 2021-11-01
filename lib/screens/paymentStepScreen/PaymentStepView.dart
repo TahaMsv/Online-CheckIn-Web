@@ -192,7 +192,7 @@ class BillingAddress extends StatelessWidget {
             hint: "Address",
             height: 90,
             errorText: "",
-            isEmpty: true,
+            isEmpty: false,
           ),
           SizedBox(
             height: 20,
@@ -201,7 +201,7 @@ class BillingAddress extends StatelessWidget {
             controller: myPaymentStepController.billingAddressCardNumberC,
             hint: "Card Number",
             errorText: "",
-            isEmpty: true,
+            isEmpty: false,
           ),
           SizedBox(
             height: 20,
@@ -213,7 +213,7 @@ class BillingAddress extends StatelessWidget {
                 controller: myPaymentStepController.countryC,
                 hint: "Card Number",
                 errorText: "",
-                isEmpty: true,
+                isEmpty: false,
               )),
               SizedBox(
                 width: 10,
@@ -223,7 +223,7 @@ class BillingAddress extends StatelessWidget {
                 controller: myPaymentStepController.provinceC,
                 hint: "Province / State",
                 errorText: "",
-                isEmpty: true,
+                isEmpty: false,
               )),
             ],
           ),
@@ -237,7 +237,7 @@ class BillingAddress extends StatelessWidget {
                 controller: myPaymentStepController.cityC,
                 hint: "City",
                 errorText: "",
-                isEmpty: true,
+                isEmpty: false,
               )),
               SizedBox(
                 width: 10,
@@ -247,7 +247,7 @@ class BillingAddress extends StatelessWidget {
                 controller: myPaymentStepController.postalC,
                 hint: "Postal / Zip Code",
                 errorText: "",
-                isEmpty: true,
+                isEmpty: false,
               )),
             ],
           ),
@@ -294,7 +294,7 @@ class CardInfo extends StatelessWidget {
             controller: myPaymentStepController.cardHolderNameC,
             hint: "Cardholder Name",
             errorText: "",
-            isEmpty: true,
+            isEmpty: false,
           ),
           SizedBox(
             height: 20,
@@ -303,7 +303,7 @@ class CardInfo extends StatelessWidget {
             controller: myPaymentStepController.cardNumberC,
             hint: "Card Number",
             errorText: "",
-            isEmpty: true,
+            isEmpty: false,
           ),
           SizedBox(
             height: 20,
@@ -315,7 +315,7 @@ class CardInfo extends StatelessWidget {
                 controller: myPaymentStepController.expiryMonthC,
                 hint: "Expiry Month",
                 errorText: "",
-                isEmpty: true,
+                isEmpty: false,
               )),
               SizedBox(
                 width: 10,
@@ -325,7 +325,7 @@ class CardInfo extends StatelessWidget {
                 controller: myPaymentStepController.expiryYearC,
                 hint: "Expiry Year",
                 errorText: "",
-                isEmpty: true,
+                isEmpty: false,
               )),
             ],
           ),
@@ -339,7 +339,7 @@ class CardInfo extends StatelessWidget {
                 controller: myPaymentStepController.cvv2C,
                 hint: "CVV2",
                 errorText: "",
-                isEmpty: true,
+                isEmpty: false,
               )),
               SizedBox(
                 width: 10,

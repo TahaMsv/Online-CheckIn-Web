@@ -60,8 +60,8 @@ class TravellersStepView extends StatelessWidget {
               Obx(
                 () => UserTextInput(
                   controller: myTravellersStepScreenController.lastNameC,
-                  hint: "Lastname",
-                  errorText: "Lastname can't be empty",
+                  hint: "Last Name",
+                  errorText: "Last Name can't be empty",
                   isEmpty: myTravellersStepScreenController.isLastNameEmpty.value,
                 ),
               ),

@@ -136,7 +136,7 @@ class SeatBlocks extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: 10,
         itemBuilder: (_, j) {
-          final columnNumber = i * 10 + j + 1;
+          final columnNumber = (i-1) * 10 + j + 1;
           return SeatColumn(columnNumber: columnNumber);
         },
       ),

@@ -103,24 +103,32 @@ class CheckInForm extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Container(
-                              height: 100,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  UserTextInput(
-                                    controller: myEnterScreenController.ticketNumberC,
-                                    hint: "Reservation ID / Ticket Number",
-                                    errorText: "",
-                                    isEmpty: true,
-                                  ),
-                                  UserTextInput(
-                                    controller: myEnterScreenController.usernameC,
-                                    hint: "Lastname",
-                                    errorText: "",
-                                    isEmpty: true,
-                                  ),
-                                ],
+                            Obx(
+                              () => Container(
+                                height: 150,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    UserTextInput(
+                                      controller: myEnterScreenController.firstNameC,
+                                      hint: "First Name",
+                                      errorText: "First Name can't be empty",
+                                      isEmpty: myEnterScreenController.isFirstNameEmpty.value,
+                                    ),
+                                    UserTextInput(
+                                      controller: myEnterScreenController.lastNameC,
+                                      hint: "Last Name",
+                                      errorText: "Last Name can't be empty",
+                                      isEmpty: myEnterScreenController.isLastNameEmpty.value,
+                                    ),
+                                    UserTextInput(
+                                      controller: myEnterScreenController.bookingRefNameC,
+                                      hint: "Booking reference name",
+                                      errorText: "Booking reference name can't be empty",
+                                      isEmpty: myEnterScreenController.isBookingRefNameEmpty.value,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             CheckInButton(
@@ -203,10 +211,13 @@ class CheckInButton extends StatelessWidget {
       ),
       child: ElevatedButton(
         onPressed: () async {
-          bool isValid = await myEnterScreenController.loginValidation();
-          if (isValid) {
-            Get.toNamed(RouteNames.steps);
-          } else {}
+          bool checkBoxesValidation = await myEnterScreenController.checkBoxesValidation();
+          if (checkBoxesValidation) {
+            bool isValid = await myEnterScreenController.loginValidation();
+            if (isValid) {
+              Get.toNamed(RouteNames.steps);
+            } else {}
+          }
         },
         child: Text("Check-in"),
         style: ButtonStyle(
@@ -270,7 +281,7 @@ class BackgroundImage extends StatelessWidget {
         width: width,
         height: height,
         child: Image.asset(
-          'assets/images/abomis-bg.png',
+          'assets/images/abomis-bg.jpg',
           fit: BoxFit.fill,
         ),
       ),

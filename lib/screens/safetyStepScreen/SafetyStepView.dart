@@ -11,9 +11,7 @@ import 'SafetyStepController.dart';
 class SafetyStepView extends StatelessWidget {
   final SafetyStepScreenController mySafetyStepScreenController;
 
-  SafetyStepView(MainModel model)
-      : mySafetyStepScreenController =
-            Get.put(SafetyStepScreenController(model));
+  SafetyStepView(MainModel model) : mySafetyStepScreenController = Get.put(SafetyStepScreenController(model));
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +25,9 @@ class SafetyStepView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AdviseSegment(),
-            CommitmentSegment(),
+            CommitmentSegment(
+              mySafetyStepScreenController: mySafetyStepScreenController,
+            ),
           ],
         ),
       ),
@@ -38,7 +38,9 @@ class SafetyStepView extends StatelessWidget {
 class CommitmentSegment extends StatelessWidget {
   const CommitmentSegment({
     Key? key,
+    required this.mySafetyStepScreenController,
   }) : super(key: key);
+  final SafetyStepScreenController mySafetyStepScreenController;
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +53,7 @@ class CommitmentSegment extends StatelessWidget {
             children: [
               Text(
                 "Your Commitment to Safety",
-                style: TextStyle(
-                    color: Color(0xff424242),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15),
+                style: TextStyle(color: Color(0xff424242), fontWeight: FontWeight.bold, fontSize: 15),
               ),
               SizedBox(
                 width: 10,
@@ -68,19 +67,20 @@ class CommitmentSegment extends StatelessWidget {
             ],
           ),
           PolicyWidget(
-            isChecked: true,
-            normalText:
-                "In the past 10 days, I/we have not had a COVID-19 diagnosis and have not experienced the onset of any one of the primary symptoms of COVID-19. ",
+            index: 0,
+            mySafetyStepScreenController: mySafetyStepScreenController,
+            normalText: "In the past 10 days, I/we have not had a COVID-19 diagnosis and have not experienced the onset of any one of the primary symptoms of COVID-19. ",
           ),
           PolicyWidget(
-            isChecked: true,
+            index: 1,
+            mySafetyStepScreenController: mySafetyStepScreenController,
             normalText:
                 "I/we have not been in close contact with someone who has COVID-19 in the past 10 days. EXCEPTION: I/we have been fully vaccinated for at least 2 weeks or have had COVID-19 within the last 90 days and fully recovered so that I/we are not contagious, and I/we remain symptom free. ",
           ),
           PolicyWidget(
-            isChecked: true,
-            normalText:
-                "I/we will wear a face mask throughout the airport, in Delta Sky Clubs and onboard the aircraft, even if fully vaccinated, unless I meet the criteria for exemptions. ",
+            index: 2,
+            mySafetyStepScreenController: mySafetyStepScreenController,
+            normalText: "I/we will wear a face mask throughout the airport, in Delta Sky Clubs and onboard the aircraft, even if fully vaccinated, unless I meet the criteria for exemptions. ",
           ),
           Container(
             margin: EdgeInsets.only(top: 30),
@@ -90,10 +90,7 @@ class CommitmentSegment extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: "Please read our ",
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xff3b3b3b),
-                        fontWeight: FontWeight.w400),
+                    style: TextStyle(fontSize: 15, color: Color(0xff3b3b3b), fontWeight: FontWeight.w400),
                   ),
                   TextSpan(
                     text: "travel policy",
@@ -105,12 +102,8 @@ class CommitmentSegment extends StatelessWidget {
                       },
                   ),
                   TextSpan(
-                    text:
-                        " to delay or cancel your trip if you are unable to accept the above commitments.",
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xff3b3b3b),
-                        fontWeight: FontWeight.w400),
+                    text: " to delay or cancel your trip if you are unable to accept the above commitments.",
+                    style: TextStyle(fontSize: 15, color: Color(0xff3b3b3b), fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -125,12 +118,13 @@ class CommitmentSegment extends StatelessWidget {
 class PolicyWidget extends StatelessWidget {
   const PolicyWidget({
     Key? key,
-    required this.isChecked,
+    required this.index,
     required this.normalText,
+    required this.mySafetyStepScreenController,
   }) : super(key: key);
-
-  final bool isChecked;
+  final int index;
   final String normalText;
+  final SafetyStepScreenController mySafetyStepScreenController;
 
   @override
   Widget build(BuildContext context) {
@@ -139,9 +133,13 @@ class PolicyWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Checkbox(
-            onChanged: (bool? value) {},
-            value: isChecked,
+          Obx(
+            () => Checkbox(
+              onChanged: (bool? value) {
+                mySafetyStepScreenController.changeValue(index, value!);
+              },
+              value: mySafetyStepScreenController.checkBoxesValue[index],
+            ),
           ),
           SizedBox(
             width: 10,
@@ -153,10 +151,7 @@ class PolicyWidget extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: normalText,
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Color(0xff3b3b3b),
-                        fontWeight: FontWeight.w400),
+                    style: TextStyle(fontSize: 15, color: Color(0xff3b3b3b), fontWeight: FontWeight.w400),
                   ),
                   TextSpan(
                     text: "Full Policy",
@@ -189,8 +184,8 @@ class AdviseSegment extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           StepsScreenTitle(
-            title:   "The Standard For Safer Travel",
-            description:"",
+            title: "The Standard For Safer Travel",
+            description: "",
           ),
           Container(
             margin: EdgeInsets.only(top: 20),

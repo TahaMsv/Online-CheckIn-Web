@@ -7,7 +7,7 @@ class UserTextInput extends StatelessWidget {
     required this.hint,
     this.height = 40,
      this.errorText="",
-     this.isEmpty=true,
+     this.isEmpty=false,
   }) : super(key: key);
 
   final TextEditingController controller;

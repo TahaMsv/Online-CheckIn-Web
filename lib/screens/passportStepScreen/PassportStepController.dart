@@ -108,7 +108,7 @@ class PassportStepController extends MainController {
                   controller: documentNoC,
                   hint: "Document No.",
                   errorText: "",
-                  isEmpty: true,
+                  isEmpty: false,
                 ),
               )
             ],

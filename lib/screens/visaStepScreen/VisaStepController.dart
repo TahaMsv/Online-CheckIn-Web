@@ -101,7 +101,7 @@ class VisaStepController extends MainController {
                   controller: documentNoC,
                   hint: "Document No.",
                   errorText: "",
-                  isEmpty: true,
+                  isEmpty: false,
                 ),
               )
             ],
@@ -156,7 +156,7 @@ class VisaStepController extends MainController {
                   controller: destinationC,
                   hint: "Destination",
                   errorText: "",
-                  isEmpty: true,
+                  isEmpty: false,
                 ),
               )
             ],

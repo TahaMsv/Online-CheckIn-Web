@@ -18,8 +18,51 @@ class EnterScreenController extends MainController {
     return _instance;
   }
 
-  TextEditingController ticketNumberC = TextEditingController();
-  TextEditingController usernameC = TextEditingController();
+  TextEditingController bookingRefNameC = TextEditingController();
+  TextEditingController lastNameC = TextEditingController();
+  TextEditingController firstNameC = TextEditingController();
+
+  RxBool isLastNameEmpty = false.obs;
+  RxBool isFirstNameEmpty = false.obs;
+  RxBool isBookingRefNameEmpty = false.obs;
+
+  Future<bool> checkBoxesValidation() async {
+    String firstName = firstNameC.text;
+    String lastName = lastNameC.text;
+    String bookingRefName = bookingRefNameC.text;
+    if (firstName == "") {
+      isFirstNameEmpty.value = true;
+    } else {
+      isFirstNameEmpty.value = false;
+    }
+    if (bookingRefName == "") {
+      isBookingRefNameEmpty.value = true;
+    } else {
+      isBookingRefNameEmpty.value = false;
+    }
+    if (lastName == "") {
+      isLastNameEmpty.value = true;
+    } else {
+      isLastNameEmpty.value = false;
+    }
+    if (bookingRefName != "" && lastName != "" && firstName != "") {
+      bool isValid = await checkTravellerValidation(firstName, lastName, bookingRefName);
+      if (isValid) {
+        firstNameC.text = "";
+        lastNameC.text = "";
+        bookingRefNameC.text = "";
+        isBookingRefNameEmpty.value = false;
+        isLastNameEmpty.value = false;
+        isFirstNameEmpty.value = false;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Future<bool> checkTravellerValidation(String firstName, String lastName, String bookingRefName) async {
+    return true;
+  }
 
   Future<bool> loginValidation() async {
     Response response = await DioClient.getToken(

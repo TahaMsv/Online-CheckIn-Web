@@ -253,15 +253,15 @@ class LeftSideOFPage extends StatelessWidget {
                     title: "Travellers",
                     width: 200,
                   ),
-                  Container(
-                    width: 2,
-                    height: double.infinity,
-                    color: Color(0xffededed),
-                  ),
-                  TitleWidget(
-                    title: "Seat",
-                    width: 100,
-                  ),
+                  // Container(
+                  //   width: 2,
+                  //   height: double.infinity,
+                  //   color: Color(0xffededed),
+                  // ),
+                  // TitleWidget(
+                  //   title: "Seat",
+                  //   width: 100,
+                  // ),
                 ],
               ),
             ),
