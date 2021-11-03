@@ -281,7 +281,7 @@ class BackgroundImage extends StatelessWidget {
         width: width,
         height: height,
         child: Image.asset(
-          'assets/images/abomis-bg.jpg',
+          'assets/images/company-logo-light.jpg',
           fit: BoxFit.fill,
         ),
       ),

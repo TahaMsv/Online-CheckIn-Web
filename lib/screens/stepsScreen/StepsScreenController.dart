@@ -20,7 +20,7 @@ class StepsScreenController extends MainController {
   }
 
   Welcome? _welcome;
-  RxInt _step = 0.obs;
+  RxInt _step = 6.obs;
 
   int get step => _step.value;
 
@@ -43,7 +43,8 @@ class StepsScreenController extends MainController {
 
   getInformation() async {
     model.setLoading(true);
-    String token = model.token;
+    // String token = model.token;
+    String token = "88DC6A75-CD1A-4249-9EEC-3BBBC54B8B9B";
     Response response = await DioClient.getInformation(
       execution: "[OnlineCheckin].[SelectFlightInformation]",
       token: token,

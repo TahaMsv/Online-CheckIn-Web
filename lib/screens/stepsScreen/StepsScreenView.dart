@@ -89,7 +89,7 @@ class StepsScreenView extends StatelessWidget {
                                 Container(
                                   color: Colors.white,
                                   height: height * 0.77,
-                                  padding: EdgeInsets.symmetric(vertical: 50, horizontal: 30),
+                                  padding: EdgeInsets.only(top: 50, left: 30, right: 30),
                                   child: myStepsScreenController.step == 0
                                       ? TravellersStepView(model)
                                       : myStepsScreenController.step == 1
@@ -453,7 +453,7 @@ class AbomisLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Image.asset(
-        'assets/images/abomis-logo.png',
+        'assets/images/company-logo-blue.png',
         fit: BoxFit.fill,
       ),
       height: 60,

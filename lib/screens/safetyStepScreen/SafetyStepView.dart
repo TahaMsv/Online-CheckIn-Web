@@ -45,7 +45,7 @@ class CommitmentSegment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 30),
+      margin: EdgeInsets.only(top: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -83,7 +83,7 @@ class CommitmentSegment extends StatelessWidget {
             normalText: "I/we will wear a face mask throughout the airport, in Delta Sky Clubs and onboard the aircraft, even if fully vaccinated, unless I meet the criteria for exemptions. ",
           ),
           Container(
-            margin: EdgeInsets.only(top: 30),
+            margin: EdgeInsets.only(top: 15),
             child: RichText(
               overflow: TextOverflow.clip,
               text: TextSpan(
@@ -109,6 +109,7 @@ class CommitmentSegment extends StatelessWidget {
               ),
             ),
           ),
+
         ],
       ),
     );
@@ -129,7 +130,7 @@ class PolicyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 20),
+      margin: EdgeInsets.symmetric(vertical: 10),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -190,13 +191,16 @@ class AdviseSegment extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 20),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  width: 100,
-                  height: 100,
-                  color: Color(0xff90d3f9),
+                  width: 150,
+                  height: 150,
                   margin: EdgeInsets.only(right: 20),
+                  child: Image.asset(
+                    'assets/images/mask.png',
+                    fit: BoxFit.fill,
+                  ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

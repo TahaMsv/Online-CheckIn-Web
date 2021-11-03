@@ -281,10 +281,18 @@ class CardInfo extends StatelessWidget {
           ),
           Row(
             children: [
-              CardImage(),
-              CardImage(),
-              CardImage(),
-              CardImage(),
+              CardImage(
+                imagePath: 'assets/images/Amex-card.png',
+              ),
+              CardImage(
+                imagePath: 'assets/images/Discover-card.png',
+              ),
+              CardImage(
+                imagePath: 'assets/images/Visa-card.png',
+              ),
+              CardImage(
+                imagePath: 'assets/images/card4.png',
+              ),
             ],
           ),
           SizedBox(
@@ -365,15 +373,21 @@ class CardInfo extends StatelessWidget {
 class CardImage extends StatelessWidget {
   const CardImage({
     Key? key,
+    required this.imagePath,
   }) : super(key: key);
+
+  final String imagePath;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 45,
       height: 30,
-      color: Colors.red,
       margin: EdgeInsets.only(right: 8),
+      child: Image.asset(
+        imagePath,
+        fit: BoxFit.fill,
+      ),
     );
   }
 }

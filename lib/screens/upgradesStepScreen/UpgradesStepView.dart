@@ -54,16 +54,25 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
   late AutoScrollController controller;
 
   var winesList = [
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
+    {
+      "name": "Sparkling Wine",
+      "description": "Sparkling wine is a wine with significant levels of carbon dioxide in it. Making it fizzy",
+      "imagePath": "assets/images/sparkling-wine.png",
+      "color": Color(0xfffffaf2),
+    },
+    {
+      "name": "Prosecco",
+      "description": "Prosecco is a sparkling wine that’s often taken for granted",
+      "imagePath": "assets/images/prosecco-wine.png",
+      "color": Color(0xfff2f3ff),
+    },
+    {
+      "name": "Champagne",
+      "description": "Champagne is a French sparkling wine",
+      "imagePath": "assets/images/champagne.png",
+      "color": Color(0xfffff2f2),
+    },
+
   ];
   var leftIndex = 0;
   var rightIndex = 2;
@@ -116,19 +125,22 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                   ),
                   Expanded(
                     child: Container(
-                      child: ListView.builder(
+                      child: ListView(
                         shrinkWrap: true,
                         scrollDirection: scrollDirection,
                         controller: controller,
-                        itemBuilder: (ctx, index) {
+                        children: winesList.map((value) {
+                          int index = winesList.indexOf(value);
                           return AutoScrollTag(
                             key: ValueKey(index),
                             controller: controller,
                             index: index,
-                            child: UpgradeItemWidget(),
+                            child: UpgradeItemWidget(
+                              value: value,
+                            ),
                             highlightColor: Colors.black.withOpacity(0.1),
                           );
-                        },
+                        }).toList(),
                       ),
                     ),
                   ),
@@ -161,19 +173,28 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
 class UpgradeItemWidget extends StatelessWidget {
   const UpgradeItemWidget({
     Key? key,
+    required this.value,
+    this.isPrinter = false,
   }) : super(key: key);
+
+  final Map<String, dynamic> value;
+  final bool isPrinter;
 
   @override
   Widget build(BuildContext context) {
+    double margin = isPrinter ? 40 : 30;
     return Container(
         // height: 100,
-        width: 350,
-        color: Colors.red,
+        width: 330,
+        // color: Colors.red,
         margin: EdgeInsets.only(left: 10, right: 10),
         child: Stack(
           children: [
             Container(
-              padding: EdgeInsets.only(left: 90, right: 20, top: 20, bottom: 20),
+              height: 180,
+              color: value["color"]!,
+              padding: EdgeInsets.only(right: 20, top: 20, bottom: 20, left: 50),
+              margin: EdgeInsets.only(left: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -182,7 +203,7 @@ class UpgradeItemWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Sparkling Wine",
+                        value["name"]!,
                         style: TextStyle(
                           fontSize: 12,
                           color: Color(0xff424242),
@@ -200,7 +221,7 @@ class UpgradeItemWidget extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    "Sparkling wine is a wine with significant levels of carbon dioxide in it. Making it fizzy",
+                    value["description"]!,
                     overflow: TextOverflow.clip,
                     style: TextStyle(
                       fontSize: 12,
@@ -217,11 +238,23 @@ class UpgradeItemWidget extends StatelessWidget {
               ),
             ),
             Positioned(
-                left: 0,
+                left: isPrinter ? -5 : -30,
                 child: Container(
-                  width: 70,
-                  height: 200,
-                  color: Colors.green,
+                  height: 180,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        // width: 150,
+                        height: isPrinter ? 100 : 130,
+                        // color: Colors.green,
+                        child: Image.asset(
+                          value["imagePath"]!,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ],
+                  ),
                 ))
           ],
         ));
@@ -253,7 +286,17 @@ class Entertainment extends StatelessWidget {
             SizedBox(
               height: 15,
             ),
-            UpgradeItemWidget()
+            Expanded(
+              child: UpgradeItemWidget(
+                value: const {
+                  "name": "Photo print",
+                  "description": "Confirm your flight details and see which extras you already purchased",
+                  "imagePath": "assets/images/printer.png",
+                  "color": Color(0xfff4f4f4),
+                },
+                isPrinter: true,
+              ),
+            )
           ],
         ),
       ),

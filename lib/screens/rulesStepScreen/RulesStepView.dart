@@ -12,8 +12,7 @@ import 'package:get/get.dart';
 class RulesStepView extends StatelessWidget {
   final RulesStepScreenController myRulesStepScreenController;
 
-  RulesStepView(MainModel model)
-      : myRulesStepScreenController = Get.put(RulesStepScreenController(model));
+  RulesStepView(MainModel model) : myRulesStepScreenController = Get.put(RulesStepScreenController(model));
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +28,7 @@ class RulesStepView extends StatelessWidget {
       {
         "imageUrl": "",
         "title": "Type of Toxins",
-        "content":
-            " Powder, Liquid and Sprays of Laboratory Products For Infectious Agents",
+        "content": " Powder, Liquid and Sprays of Laboratory Products For Infectious Agents",
       },
       {
         "imageUrl": "",
@@ -50,45 +48,39 @@ class RulesStepView extends StatelessWidget {
       {
         "imageUrl": "",
         "title": "Incendiary types",
-        "content":
-            "Matches are Just a Small Number Along With (strictly prohibited in the box)",
+        "content": "Matches are Just a Small Number Along With (strictly prohibited in the box)",
       },
       {
         "imageUrl": "",
         "title": "Types of Explosives ",
-        "content":
-            "Types of Ammunition, Explosives, Firecrackers and Fireworks Accessories",
+        "content": "Types of Ammunition, Explosives, Firecrackers and Fireworks Accessories",
       },
       {
         "imageUrl": "",
         "title": "Types of Oxidizing",
-        "content":
-            "Oxidizing and Oxidizing Materials, Detergents and Disinfectants",
+        "content": "Oxidizing and Oxidizing Materials, Detergents and Disinfectants",
       },
       {
         "imageUrl": "",
         "title": "Types of Weapons",
-        "content":
-            "Any Firearms or Cold Weapons (Knives, Scissors, Horns, Colt)",
+        "content": "Any Firearms or Cold Weapons (Knives, Scissors, Horns, Colt)",
       },
       {
         "imageUrl": "",
         "title": "Types of Acidic",
-        "content":
-            "Wet batteries, acidic substances, acidic fluids (lemon juice, pickles, etc.)",
+        "content": "Wet batteries, acidic substances, acidic fluids (lemon juice, pickles, etc.)",
       },
     ];
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-
         height: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             StepsScreenTitle(
               title: "Dangerous Goods",
-              description:          "Every items can become dangerous when transported by air. Example of dangerous goods are:",
+              description: "Every items can become dangerous when transported by air. Example of dangerous goods are:",
             ),
             SizedBox(
               height: 20,
@@ -97,47 +89,13 @@ class RulesStepView extends StatelessWidget {
               child: GridView.count(
                 crossAxisCount: 6,
                 // crossAxisSpacing: 60,
-                childAspectRatio: 220 / 270,
+                childAspectRatio: 150/ 180,
                 children: rules.map(
                   (value) {
-                    return Container(
-                      // height: 300,
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-                      width: 200,
-                      margin: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xffeaeaea)),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 110,
-                            width: 110,
-                            color: Colors.red,
-                          ),
-                          SizedBox(height: 5,),
-                          Text(
-                            value["title"]!,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Color(0xff424242),
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 5,),
-                          Text(
-                            value["content"]!,
-                            overflow: TextOverflow.clip,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xff424242),
-                              fontWeight: FontWeight.w400,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
+                    int index = rules.indexOf(value);
+                    value["imageUrl"] = "assets/images/DangerousGoods${index + 1}.png";
+                    return DangerousItem(
+                      value: value,
                     );
                   },
                 ).toList(),
@@ -145,6 +103,65 @@ class RulesStepView extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class DangerousItem extends StatelessWidget {
+  const DangerousItem({
+    Key? key,
+    required this.value,
+  }) : super(key: key);
+
+  final Map<String, String> value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // height: 300,
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      width: 150,
+      margin: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        border: Border.all(color: Color(0xffeaeaea)),
+      ),
+      child: Column(
+        children: [
+          Container(
+            height: 80,
+            width: 80,
+            child: Image.asset(
+              value["imageUrl"]!,
+              fit: BoxFit.fill,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            value["title"]!,
+            style: TextStyle(
+              fontSize: 15,
+              color: Color(0xff424242),
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            value["content"]!,
+            overflow: TextOverflow.clip,
+            style: TextStyle(
+              fontSize: 14,
+              color: Color(0xff424242),
+              fontWeight: FontWeight.w400,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }

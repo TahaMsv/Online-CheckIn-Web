@@ -27,10 +27,20 @@ class ReceiptStepView extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          Container(
-            height: 400,
-            width: 700,
-            color: Colors.green,
+          Expanded(
+            child: ListView(
+              children: [
+                Padding(
+                  padding:EdgeInsets.symmetric(horizontal: 180,vertical: 15) ,
+                  // color: Colors.green,
+
+                  child: Image.asset(
+                    'assets/images/ticket.png',
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
