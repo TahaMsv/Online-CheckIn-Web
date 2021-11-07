@@ -29,15 +29,13 @@ class SeatsStepView extends StatelessWidget {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                Expanded(
-                  child: Stack(
-                    children: [
-                      PlaneHead(),
-                      PlaneWings(),
-                      PlaneTail(),
-                      PlaneBody(),
-                    ],
-                  ),
+                Stack(
+                  children: [
+                    PlaneHead(),
+                    PlaneWings(),
+                    PlaneTail(),
+                    PlaneBody(),
+                  ],
                 ),
               ],
             ),
@@ -66,7 +64,7 @@ class PlaneWings extends StatelessWidget {
               fit: BoxFit.contain,
               // height: 350,
             ),
-            width: 420,
+            width: 720,
           ),
           Container(
             child: Image.asset(
@@ -74,7 +72,7 @@ class PlaneWings extends StatelessWidget {
               fit: BoxFit.contain,
               // height: 350,
             ),
-            width: 420,
+            width: 720,
           ),
         ],
       ),

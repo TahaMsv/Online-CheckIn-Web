@@ -20,7 +20,7 @@ class StepsScreenController extends MainController {
   }
 
   Welcome? _welcome;
-  RxInt _step = 6.obs;
+  RxInt _step = 0.obs;
 
   int get step => _step.value;
 

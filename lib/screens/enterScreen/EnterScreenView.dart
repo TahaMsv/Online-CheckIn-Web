@@ -36,12 +36,87 @@ class EnterScreenView extends StatelessWidget {
         child: Stack(
           children: [
             BackgroundImage(width: width, height: height),
-            LeftSide(),
-            CheckInForm(myEnterScreenController: myEnterScreenController),
+            Foreground(
+              width: width,
+              height: height,
+              myEnterScreenController: myEnterScreenController,
+            ),
           ],
         ),
       ),
     );
+  }
+}
+
+class Foreground extends StatelessWidget {
+  const Foreground({
+    Key? key,
+    required this.width,
+    required this.height,
+    required this.myEnterScreenController,
+  }) : super(key: key);
+  final double width;
+  final double height;
+  final EnterScreenController myEnterScreenController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+        left: 0,
+        top: 0,
+        child: Container(
+          width: width,
+          height: height,
+          padding: EdgeInsets.symmetric(vertical: 30,horizontal: 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Image.asset(
+                              'assets/images/company-logo-light.png',
+                              fit: BoxFit.fill,
+                              height: 60,
+                              width: 180,
+                            ),
+                            Row(
+                              children: [
+                                Image.asset(
+                                  'assets/images/AppStore.png',
+                                  fit: BoxFit.fill,
+                                  height: 40,
+                                  width: 140,
+                                ),
+                                SizedBox(width: 30,),
+                                Image.asset(
+                                  'assets/images/GooglePlayStore.png',
+                                  fit: BoxFit.fill,
+                                  height: 40,
+                                  width: 140,
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      Texts(),
+                    ],
+                  ),
+                ),
+              ),
+              CheckInForm(myEnterScreenController: myEnterScreenController),
+            ],
+          ),
+        ));
   }
 }
 
@@ -55,96 +130,94 @@ class CheckInForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-        top: 25,
-        right: 30,
-        child: Container(
-          height: 710,
-          width: 400,
-          color: Colors.white,
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              LanguagePicker(),
-              Divider(),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(),
-                      Container(
-                        height: 300,
-                        child: Column(
+    return Container(
+      height: 710,
+      width: 400,
+      color: Colors.white,
+      child: Column(
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          LanguagePicker(),
+          Divider(),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(),
+                  Container(
+                    height: 300,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Online Check-in",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xff424242),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 15),
-                                  child: Text(
-                                    "Input Requested info in order to continue",
-                                    style: TextStyle(
-                                      color: Color(0xff808080),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              "Online Check-in",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xff424242),
+                              ),
                             ),
-                            Obx(
-                              () => Container(
-                                height: 150,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    UserTextInput(
-                                      controller: myEnterScreenController.firstNameC,
-                                      hint: "First Name",
-                                      errorText: "First Name can't be empty",
-                                      isEmpty: myEnterScreenController.isFirstNameEmpty.value,
-                                    ),
-                                    UserTextInput(
-                                      controller: myEnterScreenController.lastNameC,
-                                      hint: "Last Name",
-                                      errorText: "Last Name can't be empty",
-                                      isEmpty: myEnterScreenController.isLastNameEmpty.value,
-                                    ),
-                                    UserTextInput(
-                                      controller: myEnterScreenController.bookingRefNameC,
-                                      hint: "Booking reference name",
-                                      errorText: "Booking reference name can't be empty",
-                                      isEmpty: myEnterScreenController.isBookingRefNameEmpty.value,
-                                    ),
-                                  ],
+                            Container(
+                              margin: EdgeInsets.only(top: 15),
+                              child: Text(
+                                "Input Requested info in order to continue",
+                                style: TextStyle(
+                                  color: Color(0xff808080),
                                 ),
                               ),
                             ),
-                            CheckInButton(
-                              myEnterScreenController: myEnterScreenController,
-                            )
                           ],
                         ),
-                      ),
-                      CopyRightText(),
-                    ],
+                        Obx(
+                          () => Container(
+                            height: 120,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // UserTextInput(
+                                //   controller: myEnterScreenController.firstNameC,
+                                //   hint: "First Name",
+                                //   errorText: "First Name can't be empty",
+                                //   isEmpty: myEnterScreenController.isFirstNameEmpty.value,
+                                // ),
+                                UserTextInput(
+                                  controller: myEnterScreenController.lastNameC,
+                                  hint: "Last Name",
+                                  errorText: "Last Name can't be empty",
+                                  isEmpty: myEnterScreenController.isLastNameEmpty.value,
+                                ),
+                                UserTextInput(
+                                  controller: myEnterScreenController.bookingRefNameC,
+                                  hint: "Booking reference name",
+                                  errorText: "Booking reference name can't be empty",
+                                  isEmpty: myEnterScreenController.isBookingRefNameEmpty.value,
+                                ),
+
+                              ],
+                            ),
+                          ),
+                        ),
+                        CheckInButton(
+                          myEnterScreenController: myEnterScreenController,
+                        )
+                      ],
+                    ),
                   ),
-                ),
+                  CopyRightText(),
+                ],
               ),
-            ],
+            ),
           ),
-        ));
+        ],
+      ),
+    );
   }
 }
 
@@ -281,7 +354,7 @@ class BackgroundImage extends StatelessWidget {
         width: width,
         height: height,
         child: Image.asset(
-          'assets/images/company-logo-light.jpg',
+          'assets/images/abomis-bg.png',
           fit: BoxFit.fill,
         ),
       ),
@@ -289,75 +362,71 @@ class BackgroundImage extends StatelessWidget {
   }
 }
 
-class LeftSide extends StatelessWidget {
-  const LeftSide({
+class Texts extends StatelessWidget {
+  const Texts({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 40,
-      left: 50,
-      child: Container(
-        color: Colors.black.withOpacity(0),
-        height: 295,
-        width: 600,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.only(left: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Ready to go?",
-                    style: TextStyle(fontSize: 23, color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "There are a few things to know before boarding.",
-                    style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
+    return Container(
+      color: Colors.black.withOpacity(0),
+      height: 295,
+      width: 600,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.only(left: 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Ready to go?",
+                  style: TextStyle(fontSize: 23, color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "There are a few things to know before boarding.",
+                  style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              ],
             ),
-            Container(
-              margin: EdgeInsets.only(top: 48, bottom: 16, left: 5),
-              child: Row(
-                children: [
-                  Container(
-                    child: Icon(
-                      Icons.fact_check_outlined,
-                      color: Colors.white,
-                    ),
-                    margin: EdgeInsets.only(right: 15),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 48, bottom: 16, left: 5),
+            child: Row(
+              children: [
+                Container(
+                  child: Icon(
+                    Icons.fact_check_outlined,
+                    color: Colors.white,
                   ),
-                  Text(
-                    "When can I check in?",
-                    style: TextStyle(fontSize: 15, color: Colors.white),
-                  ),
-                ],
-              ),
+                  margin: EdgeInsets.only(right: 15),
+                ),
+                Text(
+                  "When can I check in?",
+                  style: TextStyle(fontSize: 15, color: Colors.white),
+                ),
+              ],
             ),
-            Container(
-              margin: EdgeInsets.only(bottom: 42, left: 5),
-              child: Text(
-                "You can check in on our website up to 24 hours before departure until one (1) hour before departure. Airport check-in opens three hours (3) prior to departure.",
-                style: TextStyle(fontSize: 12, color: Colors.white),
-              ),
+          ),
+          Container(
+            margin: EdgeInsets.only(bottom: 42, left: 5),
+            child: Text(
+              "You can check in on our website up to 24 hours before departure until one (1) hour before departure. Airport check-in opens three hours (3) prior to departure.",
+              style: TextStyle(fontSize: 12, color: Colors.white),
             ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  PrevButton(),
-                  NextButton(),
-                ],
-              ),
+          ),
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                PrevButton(),
+                NextButton(),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -21,9 +21,6 @@ class MainModel
         TravellersStepScreenModel,
         SafetyStepScreenModel,
         RulesStepScreenModel,
-        PassportStepScreenModel,
-        VisaStepScreenModel,
-        PaymentStepScreenModel,
         UpgradesStepScreenModel,
         ReceiptStepScreenModel,SeatsStepScreenModel {
   bool _loading = false;
@@ -34,4 +31,7 @@ class MainModel
     _loading = val;
     notifyListeners();
   }
+        PassportStepScreenModel,
+        VisaStepScreenModel,
+        PaymentStepScreenModel,
 }

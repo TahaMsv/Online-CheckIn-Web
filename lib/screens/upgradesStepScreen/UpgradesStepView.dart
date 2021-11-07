@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import '../../widgets/MyElevatedButton.dart';
 import '../../screens/upgradesStepScreen/UpgradesStepController.dart';
 import '../../widgets/StepsScreenTitle.dart';
 import '../../global/MainModel.dart';
@@ -58,21 +59,23 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
       "name": "Sparkling Wine",
       "description": "Sparkling wine is a wine with significant levels of carbon dioxide in it. Making it fizzy",
       "imagePath": "assets/images/sparkling-wine.png",
-      "color": Color(0xfffffaf2),
+      "color": Color(0xffffc365),
+      "numberOfSelected": 2,
     },
     {
       "name": "Prosecco",
       "description": "Prosecco is a sparkling wine that’s often taken for granted",
       "imagePath": "assets/images/prosecco-wine.png",
-      "color": Color(0xfff2f3ff),
+      "color": Color(0xff5f6bff),
+      "numberOfSelected": 0,
     },
     {
       "name": "Champagne",
       "description": "Champagne is a French sparkling wine",
       "imagePath": "assets/images/champagne.png",
-      "color": Color(0xfffff2f2),
+      "color": Color(0xfffa4b4b),
+      "numberOfSelected": 0,
     },
-
   ];
   var leftIndex = 0;
   var rightIndex = 2;
@@ -184,80 +187,162 @@ class UpgradeItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     double margin = isPrinter ? 40 : 30;
     return Container(
-        // height: 100,
-        width: 330,
-        // color: Colors.red,
-        margin: EdgeInsets.only(left: 10, right: 10),
-        child: Stack(
-          children: [
-            Container(
-              height: 180,
-              color: value["color"]!,
-              padding: EdgeInsets.only(right: 20, top: 20, bottom: 20, left: 50),
-              margin: EdgeInsets.only(left: 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        value["name"]!,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Color(0xff424242),
-                          fontWeight: FontWeight.bold,
-                        ),
+      // height: 100,
+      width: 330,
+      // color: Colors.red,
+      margin: EdgeInsets.only(left: 10, right: 10),
+      child: Stack(
+        children: [
+          Container(
+            height: 180,
+            color: (value["color"]! as Color).withOpacity(0.1),
+            padding: EdgeInsets.only(right: 20, top: 20, bottom: 20, left: 50),
+            margin: EdgeInsets.only(left: 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      value["name"]!,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xff424242),
+                        fontWeight: FontWeight.bold,
                       ),
-                      Text(
-                        "Starts from \$14.00",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Color(0xff424242),
-                          fontWeight: FontWeight.w300,
-                        ),
-                      )
-                    ],
+                    ),
+                    Text(
+                      "Starts from \$14.00",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xff424242),
+                        fontWeight: FontWeight.w300,
+                      ),
+                    )
+                  ],
+                ),
+                Text(
+                  value["description"]!,
+                  overflow: TextOverflow.clip,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Color(0xff424242),
+                    fontWeight: FontWeight.w300,
                   ),
-                  Text(
-                    value["description"]!,
-                    overflow: TextOverflow.clip,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Color(0xff424242),
-                      fontWeight: FontWeight.w300,
+                ),
+                value["numberOfSelected"] == 0
+                    ? ChangeNumOfSelected(value: value)
+                    : MyElevatedButton(
+                        width: 80,
+                        height: 30,
+                        fgColor: Colors.white,
+                        bgColor: value["color"]!,
+                        buttonText: "Add",
+                        function: () {},
+                      ),
+              ],
+            ),
+          ),
+          Positioned(
+            left: isPrinter ? -5 : -30,
+            child: Container(
+              height: 180,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    // width: 150,
+                    height: isPrinter ? 100 : 130,
+                    // color: Colors.green,
+                    child: Image.asset(
+                      value["imagePath"]!,
+                      fit: BoxFit.fill,
                     ),
                   ),
-                  Container(
-                    width: 80,
-                    height: 30,
-                    color: Colors.amber,
-                  )
                 ],
               ),
             ),
-            Positioned(
-                left: isPrinter ? -5 : -30,
-                child: Container(
-                  height: 180,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        // width: 150,
-                        height: isPrinter ? 100 : 130,
-                        // color: Colors.green,
-                        child: Image.asset(
-                          value["imagePath"]!,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ],
-                  ),
-                ))
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ChangeNumOfSelected extends StatelessWidget {
+  const ChangeNumOfSelected({
+    Key? key,
+    required this.value,
+  }) : super(key: key);
+
+  final Map<String, dynamic> value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 80,
+      height: 30,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 25,
+            child: Material(
+              color: (value["color"]! as Color).withOpacity(0.5),
+              child: InkWell(
+                onTap: () {},
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.remove,
+                      color: Colors.white,
+                      size: 18,
+                    ), // icon// text
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Container(
+            width: 30,
+            color: (value["color"]! as Color).withOpacity(0.7),
+            child: Center(
+              child: Text(
+                "${value["numberOfSelected"]}",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+          Container(
+            width: 25,
+            child: Material(
+              color: value["color"]!,
+              child: InkWell(
+                onTap: () {},
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 18,
+                    ), // icon// text
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -292,7 +377,8 @@ class Entertainment extends StatelessWidget {
                   "name": "Photo print",
                   "description": "Confirm your flight details and see which extras you already purchased",
                   "imagePath": "assets/images/printer.png",
-                  "color": Color(0xfff4f4f4),
+                  "color": Color(0xff424242),
+                  "numberOfSelected": 0,
                 },
                 isPrinter: true,
               ),

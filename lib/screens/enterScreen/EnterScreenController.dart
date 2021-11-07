@@ -20,21 +20,22 @@ class EnterScreenController extends MainController {
 
   TextEditingController bookingRefNameC = TextEditingController();
   TextEditingController lastNameC = TextEditingController();
-  TextEditingController firstNameC = TextEditingController();
+
+  // TextEditingController firstNameC = TextEditingController();
 
   RxBool isLastNameEmpty = false.obs;
   RxBool isFirstNameEmpty = false.obs;
   RxBool isBookingRefNameEmpty = false.obs;
 
   Future<bool> checkBoxesValidation() async {
-    String firstName = firstNameC.text;
+    // String firstName = firstNameC.text;
     String lastName = lastNameC.text;
     String bookingRefName = bookingRefNameC.text;
-    if (firstName == "") {
-      isFirstNameEmpty.value = true;
-    } else {
-      isFirstNameEmpty.value = false;
-    }
+    // if (firstName == "") {
+    //   isFirstNameEmpty.value = true;
+    // } else {
+    //   isFirstNameEmpty.value = false;
+    // }
     if (bookingRefName == "") {
       isBookingRefNameEmpty.value = true;
     } else {
@@ -45,12 +46,14 @@ class EnterScreenController extends MainController {
     } else {
       isLastNameEmpty.value = false;
     }
-    if (bookingRefName != "" && lastName != "" && firstName != "") {
-      bool isValid = await checkTravellerValidation(firstName, lastName, bookingRefName);
+    if (bookingRefName != "" && lastName != ""
+        // && firstName != ""
+        ) {
+      bool isValid = await checkTravellerValidation("", lastName, bookingRefName);
       if (isValid) {
-        firstNameC.text = "";
-        lastNameC.text = "";
-        bookingRefNameC.text = "";
+        // firstNameC.text = "";
+        // lastNameC.text = "";
+        // bookingRefNameC.text = "";
         isBookingRefNameEmpty.value = false;
         isLastNameEmpty.value = false;
         isFirstNameEmpty.value = false;
@@ -65,10 +68,17 @@ class EnterScreenController extends MainController {
   }
 
   Future<bool> loginValidation() async {
+    String lastName = lastNameC.text;
+    String bookingRefName = bookingRefNameC.text;
+
     Response response = await DioClient.getToken(
       execution: "[OnlineCheckin].[Authenticate]",
       token: null,
-      request: {"Code": "9999999999", "Code2": "2999", "UrlType": 4},
+      request: {
+        "Code": bookingRefName,
+        "Code2": lastName,
+        "UrlType": 4,
+      },
     );
 
     if (response.statusCode == 200) {
@@ -79,6 +89,8 @@ class EnterScreenController extends MainController {
         print("ok validation");
       }
       return Future<bool>.value(true);
+    }else{
+
     }
     print("not ok validation");
     return Future<bool>.value(false);
