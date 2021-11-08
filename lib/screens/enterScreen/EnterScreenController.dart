@@ -82,16 +82,14 @@ class EnterScreenController extends MainController {
     );
 
     if (response.statusCode == 200) {
-      String? token = response.data["Body"]["Token"];
-      if (token != null) {
-        model.setToken(token);
-        print(token);
-        print("ok validation");
+      if (response.data["ResultCode"] == 1) {
+        String? token = response.data["Body"]["Token"];
+        if (token != null) {
+          model.setToken(token);
+          return Future<bool>.value(true);
+        }
       }
-      return Future<bool>.value(true);
-    }else{
-
-    }
+    } else {}
     print("not ok validation");
     return Future<bool>.value(false);
   }

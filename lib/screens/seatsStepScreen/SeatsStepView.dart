@@ -203,7 +203,7 @@ class PlaneTail extends StatelessWidget {
     return Expanded(
       child: Container(
         padding: EdgeInsets.only(top: 30,bottom: 22),
-        margin: EdgeInsets.only(left: 2180),
+        margin: EdgeInsets.only(left: 1850),
         // width: 2400,
         child: Image.asset(
           "assets/images/Edited-Tail.png",

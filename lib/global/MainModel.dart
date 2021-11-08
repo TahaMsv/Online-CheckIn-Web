@@ -22,7 +22,11 @@ class MainModel
         SafetyStepScreenModel,
         RulesStepScreenModel,
         UpgradesStepScreenModel,
-        ReceiptStepScreenModel,SeatsStepScreenModel {
+        PassportStepScreenModel,
+        VisaStepScreenModel,
+        PaymentStepScreenModel,
+        ReceiptStepScreenModel,
+        SeatsStepScreenModel {
   bool _loading = false;
 
   bool get loading => _loading;
@@ -31,7 +35,4 @@ class MainModel
     _loading = val;
     notifyListeners();
   }
-        PassportStepScreenModel,
-        VisaStepScreenModel,
-        PaymentStepScreenModel,
 }

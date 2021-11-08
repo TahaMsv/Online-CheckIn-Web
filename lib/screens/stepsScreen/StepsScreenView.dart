@@ -323,7 +323,7 @@ class TravellerItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            myStepsScreenController.travellers[index],
+            myStepsScreenController.travellers[index].lastName,
             style: TextStyle(
               color: Color(0xff424242),
               fontSize: 13,

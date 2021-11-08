@@ -5,6 +5,14 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
+class Traveller {
+  late String lastName;
+  late String ticketNumber;
+
+  Traveller({required this.lastName, required this.ticketNumber});
+
+}
+
 List<Welcome> welcomeFromJson(String str) {
   return List<Welcome>.from(json.decode(str).map((x) => Welcome.fromJson(x)));
 }
@@ -160,12 +168,12 @@ class Seat {
 
   factory Seat.fromJson(Map<String, dynamic> json) => Seat(
         line: json["Line"],
-        letter:  json["Letter"]!,
-        seatPart:  json["Part"]!,
+        letter: json["Letter"]!,
+        seatPart: json["Part"]!,
         isExitDoor: json["IsExitDoor"],
-        classType:  json["ClassType"]!,
+        classType: json["ClassType"]!,
         isUsed: json["IsUsed"],
-        isUsedDescription:json["IsUsedDescription"]!,
+        isUsedDescription: json["IsUsedDescription"]!,
         seatProperty: json["SeatProperty"]!,
         cabinIndex: json["CabinIndex"],
         isSelectable: json["IsSelectable"],
@@ -180,8 +188,8 @@ class Seat {
         "IsExitDoor": isExitDoor,
         "ClassType": classType,
         "IsUsed": isUsed,
-        "IsUsedDescription":isUsedDescription,
-        "SeatProperty":seatProperty,
+        "IsUsedDescription": isUsedDescription,
+        "SeatProperty": seatProperty,
         "CabinIndex": cabinIndex,
         "IsSelectable": isSelectable,
         "FlightScheduleID": flightScheduleId,
@@ -212,7 +220,7 @@ class Passenger {
   });
 
   int id;
-   String reference;
+  String reference;
   String name;
   String nationalId;
   String passengerType;
@@ -231,13 +239,13 @@ class Passenger {
         name: json["Name"]!,
         nationalId: json["NationalID"]!,
         passengerType: json["PassengerType"]!,
-        classType:  json["ClassType"]!,
+        classType: json["ClassType"]!,
         firstName: json["FirstName"]!,
         lastName: json["LastName"]!,
         passengerClass: json["Class"]!,
         title: json["Title"]!,
         docsBirthDate: DateTime.parse(json["DocsBirthDate"]),
-        docsTitle:  json["DocsTitle"]!,
+        docsTitle: json["DocsTitle"]!,
         flightScheduleId: json["FlightScheduleID"],
       );
 
@@ -246,7 +254,7 @@ class Passenger {
         "Reference": reference,
         "Name": name,
         "NationalID": nationalId,
-        "PassengerType":passengerType,
+        "PassengerType": passengerType,
         "ClassType": classType,
         "FirstName": firstName,
         "LastName": lastName,

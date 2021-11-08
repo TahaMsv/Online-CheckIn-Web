@@ -20,7 +20,7 @@ class StepsScreenController extends MainController {
   }
 
   Welcome? _welcome;
-  RxInt _step = 0.obs;
+  RxInt _step = 3.obs;
 
   int get step => _step.value;
 
@@ -29,10 +29,15 @@ class StepsScreenController extends MainController {
     print(_step);
   }
 
-  RxList<String> travellers = <String>[].obs;
+  RxList<Traveller> travellers = <Traveller>[].obs;
 
-  void addToTravellers(String lastName) {
-    travellers.add(lastName);
+  void addToTravellers(String lastName, String ticketNumber) {
+    for (int i = 0; i < travellers.length; i++) {
+      if (travellers[i].lastName == lastName && travellers[i].ticketNumber == ticketNumber) {
+        return;
+      }
+    }
+    travellers.add(new Traveller(lastName: lastName, ticketNumber: ticketNumber));
   }
 
   void removeFromTravellers(int index) {
