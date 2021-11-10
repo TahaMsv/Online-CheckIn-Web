@@ -34,7 +34,9 @@ class SeatsStepView extends StatelessWidget {
                     PlaneHead(),
                     PlaneWings(),
                     PlaneTail(),
-                    PlaneBody(),
+                    PlaneBody(
+                      mySeatsStepController: mySeatsStepController,
+                    ),
                   ],
                 ),
               ],
@@ -83,14 +85,16 @@ class PlaneWings extends StatelessWidget {
 class PlaneBody extends StatelessWidget {
   const PlaneBody({
     Key? key,
+    required this.mySeatsStepController,
   }) : super(key: key);
+  final SeatsStepController mySeatsStepController;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
         height: 352,
-        margin: EdgeInsets.only(left: 395,top: 7),
+        margin: EdgeInsets.only(left: 395, top: 7),
         width: 1800,
         decoration: BoxDecoration(
           color: Color(0xff5d5d5d),
@@ -155,6 +159,7 @@ class PlaneBody extends StatelessWidget {
                     default:
                       return SeatBlocks(
                         i: i,
+                        mySeatsStepController: mySeatsStepController,
                       );
                   }
                 },
@@ -177,7 +182,6 @@ class PlaneHead extends StatelessWidget {
     return Center(
       child: Positioned(
         left: 20,
-
         child: Container(
           // height: 440,
           width: 413,
@@ -193,6 +197,7 @@ class PlaneHead extends StatelessWidget {
     );
   }
 }
+
 class PlaneTail extends StatelessWidget {
   const PlaneTail({
     Key? key,
@@ -202,7 +207,7 @@ class PlaneTail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        padding: EdgeInsets.only(top: 30,bottom: 22),
+        padding: EdgeInsets.only(top: 30, bottom: 22),
         margin: EdgeInsets.only(left: 1850),
         // width: 2400,
         child: Image.asset(
@@ -217,9 +222,11 @@ class SeatBlocks extends StatelessWidget {
   const SeatBlocks({
     Key? key,
     required this.i,
+    required this.mySeatsStepController,
   }) : super(key: key);
 
   final int i;
+  final SeatsStepController mySeatsStepController;
 
   @override
   Widget build(BuildContext context) {
@@ -232,7 +239,10 @@ class SeatBlocks extends StatelessWidget {
         itemCount: 10,
         itemBuilder: (_, j) {
           final columnNumber = (i - 1) * 10 + j + 1;
-          return SeatColumn(columnNumber: columnNumber);
+          return SeatColumn(
+            columnNumber: columnNumber,
+            mySeatsStepController: mySeatsStepController,
+          );
         },
       ),
     );
@@ -243,9 +253,11 @@ class SeatColumn extends StatelessWidget {
   const SeatColumn({
     Key? key,
     required this.columnNumber,
+    required this.mySeatsStepController,
   }) : super(key: key);
 
   final int columnNumber;
+  final SeatsStepController mySeatsStepController;
 
   @override
   Widget build(BuildContext context) {
@@ -267,7 +279,12 @@ class SeatColumn extends StatelessWidget {
             itemBuilder: (_, z) {
               double topMargin = (z == 3 ? 30 : 10);
               String rowCode = String.fromCharCode(70 - z);
-              return SeatWidget(topMargin: topMargin, columnNumber: columnNumber, rowCode: rowCode);
+              return SeatWidget(
+                topMargin: topMargin,
+                columnNumber: columnNumber,
+                rowCode: rowCode,
+                mySeatsStepController: mySeatsStepController,
+              );
             },
             itemCount: 6,
             scrollDirection: Axis.vertical,
@@ -286,16 +303,23 @@ class SeatWidget extends StatelessWidget {
     required this.topMargin,
     required this.columnNumber,
     required this.rowCode,
+    required this.mySeatsStepController,
   }) : super(key: key);
 
   final double topMargin;
   final int columnNumber;
   final String rowCode;
+  final SeatsStepController mySeatsStepController;
 
   @override
   Widget build(BuildContext context) {
+    var seatId = columnNumber.toString() + rowCode;
     return GestureDetector(
-      onTap: () {},
+      onTap: mySeatsStepController.seatsStatus[seatId] == "blocked"
+          ? null
+          : () {
+              mySeatsStepController.changeSeatStatus(seatId);
+            },
       child: Container(
         margin: EdgeInsets.only(
           top: topMargin,
@@ -303,19 +327,33 @@ class SeatWidget extends StatelessWidget {
         width: 35,
         height: 35,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: mySeatsStepController.getColor(seatId),
           borderRadius: BorderRadius.all(
             Radius.circular(10),
           ),
         ),
-        child: Center(
-          child: Text(
-            columnNumber.toString() + rowCode,
-            style: TextStyle(
-              color: Color(0xffd1d1d1),
-            ),
-          ),
-        ),
+        child: mySeatsStepController.seatsStatus[seatId] == "blocked"
+            ? Container(
+                decoration: BoxDecoration(
+                  color: mySeatsStepController.getColor(seatId),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
+                child: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: 15,
+                ),
+              )
+            : Center(
+                child: Text(
+                  columnNumber.toString() + rowCode,
+                  style: TextStyle(
+                    color: mySeatsStepController.seatsStatus[seatId] == "selected" ? Colors.white : Color(0xffd1d1d1),
+                  ),
+                ),
+              ),
       ),
     );
   }
