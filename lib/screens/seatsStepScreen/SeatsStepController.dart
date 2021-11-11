@@ -19,7 +19,7 @@ class SeatsStepController extends MainController {
     for (int i = 65; i <= 70; i++) {
       for (int j = 1; j <= 30; j++) {
         String key = j.toString() + String.fromCharCode(i);
-        seatsStatus[key] = j == 1 ? "blocked" : "notSelected";
+        seatsStatus[key] = j == 1 ? "blocked" : "unSelected";
       }
     }
   }
@@ -27,7 +27,7 @@ class SeatsStepController extends MainController {
   void changeSeatStatus(String seatId) {
     String currStatus = seatsStatus[seatId]!;
     if (currStatus == "selected") {
-      seatsStatus[seatId] = "notSelected";
+      seatsStatus[seatId] = "unSelected";
     } else {
       seatsStatus[seatId] = "selected";
     }
@@ -39,7 +39,7 @@ class SeatsStepController extends MainController {
         return Colors.black;
       case "selected":
         return Colors.amberAccent;
-      case "notSelected":
+      case "unSelected":
         return Colors.white;
     }
     return Colors.white;

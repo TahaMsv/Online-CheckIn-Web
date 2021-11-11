@@ -346,15 +346,127 @@ class SeatWidget extends StatelessWidget {
                   size: 15,
                 ),
               )
-            : Center(
-                child: Text(
-                  columnNumber.toString() + rowCode,
-                  style: TextStyle(
-                    color: mySeatsStepController.seatsStatus[seatId] == "selected" ? Colors.white : Color(0xffd1d1d1),
-                  ),
+            : mySeatsStepController.seatsStatus[seatId] == "selected"
+                ? DraggableSeat(mySeatsStepController: mySeatsStepController, seatId: seatId)
+                : DroppableSeat(mySeatsStepController: mySeatsStepController, seatId: seatId),
+      ),
+    );
+  }
+}
+
+class DroppableSeat extends StatelessWidget {
+  const DroppableSeat({
+    Key? key,
+    required this.mySeatsStepController,
+    required this.seatId,
+  }) : super(key: key);
+
+  final SeatsStepController mySeatsStepController;
+  final String seatId;
+
+  @override
+  Widget build(BuildContext context) {
+    return DragTarget(
+      builder: (BuildContext context, List<Object?> candidateData, List<dynamic> rejectedData) {
+        return Container(
+          width: 35,
+          height: 35,
+          decoration: BoxDecoration(
+            color: mySeatsStepController.getColor(seatId),
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
+            ),
+          ),
+          child: Center(
+            child: Text(
+              seatId,
+              style: TextStyle(
+                color: mySeatsStepController.seatsStatus[seatId] == "selected" ? Colors.white : Color(0xffd1d1d1),
+              ),
+            ),
+          ),
+        );
+      },
+      onAccept: (_) {
+        mySeatsStepController.changeSeatStatus(seatId);
+      },
+    );
+  }
+}
+
+class DraggableSeat extends StatelessWidget {
+  const DraggableSeat({
+    Key? key,
+    required this.mySeatsStepController,
+    required this.seatId,
+  }) : super(key: key);
+
+  final SeatsStepController mySeatsStepController;
+  final String seatId;
+
+  @override
+  Widget build(BuildContext context) {
+    return Draggable(
+      feedback: DraggableItem(
+        mySeatsStepController: mySeatsStepController,
+        seatId: seatId,
+        color: mySeatsStepController.getColor(seatId).withOpacity(0.5),
+        isDragged: true,
+      ),
+      child: DraggableItem(
+        mySeatsStepController: mySeatsStepController,
+        seatId: seatId,
+        color: mySeatsStepController.getColor(seatId),
+        isDragged: false,
+      ),
+      childWhenDragging: DraggableItem(
+        mySeatsStepController: mySeatsStepController,
+        seatId: seatId,
+        color: mySeatsStepController.getColor(seatId).withOpacity(0.2),
+        isDragged: false,
+      ),
+      onDragCompleted: () {
+        mySeatsStepController.changeSeatStatus(seatId);
+      },
+    );
+  }
+}
+
+class DraggableItem extends StatelessWidget {
+  const DraggableItem({
+    Key? key,
+    required this.mySeatsStepController,
+    required this.seatId,
+    required this.color,
+    required this.isDragged,
+  }) : super(key: key);
+
+  final SeatsStepController mySeatsStepController;
+  final String seatId;
+  final Color color;
+  final bool isDragged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 35,
+      height: 35,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      child: isDragged
+          ? null
+          : Center(
+              child: Text(
+                seatId,
+                style: TextStyle(
+                  color: mySeatsStepController.seatsStatus[seatId] == "selected" ? Colors.white : Color(0xffd1d1d1),
                 ),
               ),
-      ),
+            ),
     );
   }
 }
