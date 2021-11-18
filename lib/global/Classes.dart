@@ -8,8 +8,9 @@ import 'dart:convert';
 class Traveller {
   late String lastName;
   late String ticketNumber;
+  late String seatId;
 
-  Traveller({required this.lastName, required this.ticketNumber});
+  Traveller({required this.lastName, required this.ticketNumber,required this.seatId});
 
 }
 

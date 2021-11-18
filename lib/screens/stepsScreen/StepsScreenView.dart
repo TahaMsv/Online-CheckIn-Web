@@ -248,20 +248,29 @@ class LeftSideOFPage extends StatelessWidget {
           children: [
             Expanded(
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TitleWidget(
                     title: "Travellers",
-                    width: 200,
+                    width: 190,
                   ),
-                  // Container(
-                  //   width: 2,
-                  //   height: double.infinity,
-                  //   color: Color(0xffededed),
-                  // ),
-                  // TitleWidget(
-                  //   title: "Seat",
-                  //   width: 100,
-                  // ),
+                  if (myStepsScreenController.step == 6)
+                    Container(
+                      width: 112,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 2,
+                            height: double.infinity,
+                            color: Color(0xffededed),
+                          ),
+                          TitleWidget(
+                            title: "Seat",
+                            width: 100,
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -279,6 +288,7 @@ class LeftSideOFPage extends StatelessWidget {
                     step: step,
                     index: index,
                     myStepsScreenController: myStepsScreenController,
+                    isTravellerSelected: myStepsScreenController.travellers[index].seatId == "--" ? false : true,
                   ),
                 ),
               ),
@@ -297,105 +307,139 @@ class TravellerItem extends StatelessWidget {
     required this.step,
     required this.index,
     required this.myStepsScreenController,
+    required this.isTravellerSelected,
   }) : super(key: key);
   final int step;
   final int index;
   final StepsScreenController myStepsScreenController;
+  final bool isTravellerSelected;
 
   @override
   Widget build(BuildContext context) {
-    var showSeat = false;
-    if (step == 6 || step == 8) showSeat = true;
-    return Container(
-      height: 60,
-      width: showSeat ? 200 : double.infinity,
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      decoration: BoxDecoration(
-        border: BorderDirectional(
-          bottom: BorderSide(
-            width: 1,
-            color: Color(0xffeaeaea),
-          ),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            myStepsScreenController.travellers[index].lastName,
-            style: TextStyle(
-              color: Color(0xff424242),
-              fontSize: 13,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-          if (step == 0)
-            IconButton(
-              onPressed: () => myStepsScreenController.removeFromTravellers(index),
-              icon: Icon(
-                Icons.close,
-                color: Colors.red,
+    return Expanded(
+      child: Obx(
+        () => Container(
+          color: myStepsScreenController.whoseTurnToSelect.value == index && step == 6 ? const Color(0xffffae2c).withOpacity(0.5) : Colors.white,
+          height: 60,
+          child: Column(
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: Text(
+                        myStepsScreenController.travellers[index].lastName,
+                        style: TextStyle(
+                          color: Color(0xff424242),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ),
+                    step == 0
+                        ? IconButton(
+                            onPressed: () => myStepsScreenController.removeFromTravellers(index),
+                            icon: Icon(
+                              Icons.close,
+                              color: Colors.red,
+                            ),
+                          )
+                        : step == 6
+                            ? Container(
+                                width: 112,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 2,
+                                      height: double.infinity,
+                                      color: Color(0xffededed),
+                                    ),
+                                    TitleWidget(
+                                      title: myStepsScreenController.travellers[index].seatId,
+                                      width: 65,
+                                      textColor: isTravellerSelected ? Color(0xff48c0a2) : Color(0xff424242),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(Icons.edit),
+                                      color: Colors.blue,
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Container(),
+                  ],
+                ),
               ),
-            )
-        ],
-      ),
-    );
-  }
-}
-
-class SeatWidget extends StatelessWidget {
-  const SeatWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      width: 100,
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      decoration: BoxDecoration(
-        color: Colors.blue,
-        border: BorderDirectional(
-          bottom: BorderSide(
-            width: 1,
-            color: Color(0xffeaeaea),
+              Container(
+                width: double.infinity,
+                height: 1,
+                color: Color(0xffeaeaea),
+              ),
+            ],
           ),
         ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "5E",
-            style: TextStyle(
-              fontSize: 20,
-              color: Color(0xfff5ad2f),
-            ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.edit,
-              color: Colors.blue,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
+
+// class SeatWidget extends StatelessWidget {
+//   const SeatWidget({
+//     Key? key,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       height: 60,
+//       width: 100,
+//       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+//       decoration: BoxDecoration(
+//         color: Colors.blue,
+//         border: BorderDirectional(
+//           bottom: BorderSide(
+//             width: 1,
+//             color: Color(0xffeaeaea),
+//           ),
+//         ),
+//       ),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           Text(
+//             "5E",
+//             style: TextStyle(
+//               fontSize: 20,
+//               color: Color(0xfff5ad2f),
+//             ),
+//           ),
+//           IconButton(
+//             onPressed: () {},
+//             icon: Icon(
+//               Icons.edit,
+//               color: Colors.blue,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class TitleWidget extends StatelessWidget {
   const TitleWidget({
     Key? key,
     required this.title,
     required this.width,
+    this.textColor = const Color(0xff424242),
   }) : super(key: key);
 
   final String title;
   final double width;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -406,7 +450,7 @@ class TitleWidget extends StatelessWidget {
       child: Text(
         title,
         style: TextStyle(
-          color: Color(0xff424242),
+          color: textColor,
           fontSize: 17,
           fontWeight: FontWeight.bold,
         ),
@@ -510,25 +554,6 @@ class BottomOfPage extends StatelessWidget {
   final double height;
   final StepsScreenController myStepsScreenController;
 
-  static const buttonText = [
-    "Check Pandemic Safety",
-    "Check Rules",
-    "Add Passports",
-    "Add Visa",
-    "Select Upgrades",
-    "Select Seats",
-    "Payment",
-    "Get Boarding Pass",
-  ];
-
-  void increaseStep() {
-    int currStep = myStepsScreenController.step;
-    if (currStep < 8) {
-      print("here");
-      myStepsScreenController.setStep(currStep + 1);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -546,16 +571,19 @@ class BottomOfPage extends StatelessWidget {
             PreviousButton(
               myStepsScreenController: myStepsScreenController,
             ),
-            myStepsScreenController.step == 8
-                ? ReceiptStepButtons()
-                : MyElevatedButton(
-                    height: 40,
-                    width: 300,
-                    buttonText: buttonText[myStepsScreenController.step],
-                    bgColor: Color(0xff4c6ef6),
-                    fgColor: Colors.white,
-                    function: increaseStep,
-                  ),
+            Obx(
+              () => myStepsScreenController.step == 8
+                  ? ReceiptStepButtons()
+                  : MyElevatedButton(
+                      height: 40,
+                      width: 300,
+                      buttonText: myStepsScreenController.buttonText[myStepsScreenController.step],
+                      bgColor: Color(0xff4c6ef6),
+                      fgColor: Colors.white,
+                      function: myStepsScreenController.increaseStep,
+                      isDisable: myStepsScreenController.isNextButtonDisable,
+                    ),
+            ),
           ],
         ),
       ),

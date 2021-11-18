@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:onlinecheckin/screens/stepsScreen/StepsScreenController.dart';
 
 // import 'package:network_manager/network_manager.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
@@ -21,21 +22,12 @@ class EnterScreenController extends MainController {
   TextEditingController bookingRefNameC = TextEditingController();
   TextEditingController lastNameC = TextEditingController();
 
-  // TextEditingController firstNameC = TextEditingController();
-
   RxBool isLastNameEmpty = false.obs;
-  RxBool isFirstNameEmpty = false.obs;
   RxBool isBookingRefNameEmpty = false.obs;
 
   Future<bool> checkBoxesValidation() async {
-    // String firstName = firstNameC.text;
     String lastName = lastNameC.text;
     String bookingRefName = bookingRefNameC.text;
-    // if (firstName == "") {
-    //   isFirstNameEmpty.value = true;
-    // } else {
-    //   isFirstNameEmpty.value = false;
-    // }
     if (bookingRefName == "") {
       isBookingRefNameEmpty.value = true;
     } else {
@@ -46,30 +38,17 @@ class EnterScreenController extends MainController {
     } else {
       isLastNameEmpty.value = false;
     }
-    if (bookingRefName != "" && lastName != ""
-        // && firstName != ""
-        ) {
-      bool isValid = await checkTravellerValidation("", lastName, bookingRefName);
-      if (isValid) {
-        // firstNameC.text = "";
-        // lastNameC.text = "";
-        // bookingRefNameC.text = "";
-        isBookingRefNameEmpty.value = false;
-        isLastNameEmpty.value = false;
-        isFirstNameEmpty.value = false;
-        return true;
-      }
+    if (bookingRefName != "" && lastName != "") {
+      isBookingRefNameEmpty.value = false;
+      isLastNameEmpty.value = false;
+      return true;
     }
     return false;
   }
 
-  Future<bool> checkTravellerValidation(String firstName, String lastName, String bookingRefName) async {
-    return true;
-  }
-
   Future<bool> loginValidation() async {
-    String lastName = lastNameC.text;
-    String bookingRefName = bookingRefNameC.text;
+    String lastName = lastNameC.text.trim();
+    String bookingRefName = bookingRefNameC.text.trim();
 
     Response response = await DioClient.getToken(
       execution: "[OnlineCheckin].[Authenticate]",
@@ -86,6 +65,8 @@ class EnterScreenController extends MainController {
         String? token = response.data["Body"]["Token"];
         if (token != null) {
           model.setToken(token);
+          StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
+          stepsScreenController.addToTravellers(lastName, bookingRefName);
           return Future<bool>.value(true);
         }
       }

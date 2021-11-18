@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import '../../screens/stepsScreen/StepsScreenController.dart';
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
 
@@ -16,8 +17,9 @@ class SafetyStepScreenController extends MainController {
   RxList<bool> checkBoxesValue = <bool>[false, false, false].obs;
 
   changeValue(int index, bool value) {
+    final myStepScreenController = Get.put(StepsScreenController(model));
     checkBoxesValue[index] = value;
-    print(value);
+    myStepScreenController.updateIsNextButtonDisable();
   }
 
   bool checkValidation() {

@@ -346,9 +346,9 @@ class SeatWidget extends StatelessWidget {
                   size: 15,
                 ),
               )
-            : mySeatsStepController.seatsStatus[seatId] == "selected"
-                ? DraggableSeat(mySeatsStepController: mySeatsStepController, seatId: seatId)
-                : DroppableSeat(mySeatsStepController: mySeatsStepController, seatId: seatId),
+            : mySeatsStepController.seatsStatus[seatId] == "unSelected"
+                ? DroppableSeat(mySeatsStepController: mySeatsStepController, seatId: seatId)
+                : DraggableSeat(mySeatsStepController: mySeatsStepController, seatId: seatId),
       ),
     );
   }
@@ -381,7 +381,7 @@ class DroppableSeat extends StatelessWidget {
             child: Text(
               seatId,
               style: TextStyle(
-                color: mySeatsStepController.seatsStatus[seatId] == "selected" ? Colors.white : Color(0xffd1d1d1),
+                color: mySeatsStepController.seatsStatus[seatId] != "unSelected" ? Colors.white : Color(0xffd1d1d1),
               ),
             ),
           ),
@@ -461,9 +461,9 @@ class DraggableItem extends StatelessWidget {
           ? null
           : Center(
               child: Text(
-                seatId,
+                mySeatsStepController.seatsStatus[seatId]!,
                 style: TextStyle(
-                  color: mySeatsStepController.seatsStatus[seatId] == "selected" ? Colors.white : Color(0xffd1d1d1),
+                  color: mySeatsStepController.seatsStatus[seatId] != "unSelected" ? Colors.white : Color(0xffd1d1d1),
                 ),
               ),
             ),

@@ -9,6 +9,7 @@ class MyElevatedButton extends StatelessWidget {
     required this.bgColor,
     required this.fgColor,
     required this.function,
+    this.isDisable = false,
   }) : super(key: key);
 
   final double height;
@@ -16,7 +17,8 @@ class MyElevatedButton extends StatelessWidget {
   final String buttonText;
   final Color bgColor;
   final Color fgColor;
-  final VoidCallback  function;
+  final VoidCallback function;
+  final bool isDisable;
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +26,23 @@ class MyElevatedButton extends StatelessWidget {
       height: height,
       width: width,
       child: ElevatedButton(
-        onPressed: function,
+        onPressed: isDisable ? null : function,
         child: Text(buttonText),
-        style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all(fgColor),
-          backgroundColor: MaterialStateProperty.all(bgColor),
-          textStyle: MaterialStateProperty.all(
-            TextStyle(color: Colors.white),
-          ),
-        ),
+        style: isDisable
+            ? ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(fgColor.withOpacity(0.2)),
+                backgroundColor: MaterialStateProperty.all(bgColor.withOpacity(0.2)),
+                textStyle: MaterialStateProperty.all(
+                  TextStyle(color: Colors.white.withOpacity(0.2)),
+                ),
+              )
+            : ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(fgColor),
+                backgroundColor: MaterialStateProperty.all(bgColor),
+                textStyle: MaterialStateProperty.all(
+                  TextStyle(color: Colors.white),
+                ),
+              ),
       ),
     );
   }

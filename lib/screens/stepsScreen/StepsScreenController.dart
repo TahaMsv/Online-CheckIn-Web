@@ -1,8 +1,7 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:network_manager/network_manager.dart';
+import 'package:onlinecheckin/screens/safetyStepScreen/SafetyStepController.dart';
 import '../../global/Classes.dart';
 import '../../utility/DataProvider.dart';
 import '../../global/MainController.dart';
@@ -19,8 +18,27 @@ class StepsScreenController extends MainController {
     return _instance;
   }
 
+  List<RxBool> _isNextButtonDisable = [false.obs, true.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs];
+
+  bool get isNextButtonDisable => _isNextButtonDisable[step].value;
+
+  void updateIsNextButtonDisable() {
+    if (step == 0) {
+      _isNextButtonDisable[step].value = travellers.length == 0 ? true : false;
+    } else if (step == 1) {
+      SafetyStepScreenController safetyStepScreenController = Get.put(SafetyStepScreenController(model));
+      _isNextButtonDisable[step].value = !safetyStepScreenController.checkValidation();
+    } else if (step == 2) {
+    } else if (step == 3) {
+    } else if (step == 4) {
+    } else if (step == 5) {
+    } else if (step == 6) {
+    } else if (step == 7) {
+    } else if (step == 8) {}
+  }
+
   Welcome? _welcome;
-  RxInt _step = 6.obs;
+  RxInt _step = 0.obs;
 
   int get step => _step.value;
 
@@ -29,7 +47,26 @@ class StepsScreenController extends MainController {
     print(_step);
   }
 
+  void increaseStep() {
+    int currStep = step;
+    if (currStep < 8) {
+      setStep(currStep + 1);
+    }
+  }
+
   RxList<Traveller> travellers = <Traveller>[].obs;
+  RxInt whoseTurnToSelect = 0.obs;
+
+  void changeTurnToSelect() {
+    for (int i = 0; i < travellers.length; i++) {
+      if (travellers[i].seatId == "--") {
+        whoseTurnToSelect.value = i;
+        return;
+      }
+    }
+
+    whoseTurnToSelect.value = -1;
+  }
 
   void addToTravellers(String lastName, String ticketNumber) {
     for (int i = 0; i < travellers.length; i++) {
@@ -37,13 +74,24 @@ class StepsScreenController extends MainController {
         return;
       }
     }
-    travellers.add(new Traveller(lastName: lastName, ticketNumber: ticketNumber));
+    travellers.add(new Traveller(lastName: lastName, ticketNumber: ticketNumber, seatId: "--"));
+    updateIsNextButtonDisable();
   }
 
   void removeFromTravellers(int index) {
     if (index < travellers.length && index >= 0) {
       travellers.removeAt(index);
     }
+    updateIsNextButtonDisable();
+  }
+
+  int findTravellerIndexBySeatId(String seatId) {
+    for (int i = 0; i < travellers.length; i++) {
+      if (travellers[i].seatId == seatId) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   getInformation() async {
@@ -66,6 +114,17 @@ class StepsScreenController extends MainController {
       print("ok");
     } else {}
   }
+
+  List buttonText = [
+    "Check Pandemic Safety",
+    "Check Rules",
+    "Add Passports",
+    "Add Visa",
+    "Select Upgrades",
+    "Select Seats",
+    "Payment",
+    "Get Boarding Pass",
+  ];
 
   @override
   void onInit() {

@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       enableLog: false,
       debugShowCheckedModeBanner: false,
       theme: AppConfig.themeLight,
-      initialRoute: RouteNames.steps,
+      initialRoute: RouteNames.enter,
       getPages: [
         // GetPage(name: RouteNames.initialRoute, page: () => SplashView(_model)),
         GetPage(name: RouteNames.home, page: () => HomeView(_model)),

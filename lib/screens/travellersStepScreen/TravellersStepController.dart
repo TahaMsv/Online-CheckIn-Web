@@ -49,8 +49,8 @@ class TravellersStepScreenController extends MainController {
   }
 
   Future<bool> checkTravellerValidation(String ticketNumber, String lastName) async {
-    String lastName = lastNameC.text;
-    String ticketNumber = ticketNumberC.text;
+    String lastName = lastNameC.text.trim();
+    String ticketNumber = ticketNumberC.text.trim();
     String token = model.token;
     Response response = await DioClient.getToken(
       execution: "[OnlineCheckin].[Authenticate]",
