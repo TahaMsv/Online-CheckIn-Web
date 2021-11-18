@@ -61,6 +61,7 @@ class SeatsStepController extends MainController {
       }
     }
     myStepScreenController.changeTurnToSelect();
+    myStepScreenController.travellers.refresh();
   }
 
   Color getColor(String seatId) {

@@ -288,7 +288,6 @@ class LeftSideOFPage extends StatelessWidget {
                     step: step,
                     index: index,
                     myStepsScreenController: myStepsScreenController,
-                    isTravellerSelected: myStepsScreenController.travellers[index].seatId == "--" ? false : true,
                   ),
                 ),
               ),
@@ -307,15 +306,14 @@ class TravellerItem extends StatelessWidget {
     required this.step,
     required this.index,
     required this.myStepsScreenController,
-    required this.isTravellerSelected,
   }) : super(key: key);
   final int step;
   final int index;
   final StepsScreenController myStepsScreenController;
-  final bool isTravellerSelected;
 
   @override
   Widget build(BuildContext context) {
+    bool isTravellerSelected = myStepsScreenController.travellers[index].seatId == "--" ? false : true;
     return Expanded(
       child: Obx(
         () => Container(
