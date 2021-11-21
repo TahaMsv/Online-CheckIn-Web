@@ -10,8 +10,20 @@ class Traveller {
   late String ticketNumber;
   late String seatId;
 
-  Traveller({required this.lastName, required this.ticketNumber,required this.seatId});
+  Traveller({required this.lastName, required this.ticketNumber, required this.seatId});
 
+  String getNickName(){
+    String travellerFullName = lastName;
+    int idx = travellerFullName.indexOf(" ");
+    String nickname = "";
+    if (idx == -1) {
+      nickname = travellerFullName.substring(0, 1).toUpperCase();
+    } else {
+      List<String> nameParts = [travellerFullName.substring(0, idx).trim(), travellerFullName.substring(idx + 1).trim()];
+      nickname = (nameParts[0].substring(0, 1) + nameParts[1].substring(0, 1)).toUpperCase();
+    }
+    return nickname;
+  }
 }
 
 List<Welcome> welcomeFromJson(String str) {
@@ -230,7 +242,7 @@ class Passenger {
   String lastName;
   String passengerClass;
   String title;
-  DateTime docsBirthDate;
+  DateTime? docsBirthDate;
   String docsTitle;
   int flightScheduleId;
 
@@ -245,7 +257,7 @@ class Passenger {
         lastName: json["LastName"]!,
         passengerClass: json["Class"]!,
         title: json["Title"]!,
-        docsBirthDate: DateTime.parse(json["DocsBirthDate"]),
+        docsBirthDate: json["DocsBirthDate"] == null ? null : DateTime.parse(json["DocsBirthDate"]),
         docsTitle: json["DocsTitle"]!,
         flightScheduleId: json["FlightScheduleID"],
       );
@@ -261,7 +273,7 @@ class Passenger {
         "LastName": lastName,
         "Class": passengerClass,
         "Title": title,
-        "DocsBirthDate": "${docsBirthDate.year.toString().padLeft(4, '0')}-${docsBirthDate.month.toString().padLeft(2, '0')}-${docsBirthDate.day.toString().padLeft(2, '0')}",
+        "DocsBirthDate": "${docsBirthDate!.year.toString().padLeft(4, '0')}-${docsBirthDate!.month.toString().padLeft(2, '0')}-${docsBirthDate!.day.toString().padLeft(2, '0')}",
         "DocsTitle": docsTitle,
         "FlightScheduleID": flightScheduleId,
       };

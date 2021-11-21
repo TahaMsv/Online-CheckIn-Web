@@ -59,12 +59,12 @@ class EnterScreenController extends MainController {
         "UrlType": 4,
       },
     );
-
     if (response.statusCode == 200) {
       if (response.data["ResultCode"] == 1) {
         String? token = response.data["Body"]["Token"];
         if (token != null) {
           model.setToken(token);
+          print(model.token);
           StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
           stepsScreenController.addToTravellers(lastName, bookingRefName);
           return Future<bool>.value(true);

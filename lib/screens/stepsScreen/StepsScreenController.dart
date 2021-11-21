@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:onlinecheckin/screens/safetyStepScreen/SafetyStepController.dart';
+import 'package:onlinecheckin/screens/seatsStepScreen/SeatsStepController.dart';
 import '../../global/Classes.dart';
 import '../../utility/DataProvider.dart';
 import '../../global/MainController.dart';
@@ -18,7 +19,35 @@ class StepsScreenController extends MainController {
     return _instance;
   }
 
-  List<RxBool> _isNextButtonDisable = [false.obs, true.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs];
+  TextEditingController editSeatC = TextEditingController();
+
+  RxInt _whichOneToEdit = (-1).obs;
+
+  int get whichOneToEdit => _whichOneToEdit.value;
+
+  void setWhichOneToEdit(int whichOne) {
+    _whichOneToEdit.value = whichOne;
+  }
+
+  void changeTravellerSeat(int index) {
+    Traveller traveller = travellers[index];
+    String currSeatId = traveller.seatId;
+    String newSeatId = editSeatC.text.trim().toUpperCase();
+    SeatsStepController seatStepScreenController = Get.put(SeatsStepController(model));
+    if (seatStepScreenController.seatsStatus.containsKey(newSeatId)) {
+      String currStatus = seatStepScreenController.seatsStatus[newSeatId]!;
+      if (currStatus == "Open") {
+        seatStepScreenController.seatsStatus[newSeatId] = traveller.getNickName();
+        travellers[index].seatId = newSeatId;
+        if (currSeatId != "--") {
+          seatStepScreenController.seatsStatus[currSeatId] = "Open";
+        }
+        seatStepScreenController.seatsStatus.refresh();
+      }
+    } else {}
+  }
+
+  List<RxBool> _isNextButtonDisable = [false.obs, true.obs, false.obs, false.obs, false.obs, false.obs, true.obs, false.obs, false.obs];
 
   bool get isNextButtonDisable => _isNextButtonDisable[step].value;
 
@@ -33,18 +62,26 @@ class StepsScreenController extends MainController {
     } else if (step == 4) {
     } else if (step == 5) {
     } else if (step == 6) {
+      for (int i = 0; i < travellers.length; i++) {
+        if (travellers[i].seatId == "--") {
+          _isNextButtonDisable[step].value = true;
+          return;
+        }
+      }
+      _isNextButtonDisable[step].value = false;
     } else if (step == 7) {
     } else if (step == 8) {}
   }
 
   Welcome? _welcome;
+
+  Welcome? get welcome => _welcome;
   RxInt _step = 0.obs;
 
   int get step => _step.value;
 
   void setStep(int newStep) {
     _step.value = newStep;
-    print(_step);
   }
 
   void increaseStep() {
@@ -96,14 +133,13 @@ class StepsScreenController extends MainController {
 
   getInformation() async {
     model.setLoading(true);
-    // String token = model.token;
-    String token = "88DC6A75-CD1A-4249-9EEC-3BBBC54B8B9B";
+    String token = model.token;
     Response response = await DioClient.getInformation(
       execution: "[OnlineCheckin].[SelectFlightInformation]",
       token: token,
       request: {},
     );
-
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final extractedData = response.data;
       if (extractedData == null) {

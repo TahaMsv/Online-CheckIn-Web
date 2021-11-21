@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:onlinecheckin/widgets/UserTextInput.dart';
 import '../../screens/seatsStepScreen/SeatsStepView.dart';
 import '../../screens/paymentStepScreen/PaymentStepView.dart';
 import '../../screens/receiptStepScreen/ReceipStepView.dart';
@@ -354,16 +355,58 @@ class TravellerItem extends StatelessWidget {
                                       height: double.infinity,
                                       color: Color(0xffededed),
                                     ),
-                                    TitleWidget(
-                                      title: myStepsScreenController.travellers[index].seatId,
-                                      width: 65,
-                                      textColor: isTravellerSelected ? Color(0xff48c0a2) : Color(0xff424242),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(Icons.edit),
-                                      color: Colors.blue,
-                                    ),
+                                    myStepsScreenController.whichOneToEdit == index
+                                        ? Row(
+                                            children: [
+                                              Container(
+                                                width: 45,
+                                                color: Colors.grey,
+                                                child: TextField(
+                                                  textAlignVertical: TextAlignVertical.center,
+                                                  controller: myStepsScreenController.editSeatC,
+                                                  maxLength: 3,
+                                                  decoration: InputDecoration(
+                                                      contentPadding: EdgeInsets.all(10.0), border: InputBorder.none, counterText: "", hintText: myStepsScreenController.travellers[index].seatId),
+                                                ),
+                                              ),
+                                              Container(
+                                                width: 30,
+                                                child: IconButton(onPressed: () {
+                                                  myStepsScreenController.setWhichOneToEdit(-1);
+                                                  myStepsScreenController.changeTravellerSeat(index);
+                                                }, icon: Icon(Icons.check), color: Colors.green),
+                                              ),
+                                              Container(
+                                                width: 30,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    myStepsScreenController.setWhichOneToEdit(-1);
+                                                  },
+                                                  icon: Icon(Icons.close),
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        : Row(
+                                            children: [
+                                              TitleWidget(
+                                                title: myStepsScreenController.travellers[index].seatId,
+                                                width: 75,
+                                                textColor: isTravellerSelected ? Color(0xff48c0a2) : Color(0xff424242),
+                                              ),
+                                              Container(
+                                                width: 35,
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    myStepsScreenController.setWhichOneToEdit(index);
+                                                  },
+                                                  icon: Icon(Icons.edit),
+                                                  color: myStepsScreenController.whichOneToEdit == index ? Colors.green : Colors.blue,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                   ],
                                 ),
                               )

@@ -315,7 +315,7 @@ class SeatWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var seatId = columnNumber.toString() + rowCode;
     return GestureDetector(
-      onTap: mySeatsStepController.seatsStatus[seatId] == "blocked"
+      onTap: mySeatsStepController.seatsStatus[seatId] == "Block" || mySeatsStepController.seatsStatus[seatId] == "Checked-in"
           ? null
           : () {
               mySeatsStepController.changeSeatStatus(seatId);
@@ -332,23 +332,67 @@ class SeatWidget extends StatelessWidget {
             Radius.circular(10),
           ),
         ),
-        child: mySeatsStepController.seatsStatus[seatId] == "blocked"
-            ? Container(
-                decoration: BoxDecoration(
-                  color: mySeatsStepController.getColor(seatId),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                ),
-                child: Icon(
-                  Icons.close,
-                  color: Colors.white,
-                  size: 15,
-                ),
-              )
-            : mySeatsStepController.seatsStatus[seatId] == "unSelected"
-                ? DroppableSeat(mySeatsStepController: mySeatsStepController, seatId: seatId)
-                : DraggableSeat(mySeatsStepController: mySeatsStepController, seatId: seatId),
+        child: mySeatsStepController.seatsStatus[seatId] == "Block"
+            ? BlockedSeat()
+            : mySeatsStepController.seatsStatus[seatId] == "Checked-in"
+                ? CheckedInSeat(seatId: mySeatsStepController.seatsStatus[seatId]!)
+                : mySeatsStepController.seatsStatus[seatId] == "Open"
+                    ? DroppableSeat(mySeatsStepController: mySeatsStepController, seatId: seatId)
+                    : DraggableSeat(mySeatsStepController: mySeatsStepController, seatId: seatId),
+      ),
+    );
+  }
+}
+
+class CheckedInSeat extends StatelessWidget {
+  const CheckedInSeat({
+    Key? key,
+    required this.seatId,
+  }) : super(key: key);
+
+  final String seatId;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 35,
+      height: 35,
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      child: Center(
+        child: Text(
+          seatId,
+          style: TextStyle(
+            color: Colors.grey,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class BlockedSeat extends StatelessWidget {
+  const BlockedSeat({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      child: Icon(
+        Icons.close,
+        color: Colors.white,
+        size: 15,
       ),
     );
   }
@@ -381,7 +425,7 @@ class DroppableSeat extends StatelessWidget {
             child: Text(
               seatId,
               style: TextStyle(
-                color: mySeatsStepController.seatsStatus[seatId] != "unSelected" ? Colors.white : Color(0xffd1d1d1),
+                color: mySeatsStepController.seatsStatus[seatId] != "Open" ? Colors.white : Color(0xffd1d1d1),
               ),
             ),
           ),
@@ -463,7 +507,7 @@ class DraggableItem extends StatelessWidget {
               child: Text(
                 mySeatsStepController.seatsStatus[seatId]!,
                 style: TextStyle(
-                  color: mySeatsStepController.seatsStatus[seatId] != "unSelected" ? Colors.white : Color(0xffd1d1d1),
+                  color: mySeatsStepController.seatsStatus[seatId] != "Open" ? Colors.white : Color(0xffd1d1d1),
                 ),
               ),
             ),

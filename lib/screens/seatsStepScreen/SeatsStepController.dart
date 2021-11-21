@@ -17,12 +17,18 @@ class SeatsStepController extends MainController {
 
   final RxMap<String, String> seatsStatus = <String, String>{}.obs;
 
-  void init() {
-    for (int i = 65; i <= 70; i++) {
-      for (int j = 1; j <= 30; j++) {
-        String key = j.toString() + String.fromCharCode(i);
-        seatsStatus[key] = j == 1 ? "blocked" : "unSelected";
+  void init() async {
+    final myStepScreenController = Get.put(StepsScreenController(model));
+    List<Seat> seats = myStepScreenController.welcome!.seats;
+    print(seats.length);
+    for (int i = 0; i < seats.length; i++) {
+      Seat seat = seats[i];
+      String key = seat.line! + seat.letter!;
+      if (seatsStatus.containsKey(key)) {
+        print(key + " existed");
       }
+      seatsStatus[key] = seat.isUsedDescription;
+      print(i.toString() + " ==> " + key + " : " + seat.isUsedDescription);
     }
   }
 
@@ -32,44 +38,37 @@ class SeatsStepController extends MainController {
     bool unSelectedTravellerExist = whoseTurn == -1 ? false : true;
     if (unSelectedTravellerExist) {
       String currStatus = seatsStatus[seatId]!;
-      if (currStatus == "unSelected") {
-        String travellerFullName = myStepScreenController.travellers[whoseTurn].lastName;
-        int idx = travellerFullName.indexOf(" ");
-        String newSeatId = "";
-        if (idx == -1) {
-          newSeatId = travellerFullName.substring(0, 1).toUpperCase();
-        } else {
-          List<String> nameParts = [travellerFullName.substring(0, idx).trim(), travellerFullName.substring(idx + 1).trim()];
-          newSeatId = (nameParts[0].substring(0, 1) + nameParts[1].substring(0, 1)).toUpperCase();
-        }
+      if (currStatus == "Open") {
+        String newSeatId = myStepScreenController.travellers[whoseTurn].getNickName();
         seatsStatus[seatId] = newSeatId;
         myStepScreenController.travellers[whoseTurn].seatId = seatId;
-      }else{
-        print("here");
+      } else {
         int travellerIndex = myStepScreenController.findTravellerIndexBySeatId(seatId);
         if (travellerIndex != -1) {
-          print("here1");
           myStepScreenController.travellers[travellerIndex].seatId = "--";
-          seatsStatus[seatId] = "unSelected";
+          seatsStatus[seatId] = "Open";
         }
       }
     } else {
       int travellerIndex = myStepScreenController.findTravellerIndexBySeatId(seatId);
       if (travellerIndex != -1) {
         myStepScreenController.travellers[travellerIndex].seatId = "--";
-        seatsStatus[seatId] = "unSelected";
+        seatsStatus[seatId] = "Open";
       }
     }
     myStepScreenController.changeTurnToSelect();
     myStepScreenController.travellers.refresh();
+    myStepScreenController.updateIsNextButtonDisable();
   }
 
   Color getColor(String seatId) {
     switch (seatsStatus[seatId]) {
-      case "blocked":
+      case "Block":
         return Colors.black;
-      case "unSelected":
+      case "Open":
         return Colors.white;
+      case "Checked-in":
+        return Colors.grey;
       default:
         return Color(0xffffae2c);
     }
