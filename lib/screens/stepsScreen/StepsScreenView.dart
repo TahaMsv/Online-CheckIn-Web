@@ -329,7 +329,7 @@ class TravellerItem extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 20.0),
                       child: Text(
-                        myStepsScreenController.travellers[index].lastName,
+                        myStepsScreenController.travellers[index].getFullNameWithGender(),
                         style: TextStyle(
                           color: Color(0xff424242),
                           fontSize: 13,
@@ -371,10 +371,13 @@ class TravellerItem extends StatelessWidget {
                                               ),
                                               Container(
                                                 width: 30,
-                                                child: IconButton(onPressed: () {
-                                                  myStepsScreenController.setWhichOneToEdit(-1);
-                                                  myStepsScreenController.changeTravellerSeat(index);
-                                                }, icon: Icon(Icons.check), color: Colors.green),
+                                                child: IconButton(
+                                                    onPressed: () {
+                                                      myStepsScreenController.setWhichOneToEdit(-1);
+                                                      myStepsScreenController.changeTravellerSeat(index);
+                                                    },
+                                                    icon: Icon(Icons.check),
+                                                    color: Colors.green),
                                               ),
                                               Container(
                                                 width: 30,

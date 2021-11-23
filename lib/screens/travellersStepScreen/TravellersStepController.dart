@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:onlinecheckin/screens/stepsScreen/StepsScreenController.dart';
-import 'package:onlinecheckin/utility/DataProvider.dart';
+import '../../global/Classes.dart';
+import '../../screens/stepsScreen/StepsScreenController.dart';
+import '../../utility/DataProvider.dart';
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
 
@@ -37,9 +38,9 @@ class TravellersStepScreenController extends MainController {
       isLastNameEmpty.value = false;
     }
     if (ticketNumber != "" && lastName != "") {
-      bool isValid = await checkTravellerValidation(ticketNumber, lastName);
-      if (isValid) {
-        myStepScreenController.addToTravellers(lastName, ticketNumber);
+      String token = await checkTravellerValidation(ticketNumber, lastName);
+      if (token != "") {
+        myStepScreenController.addToTravellers(token, lastName, ticketNumber);
         lastNameC.text = "";
         ticketNumberC.text = "";
         isTicketNumberEmpty.value = false;
@@ -48,7 +49,7 @@ class TravellersStepScreenController extends MainController {
     }
   }
 
-  Future<bool> checkTravellerValidation(String ticketNumber, String lastName) async {
+  Future<String> checkTravellerValidation(String ticketNumber, String lastName) async {
     String lastName = lastNameC.text.trim();
     String ticketNumber = ticketNumberC.text.trim();
     String token = model.token;
@@ -64,10 +65,11 @@ class TravellersStepScreenController extends MainController {
 
     if (response.statusCode == 200) {
       if (response.data["ResultCode"] == 1) {
-        return Future<bool>.value(true);
+        String? token = response.data["Body"]["Token"];
+        return Future<String>.value(token);
       }
     } else {}
-    return Future<bool>.value(false);
+    return Future<String>.value("");
   }
 
   @override

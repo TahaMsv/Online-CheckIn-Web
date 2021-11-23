@@ -6,14 +6,14 @@ import 'package:meta/meta.dart';
 import 'dart:convert';
 
 class Traveller {
-  late String lastName;
+  late Passenger passengerInfo;
   late String ticketNumber;
   late String seatId;
 
-  Traveller({required this.lastName, required this.ticketNumber, required this.seatId});
+  Traveller({required this.passengerInfo, required this.ticketNumber, required this.seatId});
 
-  String getNickName(){
-    String travellerFullName = lastName;
+  String getNickName() {
+    String travellerFullName = passengerInfo.name;
     int idx = travellerFullName.indexOf(" ");
     String nickname = "";
     if (idx == -1) {
@@ -23,6 +23,13 @@ class Traveller {
       nickname = (nameParts[0].substring(0, 1) + nameParts[1].substring(0, 1)).toUpperCase();
     }
     return nickname;
+  }
+
+  String getFullNameWithGender() {
+    String result = "";
+    result = (passengerInfo.title == "MR" ? "Mr. " : "Ms. ");
+    result += (passengerInfo.name);
+    return result;
   }
 }
 
@@ -217,65 +224,65 @@ class Seat {
 
 class Passenger {
   Passenger({
-    required this.id,
-    required this.reference,
+    // required this.id,
+    // required this.reference,
     required this.name,
-    required this.nationalId,
-    required this.passengerType,
-    required this.classType,
+    // required this.nationalId,
+    // required this.passengerType,
+    // required this.classType,
     required this.firstName,
     required this.lastName,
-    required this.passengerClass,
+    // required this.passengerClass,
     required this.title,
-    required this.docsBirthDate,
-    required this.docsTitle,
-    required this.flightScheduleId,
+    // required this.docsBirthDate,
+    // required this.docsTitle,
+    // required this.flightScheduleId,
   });
 
-  int id;
-  String reference;
+  // int id;
+  // String reference;
   String name;
-  String nationalId;
-  String passengerType;
-  String classType;
+  // String nationalId;
+  // String passengerType;
+  // String classType;
   String firstName;
   String lastName;
-  String passengerClass;
+  // String passengerClass;
   String title;
-  DateTime? docsBirthDate;
-  String docsTitle;
-  int flightScheduleId;
+  // DateTime? docsBirthDate;
+  // String docsTitle;
+  // int flightScheduleId;
 
   factory Passenger.fromJson(Map<String, dynamic> json) => Passenger(
-        id: json["ID"],
-        reference: json["Reference"]!,
+        // id: json["ID"],
+        // reference: json["Reference"]!,
         name: json["Name"]!,
-        nationalId: json["NationalID"]!,
-        passengerType: json["PassengerType"]!,
-        classType: json["ClassType"]!,
+        // nationalId: json["NationalID"]!,
+        // passengerType: json["PassengerType"]!,
+        // classType: json["ClassType"]!,
         firstName: json["FirstName"]!,
         lastName: json["LastName"]!,
-        passengerClass: json["Class"]!,
+        // passengerClass: json["Class"]!,
         title: json["Title"]!,
-        docsBirthDate: json["DocsBirthDate"] == null ? null : DateTime.parse(json["DocsBirthDate"]),
-        docsTitle: json["DocsTitle"]!,
-        flightScheduleId: json["FlightScheduleID"],
+        // docsBirthDate: json["DocsBirthDate"] == null ? null : DateTime.parse(json["DocsBirthDate"]),
+        // docsTitle: json["DocsTitle"]!,
+        // flightScheduleId: json["FlightScheduleID"],
       );
 
   Map<String, dynamic> toJson() => {
-        "ID": id,
-        "Reference": reference,
+        // "ID": id,
+        // "Reference": reference,
         "Name": name,
-        "NationalID": nationalId,
-        "PassengerType": passengerType,
-        "ClassType": classType,
+        // "NationalID": nationalId,
+        // "PassengerType": passengerType,
+        // "ClassType": classType,
         "FirstName": firstName,
         "LastName": lastName,
-        "Class": passengerClass,
+        // "Class": passengerClass,
         "Title": title,
-        "DocsBirthDate": "${docsBirthDate!.year.toString().padLeft(4, '0')}-${docsBirthDate!.month.toString().padLeft(2, '0')}-${docsBirthDate!.day.toString().padLeft(2, '0')}",
-        "DocsTitle": docsTitle,
-        "FlightScheduleID": flightScheduleId,
+        // "DocsBirthDate": "${docsBirthDate!.year.toString().padLeft(4, '0')}-${docsBirthDate!.month.toString().padLeft(2, '0')}-${docsBirthDate!.day.toString().padLeft(2, '0')}",
+        // "DocsTitle": docsTitle,
+        // "FlightScheduleID": flightScheduleId,
       };
 }
 

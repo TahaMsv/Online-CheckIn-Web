@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:onlinecheckin/screens/stepsScreen/StepsScreenController.dart';
 
-// import 'package:network_manager/network_manager.dart';
-import 'package:onlinecheckin/utility/Constants.dart';
 import '../../utility/DataProvider.dart';
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
@@ -49,14 +47,13 @@ class EnterScreenController extends MainController {
   Future<bool> loginValidation() async {
     String lastName = lastNameC.text.trim();
     String bookingRefName = bookingRefNameC.text.trim();
-
     Response response = await DioClient.getToken(
       execution: "[OnlineCheckin].[Authenticate]",
       token: null,
       request: {
         "Code": bookingRefName,
         "Code2": lastName,
-        "UrlType": 4,
+        "UrlType": 1,
       },
     );
     if (response.statusCode == 200) {
@@ -66,7 +63,7 @@ class EnterScreenController extends MainController {
           model.setToken(token);
           print(model.token);
           StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-          stepsScreenController.addToTravellers(lastName, bookingRefName);
+          stepsScreenController.addToTravellers(token, lastName, bookingRefName);
           return Future<bool>.value(true);
         }
       }

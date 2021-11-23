@@ -105,13 +105,15 @@ class StepsScreenController extends MainController {
     whoseTurnToSelect.value = -1;
   }
 
-  void addToTravellers(String lastName, String ticketNumber) {
+  void addToTravellers(String token, String lastName, String ticketNumber) async {
+    await getInformation(token);
+    Passenger passenger = welcome!.seats[0].passengers[0];
     for (int i = 0; i < travellers.length; i++) {
-      if (travellers[i].lastName == lastName && travellers[i].ticketNumber == ticketNumber) {
+      if (travellers[i].passengerInfo.lastName == lastName && travellers[i].ticketNumber == ticketNumber) {
         return;
       }
     }
-    travellers.add(new Traveller(lastName: lastName, ticketNumber: ticketNumber, seatId: "--"));
+    travellers.add(new Traveller(passengerInfo: passenger, ticketNumber: ticketNumber, seatId: "--"));
     updateIsNextButtonDisable();
   }
 
@@ -131,9 +133,9 @@ class StepsScreenController extends MainController {
     return -1;
   }
 
-  getInformation() async {
+  getInformation(String token) async {
     model.setLoading(true);
-    String token = model.token;
+    // String token = model.token;
     Response response = await DioClient.getInformation(
       execution: "[OnlineCheckin].[SelectFlightInformation]",
       token: token,
@@ -165,7 +167,7 @@ class StepsScreenController extends MainController {
   @override
   void onInit() {
     print("StepsScreenController Init");
-    getInformation();
+
     super.onInit();
   }
 
