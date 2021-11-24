@@ -24,6 +24,16 @@ class DataProvider {
     );
     return NetworkRequest(api: api, data: getInformationRM.toJson(), retry: retry).post();
   }
+
+  static Future<NetworkResponse> getDocumentTypes({required String execution, required dynamic token, required Map<String, Object> request, required Function retry}) async {
+    String api = Apis.getDocumentType;
+    RequestModelGetDocumentTypes grtPassportTypesRM = RequestModelGetDocumentTypes(
+      execution: execution,
+      token: token,
+      request: request,
+    );
+    return NetworkRequest(api: api, data: grtPassportTypesRM.toJson(), retry: retry).post();
+  }
 }
 
 class DioClient {
@@ -54,6 +64,27 @@ class DioClient {
   }) async {
     Response response;
     String api = Apis.baseUrl + Apis.getInformation;
+    _dio.options.headers['Content-Type'] = 'application/json';
+    response = await _dio.post(
+      api,
+      data: {
+        "Body": {
+          "Execution": execution,
+          "Token": token,
+          "Request": request,
+        },
+      },
+    );
+    return response;
+  }
+
+  static Future<Response> getDocumentTypes({
+    required String execution,
+    required dynamic token,
+    required Map<String, Object> request,
+  }) async {
+    Response response;
+    String api = Apis.baseUrl + Apis.getDocumentType;
     _dio.options.headers['Content-Type'] = 'application/json';
     response = await _dio.post(
       api,

@@ -113,7 +113,10 @@ class StepsScreenController extends MainController {
         return;
       }
     }
-    travellers.add(new Traveller(passengerInfo: passenger, ticketNumber: ticketNumber, seatId: "--"));
+    Traveller traveller = new Traveller(token: token, passengerInfo: passenger, ticketNumber: ticketNumber, seatId: "--");
+    traveller.setPassportInfo(new PassportInfo());
+    traveller.setVisaInfo(new VisaInfo());
+    travellers.add(traveller);
     updateIsNextButtonDisable();
   }
 

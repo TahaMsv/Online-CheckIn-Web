@@ -6,11 +6,20 @@ import 'package:meta/meta.dart';
 import 'dart:convert';
 
 class Traveller {
+  late String token;
   late Passenger passengerInfo;
   late String ticketNumber;
   late String seatId;
+  late PassportInfo _passportInfo;
 
-  Traveller({required this.passengerInfo, required this.ticketNumber, required this.seatId});
+  late VisaInfo _visaInfo;
+
+  Traveller({
+    required this.token,
+    required this.passengerInfo,
+    required this.ticketNumber,
+    required this.seatId,
+  });
 
   String getNickName() {
     String travellerFullName = passengerInfo.name;
@@ -31,6 +40,92 @@ class Traveller {
     result += (passengerInfo.name);
     return result;
   }
+
+  VisaInfo get visaInfo => _visaInfo;
+
+  void setVisaInfo(VisaInfo value) {
+    _visaInfo = value;
+  }
+
+  PassportInfo get passportInfo => _passportInfo;
+
+  void setPassportInfo(PassportInfo value) {
+    _passportInfo = value;
+  }
+}
+
+class PassportInfo {
+  late bool isPassInfoCompleted = false;
+  late String? passportType;
+  late String? documentNo;
+  late String? gender;
+  late String? countryOfIssue;
+  late String? nationality;
+  late DateTime? dateOfBirth;
+  late DateTime? entryDate;
+
+  PassportInfo({
+    this.passportType,
+    this.documentNo,
+    this.gender,
+    this.countryOfIssue,
+    this.nationality,
+    this.dateOfBirth,
+    this.entryDate,
+  });
+
+  bool getIsCompleted() {
+    return passportType != null && documentNo != null && gender != null && countryOfIssue != null && nationality != null && dateOfBirth != null && entryDate != null;
+  }
+}
+
+class VisaInfo {
+  late bool isVisaInfoCompleted = false;
+  late String? type;
+  late String? documentNo;
+  late String? placeOfIssue;
+  late String? destination;
+  late DateTime? issueDate;
+
+  VisaInfo({
+    this.type,
+    this.documentNo,
+    this.placeOfIssue,
+    this.destination,
+    this.issueDate,
+  });
+
+  bool getIsCompleted() {
+    return type != null && documentNo != null && placeOfIssue != null && destination != null && issueDate != null;
+  }
+}
+
+class PassPortType {
+  late int id;
+  late String shortName;
+  late String name;
+  late String fullName;
+
+  PassPortType({
+    required this.id,
+    required this.shortName,
+    required this.name,
+    required this.fullName,
+  });
+}
+
+class VisaType {
+  late int id;
+  late String shortName;
+  late String name;
+  late String fullName;
+
+  VisaType({
+    required this.id,
+    required this.shortName,
+    required this.name,
+    required this.fullName,
+  });
 }
 
 List<Welcome> welcomeFromJson(String str) {
@@ -224,65 +319,65 @@ class Seat {
 
 class Passenger {
   Passenger({
-    // required this.id,
-    // required this.reference,
+    required this.id,
+    required this.reference,
     required this.name,
-    // required this.nationalId,
-    // required this.passengerType,
-    // required this.classType,
+    required this.nationalId,
+    required this.passengerType,
+    required this.classType,
     required this.firstName,
     required this.lastName,
-    // required this.passengerClass,
+    required this.passengerClass,
     required this.title,
-    // required this.docsBirthDate,
-    // required this.docsTitle,
-    // required this.flightScheduleId,
+    required this.docsBirthDate,
+    required this.docsTitle,
+    required this.flightScheduleId,
   });
 
-  // int id;
-  // String reference;
+  int id;
+  String reference;
   String name;
-  // String nationalId;
-  // String passengerType;
-  // String classType;
+  String nationalId;
+  String passengerType;
+  String classType;
   String firstName;
   String lastName;
-  // String passengerClass;
+  String passengerClass;
   String title;
-  // DateTime? docsBirthDate;
-  // String docsTitle;
-  // int flightScheduleId;
+  DateTime? docsBirthDate;
+  String docsTitle;
+  int flightScheduleId;
 
   factory Passenger.fromJson(Map<String, dynamic> json) => Passenger(
-        // id: json["ID"],
-        // reference: json["Reference"]!,
+        id: json["ID"],
+        reference: json["Reference"]!,
         name: json["Name"]!,
-        // nationalId: json["NationalID"]!,
-        // passengerType: json["PassengerType"]!,
-        // classType: json["ClassType"]!,
+        nationalId: json["NationalID"]!,
+        passengerType: json["PassengerType"]!,
+        classType: json["ClassType"]!,
         firstName: json["FirstName"]!,
         lastName: json["LastName"]!,
-        // passengerClass: json["Class"]!,
+        passengerClass: json["Class"]!,
         title: json["Title"]!,
-        // docsBirthDate: json["DocsBirthDate"] == null ? null : DateTime.parse(json["DocsBirthDate"]),
-        // docsTitle: json["DocsTitle"]!,
-        // flightScheduleId: json["FlightScheduleID"],
+        docsBirthDate: json["DocsBirthDate"] == null ? null : DateTime.parse(json["DocsBirthDate"]),
+        docsTitle: json["DocsTitle"]!,
+        flightScheduleId: json["FlightScheduleID"],
       );
 
   Map<String, dynamic> toJson() => {
-        // "ID": id,
-        // "Reference": reference,
+        "ID": id,
+        "Reference": reference,
         "Name": name,
-        // "NationalID": nationalId,
-        // "PassengerType": passengerType,
-        // "ClassType": classType,
+        "NationalID": nationalId,
+        "PassengerType": passengerType,
+        "ClassType": classType,
         "FirstName": firstName,
         "LastName": lastName,
-        // "Class": passengerClass,
+        "Class": passengerClass,
         "Title": title,
-        // "DocsBirthDate": "${docsBirthDate!.year.toString().padLeft(4, '0')}-${docsBirthDate!.month.toString().padLeft(2, '0')}-${docsBirthDate!.day.toString().padLeft(2, '0')}",
-        // "DocsTitle": docsTitle,
-        // "FlightScheduleID": flightScheduleId,
+        "DocsBirthDate": "${docsBirthDate!.year.toString().padLeft(4, '0')}-${docsBirthDate!.month.toString().padLeft(2, '0')}-${docsBirthDate!.day.toString().padLeft(2, '0')}",
+        "DocsTitle": docsTitle,
+        "FlightScheduleID": flightScheduleId,
       };
 }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../screens/stepsScreen/StepsScreenController.dart';
+import '../../global/Classes.dart';
 import '../../widgets/SelectingDateWidget.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/StepsScreenTitle.dart';
@@ -17,10 +19,15 @@ class VisaStepController extends MainController {
     return _instance;
   }
 
+  List<Traveller> travellersList() {
+    final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
+    return stepsScreenController.travellers;
+  }
+
   TextEditingController documentNoC = TextEditingController();
   TextEditingController destinationC = TextEditingController();
 
-  List<String> listType = ["Type","Type1", "Type2"];
+  List<VisaType> listType = [new VisaType(id: -1, shortName: "", name: "", fullName: "Type")];
 
   final RxString selectedType = "Type".obs;
 
@@ -28,7 +35,7 @@ class VisaStepController extends MainController {
     selectedType.value = value;
   }
 
-  List<String> listIssuePlace = ["Place of issue","Place1", "Place2"];
+  List<String> listIssuePlace = ["Place of issue", "Place1", "Place2"];
 
   final RxString selectedPlace = "Place of issue".obs;
 
@@ -105,79 +112,80 @@ class VisaStepController extends MainController {
 
   Container placeOfIssueDropDown() {
     return Container(
-                height: 40,
-                width: 200,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Color(0xffeaeaea),
-                    width: 2,
-                  ),
-                ),
-                child: Obx(
-                  () => DropdownButtonHideUnderline(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5),
-                      child: DropdownButton(
-                        hint: Text(
-                          'Place of Issue',
-                        ),
-                        onChanged: (newValue) {
-                          setSelectedPlace(newValue.toString());
-                        },
-                        value: selectedPlace.value,
-                        items: listIssuePlace.map(
-                          (selectedType) {
-                            return DropdownMenuItem(
-                              child: new Text(
-                                selectedType,
-                              ),
-                              value: selectedType,
-                            );
-                          },
-                        ).toList(),
-                      ),
+      height: 40,
+      width: 200,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Color(0xffeaeaea),
+          width: 2,
+        ),
+      ),
+      child: Obx(
+        () => DropdownButtonHideUnderline(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            child: DropdownButton(
+              hint: Text(
+                'Place of Issue',
+              ),
+              onChanged: (newValue) {
+                setSelectedPlace(newValue.toString());
+              },
+              value: selectedPlace.value,
+              items: listIssuePlace.map(
+                (selectedType) {
+                  return DropdownMenuItem(
+                    child: new Text(
+                      selectedType,
                     ),
-                  ),
-                ),
-              );
+                    value: selectedType,
+                  );
+                },
+              ).toList(),
+            ),
+          ),
+        ),
+      ),
+    );
   }
+
   Container TypeDropDown() {
     return Container(
-                height: 40,
-                width: 200,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Color(0xffeaeaea),
-                    width: 2,
-                  ),
-                ),
-                child: Obx(
-                  () => DropdownButtonHideUnderline(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5),
-                      child: DropdownButton(
-                        hint: Text(
-                          'Type',
-                        ),
-                        onChanged: (newValue) {
-                          setSelected(newValue.toString());
-                        },
-                        value: selectedType.value,
-                        items: listType.map(
-                          (selectedType) {
-                            return DropdownMenuItem(
-                              child: new Text(
-                                selectedType,
-                              ),
-                              value: selectedType,
-                            );
-                          },
-                        ).toList(),
-                      ),
+      height: 40,
+      width: 200,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Color(0xffeaeaea),
+          width: 2,
+        ),
+      ),
+      child: Obx(
+        () => DropdownButtonHideUnderline(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            child: DropdownButton(
+              hint: Text(
+                'Type',
+              ),
+              onChanged: (newValue) {
+                setSelected(newValue.toString());
+              },
+              value: selectedType.value,
+              items: listType.map(
+                (selectedType) {
+                  return DropdownMenuItem(
+                    child:  Text(
+                      selectedType.fullName,
                     ),
-                  ),
-                ),
-              );
+                    value: selectedType.fullName,
+                  );
+                },
+              ).toList(),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override

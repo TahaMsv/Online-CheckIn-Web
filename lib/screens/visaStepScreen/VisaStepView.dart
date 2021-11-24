@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:onlinecheckin/global/Classes.dart';
 import '../../widgets/StepsScreenTitle.dart';
 import '../../screens/visaStepScreen/VisaStepController.dart';
 import '../../global/MainModel.dart';
@@ -10,72 +11,13 @@ import 'package:get/get.dart';
 class VisaStepView extends StatelessWidget {
   final VisaStepController myVisaStepController;
 
-  VisaStepView(MainModel model)
-      : myVisaStepController = Get.put(VisaStepController(model));
+  VisaStepView(MainModel model) : myVisaStepController = Get.put(VisaStepController(model));
 
   @override
   Widget build(BuildContext context) {
     // double width = Get.width;
     // double height = Get.height;
 
-    var travellers = [
-      {
-        "name": "Mr. Jack Taylor",
-        "isComplete": false,
-      },
-      {
-        "name": "Ms. Ana Lee",
-        "isComplete": true,
-      },
-      {
-        "name": "Mr. Jack Taylor",
-        "isComplete": false,
-      },
-      {
-        "name": "Ms. Ana Lee",
-        "isComplete": true,
-      },
-      {
-        "name": "Mr. Jack Taylor",
-        "isComplete": false,
-      },
-      {
-        "name": "Ms. Ana Lee",
-        "isComplete": true,
-      },
-      {
-        "name": "Mr. Jack Taylor",
-        "isComplete": false,
-      },
-      {
-        "name": "Ms. Ana Lee",
-        "isComplete": true,
-      },
-      {
-        "name": "Mr. Jack Taylor",
-        "isComplete": false,
-      },
-      {
-        "name": "Ms. Ana Lee",
-        "isComplete": true,
-      },
-      {
-        "name": "Mr. Jack Taylor",
-        "isComplete": false,
-      },
-      {
-        "name": "Ms. Ana Lee",
-        "isComplete": true,
-      },
-      {
-        "name": "Mr. Jack Taylor",
-        "isComplete": false,
-      },
-      {
-        "name": "Ms. Ana Lee",
-        "isComplete": true,
-      },
-    ];
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -84,16 +26,22 @@ class VisaStepView extends StatelessWidget {
             title: "Visa",
             description: "Enter visa data (DOCO) for all the passengers.",
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Expanded(
             child: GridView.count(
               crossAxisCount: 4,
               // crossAxisSpacing: 60,
               childAspectRatio: 315 / 193,
-              children: travellers.map(
-                    (value) {
+              children: myVisaStepController.travellersList().asMap().entries.map(
+                (entry) {
+                  int idx = entry.key;
+                  Traveller traveller = entry.value;
                   return InfoCard(
-                    info: value, myVisaStepController: myVisaStepController,
+                    index: idx,
+                    traveller: traveller,
+                    myVisaStepController: myVisaStepController,
                   );
                 },
               ).toList(),
@@ -108,16 +56,19 @@ class VisaStepView extends StatelessWidget {
 class InfoCard extends StatelessWidget {
   const InfoCard({
     Key? key,
-    required this.info, required this.myVisaStepController,
+    required this.traveller,
+    required this.myVisaStepController,
+    required this.index,
   }) : super(key: key);
-
-  final dynamic info;
+  final int index;
+  final Traveller traveller;
   final VisaStepController myVisaStepController;
+
   @override
   Widget build(BuildContext context) {
     Color textColor;
     Color bgColor;
-    if (info["isComplete"]) {
+    if (traveller.visaInfo.isVisaInfoCompleted) {
       textColor = Color(0xffffffff);
       bgColor = Color(0xff48c0a2);
     } else {
@@ -143,15 +94,13 @@ class InfoCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.warning_amber_sharp,
-                color: info["isComplete"]
-                    ? Colors.white.withOpacity(0)
-                    : Color(0xfff86f6f),
+                color: traveller.visaInfo.isVisaInfoCompleted ? Colors.white.withOpacity(0) : Color(0xfff86f6f),
                 size: 20,
               )
             ],
           ),
           Text(
-            info['name'],
+            traveller.getFullNameWithGender(),
             style: TextStyle(
               color: textColor,
               fontSize: 15,
@@ -172,14 +121,16 @@ class InfoCard extends StatelessWidget {
                 ),
               ),
               Text(
-                "45678",
+                "${traveller.passengerInfo.id}",
                 style: TextStyle(
                   color: textColor,
                   fontSize: 15,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              SizedBox(width: 5,),
+              SizedBox(
+                width: 5,
+              ),
               Text(
                 "Passport No: ",
                 style: TextStyle(
@@ -188,20 +139,24 @@ class InfoCard extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              Text(
-                "45678",
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
+              // Text(
+              //   "45678",
+              //   style: TextStyle(
+              //     color: textColor,
+              //     fontSize: 15,
+              //     fontWeight: FontWeight.w800,
+              //   ),
+              // ),
             ],
           ),
           SizedBox(
             height: 20,
           ),
-          info["isComplete"] ? EditVisaInfo() : AddVisaInfo(myVisaStepController: myVisaStepController,),
+          traveller.visaInfo.isVisaInfoCompleted
+              ? EditVisaInfo()
+              : AddVisaInfo(
+                  myVisaStepController: myVisaStepController,
+                ),
         ],
       ),
     );
@@ -210,13 +165,15 @@ class InfoCard extends StatelessWidget {
 
 class AddVisaInfo extends StatelessWidget {
   const AddVisaInfo({
-    Key? key, required this.myVisaStepController,
+    Key? key,
+    required this.myVisaStepController,
   }) : super(key: key);
   final VisaStepController myVisaStepController;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         myVisaStepController.showDOCOPopup();
       },
       child: Row(

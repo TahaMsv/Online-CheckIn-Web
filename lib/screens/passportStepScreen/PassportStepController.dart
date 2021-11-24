@@ -1,5 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide Response;
+import 'package:onlinecheckin/screens/stepsScreen/StepsScreenController.dart';
+import 'package:onlinecheckin/screens/visaStepScreen/VisaStepController.dart';
+import 'package:onlinecheckin/utility/DataProvider.dart';
+import '../../global/Classes.dart';
 import '../../widgets/SelectingDateWidget.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/StepsScreenTitle.dart';
@@ -17,9 +22,36 @@ class PassportStepController extends MainController {
     return _instance;
   }
 
+  void init() async {
+    Response response = await DioClient.getDocumentTypes(
+      execution: "[OnlineCheckin].[SelectDocumentTypes]",
+      token: model.token,
+      request: {},
+    );
+
+    if (response.statusCode == 200) {
+      if (response.data["ResultCode"] == 1) {
+        final VisaStepController visaStepController = Get.put(VisaStepController(model));
+        List visaTypes = response.data["Body"]["VisaTypes"];
+        List passportTypes = response.data["Body"]["PassportTypes"];
+        for (var i = 0; i < visaTypes.length; ++i) {
+          visaStepController.listType.add(new VisaType(id: visaTypes[i]["ID"], shortName: visaTypes[i]["ShortName"], name: visaTypes[i]["name"], fullName: visaTypes[i]["FullName"]));
+        }
+        for (var i = 0; i < passportTypes.length; ++i) {
+          listPassportType.add(new PassPortType(id: passportTypes[i]["ID"], shortName: passportTypes[i]["ShortName"], name: passportTypes[i]["name"], fullName: passportTypes[i]["FullName"]));
+        }
+      }
+    } else {}
+  }
+
+  List<Traveller> travellersList() {
+    final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
+    return stepsScreenController.travellers;
+  }
+
   TextEditingController documentNoC = TextEditingController();
 
-  List<String> listPassportType = ["Passport Type","Passport Type1", "Passport Type2"];
+  List<PassPortType> listPassportType = [new PassPortType(id: -1, shortName: "", name: "", fullName: "Passport Type")];
 
   final RxString selectedPassportType = "Passport Type".obs;
 
@@ -135,163 +167,164 @@ class PassportStepController extends MainController {
 
   Container passportTypeDropDown() {
     return Container(
-              height: 40,
-              width: 200,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Color(0xffeaeaea),
-                  width: 2,
-                ),
+      height: 40,
+      width: 200,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Color(0xffeaeaea),
+          width: 2,
+        ),
+      ),
+      child: Obx(
+        () => DropdownButtonHideUnderline(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            child: DropdownButton(
+              hint: Text(
+                'Type',
               ),
-              child: Obx(
-                () => DropdownButtonHideUnderline(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: DropdownButton(
-                      hint: Text(
-                        'Type',
-                      ),
-                      onChanged: (newValue) {
-                        setSelected(newValue.toString());
-                      },
-                      value: selectedPassportType.value,
-                      items: listPassportType.map(
-                        (selectedType) {
-                          return DropdownMenuItem(
-                            child: new Text(
-                              selectedType,
-                            ),
-                            value: selectedType,
-                          );
-                        },
-                      ).toList(),
+              onChanged: (newValue) {
+                setSelected(newValue.toString());
+              },
+              value: selectedPassportType.value,
+              items: listPassportType.map(
+                (selectedType) {
+                  return DropdownMenuItem(
+                    child:  Text(
+                      selectedType.fullName,
                     ),
-                  ),
-                ),
-              ),
-            );
+                    value: selectedType.fullName,
+                  );
+                },
+              ).toList(),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Container nationalityDropDown() {
     return Container(
-              height: 40,
-              width: 200,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Color(0xffeaeaea),
-                  width: 2,
-                ),
+      height: 40,
+      width: 200,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Color(0xffeaeaea),
+          width: 2,
+        ),
+      ),
+      child: Obx(
+        () => DropdownButtonHideUnderline(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            child: DropdownButton(
+              hint: Text(
+                'Nationality',
               ),
-              child: Obx(
-                () => DropdownButtonHideUnderline(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: DropdownButton(
-                      hint: Text(
-                        'Nationality',
-                      ),
-                      onChanged: (newValue) {
-                        setSelectedNationality(newValue.toString());
-                      },
-                      value: selectedNationality.value,
-                      items: listNationality.map(
-                        (selectedType) {
-                          return DropdownMenuItem(
-                            child: new Text(
-                              selectedType,
-                            ),
-                            value: selectedType,
-                          );
-                        },
-                      ).toList(),
+              onChanged: (newValue) {
+                setSelectedNationality(newValue.toString());
+              },
+              value: selectedNationality.value,
+              items: listNationality.map(
+                (selectedType) {
+                  return DropdownMenuItem(
+                    child: new Text(
+                      selectedType,
                     ),
-                  ),
-                ),
-              ),
-            );
+                    value: selectedType,
+                  );
+                },
+              ).toList(),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Container countryOfIssueDropDown() {
     return Container(
-              height: 40,
-              width: 200,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Color(0xffeaeaea),
-                  width: 2,
-                ),
+      height: 40,
+      width: 200,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Color(0xffeaeaea),
+          width: 2,
+        ),
+      ),
+      child: Obx(
+        () => DropdownButtonHideUnderline(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            child: DropdownButton(
+              hint: Text(
+                'Country of Issue',
               ),
-              child: Obx(
-                () => DropdownButtonHideUnderline(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: DropdownButton(
-                      hint: Text(
-                        'Country of Issue',
-                      ),
-                      onChanged: (newValue) {
-                        setSelectedCountryIssue(newValue.toString());
-                      },
-                      value: selectedCountryIssue.value,
-                      items: listCountryIssue.map(
-                        (selectedType) {
-                          return DropdownMenuItem(
-                            child: new Text(
-                              selectedType,
-                            ),
-                            value: selectedType,
-                          );
-                        },
-                      ).toList(),
+              onChanged: (newValue) {
+                setSelectedCountryIssue(newValue.toString());
+              },
+              value: selectedCountryIssue.value,
+              items: listCountryIssue.map(
+                (selectedType) {
+                  return DropdownMenuItem(
+                    child: new Text(
+                      selectedType,
                     ),
-                  ),
-                ),
-              ),
-            );
+                    value: selectedType,
+                  );
+                },
+              ).toList(),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Container genderDropDown() {
     return Container(
-              height: 40,
-              width: 200,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Color(0xffeaeaea),
-                  width: 2,
-                ),
+      height: 40,
+      width: 200,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Color(0xffeaeaea),
+          width: 2,
+        ),
+      ),
+      child: Obx(
+        () => DropdownButtonHideUnderline(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            child: DropdownButton(
+              hint: Text(
+                'Gender',
               ),
-              child: Obx(
-                () => DropdownButtonHideUnderline(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: DropdownButton(
-                      hint: Text(
-                        'Gender',
-                      ),
-                      onChanged: (newValue) {
-                        setSelectedGender(newValue.toString());
-                      },
-                      value: selectedGender.value,
-                      items: listGender.map(
-                        (selectedType) {
-                          return DropdownMenuItem(
-                            child: new Text(
-                              selectedType,
-                            ),
-                            value: selectedType,
-                          );
-                        },
-                      ).toList(),
+              onChanged: (newValue) {
+                setSelectedGender(newValue.toString());
+              },
+              value: selectedGender.value,
+              items: listGender.map(
+                (selectedType) {
+                  return DropdownMenuItem(
+                    child: new Text(
+                      selectedType,
                     ),
-                  ),
-                ),
-              ),
-            );
+                    value: selectedType,
+                  );
+                },
+              ).toList(),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   void onInit() {
     print("PassportStepController Init");
+    init();
     super.onInit();
   }
 

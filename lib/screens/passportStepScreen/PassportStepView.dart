@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:onlinecheckin/global/Classes.dart';
 import 'package:onlinecheckin/widgets/MyElevatedButton.dart';
 import 'package:onlinecheckin/widgets/UserTextInput.dart';
 import '../../widgets/StepsScreenTitle.dart';
@@ -21,64 +22,6 @@ class PassportStepView extends StatelessWidget {
     // double width = Get.width;
     // double height = Get.height;
 
-    var travellers = [
-      {
-        "name": "Mr. Jack Taylor",
-        "isComplete": false,
-      },
-      {
-        "name": "Ms. Ana Lee",
-        "isComplete": true,
-      },
-      {
-        "name": "Mr. Jack Taylor",
-        "isComplete": false,
-      },
-      {
-        "name": "Ms. Ana Lee",
-        "isComplete": true,
-      },
-      {
-        "name": "Mr. Jack Taylor",
-        "isComplete": false,
-      },
-      {
-        "name": "Ms. Ana Lee",
-        "isComplete": true,
-      },
-      {
-        "name": "Mr. Jack Taylor",
-        "isComplete": false,
-      },
-      {
-        "name": "Ms. Ana Lee",
-        "isComplete": true,
-      },
-      {
-        "name": "Mr. Jack Taylor",
-        "isComplete": false,
-      },
-      {
-        "name": "Ms. Ana Lee",
-        "isComplete": true,
-      },
-      {
-        "name": "Mr. Jack Taylor",
-        "isComplete": false,
-      },
-      {
-        "name": "Ms. Ana Lee",
-        "isComplete": true,
-      },
-      {
-        "name": "Mr. Jack Taylor",
-        "isComplete": false,
-      },
-      {
-        "name": "Ms. Ana Lee",
-        "isComplete": true,
-      },
-    ];
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -95,10 +38,13 @@ class PassportStepView extends StatelessWidget {
               crossAxisCount: 4,
               // crossAxisSpacing: 60,
               childAspectRatio: 315 / 193,
-              children: travellers.map(
-                (value) {
+              children: myPassportStepController.travellersList().asMap().entries.map(
+                (entry) {
+                  int idx = entry.key;
+                  Traveller traveller = entry.value;
                   return InfoCard(
-                    info: value,
+                    index: idx,
+                    traveller: traveller,
                     myPassportStepController: myPassportStepController,
                   );
                 },
@@ -114,18 +60,19 @@ class PassportStepView extends StatelessWidget {
 class InfoCard extends StatelessWidget {
   const InfoCard({
     Key? key,
-    required this.info,
+    required this.traveller,
     required this.myPassportStepController,
+    required this.index,
   }) : super(key: key);
-
-  final dynamic info;
+  final int index;
+  final Traveller traveller;
   final PassportStepController myPassportStepController;
 
   @override
   Widget build(BuildContext context) {
     Color textColor;
     Color bgColor;
-    if (info["isComplete"]) {
+    if (traveller.passportInfo.isPassInfoCompleted) {
       textColor = Color(0xffffffff);
       bgColor = Color(0xff48c0a2);
     } else {
@@ -151,13 +98,13 @@ class InfoCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.warning_amber_sharp,
-                color: info["isComplete"] ? Colors.white.withOpacity(0) : Color(0xfff86f6f),
+                color: traveller.passportInfo.isPassInfoCompleted ? Colors.white.withOpacity(0) : Color(0xfff86f6f),
                 size: 20,
               )
             ],
           ),
           Text(
-            info['name'],
+            traveller.getFullNameWithGender(),
             style: TextStyle(
               color: textColor,
               fontSize: 15,
@@ -178,7 +125,7 @@ class InfoCard extends StatelessWidget {
                 ),
               ),
               Text(
-                "45678",
+                "${traveller.passengerInfo.id}",
                 style: TextStyle(
                   color: textColor,
                   fontSize: 15,
@@ -190,7 +137,7 @@ class InfoCard extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          info["isComplete"]
+          traveller.passportInfo.isPassInfoCompleted
               ? EditIPassInfo()
               : AddPassInfo(
                   myPassportStepController: myPassportStepController,
@@ -260,7 +207,7 @@ class EditIPassInfo extends StatelessWidget {
               width: 5,
             ),
             Text(
-              "Passport No: 43657",
+              "Passport No: ",
               style: TextStyle(
                 color: Color(0xffffffff),
                 fontSize: 12,
