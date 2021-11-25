@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:onlinecheckin/screens/stepsScreen/StepsScreenController.dart';
@@ -76,6 +79,7 @@ class EnterScreenController extends MainController {
   void onInit() {
     print("EnterScreenController Init");
     // initializeApp();
+
     super.onInit();
   }
 

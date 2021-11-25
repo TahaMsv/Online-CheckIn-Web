@@ -140,6 +140,7 @@ class InfoCard extends StatelessWidget {
           traveller.passportInfo.isPassInfoCompleted
               ? EditIPassInfo()
               : AddPassInfo(
+                  index: index,
                   myPassportStepController: myPassportStepController,
                 ),
         ],
@@ -152,15 +153,17 @@ class AddPassInfo extends StatelessWidget {
   const AddPassInfo({
     Key? key,
     required this.myPassportStepController,
+    required this.index,
   }) : super(key: key);
 
   final PassportStepController myPassportStepController;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        myPassportStepController.showDOCSPopup();
+        myPassportStepController.showDOCSPopup(index);
       },
       child: Row(
         children: [

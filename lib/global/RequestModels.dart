@@ -54,3 +54,22 @@ class RequestModelGetDocumentTypes{
   };
 }
 
+
+class RequestModelGetSelectCountries{
+  final String execution;
+  final dynamic token;
+  final Map<String,dynamic> request;
+
+  RequestModelGetSelectCountries({
+    required this.execution,
+    required this.token,
+    required this.request,
+  });
+
+  Map<String, dynamic> toJson() => {
+    "Execution": execution,
+    "Token": token,
+    "Request": request,
+  };
+}
+

@@ -255,7 +255,9 @@ class SubmitButton extends StatelessWidget {
             buttonText: "Submit",
             bgColor: Colors.white,
             fgColor: Color(0xff4d6ff8),
-            function: () {},
+            function: () {
+
+            },
           ),
         ),
       ],
