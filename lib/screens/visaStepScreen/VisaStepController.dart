@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:onlinecheckin/screens/passportStepScreen/PassportStepController.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
 import '../../global/Classes.dart';
 import '../../widgets/SelectingDateWidget.dart';
@@ -19,31 +20,49 @@ class VisaStepController extends MainController {
     return _instance;
   }
 
+  RxList<Traveller> travellers = <Traveller>[].obs;
+  List<TextEditingController> documentNoCs = [];
+  List<TextEditingController> destinationCs = [];
+
+  void init() async {
+    final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
+    final PassportStepController passportStepController = Get.put(PassportStepController(model));
+    travellers = stepsScreenController.travellers;
+    for (var i = 0; i < travellers.length; ++i) {
+      documentNoCs.add(new TextEditingController());
+      destinationCs.add(new TextEditingController());
+    }
+  }
+
   List<Traveller> travellersList() {
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
     return stepsScreenController.travellers;
   }
 
-  TextEditingController documentNoC = TextEditingController();
-  TextEditingController destinationC = TextEditingController();
+  //////////////////////////////
 
   List<VisaType> listType = [new VisaType(id: -1, shortName: "", name: "", fullName: "Type")];
-
-  final RxString selectedType = "Type".obs;
-
-  void setSelected(String value) {
-    selectedType.value = value;
+  // final RxString selectedType = "Type".obs;
+  void setSelected(int index, String value) {
+    travellers[index].visaInfo.type = value;
+    travellers.refresh();
   }
 
-  List<String> listIssuePlace = ["Place of issue", "Place1", "Place2"];
+  //////////////////////////////
 
-  final RxString selectedPlace = "Place of issue".obs;
+  List<Country> listIssuePlace = [
+    new Country(worldAreaCode: null, currencyId: null, englishName: "Place of issue", name: null, hasOnHoldBooking: null, regionId: null, code3: null, isDisabled: null, id: null)
+  ];
+  // final RxString selectedPlace = "Place of issue".obs;
+  void setSelectedPlace(int index, String value) {
+    travellers[index].visaInfo.placeOfIssue = value;
+    travellers.refresh();
 
-  void setSelectedPlace(String value) {
-    selectedPlace.value = value;
   }
 
-  void showDOCOPopup() {
+  //////////////////////////////
+
+  void showDOCOPopup(int index) {
     Get.defaultDialog(
       title: "",
       contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
@@ -70,11 +89,11 @@ class VisaStepController extends MainController {
             ),
             Row(
               children: [
-                TypeDropDown(),
+                TypeDropDown(index),
                 SizedBox(
                   width: 20,
                 ),
-                DocumentNoWidget(documentNoC: documentNoC)
+                DocumentNoWidget(documentNoC: documentNoCs[index])
               ],
             ),
             SizedBox(
@@ -82,17 +101,17 @@ class VisaStepController extends MainController {
             ),
             Row(
               children: [
-                placeOfIssueDropDown(),
+                placeOfIssueDropDown(index),
                 SizedBox(
                   width: 20,
                 ),
-                SelectingDateWidget(hint: "Issue Date"),
+                // SelectingDateWidget(hint: "Issue Date"),
                 SizedBox(
                   width: 20,
                 ),
                 Expanded(
                   child: UserTextInput(
-                    controller: destinationC,
+                    controller: destinationCs[index],
                     hint: "Destination",
                     errorText: "",
                     isEmpty: false,
@@ -110,7 +129,7 @@ class VisaStepController extends MainController {
     );
   }
 
-  Container placeOfIssueDropDown() {
+  Container placeOfIssueDropDown(int index) {
     return Container(
       height: 40,
       width: 200,
@@ -129,16 +148,16 @@ class VisaStepController extends MainController {
                 'Place of Issue',
               ),
               onChanged: (newValue) {
-                setSelectedPlace(newValue.toString());
+                setSelectedPlace(index, newValue.toString());
               },
-              value: selectedPlace.value,
+              value: travellers[index].visaInfo.placeOfIssue == null ? "Place of issue" : travellers[index].visaInfo.placeOfIssue,
               items: listIssuePlace.map(
                 (selectedType) {
                   return DropdownMenuItem(
                     child: new Text(
-                      selectedType,
+                      selectedType.englishName!,
                     ),
-                    value: selectedType,
+                    value: selectedType.englishName,
                   );
                 },
               ).toList(),
@@ -149,7 +168,7 @@ class VisaStepController extends MainController {
     );
   }
 
-  Container TypeDropDown() {
+  Container TypeDropDown(int index) {
     return Container(
       height: 40,
       width: 200,
@@ -168,13 +187,13 @@ class VisaStepController extends MainController {
                 'Type',
               ),
               onChanged: (newValue) {
-                setSelected(newValue.toString());
+                setSelected(index, newValue.toString());
               },
-              value: selectedType.value,
+              value: travellers[index].visaInfo.type == null ? "Type" : travellers[index].visaInfo.type,
               items: listType.map(
                 (selectedType) {
                   return DropdownMenuItem(
-                    child:  Text(
+                    child: Text(
                       selectedType.fullName,
                     ),
                     value: selectedType.fullName,
@@ -191,6 +210,7 @@ class VisaStepController extends MainController {
   @override
   void onInit() {
     print("VisaStepController Init");
+    init();
     super.onInit();
   }
 
@@ -255,9 +275,7 @@ class SubmitButton extends StatelessWidget {
             buttonText: "Submit",
             bgColor: Colors.white,
             fgColor: Color(0xff4d6ff8),
-            function: () {
-
-            },
+            function: () {},
           ),
         ),
       ],

@@ -101,31 +101,61 @@ class VisaInfo {
 }
 
 class PassPortType {
-  late int id;
-  late String shortName;
-  late String name;
-  late String fullName;
-
   PassPortType({
     required this.id,
     required this.shortName,
     required this.name,
     required this.fullName,
   });
+
+  int id;
+  String shortName;
+  String name;
+  String fullName;
+
+  factory PassPortType.fromJson(Map<String, dynamic> json) => PassPortType(
+    id: json["ID"],
+    shortName: json["ShortName"],
+    name: json["name"],
+    fullName: json["FullName"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "ID": id,
+    "ShortName": shortName,
+    "name": name,
+    "FullName": fullName,
+  };
 }
 
-class VisaType {
-  late int id;
-  late String shortName;
-  late String name;
-  late String fullName;
 
+
+class VisaType {
   VisaType({
     required this.id,
     required this.shortName,
     required this.name,
     required this.fullName,
   });
+
+  int id;
+  String shortName;
+  String name;
+  String fullName;
+
+  factory VisaType.fromJson(Map<String, dynamic> json) => VisaType(
+    id: json["ID"],
+    shortName: json["ShortName"],
+    name: json["name"],
+    fullName: json["FullName"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "ID": id,
+    "ShortName": shortName,
+    "name": name,
+    "FullName": fullName,
+  };
 }
 
 

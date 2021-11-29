@@ -156,6 +156,7 @@ class InfoCard extends StatelessWidget {
               ? EditVisaInfo()
               : AddVisaInfo(
                   myVisaStepController: myVisaStepController,
+                  index: index,
                 ),
         ],
       ),
@@ -167,14 +168,16 @@ class AddVisaInfo extends StatelessWidget {
   const AddVisaInfo({
     Key? key,
     required this.myVisaStepController,
+    required this.index,
   }) : super(key: key);
   final VisaStepController myVisaStepController;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        myVisaStepController.showDOCOPopup();
+        myVisaStepController.showDOCOPopup(index);
       },
       child: Row(
         children: [

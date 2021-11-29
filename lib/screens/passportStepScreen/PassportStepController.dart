@@ -22,11 +22,23 @@ class PassportStepController extends MainController {
     return _instance;
   }
 
+  RxList<Traveller> travellers = <Traveller>[].obs;
+  List<TextEditingController> documentNoCs = [];
+  List<Country> countriesList = [];
+
+  List<Traveller> travellersList() {
+    final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
+    return stepsScreenController.travellers;
+  }
+
   void init() async {
     await getDocumentTypes();
     await getSelectCountries();
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
     travellers = stepsScreenController.travellers;
+    for (var i = 0; i < travellers.length; ++i) {
+      documentNoCs.add(new TextEditingController());
+    }
   }
 
   Future<void> getSelectCountries() async {
@@ -38,10 +50,12 @@ class PassportStepController extends MainController {
 
     if (response.statusCode == 200) {
       if (response.data["ResultCode"] == 1) {
+        final VisaStepController visaStepController = Get.put(VisaStepController(model));
         countriesList.addAll(List<Country>.from(response.data["Body"]["Countries"].map((x) => Country.fromJson(x))));
         for (var i = 0; i < countriesList.length; ++i) {
           countryOfIssueList.add(countriesList[i]);
           nationalitiesList.add(countriesList[i]);
+          visaStepController.listIssuePlace.add(countriesList[i]);
         }
       }
     } else {}
@@ -57,14 +71,8 @@ class PassportStepController extends MainController {
     if (response.statusCode == 200) {
       if (response.data["ResultCode"] == 1) {
         final VisaStepController visaStepController = Get.put(VisaStepController(model));
-        List visaTypes = response.data["Body"]["VisaTypes"];
-        List passportTypes = response.data["Body"]["PassportTypes"];
-        for (var i = 0; i < visaTypes.length; ++i) {
-          visaStepController.listType.add(new VisaType(id: visaTypes[i]["ID"], shortName: visaTypes[i]["ShortName"], name: visaTypes[i]["name"], fullName: visaTypes[i]["FullName"]));
-        }
-        for (var i = 0; i < passportTypes.length; ++i) {
-          listPassportType.add(new PassPortType(id: passportTypes[i]["ID"], shortName: passportTypes[i]["ShortName"], name: passportTypes[i]["name"], fullName: passportTypes[i]["FullName"]));
-        }
+        listPassportType.addAll(List<PassPortType>.from(response.data["Body"]["PassportTypes"].map((x) => PassPortType.fromJson(x))));
+        visaStepController.listType.addAll(List<VisaType>.from(response.data["Body"]["VisaTypes"].map((x) => VisaType.fromJson(x))));
       }
     } else {}
   }
@@ -75,52 +83,61 @@ class PassportStepController extends MainController {
   //   return stepsScreenController.travellers;
   // }
 
-  TextEditingController documentNoC = TextEditingController();
+/////////////////////////////////////////////
 
   List<PassPortType> listPassportType = [new PassPortType(id: -1, shortName: "", name: "", fullName: "Passport Type")];
 
   // final RxString selectedPassportType = "Passport Type".obs;
-
   void setSelected(int index, String value) {
     travellers[index].passportInfo.passportType = value;
     travellers.refresh();
   }
 
-  List<Traveller> travellersList() {
-    final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-    return stepsScreenController.travellers;
-  }
-  List<Country> countriesList = [];
+/////////////////////////////////////////////
+
   List<Country> countryOfIssueList = [
     new Country(worldAreaCode: null, currencyId: null, englishName: "Country of Issue", name: null, hasOnHoldBooking: null, regionId: null, code3: null, isDisabled: null, id: null)
   ];
 
   // final RxString selectedCountryIssue = "Country of Issue".obs;
-
   void setSelectedCountryIssue(int index, String value) {
     travellers[index].passportInfo.countryOfIssue = value;
     travellers.refresh();
   }
 
-  List<String> listGender = ["Male", "Female"];
+/////////////////////////////////////////////
 
-  final RxString selectedGender = "Male".obs;
+  List<String> listGender = ["Gender", "Male", "Female"];
 
-  void setSelectedGender(String value) {
-    selectedGender.value = value;
+  // final RxString selectedGender = "Male".obs;
+  void setSelectedGender(int index, String value) {
+    travellers[index].passportInfo.gender = value;
+    travellers.refresh();
   }
 
-  final RxString selectedNationality = "Nationality".obs;
-
+/////////////////////////////////////////////
+  // final RxString selectedNationality = "Nationality".obs;
   List<Country> nationalitiesList = [
     new Country(worldAreaCode: null, currencyId: null, englishName: "Nationality", name: null, hasOnHoldBooking: null, regionId: null, code3: null, isDisabled: null, id: null)
   ];
 
-  void setSelectedNationality(String value) {
-    selectedNationality.value = value;
+  void setSelectedNationality(int index, String value) {
+    travellers[index].passportInfo.nationality = value;
+    travellers.refresh();
   }
 
-  RxList<Traveller> travellers = <Traveller>[].obs;
+/////////////////////////////////////////////
+
+  void selectDateOfBirth(int index, DateTime date) {
+    travellers[index].passportInfo.dateOfBirth = date;
+    travellers.refresh();
+  }
+
+  ////////////////////////////////////////////
+  void selectEntryDate(int index, DateTime date) {
+    travellers[index].passportInfo.entryDate = date;
+    travellers.refresh();
+  }
 
   void showDOCSPopup(int index) {
     Get.defaultDialog(
@@ -144,7 +161,7 @@ class PassportStepController extends MainController {
               ),
               Expanded(
                 child: UserTextInput(
-                  controller: documentNoC,
+                  controller: documentNoCs[index],
                   hint: "Document No.",
                   errorText: "",
                   isEmpty: false,
@@ -157,7 +174,7 @@ class PassportStepController extends MainController {
           ),
           Row(
             children: [
-              genderDropDown(),
+              genderDropDown(index),
               SizedBox(
                 width: 20,
               ),
@@ -165,7 +182,15 @@ class PassportStepController extends MainController {
               SizedBox(
                 width: 20,
               ),
-              SelectingDateWidget(hint: "Entry Date"),
+              Obx(
+                () => SelectingDateWidget(
+                  hint: "Entry Date",
+                  index: index,
+                  updateDate: selectEntryDate,
+                  currDateTime: travellers[index].passportInfo.entryDate == null ? DateTime.now() : travellers[index].passportInfo.entryDate!,
+                  isCurrDateEmpty: travellers[index].passportInfo.entryDate == null ? true : false,
+                ),
+              ),
             ],
           ),
           SizedBox(
@@ -173,11 +198,19 @@ class PassportStepController extends MainController {
           ),
           Row(
             children: [
-              nationalityDropDown(),
+              nationalityDropDown(index),
               SizedBox(
                 width: 20,
               ),
-              SelectingDateWidget(hint: "Date of Birth"),
+              Obx(
+                () => SelectingDateWidget(
+                  hint: "Date of Birth",
+                  index: index,
+                  updateDate: selectDateOfBirth,
+                  currDateTime: travellers[index].passportInfo.dateOfBirth == null ? DateTime.now() : travellers[index].passportInfo.dateOfBirth!,
+                  isCurrDateEmpty: travellers[index].passportInfo.dateOfBirth == null ? true : false,
+                ),
+              ),
             ],
           ),
           SizedBox(
@@ -195,7 +228,9 @@ class PassportStepController extends MainController {
                 buttonText: "Submit",
                 bgColor: Colors.white,
                 fgColor: Color(0xff4d6ff8),
-                function: () {},
+                function: () {
+                  Get.back();
+                },
               ),
             ],
           )
@@ -243,7 +278,7 @@ class PassportStepController extends MainController {
     );
   }
 
-  Container nationalityDropDown() {
+  Container nationalityDropDown(int index) {
     return Container(
       height: 40,
       width: 200,
@@ -262,9 +297,9 @@ class PassportStepController extends MainController {
                 'Nationality',
               ),
               onChanged: (newValue) {
-                setSelectedNationality(newValue.toString());
+                setSelectedNationality(index, newValue.toString());
               },
-              value: selectedNationality.value,
+              value: travellers[index].passportInfo.nationality == null ? "Nationality" : travellers[index].passportInfo.nationality,
               items: nationalitiesList.map(
                 (selectedType) {
                   return DropdownMenuItem(
@@ -321,7 +356,7 @@ class PassportStepController extends MainController {
     );
   }
 
-  Container genderDropDown() {
+  Container genderDropDown(int index) {
     return Container(
       height: 40,
       width: 200,
@@ -340,9 +375,9 @@ class PassportStepController extends MainController {
                 'Gender',
               ),
               onChanged: (newValue) {
-                setSelectedGender(newValue.toString());
+                setSelectedGender(index, newValue.toString());
               },
-              value: selectedGender.value,
+              value: travellers[index].passportInfo.gender == null ? "Gender" : travellers[index].passportInfo.gender,
               items: listGender.map(
                 (selectedType) {
                   return DropdownMenuItem(

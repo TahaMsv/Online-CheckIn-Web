@@ -1,12 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:intl/intl.dart';
 
-class SelectingDateWidget extends StatelessWidget {
+class SelectingDateWidget extends StatefulWidget {
   const SelectingDateWidget({
-    Key? key, required this.hint,
+    Key? key,
+    required this.hint,
+    required this.updateDate,
+    required this.index,
+    required this.currDateTime,
+    required this.isCurrDateEmpty,
   }) : super(key: key);
 
   final String hint;
+  final Function updateDate;
+  final int index;
+  final DateTime currDateTime;
+  final bool isCurrDateEmpty;
+
+  @override
+  State<SelectingDateWidget> createState() => _SelectingDateWidgetState();
+}
+
+class _SelectingDateWidgetState extends State<SelectingDateWidget> {
+  late DateTime currentDate;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(context: context, initialDate: currentDate, firstDate: DateTime(2015), lastDate: DateTime(2050));
+    if (pickedDate != null && pickedDate != currentDate)
+      setState(() {
+        currentDate = pickedDate;
+        widget.updateDate(widget.index, currentDate);
+      });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    currentDate = widget.currDateTime;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,37 +59,12 @@ class SelectingDateWidget extends StatelessWidget {
           children: [
             Container(
               width: 140,
-              child: Text(hint),
+              child: widget.isCurrDateEmpty ? Text(widget.hint) : Text(DateFormat('yyyy-MM-dd').format(currentDate)),
             ),
             Container(
               width: 20,
               child: IconButton(
-                onPressed: () {
-                  // DateTimePicker(
-                  //   type: DateTimePickerType.dateTimeSeparate,
-                  //   dateMask: 'd MMM, yyyy',
-                  //   initialValue: DateTime.now().toString(),
-                  //   firstDate: DateTime(2000),
-                  //   lastDate: DateTime(2100),
-                  //   icon: Icon(Icons.event),
-                  //   dateLabelText: 'Date',
-                  //   timeLabelText: "Hour",
-                  //   selectableDayPredicate: (date) {
-                  //     // Disable weekend days to select from the calendar
-                  //     if (date.weekday == 6 || date.weekday == 7) {
-                  //       return false;
-                  //     }
-                  //
-                  //     return true;
-                  //   },
-                  //   onChanged: (val) => print(val),
-                  //   validator: (val) {
-                  //     print(val);
-                  //     return null;
-                  //   },
-                  //   onSaved: (val) => print(val),
-                  // );
-                },
+                onPressed: () => _selectDate(context),
                 icon: Icon(
                   Icons.calendar_today_outlined,
                   color: Color(0xff4d6fff),
