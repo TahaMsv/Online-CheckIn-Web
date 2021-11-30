@@ -26,12 +26,13 @@ class PassportStepController extends MainController {
   List<TextEditingController> documentNoCs = [];
   List<Country> countriesList = [];
 
-  List<Traveller> travellersList() {
+  void travellersList() {
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-    return stepsScreenController.travellers;
+    travellers = stepsScreenController.travellers;
   }
 
   void init() async {
+    travellersList();
     await getDocumentTypes();
     await getSelectCountries();
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
@@ -87,9 +88,20 @@ class PassportStepController extends MainController {
 
   List<PassPortType> listPassportType = [new PassPortType(id: -1, shortName: "", name: "", fullName: "Passport Type")];
 
+  void updateIsCompleted(int index) {
+    travellers[index].passportInfo.updateIsCompleted();
+  }
+
+  void updateDocuments() {
+    for (var i = 0; i < travellers.length; ++i) {
+      travellers[i].passportInfo.documentNo = documentNoCs[i].text == "" ? null : documentNoCs[i].text;
+    }
+  }
+
   // final RxString selectedPassportType = "Passport Type".obs;
   void setSelected(int index, String value) {
     travellers[index].passportInfo.passportType = value;
+    updateIsCompleted(index);
     travellers.refresh();
   }
 
@@ -102,6 +114,7 @@ class PassportStepController extends MainController {
   // final RxString selectedCountryIssue = "Country of Issue".obs;
   void setSelectedCountryIssue(int index, String value) {
     travellers[index].passportInfo.countryOfIssue = value;
+    updateIsCompleted(index);
     travellers.refresh();
   }
 
@@ -112,6 +125,7 @@ class PassportStepController extends MainController {
   // final RxString selectedGender = "Male".obs;
   void setSelectedGender(int index, String value) {
     travellers[index].passportInfo.gender = value;
+    updateIsCompleted(index);
     travellers.refresh();
   }
 
@@ -123,6 +137,7 @@ class PassportStepController extends MainController {
 
   void setSelectedNationality(int index, String value) {
     travellers[index].passportInfo.nationality = value;
+    updateIsCompleted(index);
     travellers.refresh();
   }
 
@@ -130,12 +145,14 @@ class PassportStepController extends MainController {
 
   void selectDateOfBirth(int index, DateTime date) {
     travellers[index].passportInfo.dateOfBirth = date;
+    updateIsCompleted(index);
     travellers.refresh();
   }
 
   ////////////////////////////////////////////
   void selectEntryDate(int index, DateTime date) {
     travellers[index].passportInfo.entryDate = date;
+    updateIsCompleted(index);
     travellers.refresh();
   }
 
@@ -229,6 +246,9 @@ class PassportStepController extends MainController {
                 bgColor: Colors.white,
                 fgColor: Color(0xff4d6ff8),
                 function: () {
+                  travellers.refresh();
+                  updateDocuments();
+                  updateIsCompleted(index);
                   Get.back();
                 },
               ),

@@ -26,7 +26,7 @@ class _SelectingDateWidgetState extends State<SelectingDateWidget> {
   late DateTime currentDate;
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(context: context, initialDate: currentDate, firstDate: DateTime(2015), lastDate: DateTime(2050));
+    final DateTime? pickedDate = await showDatePicker(context: context, initialDate: currentDate, firstDate: DateTime(1900), lastDate: DateTime(2050));
     if (pickedDate != null && pickedDate != currentDate)
       setState(() {
         currentDate = pickedDate;

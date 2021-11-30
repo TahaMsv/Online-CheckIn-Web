@@ -33,22 +33,24 @@ class PassportStepView extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          Expanded(
-            child: GridView.count(
-              crossAxisCount: 4,
-              // crossAxisSpacing: 60,
-              childAspectRatio: 315 / 193,
-              children: myPassportStepController.travellersList().asMap().entries.map(
-                (entry) {
-                  int idx = entry.key;
-                  Traveller traveller = entry.value;
-                  return InfoCard(
-                    index: idx,
-                    traveller: traveller,
-                    myPassportStepController: myPassportStepController,
-                  );
-                },
-              ).toList(),
+          Obx(
+            () => Expanded(
+              child: GridView.count(
+                crossAxisCount: 4,
+                // crossAxisSpacing: 60,
+                childAspectRatio: 315 / 193,
+                children: myPassportStepController.travellers.asMap().entries.map(
+                  (entry) {
+                    int idx = entry.key;
+                    Traveller traveller = entry.value;
+                    return InfoCard(
+                      index: idx,
+                      // traveller: traveller,
+                      myPassportStepController: myPassportStepController,
+                    );
+                  },
+                ).toList(),
+              ),
             ),
           ),
         ],
@@ -60,19 +62,20 @@ class PassportStepView extends StatelessWidget {
 class InfoCard extends StatelessWidget {
   const InfoCard({
     Key? key,
-    required this.traveller,
+    // required this.traveller,
     required this.myPassportStepController,
     required this.index,
   }) : super(key: key);
   final int index;
-  final Traveller traveller;
+
+  // final Traveller traveller;
   final PassportStepController myPassportStepController;
 
   @override
   Widget build(BuildContext context) {
     Color textColor;
     Color bgColor;
-    if (traveller.passportInfo.isPassInfoCompleted) {
+    if (myPassportStepController.travellers[index].passportInfo.isPassInfoCompleted) {
       textColor = Color(0xffffffff);
       bgColor = Color(0xff48c0a2);
     } else {
@@ -98,13 +101,13 @@ class InfoCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.warning_amber_sharp,
-                color: traveller.passportInfo.isPassInfoCompleted ? Colors.white.withOpacity(0) : Color(0xfff86f6f),
+                color: myPassportStepController.travellers[index].passportInfo.isPassInfoCompleted ? Colors.white.withOpacity(0) : Color(0xfff86f6f),
                 size: 20,
               )
             ],
           ),
           Text(
-            traveller.getFullNameWithGender(),
+            myPassportStepController.travellers[index].getFullNameWithGender(),
             style: TextStyle(
               color: textColor,
               fontSize: 15,
@@ -125,7 +128,7 @@ class InfoCard extends StatelessWidget {
                 ),
               ),
               Text(
-                "${traveller.passengerInfo.id}",
+                "${myPassportStepController.travellers[index].passengerInfo.id}",
                 style: TextStyle(
                   color: textColor,
                   fontSize: 15,
@@ -137,8 +140,11 @@ class InfoCard extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          traveller.passportInfo.isPassInfoCompleted
-              ? EditIPassInfo()
+          myPassportStepController.travellers[index].passportInfo.isPassInfoCompleted
+              ? EditIPassInfo(
+                  index: index,
+                  myPassportStepController: myPassportStepController,
+                )
               : AddPassInfo(
                   index: index,
                   myPassportStepController: myPassportStepController,
@@ -192,7 +198,11 @@ class AddPassInfo extends StatelessWidget {
 class EditIPassInfo extends StatelessWidget {
   const EditIPassInfo({
     Key? key,
+    required this.myPassportStepController,
+    required this.index,
   }) : super(key: key);
+  final PassportStepController myPassportStepController;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -219,10 +229,15 @@ class EditIPassInfo extends StatelessWidget {
             ),
           ],
         ),
-        Icon(
-          Icons.edit,
-          color: Colors.white,
-          size: 18,
+        GestureDetector(
+          onTap: () {
+            myPassportStepController.showDOCSPopup(index);
+          },
+          child: Icon(
+            Icons.edit,
+            color: Colors.white,
+            size: 18,
+          ),
         )
       ],
     );

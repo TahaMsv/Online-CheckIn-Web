@@ -25,6 +25,7 @@ class VisaStepController extends MainController {
   List<TextEditingController> destinationCs = [];
 
   void init() async {
+    travellersList();
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
     final PassportStepController passportStepController = Get.put(PassportStepController(model));
     travellers = stepsScreenController.travellers;
@@ -34,17 +35,43 @@ class VisaStepController extends MainController {
     }
   }
 
-  List<Traveller> travellersList() {
+  void travellersList() {
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-    return stepsScreenController.travellers;
+    travellers = stepsScreenController.travellers;
+  }
+
+  void updateIsCompleted(int index) {
+    travellers[index].visaInfo.updateIsCompleted();
+  }
+
+  void updateDocuments() {
+    for (var i = 0; i < travellers.length; ++i) {
+      travellers[i].visaInfo.documentNo = documentNoCs[i].text == "" ? null : documentNoCs[i].text;
+      travellers[i].visaInfo.destination = destinationCs[i].text == "" ? null : destinationCs[i].text;
+    }
+  }
+
+  void submitBtnFunction(int index) {
+    updateDocuments();
+    updateIsCompleted(index);
+    travellers.refresh();
+    Get.back();
+  }
+
+  void selectEntryDate(int index, DateTime date) {
+    travellers[index].visaInfo.issueDate = date;
+    updateIsCompleted(index);
+    travellers.refresh();
   }
 
   //////////////////////////////
 
   List<VisaType> listType = [new VisaType(id: -1, shortName: "", name: "", fullName: "Type")];
+
   // final RxString selectedType = "Type".obs;
   void setSelected(int index, String value) {
     travellers[index].visaInfo.type = value;
+    updateIsCompleted(index);
     travellers.refresh();
   }
 
@@ -53,11 +80,12 @@ class VisaStepController extends MainController {
   List<Country> listIssuePlace = [
     new Country(worldAreaCode: null, currencyId: null, englishName: "Place of issue", name: null, hasOnHoldBooking: null, regionId: null, code3: null, isDisabled: null, id: null)
   ];
+
   // final RxString selectedPlace = "Place of issue".obs;
   void setSelectedPlace(int index, String value) {
     travellers[index].visaInfo.placeOfIssue = value;
+    updateIsCompleted(index);
     travellers.refresh();
-
   }
 
   //////////////////////////////
@@ -105,7 +133,15 @@ class VisaStepController extends MainController {
                 SizedBox(
                   width: 20,
                 ),
-                // SelectingDateWidget(hint: "Issue Date"),
+                Obx(
+                      () => SelectingDateWidget(
+                    hint: "Issue Date",
+                    index: index,
+                    updateDate: selectEntryDate,
+                    currDateTime: travellers[index].visaInfo.issueDate == null ? DateTime.now() : travellers[index].visaInfo.issueDate!,
+                    isCurrDateEmpty: travellers[index].visaInfo.issueDate == null ? true : false,
+                  ),
+                ),
                 SizedBox(
                   width: 20,
                 ),
@@ -122,7 +158,9 @@ class VisaStepController extends MainController {
             SizedBox(
               height: 20,
             ),
-            SubmitButton()
+            SubmitButton(
+              function:() => submitBtnFunction(index),
+            )
           ],
         ),
       ),
@@ -251,7 +289,9 @@ class DocumentNoWidget extends StatelessWidget {
 class SubmitButton extends StatelessWidget {
   const SubmitButton({
     Key? key,
+    required this.function,
   }) : super(key: key);
+  final Function function;
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +315,9 @@ class SubmitButton extends StatelessWidget {
             buttonText: "Submit",
             bgColor: Colors.white,
             fgColor: Color(0xff4d6ff8),
-            function: () {},
+            function: () {
+              function();
+            },
           ),
         ),
       ],

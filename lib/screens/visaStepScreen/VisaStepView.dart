@@ -29,22 +29,24 @@ class VisaStepView extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          Expanded(
-            child: GridView.count(
-              crossAxisCount: 4,
-              // crossAxisSpacing: 60,
-              childAspectRatio: 315 / 193,
-              children: myVisaStepController.travellersList().asMap().entries.map(
-                (entry) {
-                  int idx = entry.key;
-                  Traveller traveller = entry.value;
-                  return InfoCard(
-                    index: idx,
-                    traveller: traveller,
-                    myVisaStepController: myVisaStepController,
-                  );
-                },
-              ).toList(),
+          Obx(
+            () => Expanded(
+              child: GridView.count(
+                crossAxisCount: 4,
+                // crossAxisSpacing: 60,
+                childAspectRatio: 315 / 193,
+                children: myVisaStepController.travellers.asMap().entries.map(
+                  (entry) {
+                    int idx = entry.key;
+                    // Traveller traveller = entry.value;
+                    return InfoCard(
+                      index: idx,
+                      // traveller: traveller,
+                      myVisaStepController: myVisaStepController,
+                    );
+                  },
+                ).toList(),
+              ),
             ),
           ),
         ],
@@ -56,19 +58,19 @@ class VisaStepView extends StatelessWidget {
 class InfoCard extends StatelessWidget {
   const InfoCard({
     Key? key,
-    required this.traveller,
+    // required this.traveller,
     required this.myVisaStepController,
     required this.index,
   }) : super(key: key);
   final int index;
-  final Traveller traveller;
+  // final Traveller traveller;
   final VisaStepController myVisaStepController;
 
   @override
   Widget build(BuildContext context) {
     Color textColor;
     Color bgColor;
-    if (traveller.visaInfo.isVisaInfoCompleted) {
+    if (myVisaStepController.travellers[index].visaInfo.isVisaInfoCompleted) {
       textColor = Color(0xffffffff);
       bgColor = Color(0xff48c0a2);
     } else {
@@ -94,13 +96,13 @@ class InfoCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.warning_amber_sharp,
-                color: traveller.visaInfo.isVisaInfoCompleted ? Colors.white.withOpacity(0) : Color(0xfff86f6f),
+                color: myVisaStepController.travellers[index].visaInfo.isVisaInfoCompleted ? Colors.white.withOpacity(0) : Color(0xfff86f6f),
                 size: 20,
               )
             ],
           ),
           Text(
-            traveller.getFullNameWithGender(),
+            myVisaStepController.travellers[index].getFullNameWithGender(),
             style: TextStyle(
               color: textColor,
               fontSize: 15,
@@ -121,7 +123,7 @@ class InfoCard extends StatelessWidget {
                 ),
               ),
               Text(
-                "${traveller.passengerInfo.id}",
+                "${myVisaStepController.travellers[index].passengerInfo.id}",
                 style: TextStyle(
                   color: textColor,
                   fontSize: 15,
@@ -152,8 +154,11 @@ class InfoCard extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          traveller.visaInfo.isVisaInfoCompleted
-              ? EditVisaInfo()
+          myVisaStepController.travellers[index].visaInfo.isVisaInfoCompleted
+              ? EditVisaInfo(
+                  myVisaStepController: myVisaStepController,
+                  index: index,
+                )
               : AddVisaInfo(
                   myVisaStepController: myVisaStepController,
                   index: index,
@@ -206,7 +211,11 @@ class AddVisaInfo extends StatelessWidget {
 class EditVisaInfo extends StatelessWidget {
   const EditVisaInfo({
     Key? key,
+    required this.myVisaStepController,
+    required this.index,
   }) : super(key: key);
+  final VisaStepController myVisaStepController;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -233,10 +242,15 @@ class EditVisaInfo extends StatelessWidget {
             ),
           ],
         ),
-        Icon(
-          Icons.edit,
-          color: Colors.white,
-          size: 18,
+        GestureDetector(
+          onTap: () {
+            myVisaStepController.showDOCOPopup(index);
+          },
+          child: Icon(
+            Icons.edit,
+            color: Colors.white,
+            size: 18,
+          ),
         )
       ],
     );
