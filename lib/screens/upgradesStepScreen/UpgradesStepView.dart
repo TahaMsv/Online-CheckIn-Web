@@ -29,11 +29,15 @@ class UpgradesStepView extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          WinesAndDrinksList(),
+          WinesAndDrinksList(
+            upgradesStepController: myUpgradesStepController,
+          ),
           SizedBox(
             height: 10,
           ),
-          Entertainment(),
+          Entertainment(
+            upgradesStepController: myUpgradesStepController,
+          ),
         ],
       ),
     );
@@ -43,7 +47,10 @@ class UpgradesStepView extends StatelessWidget {
 class WinesAndDrinksList extends StatefulWidget {
   const WinesAndDrinksList({
     Key? key,
+    required this.upgradesStepController,
   }) : super(key: key);
+
+  final UpgradesStepController upgradesStepController;
 
   @override
   State<WinesAndDrinksList> createState() => _WinesAndDrinksListState();
@@ -54,29 +61,6 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
 
   late AutoScrollController controller;
 
-  var winesList = [
-    {
-      "name": "Sparkling Wine",
-      "description": "Sparkling wine is a wine with significant levels of carbon dioxide in it. Making it fizzy",
-      "imagePath": "assets/images/sparkling-wine.png",
-      "color": Color(0xffffc365),
-      "numberOfSelected": 2,
-    },
-    {
-      "name": "Prosecco",
-      "description": "Prosecco is a sparkling wine that’s often taken for granted",
-      "imagePath": "assets/images/prosecco-wine.png",
-      "color": Color(0xff5f6bff),
-      "numberOfSelected": 0,
-    },
-    {
-      "name": "Champagne",
-      "description": "Champagne is a French sparkling wine",
-      "imagePath": "assets/images/champagne.png",
-      "color": Color(0xfffa4b4b),
-      "numberOfSelected": 0,
-    },
-  ];
   var leftIndex = 0;
   var rightIndex = 2;
 
@@ -126,24 +110,28 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                   SizedBox(
                     width: 10,
                   ),
-                  Expanded(
-                    child: Container(
-                      child: ListView(
-                        shrinkWrap: true,
-                        scrollDirection: scrollDirection,
-                        controller: controller,
-                        children: winesList.map((value) {
-                          int index = winesList.indexOf(value);
-                          return AutoScrollTag(
-                            key: ValueKey(index),
-                            controller: controller,
-                            index: index,
-                            child: UpgradeItemWidget(
-                              value: value,
-                            ),
-                            highlightColor: Colors.black.withOpacity(0.1),
-                          );
-                        }).toList(),
+                  Obx(
+                    () => Expanded(
+                      child: Container(
+                        child: ListView(
+                          shrinkWrap: true,
+                          scrollDirection: scrollDirection,
+                          controller: controller,
+                          children: widget.upgradesStepController.winesList.map((value) {
+                            int index = widget.upgradesStepController.winesList.indexOf(value);
+                            return AutoScrollTag(
+                              key: ValueKey(index),
+                              controller: controller,
+                              index: index,
+                              child: UpgradeItemWidget(
+                                index: index,
+                                value: value,
+                                upgradesStepController: widget.upgradesStepController,
+                              ),
+                              highlightColor: Colors.black.withOpacity(0.1),
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
                   ),
@@ -152,7 +140,7 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                   ),
                   IconButton(
                     onPressed: () async {
-                      if (rightIndex < winesList.length - 1) {
+                      if (rightIndex < widget.upgradesStepController.winesList.length - 1) {
                         await controller.scrollToIndex(rightIndex, preferPosition: AutoScrollPosition.begin);
                         leftIndex++;
                         rightIndex++;
@@ -178,10 +166,14 @@ class UpgradeItemWidget extends StatelessWidget {
     Key? key,
     required this.value,
     this.isPrinter = false,
+    required this.upgradesStepController,
+    required this.index,
   }) : super(key: key);
 
   final Map<String, dynamic> value;
   final bool isPrinter;
+  final UpgradesStepController upgradesStepController;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -233,14 +225,21 @@ class UpgradeItemWidget extends StatelessWidget {
                   ),
                 ),
                 value["numberOfSelected"] == 0
-                    ? ChangeNumOfSelected(value: value)
-                    : MyElevatedButton(
+                    ? MyElevatedButton(
                         width: 80,
                         height: 30,
                         fgColor: Colors.white,
                         bgColor: value["color"]!,
                         buttonText: "Add",
-                        function: () {},
+                        function: () {
+                          isPrinter ? upgradesStepController.addEntertainment(index) : upgradesStepController.addWine(index);
+                        },
+                      )
+                    : ChangeNumOfSelected(
+                        value: value,
+                        index: index,
+                        upgradesStepController: upgradesStepController,
+                        isPrinter: isPrinter,
                       ),
               ],
             ),
@@ -275,9 +274,15 @@ class ChangeNumOfSelected extends StatelessWidget {
   const ChangeNumOfSelected({
     Key? key,
     required this.value,
+    required this.upgradesStepController,
+    required this.index,
+    required this.isPrinter,
   }) : super(key: key);
 
   final Map<String, dynamic> value;
+  final UpgradesStepController upgradesStepController;
+  final int index;
+  final bool isPrinter;
 
   @override
   Widget build(BuildContext context) {
@@ -295,7 +300,9 @@ class ChangeNumOfSelected extends StatelessWidget {
             child: Material(
               color: (value["color"]! as Color).withOpacity(0.5),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  isPrinter ? upgradesStepController.removeEntertainment(index) : upgradesStepController.removeWine(index);
+                },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -325,7 +332,9 @@ class ChangeNumOfSelected extends StatelessWidget {
             child: Material(
               color: value["color"]!,
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  isPrinter ? upgradesStepController.addEntertainment(index) : upgradesStepController.addWine(index);
+                },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -349,7 +358,10 @@ class ChangeNumOfSelected extends StatelessWidget {
 class Entertainment extends StatelessWidget {
   const Entertainment({
     Key? key,
+    required this.upgradesStepController,
   }) : super(key: key);
+
+  final UpgradesStepController upgradesStepController;
 
   @override
   Widget build(BuildContext context) {
@@ -371,18 +383,16 @@ class Entertainment extends StatelessWidget {
             SizedBox(
               height: 15,
             ),
-            Expanded(
-              child: UpgradeItemWidget(
-                value: const {
-                  "name": "Photo print",
-                  "description": "Confirm your flight details and see which extras you already purchased",
-                  "imagePath": "assets/images/printer.png",
-                  "color": Color(0xff424242),
-                  "numberOfSelected": 0,
-                },
-                isPrinter: true,
+            Obx(
+              () => Expanded(
+                child: UpgradeItemWidget(
+                  value: upgradesStepController.entertainmentsList[0],
+                  index: 0,
+                  upgradesStepController: upgradesStepController,
+                  isPrinter: true,
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),
