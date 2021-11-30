@@ -20,13 +20,13 @@ class RouteNames {
 
 class Apis {
   Apis._();
-  static const baseUrl = '';
+  static const baseUrl = 'https://onlinecheckinapi.abomis.com/';
   static const login = '/api/login';
   static const signUp = '/api/signUp';
-  static const getTokenUrl = '';
-  static const getInformation = '';
-  static const getDocumentType = '';
-  static const getSelectCountries = '';
+  static const getTokenUrl = 'api/Execute';
+  static const getInformation = 'api/Execute';
+  static const getDocumentType = 'api/Execute';
+  static const getSelectCountries = 'api/Execute';
 
 
 }
