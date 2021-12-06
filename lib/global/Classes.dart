@@ -478,3 +478,168 @@ class EnumValues<T> {
     return reverseMap;
   }
 }
+/////////////////////////////////////////////////////////////////Seat Map///////////////////////////////////////////
+
+class Cabin {
+  Cabin({
+    required this.cabinClass,
+    required this.linesCount,
+    required this.cabinTitle,
+    required this.lines,
+    required this.zones,
+    required this.sumZones,
+  });
+
+  String cabinClass;
+  int linesCount;
+  String cabinTitle;
+  List<Line> lines;
+  List<dynamic> zones;
+  int sumZones;
+
+  factory Cabin.fromJson(Map<String, dynamic> json) => Cabin(
+    cabinClass: json["CabinClass"],
+    linesCount: json["LinesCount"],
+    cabinTitle: json["CabinTitle"],
+    lines: List<Line>.from(json["Lines"].map((x) => Line.fromJson(x))),
+    zones: List<dynamic>.from(json["Zones"].map((x) => x)),
+    sumZones: json["SumZones"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "CabinClass": cabinClass,
+    "LinesCount": linesCount,
+    "CabinTitle": cabinTitle,
+    "Lines": List<dynamic>.from(lines.map((x) => x.toJson())),
+    "Zones": List<dynamic>.from(zones.map((x) => x)),
+    "SumZones": sumZones,
+  };
+}
+
+
+class Line {
+  Line({
+    required this.type,
+    // required this.arm,
+    // required this.index,
+    // required this.isIndex,
+    // required this.zone,
+    // required this.seatsCount,
+    // required this.line,
+    required this.cells,
+  });
+
+  LineType type;
+  // dynamic arm;
+  // dynamic index;
+  // bool isIndex;
+  // dynamic zone;
+  // int seatsCount;
+  // dynamic line;
+  List<Cell> cells;
+
+  factory Line.fromJson(Map<String, dynamic> json) => Line(
+    type: lineTypeValues.map[json["Type"]]!,
+    // arm: json["Arm"],
+    // index: json["Index"],
+    // isIndex: json["IsIndex"],
+    // zone: json["Zone"],
+    // seatsCount: json["SeatsCount"],
+    // line: json["Line"],
+    cells: List<Cell>.from(json["Cells"].map((x) => Cell.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "Type": lineTypeValues.reverse[type],
+    // "Arm": arm,
+    // "Index": index,
+    // "IsIndex": isIndex,
+    // "Zone": zone,
+    // "SeatsCount": seatsCount,
+    // "Line": line,
+    "Cells": List<dynamic>.from(cells.map((x) => x.toJson())),
+  };
+}
+
+class Cell {
+  Cell({
+    required this.type,
+    required this.value,
+    required this.letter,
+    required this.line,
+    required this.code,
+    // required this.attribiutes,
+    // required this.cellStatusType,
+    // required this.cellStatusTypeText,
+    // required this.flightPassengerId,
+    // required this.genderType,
+    // required this.hasInfant,
+    // required this.classType,
+  });
+
+  CellType type;
+  String value;
+  String letter;
+  String line;
+  String code;
+  // dynamic attribiutes;
+  // CellStatusType cellStatusType;
+  // CellStatusType cellStatusTypeText;
+  // int flightPassengerId;
+  // int genderType;
+  // int hasInfant;
+  // dynamic classType;
+
+  factory Cell.fromJson(Map<String, dynamic> json) => Cell(
+    type: cellTypeValues.map[json["Type"]]!,
+    value: json["Value"] == null ? null : json["Value"],
+    letter: json["Letter"] == null ? null :json["Letter"],
+    line: json["Line"] == null ? null : json["Line"],
+    code: json["Code"],
+    // attribiutes: json["Attribiutes"],
+    // cellStatusType: cellStatusTypeValues.map[json["CellStatusType"]],
+    // cellStatusTypeText: cellStatusTypeValues.map[json["CellStatusTypeText"]],
+    // flightPassengerId: json["FlightPassengerId"],
+    // genderType: json["GenderType"],
+    // hasInfant: json["HasInfant"],
+    // classType: json["ClassType"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "Type": cellTypeValues.reverse[type],
+    "Value": value == null ? null : value,
+    "Letter": letter == null ? null : letter,
+    "Line": line == null ? null : line,
+    "Code": code,
+    // "Attribiutes": attribiutes,
+    // "CellStatusType": cellStatusTypeValues.reverse[cellStatusType],
+    // "CellStatusTypeText": cellStatusTypeValues.reverse[cellStatusTypeText],
+    // "FlightPassengerId": flightPassengerId,
+    // "GenderType": genderType,
+    // "HasInfant": hasInfant,
+    // "ClassType": classType,
+  };
+}
+
+enum CellStatusType { NONE }
+
+final cellStatusTypeValues = EnumValues({
+  "None": CellStatusType.NONE
+});
+
+enum CellType { VERTICAL_CODE, OUT_EQUIPMENT_WING, OUT_EQUIPMENT_EXIT, SEAT, AILE }
+
+final cellTypeValues = EnumValues({
+  "Aile": CellType.AILE,
+  "OutEquipmentExit": CellType.OUT_EQUIPMENT_EXIT,
+  "OutEquipmentWing": CellType.OUT_EQUIPMENT_WING,
+  "Seat": CellType.SEAT,
+  "VerticalCode": CellType.VERTICAL_CODE
+});
+
+enum LineType { HORIZONTAL_CODE, BODY }
+
+final lineTypeValues = EnumValues({
+  "Body": LineType.BODY,
+  "HorizontalCode": LineType.HORIZONTAL_CODE
+});

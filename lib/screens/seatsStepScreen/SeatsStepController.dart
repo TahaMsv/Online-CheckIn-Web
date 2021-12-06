@@ -15,6 +15,21 @@ class SeatsStepController extends MainController {
     return _instance;
   }
 
+
+  ///////////// new /////////////////
+  final double eachLineWidth =  40;
+  List<Cabin> cabins = [];
+
+  double calculatePlaneBodyLength() {
+    double length = 0;
+    for (var i = 0; i < cabins.length; ++i) {
+      length += cabins[i].linesCount;
+    }
+    return length * eachLineWidth;
+  }
+
+  ///////////////////
+
   final RxMap<String, String> seatsStatus = <String, String>{}.obs;
 
   void init() async {
