@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:onlinecheckin/screens/seatsStepScreen/SeatsStepView.dart';
+import '../../screens/seatsStepScreen/NewStepScreenView.dart';
+// import 'package:onlinecheckin/screens/seatsStepScreen/SeatsStepView.dart';
 import 'screens/receiptStepScreen/ReceipStepView.dart';
 import 'screens/upgradesStepScreen/UpgradesStepView.dart';
 import 'screens/paymentStepScreen/PaymentStepView.dart';

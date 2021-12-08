@@ -76,7 +76,7 @@ class StepsScreenController extends MainController {
   Welcome? _welcome;
 
   Welcome? get welcome => _welcome;
-  RxInt _step = 0.obs;
+  RxInt _step = 6.obs;
 
   int get step => _step.value;
 
