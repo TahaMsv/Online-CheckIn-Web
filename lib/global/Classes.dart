@@ -98,11 +98,11 @@ class VisaInfo {
 
   bool updateIsCompleted() {
     isVisaInfoCompleted = type != null && documentNo != null && placeOfIssue != null && destination != null && issueDate != null;
-    print(type==null);
-    print(documentNo==null);
-    print(destination==null);
-    print(destination==null);
-    print(issueDate==null);
+    print(type == null);
+    print(documentNo == null);
+    print(destination == null);
+    print(destination == null);
+    print(issueDate == null);
     print(isVisaInfoCompleted);
     return isVisaInfoCompleted;
   }
@@ -221,117 +221,115 @@ String welcomeToJson(List<Welcome> data) => json.encode(List<dynamic>.from(data.
 class Welcome {
   Welcome({
     required this.aircraft,
-    // required this.seatMap,
-    // required this.fromCity,
-    // required this.toCity,
-    // required this.fromCityName,
-    // required this.toCityName,
-    // required this.fromTime,
-    // required this.toTime,
-    // required this.attendanceTime,
-    // required this.flightDateShamsi,
-    // required this.flightDate,
-    // required this.flightDayShamsi,
-    // required this.terminal,
-    // required this.weightAdl,
-    // required this.weightChd,
-    // required this.weightInf,
-    // required this.alNameFa,
-    // required this.al,
-    // required this.dayOfWeek,
-    // required this.flnb,
-    // required this.aircraftId,
-    // required this.alName,
-    // required this.aircraftShowName,
-    // required this.boardingTime,
-    // required this.id,
+    required this.seatMap,
+    required this.fromCity,
+    required this.toCity,
+    required this.fromCityName,
+    required this.toCityName,
+    required this.fromTime,
+    required this.toTime,
+    required this.attendanceTime,
+    required this.flightDateShamsi,
+    required this.flightDate,
+    required this.flightDayShamsi,
+    required this.terminal,
+    required this.weightAdl,
+    required this.weightChd,
+    required this.weightInf,
+    required this.al,
+    required this.dayOfWeek,
+    required this.flnb,
+    required this.aircraftId,
+    required this.alName,
+    required this.aircraftShowName,
+    required this.boardingTime,
+    required this.id,
+    required this.checkDocs,
     required this.seats,
   });
 
   String aircraft;
-  // String seatMap;
-  // String fromCity;
-  // String toCity;
-  // String fromCityName;
-  // String toCityName;
-  // String fromTime;
-  // String toTime;
-  // String attendanceTime;
-  // String flightDateShamsi;
-  // DateTime flightDate;
-  // String flightDayShamsi;
-  // int terminal;
-  // int weightAdl;
-  // int weightChd;
-  // int weightInf;
-  // String alNameFa;
-  // String al;
-  // String dayOfWeek;
-  // String flnb;
-  // int aircraftId;
-  // String alName;
-  // String aircraftShowName;
-  // String boardingTime;
-  // int id;
+  String seatMap;
+  String fromCity;
+  String toCity;
+  String fromCityName;
+  String toCityName;
+  String fromTime;
+  String toTime;
+  String attendanceTime;
+  String flightDateShamsi;
+  DateTime flightDate;
+  String flightDayShamsi;
+  int terminal;
+  int weightAdl;
+  int weightChd;
+  int weightInf;
+  String al;
+  String dayOfWeek;
+  String flnb;
+  int aircraftId;
+  String alName;
+  String aircraftShowName;
+  String boardingTime;
+  int id;
+  bool checkDocs;
   List<Seat> seats;
 
-  factory Welcome.fromJson(Map<String, dynamic> json) {
-    return Welcome(
-      aircraft: json["Aircraft"],
-      // seatMap: json["SeatMap"],
-      // fromCity: json["From_City"],
-      // toCity: json["To_City"],
-      // fromCityName: json["From_CityName"],
-      // toCityName: json["To_CityName"],
-      // fromTime: json["From_Time"],
-      // toTime: json["To_Time"],
-      // attendanceTime: json["AttendanceTime"],
-      // flightDateShamsi: json["FlightDateShamsi"],
-      // flightDate: DateTime.parse(json["FlightDate"]),
-      // flightDayShamsi: json["FlightDayShamsi"],
-      // terminal: json["Terminal"],
-      // weightAdl: json["Weight_ADL"],
-      // weightChd: json["Weight_CHD"],
-      // weightInf: json["Weight_INF"],
-      // alNameFa: json["AL_Name_Fa"],
-      // al: json["AL"],
-      // dayOfWeek: json["DayOfWeek"],
-      // flnb: json["FLNB"],
-      // aircraftId: json["AircraftID"],
-      // alName: json["AL_Name"],
-      // aircraftShowName: json["AircraftShowName"],
-      // boardingTime: json["BoardingTime"],
-      // id: json["ID"],
-      seats: List<Seat>.from(json["Seats"].map((x) => Seat.fromJson(x))),
-    );
-  }
+  factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
+        aircraft: json["Aircraft"],
+        seatMap: json["SeatMap"],
+        fromCity: json["From_City"],
+        toCity: json["To_City"],
+        fromCityName: json["From_CityName"],
+        toCityName: json["To_CityName"],
+        fromTime: json["From_Time"],
+        toTime: json["To_Time"],
+        attendanceTime: json["AttendanceTime"],
+        flightDateShamsi: json["FlightDateShamsi"],
+        flightDate: DateTime.parse(json["FlightDate"]),
+        flightDayShamsi: json["FlightDayShamsi"],
+        terminal: json["Terminal"],
+        weightAdl: json["Weight_ADL"],
+        weightChd: json["Weight_CHD"],
+        weightInf: json["Weight_INF"],
+        al: json["AL"],
+        dayOfWeek: json["DayOfWeek"],
+        flnb: json["FLNB"],
+        aircraftId: json["AircraftID"],
+        alName: json["AL_Name"],
+        aircraftShowName: json["AircraftShowName"],
+        boardingTime: json["BoardingTime"],
+        id: json["ID"],
+        checkDocs: json["CheckDocs"],
+        seats: List<Seat>.from(json["Seats"].map((x) => Seat.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
         "Aircraft": aircraft,
-        // "SeatMap": seatMap,
-        // "From_City": fromCity,
-        // "To_City": toCity,
-        // "From_CityName": fromCityName,
-        // "To_CityName": toCityName,
-        // "From_Time": fromTime,
-        // "To_Time": toTime,
-        // "AttendanceTime": attendanceTime,
-        // "FlightDateShamsi": flightDateShamsi,
-        // "FlightDate": "${flightDate.year.toString().padLeft(4, '0')}-${flightDate.month.toString().padLeft(2, '0')}-${flightDate.day.toString().padLeft(2, '0')}",
-        // "FlightDayShamsi": flightDayShamsi,
-        // "Terminal": terminal,
-        // "Weight_ADL": weightAdl,
-        // "Weight_CHD": weightChd,
-        // "Weight_INF": weightInf,
-        // "AL_Name_Fa": alNameFa,
-        // "AL": al,
-        // "DayOfWeek": dayOfWeek,
-        // "FLNB": flnb,
-        // "AircraftID": aircraftId,
-        // "AL_Name": alName,
-        // "AircraftShowName": aircraftShowName,
-        // "BoardingTime": boardingTime,
-        // "ID": id,
+        "SeatMap": seatMap,
+        "From_City": fromCity,
+        "To_City": toCity,
+        "From_CityName": fromCityName,
+        "To_CityName": toCityName,
+        "From_Time": fromTime,
+        "To_Time": toTime,
+        "AttendanceTime": attendanceTime,
+        "FlightDateShamsi": flightDateShamsi,
+        "FlightDate": "${flightDate.year.toString().padLeft(4, '0')}-${flightDate.month.toString().padLeft(2, '0')}-${flightDate.day.toString().padLeft(2, '0')}",
+        "FlightDayShamsi": flightDayShamsi,
+        "Terminal": terminal,
+        "Weight_ADL": weightAdl,
+        "Weight_CHD": weightChd,
+        "Weight_INF": weightInf,
+        "AL": al,
+        "DayOfWeek": dayOfWeek,
+        "FLNB": flnb,
+        "AircraftID": aircraftId,
+        "AL_Name": alName,
+        "AircraftShowName": aircraftShowName,
+        "BoardingTime": boardingTime,
+        "ID": id,
+        "CheckDocs": checkDocs,
         "Seats": List<dynamic>.from(seats.map((x) => x.toJson())),
       };
 }
@@ -340,66 +338,61 @@ class Seat {
   Seat({
     required this.line,
     required this.letter,
-    // required this.seatPart,
-    // required this.isExitDoor,
-    // required this.classType,
-    // required this.isUsed,
-    // required this.isUsedDescription,
-    // required this.seatProperty,
-    // required this.cabinIndex,
-    // required this.isSelectable,
-    // required this.flightScheduleId,
+    required this.seatPart,
+    required this.isExitDoor,
+    required this.classType,
+    required this.isUsed,
+    required this.isUsedDescription,
+    required this.seatProperty,
+    required this.cabinIndex,
+    required this.isSelectable,
+    required this.flightScheduleId,
     required this.passengers,
   });
 
-  String? line;
-  String? letter;
-  // String? seatPart;
-  // bool? isExitDoor;
-  // String? classType;
-  // int? isUsed;
-  // String isUsedDescription;
-  // String? seatProperty;
-  // int? cabinIndex;
-  // int? isSelectable;
-  // int? flightScheduleId;
+  String line;
+  String letter;
+  String seatPart;
+  bool isExitDoor;
+  String classType;
+  int isUsed;
+  String isUsedDescription;
+  String seatProperty;
+  int cabinIndex;
+  int isSelectable;
+  int flightScheduleId;
   List<Passenger> passengers;
 
   factory Seat.fromJson(Map<String, dynamic> json) => Seat(
         line: json["Line"],
-        letter: json["Letter"]!,
-        // seatPart: json["Part"]!,
-        // isExitDoor: json["IsExitDoor"],
-        // classType: json["ClassType"]!,
-        // isUsed: json["IsUsed"],
-        // isUsedDescription: json["IsUsedDescription"]!,
-        // seatProperty: json["SeatProperty"]!,
-        // cabinIndex: json["CabinIndex"],
-        // isSelectable: json["IsSelectable"],
-        // flightScheduleId: json["FlightScheduleID"],
+        letter: json["Letter"],
+        seatPart: json["Part"],
+        isExitDoor: json["IsExitDoor"],
+        classType: json["ClassType"],
+        isUsed: json["IsUsed"],
+        isUsedDescription: json["IsUsedDescription"],
+        seatProperty: json["SeatProperty"],
+        cabinIndex: json["CabinIndex"],
+        isSelectable: json["IsSelectable"],
+        flightScheduleId: json["FlightScheduleID"],
         passengers: List<Passenger>.from(json["Passengers"].map((x) => Passenger.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "Line": line,
         "Letter": letter,
-        // "Part": seatPart,
-        // "IsExitDoor": isExitDoor,
-        // "ClassType": classType,
-        // "IsUsed": isUsed,
-        // "IsUsedDescription": isUsedDescription,
-        // "SeatProperty": seatProperty,
-        // "CabinIndex": cabinIndex,
-        // "IsSelectable": isSelectable,
-        // "FlightScheduleID": flightScheduleId,
+        "Part": seatPart,
+        "IsExitDoor": isExitDoor,
+        "ClassType": classType,
+        "IsUsed": isUsed,
+        "IsUsedDescription": isUsedDescription,
+        "SeatProperty": seatProperty,
+        "CabinIndex": cabinIndex,
+        "IsSelectable": isSelectable,
+        "FlightScheduleID": flightScheduleId,
         "Passengers": List<dynamic>.from(passengers.map((x) => x.toJson())),
       };
 }
-//
-// enum ClassType { B, A, E, F, C, D }
-//
-// final classTypeValues = EnumValues({"A": ClassType.A, "B": ClassType.B, "C": ClassType.C, "D": ClassType.D, "E": ClassType.E, "F": ClassType.F});
-//
 
 class Passenger {
   Passenger({
@@ -407,45 +400,42 @@ class Passenger {
     required this.reference,
     required this.name,
     required this.nationalId,
-    // required this.passengerType,
-    // required this.classType,
+    required this.passengerType,
+    required this.classType,
     required this.firstName,
     required this.lastName,
     required this.passengerClass,
     required this.title,
-    // required this.docsBirthDate,
-    // required this.docsTitle,
-    // required this.flightScheduleId,
+    required this.docsTitle,
+    required this.flightScheduleId,
   });
 
   int id;
   String reference;
   String name;
   String nationalId;
-  // String passengerType;
-  // String classType;
+  String passengerType;
+  String classType;
   String firstName;
   String lastName;
   String passengerClass;
   String title;
-  // DateTime? docsBirthDate;
-  // String docsTitle;
-  // int flightScheduleId;
+  String docsTitle;
+  int flightScheduleId;
 
   factory Passenger.fromJson(Map<String, dynamic> json) => Passenger(
         id: json["ID"],
-        reference: json["Reference"]!,
-        name: json["Name"]!,
-        nationalId: json["NationalID"]!,
-        // passengerType: json["PassengerType"]!,
-        // classType: json["ClassType"]!,
-        firstName: json["FirstName"]!,
-        lastName: json["LastName"]!,
-        passengerClass: json["Class"]!,
-        title: json["Title"]!,
-        // docsBirthDate: json["DocsBirthDate"] == null ? null : DateTime.parse(json["DocsBirthDate"]),
-        // docsTitle: json["DocsTitle"]!,
-        // flightScheduleId: json["FlightScheduleID"],
+        reference: json["Reference"],
+        name: json["Name"],
+        nationalId: json["NationalID"],
+        passengerType: json["PassengerType"],
+        classType: json["ClassType"],
+        firstName: json["FirstName"],
+        lastName: json["LastName"],
+        passengerClass: json["Class"],
+        title: json["Title"],
+        docsTitle: json["DocsTitle"],
+        flightScheduleId: json["FlightScheduleID"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -453,15 +443,14 @@ class Passenger {
         "Reference": reference,
         "Name": name,
         "NationalID": nationalId,
-        // "PassengerType": passengerType,
-        // "ClassType": classType,
+        "PassengerType": passengerType,
+        "ClassType": classType,
         "FirstName": firstName,
         "LastName": lastName,
         "Class": passengerClass,
         "Title": title,
-        // "DocsBirthDate": "${docsBirthDate!.year.toString().padLeft(4, '0')}-${docsBirthDate!.month.toString().padLeft(2, '0')}-${docsBirthDate!.day.toString().padLeft(2, '0')}",
-        // "DocsTitle": docsTitle,
-        // "FlightScheduleID": flightScheduleId,
+        "DocsTitle": docsTitle,
+        "FlightScheduleID": flightScheduleId,
       };
 }
 
@@ -478,6 +467,7 @@ class EnumValues<T> {
     return reverseMap;
   }
 }
+
 /////////////////////////////////////////////////////////////////Seat Map///////////////////////////////////////////
 
 class Cabin {
@@ -486,7 +476,7 @@ class Cabin {
     required this.linesCount,
     required this.cabinTitle,
     required this.lines,
-    required this.zones,
+    // required this.zones,
     required this.sumZones,
   });
 
@@ -494,28 +484,27 @@ class Cabin {
   int linesCount;
   String cabinTitle;
   List<Line> lines;
-  List<dynamic> zones;
+  // List<dynamic> zones;
   int sumZones;
 
   factory Cabin.fromJson(Map<String, dynamic> json) => Cabin(
-    cabinClass:json["CabinClass"] == null ? null :  json["CabinClass"],
-    linesCount: json["LinesCount"],
-    cabinTitle: json["CabinTitle"] == null ? null : json["CabinTitle"],
-    lines: List<Line>.from(json["Lines"].map((x) => Line.fromJson(x))),
-    zones: List<dynamic>.from(json["Zones"].map((x) => x)),
-    sumZones: json["SumZones"],
-  );
+        cabinClass: json["CabinClass"] == null ? null : json["CabinClass"],
+        linesCount: json["LinesCount"],
+        cabinTitle: json["CabinTitle"] == null ? null : json["CabinTitle"],
+        lines: List<Line>.from(json["Lines"].map((x) => Line.fromJson(x))),
+        // zones: List<dynamic>.from(json["Zones"].map((x) => x)),
+        sumZones: json["SumZones"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "CabinClass": cabinClass,
-    "LinesCount": linesCount,
-    "CabinTitle": cabinTitle,
-    // "Lines": List<dynamic>.from(lines.map((x) => x.toJson())),
-    // "Zones": List<dynamic>.from(zones.map((x) => x)),
-    // "SumZones": sumZones,
-  };
+        "CabinClass": cabinClass,
+        "LinesCount": linesCount,
+        "CabinTitle": cabinTitle,
+        "Lines": List<dynamic>.from(lines.map((x) => x.toJson())),
+        // "Zones": List<dynamic>.from(zones.map((x) => x)),
+        "SumZones": sumZones,
+      };
 }
-
 
 class Line {
   Line({
@@ -530,6 +519,7 @@ class Line {
   });
 
   String type;
+
   // dynamic arm;
   // dynamic index;
   // bool isIndex;
@@ -539,26 +529,26 @@ class Line {
   List<Cell> cells;
 
   factory Line.fromJson(Map<String, dynamic> json) => Line(
-    type:json["Type"] == null ? null :  json["Type"]!,
-    // arm: json["Arm"],
-    // index: json["Index"],
-    // isIndex: json["IsIndex"],
-    // zone: json["Zone"],
-    // seatsCount: json["SeatsCount"],
-    // line: json["Line"],
-    cells: List<Cell>.from(json["Cells"].map((x) => Cell.fromJson(x))),
-  );
+        type: json["Type"] == null ? null : json["Type"]!,
+        // arm: json["Arm"],
+        // index: json["Index"],
+        // isIndex: json["IsIndex"],
+        // zone: json["Zone"],
+        // seatsCount: json["SeatsCount"],
+        // line: json["Line"],
+        cells: List<Cell>.from(json["Cells"].map((x) => Cell.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Type": type,
-    // "Arm": arm,
-    // "Index": index,
-    // "IsIndex": isIndex,
-    // "Zone": zone,
-    // "SeatsCount": seatsCount,
-    // "Line": line,
-    "Cells": List<dynamic>.from(cells.map((x) => x.toJson())),
-  };
+        "Type": type,
+        // "Arm": arm,
+        // "Index": index,
+        // "IsIndex": isIndex,
+        // "Zone": zone,
+        // "SeatsCount": seatsCount,
+        // "Line": line,
+        "Cells": List<dynamic>.from(cells.map((x) => x.toJson())),
+      };
 }
 
 class Cell {
@@ -582,6 +572,7 @@ class Cell {
   String? letter;
   String? line;
   String? code;
+
   // dynamic attribiutes;
   // CellStatusType cellStatusType;
   // CellStatusType cellStatusTypeText;
@@ -591,34 +582,34 @@ class Cell {
   // dynamic classType;
 
   factory Cell.fromJson(Map<String, dynamic> json) => Cell(
-    type:json["Type"] == null ? null :  json["Type"]!,
-    value: json["Value"] == null ? null : json["Value"],
-    letter: json["Letter"] == null ? null :json["Letter"],
-    line: json["Line"] == null ? null : json["Line"],
-    code:json["Code"] == null ? null :  json["Code"],
-    // attribiutes: json["Attribiutes"],
-    // cellStatusType: cellStatusTypeValues.map[json["CellStatusType"]],
-    // cellStatusTypeText: cellStatusTypeValues.map[json["CellStatusTypeText"]],
-    // flightPassengerId: json["FlightPassengerId"],
-    // genderType: json["GenderType"],
-    // hasInfant: json["HasInfant"],
-    // classType: json["ClassType"],
-  );
+        type: json["Type"] == null ? null : json["Type"]!,
+        value: json["Value"] == null ? null : json["Value"],
+        letter: json["Letter"] == null ? null : json["Letter"],
+        line: json["Line"] == null ? null : json["Line"],
+        code: json["Code"] == null ? null : json["Code"],
+        // attribiutes: json["Attribiutes"],
+        // cellStatusType: cellStatusTypeValues.map[json["CellStatusType"]],
+        // cellStatusTypeText: cellStatusTypeValues.map[json["CellStatusTypeText"]],
+        // flightPassengerId: json["FlightPassengerId"],
+        // genderType: json["GenderType"],
+        // hasInfant: json["HasInfant"],
+        // classType: json["ClassType"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "Type": type,
-    "Value": value == null ? null : value,
-    "Letter": letter == null ? null : letter,
-    "Line": line == null ? null : line,
-    "Code": code,
-    // "Attribiutes": attribiutes,
-    // "CellStatusType": cellStatusTypeValues.reverse[cellStatusType],
-    // "CellStatusTypeText": cellStatusTypeValues.reverse[cellStatusTypeText],
-    // "FlightPassengerId": flightPassengerId,
-    // "GenderType": genderType,
-    // "HasInfant": hasInfant,
-    // "ClassType": classType,
-  };
+        "Type": type,
+        "Value": value == null ? null : value,
+        "Letter": letter == null ? null : letter,
+        "Line": line == null ? null : line,
+        "Code": code,
+        // "Attribiutes": attribiutes,
+        // "CellStatusType": cellStatusTypeValues.reverse[cellStatusType],
+        // "CellStatusTypeText": cellStatusTypeValues.reverse[cellStatusTypeText],
+        // "FlightPassengerId": flightPassengerId,
+        // "GenderType": genderType,
+        // "HasInfant": hasInfant,
+        // "ClassType": classType,
+      };
 }
 
 // enum CellStatusType { NONE }

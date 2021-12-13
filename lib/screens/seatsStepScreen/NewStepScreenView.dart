@@ -111,19 +111,23 @@ class PlaneBody extends StatelessWidget {
         ),
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Expanded(
-          child: Container(
-            child: ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: mySeatsStepController.cabins.length,
-              itemBuilder: (_, i) {
-                print("PlaneBody " + i.toString());
-                print("lines: " + mySeatsStepController.cabins[i].linesCount.toString());
-                return CabinWidget(
-                  cabin: mySeatsStepController.cabins[i],
-                  mySeatsStepController: mySeatsStepController,
-                );
-              },
+          child: Center(
+            child: Container(
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemCount: mySeatsStepController.cabins.length,
+                itemBuilder: (_, i) {
+                  // print("PlaneBody " + i.toString());
+                  // print("lines: " + mySeatsStepController.cabins[i].linesCount.toString());
+                  return CabinWidget(
+                    width: mySeatsStepController.calculateCabinLength(i),
+                    height: mySeatsStepController.calculateCabinHeight(i),
+                    cabin: mySeatsStepController.cabins[i],
+                    mySeatsStepController: mySeatsStepController,
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -135,13 +139,15 @@ class PlaneBody extends StatelessWidget {
 class CabinWidget extends StatelessWidget {
   final Cabin cabin;
   final SeatsStepController mySeatsStepController;
+  final double height;
+  final double width;
 
-  const CabinWidget({Key? key, required this.cabin, required this.mySeatsStepController}) : super(key: key);
+  const CabinWidget({Key? key, required this.cabin, required this.mySeatsStepController, required this.height, required this.width}) : super(key: key);
 
   Widget build(BuildContext context) {
     return Container(
-      width: cabin.linesCount * (mySeatsStepController.eachLineWidth + 30),
-      height: 300,
+      width: width + 60,
+      height: height,
       child: ListView(
         scrollDirection: Axis.horizontal,
         physics: const NeverScrollableScrollPhysics(),
@@ -152,26 +158,29 @@ class CabinWidget extends StatelessWidget {
                 cabin.cabinTitle,
                 style: TextStyle(color: Colors.white, fontSize: 20),
               )),
-          Container(
-            width: cabin.linesCount * (mySeatsStepController.eachLineWidth + 20),
-            child: ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: cabin.linesCount,
-              itemBuilder: (_, i) {
-                print("cabin widget: " + i.toString());
-                print("line type: " + cabin.lines[i].type);
-                return
-                    //   Container(
-                    //   width: 45,
-                    //   margin: EdgeInsets.all(3),
-                    //   color: Colors.greenAccent,
-                    // );
-                    LineWidget(
-                  line: cabin.lines[i],
-                  mySeatsStepController: mySeatsStepController,
-                );
-              },
+          Center(
+            child: Container(
+              height: height,
+              width: width,
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemCount: cabin.linesCount,
+                itemBuilder: (_, i) {
+                  // print("cabin widget: " + i.toString());
+                  // print("line type: " + cabin.lines[i].type);
+                  return
+                      //   Container(
+                      //   width: 45,
+                      //   margin: EdgeInsets.all(3),
+                      //   color: Colors.greenAccent,
+                      // );
+                      LineWidget(
+                    line: cabin.lines[i],
+                    mySeatsStepController: mySeatsStepController,
+                  );
+                },
+              ),
             ),
           ),
         ],
@@ -335,18 +344,21 @@ class SeatWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTap: mySeatsStepController.seatsStatus[seatId] == "Block" || mySeatsStepController.seatsStatus[seatId] == "Checked-in"
-      //     ? null
-      //     : () {
-      //         mySeatsStepController.changeSeatStatus(seatId);
-      //       },
+      onTap: cell.type != "Seat"
+          ? null
+          : mySeatsStepController.seatsStatus[cell.code] == "Block" || mySeatsStepController.seatsStatus[cell.code] == "Checked-in"
+              ? null
+              : () {
+                  print("here" + cell.code!);
+                  mySeatsStepController.changeSeatStatus(cell.code!);
+                },
       child: Container(
         width: cell.type == "Seat" || cell.type == "OutEquipmentExit" ? 35 : 15,
         height: cell.type == "Seat" || cell.type == "OutEquipmentExit" ? 35 : 15,
 
         margin: EdgeInsets.all(2),
         decoration: BoxDecoration(
-          color: cell.type == "Seat" ? Colors.white : Color(0xff5d5d5d),
+          color: cell.type == "Seat" ? mySeatsStepController.getColor(cell.code!): Color(0xff5d5d5d),
           borderRadius: BorderRadius.all(
             Radius.circular(10),
           ),
@@ -356,16 +368,20 @@ class SeatWidget extends StatelessWidget {
                 Icons.sensor_door_outlined,
                 color: Colors.red,
               )
-            : Center(
-                child: Text(
-                  cell.type! == "Seat"
-                      ? cell.code!
-                      : cell.type! == "VerticalCode"
-                          ? cell.value!
-                          : "",
-                  style: TextStyle(color: cell.type! == "Seat" ? Color(0xffd1d1d1) : Colors.white),
-                ),
-              ),
+            : cell.type == "Seat" && mySeatsStepController.seatsStatus[cell.code] == "Block"
+                ? BlockedSeat()
+                : cell.type == "Seat" && mySeatsStepController.seatsStatus[cell.code] == "Checked-in"
+                    ? CheckedInSeat(seatId: mySeatsStepController.seatsStatus[cell.code]!)
+                    : Center(
+                        child: Text(
+                          cell.type! == "Seat"
+                              ? cell.code!
+                              : cell.type! == "VerticalCode"
+                                  ? cell.value!
+                                  : "",
+                          style: TextStyle(color: cell.type! == "Seat" ? Color(0xffd1d1d1) : Colors.white),
+                        ),
+                      ),
         // child: mySeatsStepController.seatsStatus[seatId] == "Block"
         //     ? BlockedSeat()
         //     : mySeatsStepController.seatsStatus[seatId] == "Checked-in"
@@ -386,4 +402,58 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
         PointerDeviceKind.mouse,
         // etc.
       };
+}
+
+class BlockedSeat extends StatelessWidget {
+  const BlockedSeat({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      child: Icon(
+        Icons.close,
+        color: Colors.white,
+        size: 15,
+      ),
+    );
+  }
+}
+
+class CheckedInSeat extends StatelessWidget {
+  const CheckedInSeat({
+    Key? key,
+    required this.seatId,
+  }) : super(key: key);
+
+  final String seatId;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 35,
+      height: 35,
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      child: Center(
+        child: Text(
+          seatId,
+          style: TextStyle(
+            color: Colors.grey,
+          ),
+        ),
+      ),
+    );
+  }
 }

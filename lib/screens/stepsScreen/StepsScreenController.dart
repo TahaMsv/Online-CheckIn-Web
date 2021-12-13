@@ -76,7 +76,7 @@ class StepsScreenController extends MainController {
   Welcome? _welcome;
 
   Welcome? get welcome => _welcome;
-  RxInt _step = 6.obs;
+  RxInt _step = 0.obs;
 
   int get step => _step.value;
 
@@ -138,7 +138,7 @@ class StepsScreenController extends MainController {
 
   getInformation(String token) async {
     model.setLoading(true);
-    // String token = model.token;
+    String token = "4C704766-2DD0-4F27-BD8A-A6162FF501DB";   //todo    //dynamic api, now it is static for testing
     Response response = await DioClient.getInformation(
       execution: "[OnlineCheckin].[SelectFlightInformation]",
       token: token,
