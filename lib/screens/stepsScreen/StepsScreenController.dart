@@ -107,7 +107,7 @@ class StepsScreenController extends MainController {
 
   void addToTravellers(String token, String lastName, String ticketNumber) async {
     await getInformation(token);
-    Passenger passenger = welcome!.seats[0].passengers[0];
+    Passenger passenger = welcome!.body.passengers.first;
     for (int i = 0; i < travellers.length; i++) {
       if (travellers[i].passengerInfo.lastName == lastName && travellers[i].ticketNumber == ticketNumber) {
         return;
@@ -138,9 +138,9 @@ class StepsScreenController extends MainController {
 
   getInformation(String token) async {
     model.setLoading(true);
-    String token = "4C704766-2DD0-4F27-BD8A-A6162FF501DB";   //todo    //dynamic api, now it is static for testing
+    // String token = "4C704766-2DD0-4F27-BD8A-A6162FF501DB";   //todo    //dynamic api, now it is static for testing
     Response response = await DioClient.getInformation(
-      execution: "[OnlineCheckin].[SelectFlightInformation]",
+      execution: "[OnlineCheckin].[SelectFlightInformation2]",
       token: token,
       request: {},
     );
@@ -150,7 +150,9 @@ class StepsScreenController extends MainController {
       if (extractedData == null) {
         return null;
       }
-      _welcome = welcomeFromJson(jsonEncode(extractedData))[0];
+
+      _welcome = welcomeFromJson(jsonEncode(extractedData));
+
       model.setLoading(false);
       print("ok");
     } else {}

@@ -21,12 +21,12 @@ class SeatsStepController extends MainController {
   ///////////// new /////////////////
 
   void init() {
-    String seatMap = SeatMaps.seatMapAB6;
-    Map<String, dynamic> sm = jsonDecode(seatMap);
+    // String seatMap = SeatMaps.seatMap320;
+    // Map<String, dynamic> sm = jsonDecode(seatMap);
     // print(sm);
-    cabins = List<Cabin>.from(sm["Cabins"].map((x) => Cabin.fromJson(x)));
     final myStepScreenController = Get.put(StepsScreenController(model));
-    List<Seat> seats = myStepScreenController.welcome!.seats;
+    cabins = myStepScreenController.welcome!.body.seatmap.cabins;
+    List<Seat> seats = myStepScreenController.welcome!.body.seats;
     // print(seats.length);
     for (int i = 0; i < seats.length; i++) {
       Seat seat = seats[i];
@@ -51,7 +51,7 @@ class SeatsStepController extends MainController {
   }
 
   double calculateCabinLength(int index) {
-    return cabins[index].linesCount * (eachLineWidth + 10);
+    return cabins[index].linesCount * (eachLineWidth + 11);
   }
 
   double calculatePlaneBodyHeight() {
@@ -93,14 +93,8 @@ class SeatsStepController extends MainController {
     final myStepScreenController = Get.put(StepsScreenController(model));
     int whoseTurn = myStepScreenController.whoseTurnToSelect.value;
     bool unSelectedTravellerExist = whoseTurn == -1 ? false : true;
-    print("change status: " + seatId);
-    print(whoseTurn);
-    print(unSelectedTravellerExist);
     if (unSelectedTravellerExist) {
-      print("here102");
       String currStatus = seatsStatus[seatId]!;
-      print("here104");
-      print(seatId + " " + currStatus);
       if (currStatus == "Open") {
         String newSeatId = myStepScreenController.travellers[whoseTurn].getNickName();
         seatsStatus[seatId] = newSeatId;

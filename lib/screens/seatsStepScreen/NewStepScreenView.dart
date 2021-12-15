@@ -275,61 +275,6 @@ class BodyLine extends StatelessWidget {
   }
 }
 
-class PlaneHead extends StatelessWidget {
-  const PlaneHead({
-    Key? key,
-    required this.height,
-  }) : super(key: key);
-
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Positioned(
-        left: 20,
-        child: Container(
-          height: height,
-          // width: 413,
-          child: Image.asset(
-            "assets/images/Airplane Head.png",
-            fit: BoxFit.contain,
-            // height: 350,
-          ),
-          // margin: EdgeInsets.only(left: 20),
-          // width: 400,
-        ),
-      ),
-    );
-  }
-}
-
-class PlaneTail extends StatelessWidget {
-  const PlaneTail({
-    Key? key,
-    required this.margin,
-    required this.height,
-  }) : super(key: key);
-
-  final double margin;
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.only(top: 30, bottom: 22),
-        margin: EdgeInsets.only(left: margin + 50),
-        // width: 2400,
-        // height: height+100,
-        child: Image.asset(
-          "assets/images/Edited-Tail.png",
-          fit: BoxFit.contain,
-        ),
-      ),
-    );
-  }
-}
 
 class SeatWidget extends StatelessWidget {
   const SeatWidget({
@@ -389,6 +334,62 @@ class SeatWidget extends StatelessWidget {
         //     : mySeatsStepController.seatsStatus[seatId] == "Open"
         //     ? DroppableSeat(mySeatsStepController: mySeatsStepController, seatId: seatId)
         //     : DraggableSeat(mySeatsStepController: mySeatsStepController, seatId: seatId),
+      ),
+    );
+  }
+}
+
+class PlaneHead extends StatelessWidget {
+  const PlaneHead({
+    Key? key,
+    required this.height,
+  }) : super(key: key);
+
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Positioned(
+        left: 20,
+        child: Container(
+          height: height,
+          // width: 413,
+          child: Image.asset(
+            "assets/images/Airplane Head.png",
+            fit: BoxFit.contain,
+            // height: 350,
+          ),
+          // margin: EdgeInsets.only(left: 20),
+          // width: 400,
+        ),
+      ),
+    );
+  }
+}
+
+class PlaneTail extends StatelessWidget {
+  const PlaneTail({
+    Key? key,
+    required this.margin,
+    required this.height,
+  }) : super(key: key);
+
+  final double margin;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.only(top: 30, bottom: 22),
+        margin: EdgeInsets.only(left: margin + 50),
+        // width: 2400,
+        // height: height+100,
+        child: Image.asset(
+          "assets/images/Edited-Tail.png",
+          fit: BoxFit.contain,
+        ),
       ),
     );
   }

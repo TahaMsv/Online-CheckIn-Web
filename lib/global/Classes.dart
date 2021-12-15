@@ -211,17 +211,70 @@ class Country {
         "IsDisabled": isDisabled == null ? null : isDisabled,
       };
 }
+// To parse this JSON data, do
+//
+//     final welcome = welcomeFromJson(jsonString);
 
-List<Welcome> welcomeFromJson(String str) {
-  return List<Welcome>.from(json.decode(str).map((x) => Welcome.fromJson(x)));
-}
+Welcome welcomeFromJson(String str) => Welcome.fromJson(json.decode(str));
 
-String welcomeToJson(List<Welcome> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String welcomeToJson(Welcome data) => json.encode(data.toJson());
 
 class Welcome {
   Welcome({
+    required this.resultCode,
+    required this.resultText,
+    required this.body,
+  });
+
+  int resultCode;
+  String resultText;
+  Body body;
+
+  factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
+        resultCode: json["ResultCode"],
+        resultText: json["ResultText"],
+        body: Body.fromJson(json["Body"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "ResultCode": resultCode,
+        "ResultText": resultText,
+        "Body": body.toJson(),
+      };
+}
+
+class Body {
+  Body({
+    required this.flight,
+    required this.passengers,
+    required this.seats,
+    required this.seatmap,
+  });
+
+  List<Flight> flight;
+  List<Passenger> passengers;
+  List<Seat> seats;
+  SeatMap seatmap;
+
+  factory Body.fromJson(Map<String, dynamic> json) => Body(
+        flight: List<Flight>.from(json["Flight"].map((x) => Flight.fromJson(x))),
+        passengers: List<Passenger>.from(json["Passengers"].map((x) => Passenger.fromJson(x))),
+        seats: List<Seat>.from(json["Seats"].map((x) => Seat.fromJson(x))),
+        seatmap: SeatMap.fromJson(json["Seatmap"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "Flight": List<dynamic>.from(flight.map((x) => x.toJson())),
+        "Passengers": List<dynamic>.from(passengers.map((x) => x.toJson())),
+        "Seats": List<dynamic>.from(seats.map((x) => x.toJson())),
+        "Seatmap": seatmap.toJson(),
+      };
+}
+
+class Flight {
+  Flight({
+    required this.id,
     required this.aircraft,
-    required this.seatMap,
     required this.fromCity,
     required this.toCity,
     required this.fromCityName,
@@ -229,9 +282,7 @@ class Welcome {
     required this.fromTime,
     required this.toTime,
     required this.attendanceTime,
-    required this.flightDateShamsi,
     required this.flightDate,
-    required this.flightDayShamsi,
     required this.terminal,
     required this.weightAdl,
     required this.weightChd,
@@ -243,13 +294,11 @@ class Welcome {
     required this.alName,
     required this.aircraftShowName,
     required this.boardingTime,
-    required this.id,
     required this.checkDocs,
-    required this.seats,
   });
 
+  int id;
   String aircraft;
-  String seatMap;
   String fromCity;
   String toCity;
   String fromCityName;
@@ -257,9 +306,7 @@ class Welcome {
   String fromTime;
   String toTime;
   String attendanceTime;
-  String flightDateShamsi;
   DateTime flightDate;
-  String flightDayShamsi;
   int terminal;
   int weightAdl;
   int weightChd;
@@ -271,13 +318,11 @@ class Welcome {
   String alName;
   String aircraftShowName;
   String boardingTime;
-  int id;
   bool checkDocs;
-  List<Seat> seats;
 
-  factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
+  factory Flight.fromJson(Map<String, dynamic> json) => Flight(
+        id: json["ID"],
         aircraft: json["Aircraft"],
-        seatMap: json["SeatMap"],
         fromCity: json["From_City"],
         toCity: json["To_City"],
         fromCityName: json["From_CityName"],
@@ -285,9 +330,7 @@ class Welcome {
         fromTime: json["From_Time"],
         toTime: json["To_Time"],
         attendanceTime: json["AttendanceTime"],
-        flightDateShamsi: json["FlightDateShamsi"],
         flightDate: DateTime.parse(json["FlightDate"]),
-        flightDayShamsi: json["FlightDayShamsi"],
         terminal: json["Terminal"],
         weightAdl: json["Weight_ADL"],
         weightChd: json["Weight_CHD"],
@@ -299,14 +342,12 @@ class Welcome {
         alName: json["AL_Name"],
         aircraftShowName: json["AircraftShowName"],
         boardingTime: json["BoardingTime"],
-        id: json["ID"],
         checkDocs: json["CheckDocs"],
-        seats: List<Seat>.from(json["Seats"].map((x) => Seat.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
+        "ID": id,
         "Aircraft": aircraft,
-        "SeatMap": seatMap,
         "From_City": fromCity,
         "To_City": toCity,
         "From_CityName": fromCityName,
@@ -314,9 +355,7 @@ class Welcome {
         "From_Time": fromTime,
         "To_Time": toTime,
         "AttendanceTime": attendanceTime,
-        "FlightDateShamsi": flightDateShamsi,
         "FlightDate": "${flightDate.year.toString().padLeft(4, '0')}-${flightDate.month.toString().padLeft(2, '0')}-${flightDate.day.toString().padLeft(2, '0')}",
-        "FlightDayShamsi": flightDayShamsi,
         "Terminal": terminal,
         "Weight_ADL": weightAdl,
         "Weight_CHD": weightChd,
@@ -328,69 +367,7 @@ class Welcome {
         "AL_Name": alName,
         "AircraftShowName": aircraftShowName,
         "BoardingTime": boardingTime,
-        "ID": id,
         "CheckDocs": checkDocs,
-        "Seats": List<dynamic>.from(seats.map((x) => x.toJson())),
-      };
-}
-
-class Seat {
-  Seat({
-    required this.line,
-    required this.letter,
-    required this.seatPart,
-    required this.isExitDoor,
-    required this.classType,
-    required this.isUsed,
-    required this.isUsedDescription,
-    required this.seatProperty,
-    required this.cabinIndex,
-    required this.isSelectable,
-    required this.flightScheduleId,
-    required this.passengers,
-  });
-
-  String line;
-  String letter;
-  String seatPart;
-  bool isExitDoor;
-  String classType;
-  int isUsed;
-  String isUsedDescription;
-  String seatProperty;
-  int cabinIndex;
-  int isSelectable;
-  int flightScheduleId;
-  List<Passenger> passengers;
-
-  factory Seat.fromJson(Map<String, dynamic> json) => Seat(
-        line: json["Line"],
-        letter: json["Letter"],
-        seatPart: json["Part"],
-        isExitDoor: json["IsExitDoor"],
-        classType: json["ClassType"],
-        isUsed: json["IsUsed"],
-        isUsedDescription: json["IsUsedDescription"],
-        seatProperty: json["SeatProperty"],
-        cabinIndex: json["CabinIndex"],
-        isSelectable: json["IsSelectable"],
-        flightScheduleId: json["FlightScheduleID"],
-        passengers: List<Passenger>.from(json["Passengers"].map((x) => Passenger.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "Line": line,
-        "Letter": letter,
-        "Part": seatPart,
-        "IsExitDoor": isExitDoor,
-        "ClassType": classType,
-        "IsUsed": isUsed,
-        "IsUsedDescription": isUsedDescription,
-        "SeatProperty": seatProperty,
-        "CabinIndex": cabinIndex,
-        "IsSelectable": isSelectable,
-        "FlightScheduleID": flightScheduleId,
-        "Passengers": List<dynamic>.from(passengers.map((x) => x.toJson())),
       };
 }
 
@@ -454,21 +431,21 @@ class Passenger {
       };
 }
 
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
+class SeatMap {
+  SeatMap({
+    required this.cabins,
+  });
 
-  EnumValues(this.map);
+  List<Cabin> cabins;
 
-  Map<T, String> get reverse {
-    if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
-    }
-    return reverseMap;
-  }
+  factory SeatMap.fromJson(Map<String, dynamic> json) => SeatMap(
+        cabins: List<Cabin>.from(json["Cabins"].map((x) => Cabin.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "Cabins": List<dynamic>.from(cabins.map((x) => x.toJson())),
+      };
 }
-
-/////////////////////////////////////////////////////////////////Seat Map///////////////////////////////////////////
 
 class Cabin {
   Cabin({
@@ -477,23 +454,24 @@ class Cabin {
     required this.cabinTitle,
     required this.lines,
     // required this.zones,
-    required this.sumZones,
+    // required this.sumZones,
   });
 
   String cabinClass;
   int linesCount;
   String cabinTitle;
   List<Line> lines;
+
   // List<dynamic> zones;
-  int sumZones;
+  // int sumZones;
 
   factory Cabin.fromJson(Map<String, dynamic> json) => Cabin(
-        cabinClass: json["CabinClass"] == null ? null : json["CabinClass"],
+        cabinClass: json["CabinClass"],
         linesCount: json["LinesCount"],
-        cabinTitle: json["CabinTitle"] == null ? null : json["CabinTitle"],
+        cabinTitle: json["CabinTitle"],
         lines: List<Line>.from(json["Lines"].map((x) => Line.fromJson(x))),
         // zones: List<dynamic>.from(json["Zones"].map((x) => x)),
-        sumZones: json["SumZones"],
+        // sumZones: json["SumZones"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -502,7 +480,7 @@ class Cabin {
         "CabinTitle": cabinTitle,
         "Lines": List<dynamic>.from(lines.map((x) => x.toJson())),
         // "Zones": List<dynamic>.from(zones.map((x) => x)),
-        "SumZones": sumZones,
+        // "SumZones": sumZones,
       };
 }
 
@@ -529,7 +507,7 @@ class Line {
   List<Cell> cells;
 
   factory Line.fromJson(Map<String, dynamic> json) => Line(
-        type: json["Type"] == null ? null : json["Type"]!,
+        type: json["Type"],
         // arm: json["Arm"],
         // index: json["Index"],
         // isIndex: json["IsIndex"],
@@ -567,29 +545,29 @@ class Cell {
     // required this.classType,
   });
 
-  String? type;
+  String type;
   String? value;
   String? letter;
   String? line;
   String? code;
 
   // dynamic attribiutes;
-  // CellStatusType cellStatusType;
-  // CellStatusType cellStatusTypeText;
+  // String cellStatusType;
+  // String cellStatusTypeText;
   // int flightPassengerId;
   // int genderType;
   // int hasInfant;
   // dynamic classType;
 
   factory Cell.fromJson(Map<String, dynamic> json) => Cell(
-        type: json["Type"] == null ? null : json["Type"]!,
+        type: json["Type"],
         value: json["Value"] == null ? null : json["Value"],
         letter: json["Letter"] == null ? null : json["Letter"],
         line: json["Line"] == null ? null : json["Line"],
         code: json["Code"] == null ? null : json["Code"],
         // attribiutes: json["Attribiutes"],
-        // cellStatusType: cellStatusTypeValues.map[json["CellStatusType"]],
-        // cellStatusTypeText: cellStatusTypeValues.map[json["CellStatusTypeText"]],
+        // cellStatusType: json["CellStatusType"],
+        // cellStatusTypeText: json["CellStatusTypeText"],
         // flightPassengerId: json["FlightPassengerId"],
         // genderType: json["GenderType"],
         // hasInfant: json["HasInfant"],
@@ -603,13 +581,100 @@ class Cell {
         "Line": line == null ? null : line,
         "Code": code,
         // "Attribiutes": attribiutes,
-        // "CellStatusType": cellStatusTypeValues.reverse[cellStatusType],
-        // "CellStatusTypeText": cellStatusTypeValues.reverse[cellStatusTypeText],
+        // "CellStatusType":  cellStatusType,
+        // "CellStatusTypeText":  cellStatusTypeText,
         // "FlightPassengerId": flightPassengerId,
         // "GenderType": genderType,
         // "HasInfant": hasInfant,
         // "ClassType": classType,
       };
+}
+
+// enum SeatProperty { SEAT, VERTICAL_CODE, OUT_EQUIPMENT_WING, OUT_EQUIPMENT_EXIT, AILE }
+//
+// final seatPropertyValues = EnumValues({
+//   "Aile": SeatProperty.AILE,
+//   "OutEquipmentExit": SeatProperty.OUT_EQUIPMENT_EXIT,
+//   "OutEquipmentWing": SeatProperty.OUT_EQUIPMENT_WING,
+//   "Seat": SeatProperty.SEAT,
+//   "VerticalCode": SeatProperty.VERTICAL_CODE
+// });
+
+// enum Type { HORIZONTAL_CODE, BODY }
+//
+// final typeValues = EnumValues({
+//   "Body": Type.BODY,
+//   "HorizontalCode": Type.HORIZONTAL_CODE
+// });
+
+class Seat {
+  Seat({
+    required this.line,
+    required this.letter,
+    // required this.seatPart,
+    // required this.isExitDoor,
+    // required this.classType,
+    // required this.isUsed,
+    required this.isUsedDescription,
+    // required this.seatProperty,
+    // required this.mainIndex,
+    // required this.isSelectable,
+    required this.price,
+  });
+
+  String line;
+  String letter;
+  // String seatPart;
+  // bool isExitDoor;
+  // String classType;
+  // int isUsed;
+  String isUsedDescription;
+  // String seatProperty;
+  // double mainIndex;
+  // int isSelectable;
+  int price;
+
+  factory Seat.fromJson(Map<String, dynamic> json) => Seat(
+        line: json["Line"],
+        letter: json["Letter"],
+        // seatPart: json["Part"],
+        // isExitDoor: json["IsExitDoor"],
+        // classType: json["ClassType"],
+        // isUsed: json["IsUsed"],
+        isUsedDescription: json["IsUsedDescription"],
+        // seatProperty: json["SeatProperty"],
+        // mainIndex: json["MainIndex"].toDouble(),
+        // isSelectable: json["IsSelectable"],
+        price: json["Price"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "Line": line,
+        "Letter": letter,
+        // "Part": seatPart,
+        // "IsExitDoor": isExitDoor,
+        // "ClassType": classType,
+        // "IsUsed": isUsed,
+        "IsUsedDescription": isUsedDescription,
+        // "SeatProperty": seatProperty,
+        // "MainIndex": mainIndex,
+        // "IsSelectable": isSelectable,
+        "Price": price,
+      };
+}
+
+class EnumValues<T> {
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    if (reverseMap == null) {
+      reverseMap = map.map((k, v) => new MapEntry(v, k));
+    }
+    return reverseMap;
+  }
 }
 
 // enum CellStatusType { NONE }
