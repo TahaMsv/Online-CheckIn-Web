@@ -50,6 +50,7 @@ class EnterScreenController extends MainController {
   Future<bool> loginValidation() async {
     String lastName = lastNameC.text.trim();
     String bookingRefName = bookingRefNameC.text.trim();
+    print("here53");
     Response response = await DioClient.getToken(
       execution: "[OnlineCheckin].[Authenticate]",
       token: null,
@@ -59,6 +60,7 @@ class EnterScreenController extends MainController {
         "UrlType": 1,
       },
     );
+    print("here62");
     if (response.statusCode == 200) {
       if (response.data["ResultCode"] == 1) {
         String? token = response.data["Body"]["Token"];  //todo //dynamic api, now it is static for testing

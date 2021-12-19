@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:onlinecheckin/screens/passportStepScreen/PassportStepController.dart';
+import 'package:get/get.dart' hide Response;
+import '../../screens/passportStepScreen/PassportStepController.dart';
+import '../../utility/DataProvider.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
 import '../../global/Classes.dart';
 import '../../widgets/SelectingDateWidget.dart';
@@ -24,14 +26,44 @@ class VisaStepController extends MainController {
   List<TextEditingController> documentNoCs = [];
   List<TextEditingController> destinationCs = [];
 
+  RxBool isDocoNecessary = false.obs;
+
   void init() async {
-    travellersList();
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
     final PassportStepController passportStepController = Get.put(PassportStepController(model));
-    travellers = stepsScreenController.travellers;
-    for (var i = 0; i < travellers.length; ++i) {
-      documentNoCs.add(new TextEditingController());
-      destinationCs.add(new TextEditingController());
+    String docsType = passportStepController.travellers[0].passportInfo.passportType!;
+    String docsCountry = passportStepController.travellers[0].passportInfo.countryOfIssue!;
+    String docsNationality = passportStepController.travellers[0].passportInfo.nationality!;
+    String fromCityCode = stepsScreenController.welcome!.body.flight[0].fromCity;
+    String toCityCode = stepsScreenController.welcome!.body.flight[0].toCity;
+    Response response = await DioClient.getDocumentTypes(
+      execution: "[OnlineCheckin].[SelectDocumentTypes]",
+      token: model.token,
+      request: {
+        "DocsType": docsType,
+        "DocsCountry": docsCountry,
+        "DocsNationality": docsNationality,
+        "FromCityCode": fromCityCode,
+        "ToCityCode": toCityCode,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      if (response.data["ResultCode"] == 1) {
+        if (response.data["Body"]["IsNecessary"] == 1) {
+          isDocoNecessary.value = true;
+        }
+      }
+    } else {}
+
+    if (isDocoNecessary.value) {
+      travellersList();
+
+      travellers = stepsScreenController.travellers;
+      for (var i = 0; i < travellers.length; ++i) {
+        documentNoCs.add(new TextEditingController());
+        destinationCs.add(new TextEditingController());
+      }
     }
   }
 
@@ -134,7 +166,7 @@ class VisaStepController extends MainController {
                   width: 20,
                 ),
                 Obx(
-                      () => SelectingDateWidget(
+                  () => SelectingDateWidget(
                     hint: "Issue Date",
                     index: index,
                     updateDate: selectEntryDate,
@@ -159,7 +191,7 @@ class VisaStepController extends MainController {
               height: 20,
             ),
             SubmitButton(
-              function:() => submitBtnFunction(index),
+              function: () => submitBtnFunction(index),
             )
           ],
         ),

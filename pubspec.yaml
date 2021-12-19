@@ -31,10 +31,10 @@ dependencies:
   network_manager: ^0.0.85
   flutter_spinkit: ^5.0.0
   get: ^4.1.4
-  provider: ^5.0.0
+  provider: ^6.0.1
   dotted_line: ^3.0.1
   scroll_to_index: ^2.1.0
-  dio: ^4.0.1
+  dio: ^4.0.4
   date_time_picker: ^2.1.0
 
 dev_dependencies:

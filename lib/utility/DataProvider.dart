@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import '../global/RequestModels.dart';
 import 'package:network_manager/network_manager.dart';
 
@@ -35,7 +37,6 @@ class DataProvider {
     return NetworkRequest(api: api, data: grtPassportTypesRM.toJson(), retry: retry).post();
   }
 
-
   static Future<NetworkResponse> getSelectCountries({required String execution, required dynamic token, required Map<String, Object> request, required Function retry}) async {
     String api = Apis.getSelectCountries;
     RequestModelGetSelectCountries selectCountriesRM = RequestModelGetSelectCountries(
@@ -44,6 +45,16 @@ class DataProvider {
       request: request,
     );
     return NetworkRequest(api: api, data: selectCountriesRM.toJson(), retry: retry).post();
+  }
+
+  static Future<NetworkResponse> getCheckDocoNecessity({required String execution, required dynamic token, required Map<String, Object> request, required Function retry}) async {
+    String api = Apis.getCheckDocoNecessity;
+    RequestModelGetSelectCheckDocoNecessity checkDocoNecessityRM = RequestModelGetSelectCheckDocoNecessity(
+      execution: execution,
+      token: token,
+      request: request,
+    );
+    return NetworkRequest(api: api, data: checkDocoNecessityRM.toJson(), retry: retry).post();
   }
 }
 
@@ -65,6 +76,7 @@ class DioClient {
         "Request": request,
       },
     });
+
     return response;
   }
 
@@ -117,6 +129,27 @@ class DioClient {
   }) async {
     Response response;
     String api = Apis.baseUrl + Apis.getSelectCountries;
+    _dio.options.headers['Content-Type'] = 'application/json';
+    response = await _dio.post(
+      api,
+      data: {
+        "Body": {
+          "Execution": execution,
+          "Token": token,
+          "Request": request,
+        },
+      },
+    );
+    return response;
+  }
+
+  static Future<Response> getCheckDocoNecessity({
+    required String execution,
+    required dynamic token,
+    required Map<String, Object> request,
+  }) async {
+    Response response;
+    String api = Apis.baseUrl + Apis.getCheckDocoNecessity;
     _dio.options.headers['Content-Type'] = 'application/json';
     response = await _dio.post(
       api,

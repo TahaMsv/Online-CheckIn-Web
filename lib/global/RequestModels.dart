@@ -73,3 +73,22 @@ class RequestModelGetSelectCountries{
   };
 }
 
+class RequestModelGetSelectCheckDocoNecessity{
+  final String execution;
+  final dynamic token;
+  final Map<String,dynamic> request;
+
+  RequestModelGetSelectCheckDocoNecessity({
+    required this.execution,
+    required this.token,
+    required this.request,
+  });
+
+  Map<String, dynamic> toJson() => {
+    "Execution": execution,
+    "Token": token,
+    "Request": request,
+  };
+}
+
+

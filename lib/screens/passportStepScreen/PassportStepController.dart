@@ -25,6 +25,7 @@ class PassportStepController extends MainController {
   RxList<Traveller> travellers = <Traveller>[].obs;
   List<TextEditingController> documentNoCs = [];
   List<Country> countriesList = [];
+  RxBool checkDocs = false.obs;
 
   void travellersList() {
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
@@ -32,13 +33,17 @@ class PassportStepController extends MainController {
   }
 
   void init() async {
-    travellersList();
-    await getDocumentTypes();
-    await getSelectCountries();
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-    travellers = stepsScreenController.travellers;
-    for (var i = 0; i < travellers.length; ++i) {
-      documentNoCs.add(new TextEditingController());
+    checkDocs.value = stepsScreenController.welcome!.body.flight[0].checkDocs;
+    if (checkDocs.value) {
+      travellersList();
+      await getDocumentTypes();
+      await getSelectCountries();
+
+      travellers = stepsScreenController.travellers;
+      for (var i = 0; i < travellers.length; ++i) {
+        documentNoCs.add(new TextEditingController());
+      }
     }
   }
 

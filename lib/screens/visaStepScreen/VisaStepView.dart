@@ -20,37 +20,41 @@ class VisaStepView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          StepsScreenTitle(
-            title: "Visa",
-            description: "Enter visa data (DOCO) for all the passengers.",
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Obx(
-            () => Expanded(
-              child: GridView.count(
-                crossAxisCount: 4,
-                // crossAxisSpacing: 60,
-                childAspectRatio: 315 / 193,
-                children: myVisaStepController.travellers.asMap().entries.map(
-                  (entry) {
-                    int idx = entry.key;
-                    // Traveller traveller = entry.value;
-                    return InfoCard(
-                      index: idx,
-                      // traveller: traveller,
-                      myVisaStepController: myVisaStepController,
-                    );
-                  },
-                ).toList(),
-              ),
+      body: !myVisaStepController.isDocoNecessary.value
+          ? Center(
+              child: Text("No need to add visa"),
+            )
+          : Column(
+              children: [
+                StepsScreenTitle(
+                  title: "Visa",
+                  description: "Enter visa data (DOCO) for all the passengers.",
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Obx(
+                  () => Expanded(
+                    child: GridView.count(
+                      crossAxisCount: 4,
+                      // crossAxisSpacing: 60,
+                      childAspectRatio: 315 / 193,
+                      children: myVisaStepController.travellers.asMap().entries.map(
+                        (entry) {
+                          int idx = entry.key;
+                          // Traveller traveller = entry.value;
+                          return InfoCard(
+                            index: idx,
+                            // traveller: traveller,
+                            myVisaStepController: myVisaStepController,
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -63,6 +67,7 @@ class InfoCard extends StatelessWidget {
     required this.index,
   }) : super(key: key);
   final int index;
+
   // final Traveller traveller;
   final VisaStepController myVisaStepController;
 

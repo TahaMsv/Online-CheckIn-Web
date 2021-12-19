@@ -24,37 +24,41 @@ class PassportStepView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          StepsScreenTitle(
-            title: "Passport",
-            description: "Enter passport data (DOCS) for all the passengers.",
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Obx(
-            () => Expanded(
-              child: GridView.count(
-                crossAxisCount: 4,
-                // crossAxisSpacing: 60,
-                childAspectRatio: 315 / 193,
-                children: myPassportStepController.travellers.asMap().entries.map(
-                  (entry) {
-                    int idx = entry.key;
-                    Traveller traveller = entry.value;
-                    return InfoCard(
-                      index: idx,
-                      // traveller: traveller,
-                      myPassportStepController: myPassportStepController,
-                    );
-                  },
-                ).toList(),
-              ),
+      body: !myPassportStepController.checkDocs.value
+          ? Center(
+              child: Text("No need to add passport"),
+            )
+          : Column(
+              children: [
+                StepsScreenTitle(
+                  title: "Passport",
+                  description: "Enter passport data (DOCS) for all the passengers.",
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Obx(
+                  () => Expanded(
+                    child: GridView.count(
+                      crossAxisCount: 4,
+                      // crossAxisSpacing: 60,
+                      childAspectRatio: 315 / 193,
+                      children: myPassportStepController.travellers.asMap().entries.map(
+                        (entry) {
+                          int idx = entry.key;
+                          Traveller traveller = entry.value;
+                          return InfoCard(
+                            index: idx,
+                            // traveller: traveller,
+                            myPassportStepController: myPassportStepController,
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }
