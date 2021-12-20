@@ -55,12 +55,12 @@ class RequestModelGetDocumentTypes{
 }
 
 
-class RequestModelGetSelectCountries{
+class RequestModelSelectCountries{
   final String execution;
   final dynamic token;
   final Map<String,dynamic> request;
 
-  RequestModelGetSelectCountries({
+  RequestModelSelectCountries({
     required this.execution,
     required this.token,
     required this.request,
@@ -73,12 +73,12 @@ class RequestModelGetSelectCountries{
   };
 }
 
-class RequestModelGetSelectCheckDocoNecessity{
+class RequestModelSelectCheckDocoNecessity{
   final String execution;
   final dynamic token;
   final Map<String,dynamic> request;
 
-  RequestModelGetSelectCheckDocoNecessity({
+  RequestModelSelectCheckDocoNecessity({
     required this.execution,
     required this.token,
     required this.request,
@@ -90,5 +90,81 @@ class RequestModelGetSelectCheckDocoNecessity{
     "Request": request,
   };
 }
+
+
+class RequestModelSaveDocsDocoDoca{
+  final String execution;
+  final dynamic token;
+  final Map<String,dynamic> request;
+
+  RequestModelSaveDocsDocoDoca({
+    required this.execution,
+    required this.token,
+    required this.request,
+  });
+
+  Map<String, dynamic> toJson() => {
+    "Execution": execution,
+    "Token": token,
+    "Request": request,
+  };
+}
+
+class RequestModelReserveSeat{
+  final String execution;
+  final dynamic token;
+  final Map<String,dynamic> request;
+
+  RequestModelReserveSeat({
+    required this.execution,
+    required this.token,
+    required this.request,
+  });
+
+  Map<String, dynamic> toJson() => {
+    "Execution": execution,
+    "Token": token,
+    "Request": request,
+  };
+}
+
+
+class RequestModelSelectBoardingPass{
+  final String execution;
+  final dynamic token;
+  final Map<String,dynamic> request;
+
+  RequestModelSelectBoardingPass({
+    required this.execution,
+    required this.token,
+    required this.request,
+  });
+
+  Map<String, dynamic> toJson() => {
+    "Execution": execution,
+    "Token": token,
+    "Request": request,
+  };
+}
+
+
+class RequestModelSelectSeatExtras{
+  final String execution;
+  final dynamic token;
+  final Map<String,dynamic> request;
+
+  RequestModelSelectSeatExtras({
+    required this.execution,
+    required this.token,
+    required this.request,
+  });
+
+  Map<String, dynamic> toJson() => {
+    "Execution": execution,
+    "Token": token,
+    "Request": request,
+  };
+}
+
 
 

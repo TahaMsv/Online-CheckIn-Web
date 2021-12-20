@@ -13,14 +13,9 @@ import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
 
 class PassportStepController extends MainController {
-  PassportStepController._();
+  MainModel model;
 
-  static final PassportStepController _instance = PassportStepController._();
-
-  factory PassportStepController(MainModel model) {
-    _instance.model = model;
-    return _instance;
-  }
+  PassportStepController(this.model);
 
   RxList<Traveller> travellers = <Traveller>[].obs;
   List<TextEditingController> documentNoCs = [];
@@ -47,8 +42,15 @@ class PassportStepController extends MainController {
     }
   }
 
+  void close() async {
+    final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
+    for (var i = 0; i < travellers.length; ++i) {
+      stepsScreenController.travellers[i] = travellers[i];
+    }
+  }
+
   Future<void> getSelectCountries() async {
-    Response response = await DioClient.getSelectCountries(
+    Response response = await DioClient.selectCountries(
       execution: "[OnlineCheckin].[SelectCountries]",
       token: model.token,
       request: {},
@@ -430,6 +432,7 @@ class PassportStepController extends MainController {
   @override
   void onClose() {
     print("PassportStepController Close");
+
     super.onClose();
   }
 

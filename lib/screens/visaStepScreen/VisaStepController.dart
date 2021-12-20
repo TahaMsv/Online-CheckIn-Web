@@ -13,14 +13,9 @@ import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
 
 class VisaStepController extends MainController {
-  VisaStepController._();
+  MainModel model;
 
-  static final VisaStepController _instance = VisaStepController._();
-
-  factory VisaStepController(MainModel model) {
-    _instance.model = model;
-    return _instance;
-  }
+  VisaStepController(this.model);
 
   RxList<Traveller> travellers = <Traveller>[].obs;
   List<TextEditingController> documentNoCs = [];
@@ -29,15 +24,16 @@ class VisaStepController extends MainController {
   RxBool isDocoNecessary = false.obs;
 
   void init() async {
+    print("here32");
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-    final PassportStepController passportStepController = Get.put(PassportStepController(model));
-    String docsType = passportStepController.travellers[0].passportInfo.passportType!;
-    String docsCountry = passportStepController.travellers[0].passportInfo.countryOfIssue!;
-    String docsNationality = passportStepController.travellers[0].passportInfo.nationality!;
-    String fromCityCode = stepsScreenController.welcome!.body.flight[0].fromCity;
-    String toCityCode = stepsScreenController.welcome!.body.flight[0].toCity;
+    String docsType = stepsScreenController.travellers[0].passportInfo.passportType??"";
+    String docsCountry = stepsScreenController.travellers[0].passportInfo.countryOfIssue??"";
+    String docsNationality = stepsScreenController.travellers[0].passportInfo.nationality??"";
+    String fromCityCode = stepsScreenController.welcome!.body.flight[0].fromCity??"";
+    String toCityCode = stepsScreenController.welcome!.body.flight[0].toCity??"";
+    print("DocsType" + docsType + "\nDocsCountry" + docsCountry + "\nDocsNationality" + docsNationality + "\nFromCityCode" + fromCityCode + "\nToCityCode" + toCityCode);
     Response response = await DioClient.getDocumentTypes(
-      execution: "[OnlineCheckin].[SelectDocumentTypes]",
+      execution: "[OnlineCheckin].[CheckDocoNecessity]",
       token: model.token,
       request: {
         "DocsType": docsType,
@@ -47,10 +43,16 @@ class VisaStepController extends MainController {
         "ToCityCode": toCityCode,
       },
     );
+    print("here50");
+
 
     if (response.statusCode == 200) {
+      print("here55");
       if (response.data["ResultCode"] == 1) {
+        print("here56");
+        print(response.data["Body"]["IsNecessary"] );
         if (response.data["Body"]["IsNecessary"] == 1) {
+          print("here57");
           isDocoNecessary.value = true;
         }
       }
