@@ -7,21 +7,22 @@ import 'dart:convert';
 
 class Traveller {
   late String token;
-  late Passenger passengerInfo;
   late String ticketNumber;
   late String seatId;
   late PassportInfo _passportInfo;
+  late Welcome welcome;
 
   late VisaInfo _visaInfo;
 
   Traveller({
     required this.token,
-    required this.passengerInfo,
     required this.ticketNumber,
     required this.seatId,
+    required this.welcome,
   });
 
   String getNickName() {
+    Passenger passengerInfo=welcome.body.passengers[0];
     String travellerFullName = passengerInfo.name;
     int idx = travellerFullName.indexOf(" ");
     String nickname = "";
@@ -35,6 +36,7 @@ class Traveller {
   }
 
   String getFullNameWithGender() {
+    Passenger passengerInfo=welcome.body.passengers[0];
     String result = "";
     result = (passengerInfo.title == "MR" ? "Mr. " : "Ms. ");
     result += (passengerInfo.name);
@@ -676,6 +678,44 @@ class EnumValues<T> {
     return reverseMap;
   }
 }
+
+
+class Extra {
+  Extra({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.imageUrl,
+    required this.price,
+    required this.image,
+  });
+
+  int id;
+  String title;
+  String description;
+  String imageUrl;
+  double price;
+  String image;
+
+  factory Extra.fromJson(Map<String, dynamic> json) => Extra(
+    id: json["Id"],
+    title: json["Title"],
+    description: json["Description"],
+    imageUrl: json["ImageUrl"],
+    price: json["Price"].toDouble(),
+    image: json["Image"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "Id": id,
+    "Title": title,
+    "Description": description,
+    "ImageUrl": imageUrl,
+    "Price": price,
+    "Image": image,
+  };
+}
+
 
 // enum CellStatusType { NONE }
 //

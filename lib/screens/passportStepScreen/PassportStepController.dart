@@ -43,6 +43,10 @@ class PassportStepController extends MainController {
   }
 
   void close() async {
+    await saveDocs();
+  }
+
+  Future<void> saveDocs() async {
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
     for (var i = 0; i < travellers.length; ++i) {
       stepsScreenController.travellers[i] = travellers[i];
@@ -432,7 +436,7 @@ class PassportStepController extends MainController {
   @override
   void onClose() {
     print("PassportStepController Close");
-
+    close();
     super.onClose();
   }
 

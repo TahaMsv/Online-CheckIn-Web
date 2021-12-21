@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
@@ -25,6 +27,7 @@ class VisaStepController extends MainController {
 
   void init() async {
     print("here32");
+    model.setLoading(true);
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
     String docsType = stepsScreenController.travellers[0].passportInfo.passportType??"";
     String docsCountry = stepsScreenController.travellers[0].passportInfo.countryOfIssue??"";
@@ -48,12 +51,14 @@ class VisaStepController extends MainController {
 
     if (response.statusCode == 200) {
       print("here55");
+      print(jsonEncode(response.data));
       if (response.data["ResultCode"] == 1) {
         print("here56");
         print(response.data["Body"]["IsNecessary"] );
         if (response.data["Body"]["IsNecessary"] == 1) {
           print("here57");
           isDocoNecessary.value = true;
+
         }
       }
     } else {}
@@ -67,6 +72,20 @@ class VisaStepController extends MainController {
         destinationCs.add(new TextEditingController());
       }
     }
+    model.setLoading(false);
+  }
+
+  void close() async{
+    await saveDocoDoca();
+   await saveDocsDocoDoca();
+  }
+
+  Future<void> saveDocoDoca() async {
+
+  }
+
+  Future<void> saveDocsDocoDoca() async {
+
   }
 
   void travellersList() {
@@ -289,6 +308,7 @@ class VisaStepController extends MainController {
   @override
   void onClose() {
     print("VisaStepController Close");
+    close();
     super.onClose();
   }
 
@@ -297,6 +317,8 @@ class VisaStepController extends MainController {
     print("VisaStepController Ready");
     super.onReady();
   }
+
+
 }
 
 class DocumentNoWidget extends StatelessWidget {

@@ -7,6 +7,7 @@ import '../../widgets/StepsScreenTitle.dart';
 import '../../screens/visaStepScreen/VisaStepController.dart';
 import '../../global/MainModel.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class VisaStepView extends StatelessWidget {
   final VisaStepController myVisaStepController;
@@ -17,43 +18,49 @@ class VisaStepView extends StatelessWidget {
   Widget build(BuildContext context) {
     // double width = Get.width;
     // double height = Get.height;
-
+    MainModel model = context.watch<MainModel>();
     return Scaffold(
       backgroundColor: Colors.white,
-      body: !myVisaStepController.isDocoNecessary.value
+      body: model.loading
           ? Center(
-              child: Text("No need to add visa"),
+              child: CircularProgressIndicator(),
             )
-          : Column(
-              children: [
-                StepsScreenTitle(
-                  title: "Visa",
-                  description: "Enter visa data (DOCO) for all the passengers.",
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Obx(
-                  () => Expanded(
-                    child: GridView.count(
-                      crossAxisCount: 4,
-                      // crossAxisSpacing: 60,
-                      childAspectRatio: 315 / 193,
-                      children: myVisaStepController.travellers.asMap().entries.map(
-                        (entry) {
-                          int idx = entry.key;
-                          // Traveller traveller = entry.value;
-                          return InfoCard(
-                            index: idx,
-                            // traveller: traveller,
-                            myVisaStepController: myVisaStepController,
-                          );
-                        },
-                      ).toList(),
+          : Obx(
+              () => !myVisaStepController.isDocoNecessary.value
+                  ? Center(
+                      child: Text("No need to add visa"),
+                    )
+                  : Column(
+                      children: [
+                        StepsScreenTitle(
+                          title: "Visa",
+                          description: "Enter visa data (DOCO) for all the passengers.",
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Obx(
+                          () => Expanded(
+                            child: GridView.count(
+                              crossAxisCount: 4,
+                              // crossAxisSpacing: 60,
+                              childAspectRatio: 315 / 193,
+                              children: myVisaStepController.travellers.asMap().entries.map(
+                                (entry) {
+                                  int idx = entry.key;
+                                  // Traveller traveller = entry.value;
+                                  return InfoCard(
+                                    index: idx,
+                                    // traveller: traveller,
+                                    myVisaStepController: myVisaStepController,
+                                  );
+                                },
+                              ).toList(),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-              ],
             ),
     );
   }
@@ -128,7 +135,7 @@ class InfoCard extends StatelessWidget {
                 ),
               ),
               Text(
-                "${myVisaStepController.travellers[index].passengerInfo.id}",
+                "${myVisaStepController.travellers[index].welcome.body.passengers[0].id}",
                 style: TextStyle(
                   color: textColor,
                   fontSize: 15,

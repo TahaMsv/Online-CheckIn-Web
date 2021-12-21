@@ -132,7 +132,7 @@ class InfoCard extends StatelessWidget {
                 ),
               ),
               Text(
-                "${myPassportStepController.travellers[index].passengerInfo.id}",
+                "${myPassportStepController.travellers[index].welcome.body.passengers[0].id}",
                 style: TextStyle(
                   color: textColor,
                   fontSize: 15,

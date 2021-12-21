@@ -4,8 +4,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import '../../screens/seatsStepScreen/NewStepScreenView.dart';
-import '../../widgets/UserTextInput.dart';
-// import '../../screens/seatsStepScreen/SeatsStepView.dart';
+
 import '../../screens/paymentStepScreen/PaymentStepView.dart';
 import '../../screens/receiptStepScreen/ReceipStepView.dart';
 import '../../screens/upgradesStepScreen/UpgradesStepView.dart';

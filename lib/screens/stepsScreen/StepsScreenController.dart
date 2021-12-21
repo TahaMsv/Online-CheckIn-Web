@@ -109,11 +109,11 @@ class StepsScreenController extends MainController {
     await getInformation(token);
     Passenger passenger = welcome!.body.passengers.first;
     for (int i = 0; i < travellers.length; i++) {
-      if (travellers[i].passengerInfo.lastName == lastName && travellers[i].ticketNumber == ticketNumber) {
+      if (travellers[i].welcome.body.passengers[0].lastName == lastName && travellers[i].ticketNumber == ticketNumber) {
         return;
       }
     }
-    Traveller traveller = new Traveller(token: token, passengerInfo: passenger, ticketNumber: ticketNumber, seatId: "--");
+    Traveller traveller = new Traveller(token: token,  ticketNumber: ticketNumber, seatId: "--" ,welcome: _welcome!);
     traveller.setPassportInfo(new PassportInfo());
     traveller.setVisaInfo(new VisaInfo());
     travellers.add(traveller);

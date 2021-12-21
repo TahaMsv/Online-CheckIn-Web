@@ -1,3 +1,8 @@
+import 'package:dio/dio.dart';
+import 'package:onlinecheckin/global/Classes.dart';
+import 'package:onlinecheckin/screens/stepsScreen/StepsScreenController.dart';
+import 'package:onlinecheckin/utility/DataProvider.dart';
+
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
 import 'package:get/get.dart' hide Response;
@@ -12,6 +17,9 @@ class UpgradesStepController extends MainController {
     _instance.model = model;
     return _instance;
   }
+
+  List<Extra> extras = [];
+  List<RxInt> numberOfSelected=[];
 
   RxList<Map<String, dynamic>> winesList = [
     {
@@ -53,20 +61,21 @@ class UpgradesStepController extends MainController {
   // RxList<int> entertainmentsNumberList = <int>[].obs;
   // List<double> entertainmentsCost = [];
 
-  // void init() {
-  //   winesNumberList.add(0);
-  //   winesNumberList.add(0);
-  //   winesNumberList.add(0);
-  //
-  //   winesCost.add(14);
-  //   winesCost.add(14);
-  //   winesCost.add(14);
-  //
-  //
-  //   entertainmentsNumberList.add(0);
-  //
-  //   entertainmentsCost.add(14);
-  // }
+  void init() async {
+    final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
+    Response response = await DioClient.selectCountries(
+      execution: "[OnlineCheckin].[SelectSeatExtras]",
+      token: stepsScreenController.travellers[0].token,
+      request: {},
+    );
+
+    if (response.statusCode == 200) {
+      if (response.data["ResultCode"] == 1) {
+        extras = List<Extra>.from(response.data["Body"]["Extras"].map((x) => Extra.fromJson(x)));
+        numberOfSelected = List.filled(extras.length, 0.obs);
+      }
+    } else {}
+  }
 
   void addWine(int index) {
     winesList[index]["numberOfSelected"]++;
@@ -85,20 +94,21 @@ class UpgradesStepController extends MainController {
   void addEntertainment(int index) {
     entertainmentsList[index]["numberOfSelected"]++;
     entertainmentsList.refresh();
-    print(index.toString() + " " +  entertainmentsList[index]["numberOfSelected"]);
+    print(index.toString() + " " + entertainmentsList[index]["numberOfSelected"]);
   }
 
   void removeEntertainment(int index) {
     if (entertainmentsList[index]["numberOfSelected"] > 0) {
       entertainmentsList[index]["numberOfSelected"]--;
       entertainmentsList.refresh();
-      print(index.toString() + " " +  entertainmentsList[index]["numberOfSelected"]);
+      print(index.toString() + " " + entertainmentsList[index]["numberOfSelected"]);
     }
   }
 
   @override
   void onInit() {
     print("UpgradesStepController Init");
+    init();
     super.onInit();
   }
 
