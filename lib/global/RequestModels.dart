@@ -147,6 +147,38 @@ class RequestModelSelectBoardingPass{
   };
 }
 
+class RequestModelBoardingPassPDF{
+  final dynamic token;
+  final Map<String,dynamic> request;
+
+  RequestModelBoardingPassPDF({
+    required this.token,
+    required this.request,
+  });
+
+  Map<String, dynamic> toJson() => {
+    "Token": token,
+    "Request": request,
+  };
+}
+
+class RequestModelBoardingPassSendEmail{
+  final String execution;
+  final dynamic token;
+  final Map<String,dynamic> request;
+
+  RequestModelBoardingPassSendEmail({
+    required this.execution,
+    required this.token,
+    required this.request,
+  });
+
+  Map<String, dynamic> toJson() => {
+    "Execution": execution,
+    "Token": token,
+    "Request": request,
+  };
+}
 
 class RequestModelSelectSeatExtras{
   final String execution;

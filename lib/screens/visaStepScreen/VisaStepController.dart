@@ -13,6 +13,7 @@ import '../../widgets/StepsScreenTitle.dart';
 import '../../widgets/UserTextInput.dart';
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
+import 'package:intl/intl.dart';
 
 class VisaStepController extends MainController {
   MainModel model;
@@ -26,16 +27,15 @@ class VisaStepController extends MainController {
   RxBool isDocoNecessary = false.obs;
 
   void init() async {
-    print("here32");
     model.setLoading(true);
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-    String docsType = stepsScreenController.travellers[0].passportInfo.passportType??"";
-    String docsCountry = stepsScreenController.travellers[0].passportInfo.countryOfIssue??"";
-    String docsNationality = stepsScreenController.travellers[0].passportInfo.nationality??"";
-    String fromCityCode = stepsScreenController.welcome!.body.flight[0].fromCity??"";
-    String toCityCode = stepsScreenController.welcome!.body.flight[0].toCity??"";
-    print("DocsType" + docsType + "\nDocsCountry" + docsCountry + "\nDocsNationality" + docsNationality + "\nFromCityCode" + fromCityCode + "\nToCityCode" + toCityCode);
-    Response response = await DioClient.getDocumentTypes(
+    String docsType = stepsScreenController.travellers[0].passportInfo.passportType ?? "";
+    String docsCountry = stepsScreenController.travellers[0].passportInfo.countryOfIssue ?? "";
+    String docsNationality = stepsScreenController.travellers[0].passportInfo.nationality ?? "";
+    String fromCityCode = stepsScreenController.welcome!.body.flight[0].fromCity ?? "";
+    String toCityCode = stepsScreenController.welcome!.body.flight[0].toCity ?? "";
+    // print("DocsType" + docsType + "\nDocsCountry" + docsCountry + "\nDocsNationality" + docsNationality + "\nFromCityCode" + fromCityCode + "\nToCityCode" + toCityCode);
+    Response response = await DioClient.checkDocoNecessity(
       execution: "[OnlineCheckin].[CheckDocoNecessity]",
       token: model.token,
       request: {
@@ -46,19 +46,13 @@ class VisaStepController extends MainController {
         "ToCityCode": toCityCode,
       },
     );
-    print("here50");
-
 
     if (response.statusCode == 200) {
-      print("here55");
       print(jsonEncode(response.data));
       if (response.data["ResultCode"] == 1) {
-        print("here56");
-        print(response.data["Body"]["IsNecessary"] );
+        print(response.data["Body"]["IsNecessary"]);
         if (response.data["Body"]["IsNecessary"] == 1) {
-          print("here57");
           isDocoNecessary.value = true;
-
         }
       }
     } else {}
@@ -75,17 +69,61 @@ class VisaStepController extends MainController {
     model.setLoading(false);
   }
 
-  void close() async{
-    await saveDocoDoca();
-   await saveDocsDocoDoca();
-  }
+  Future<void> saveDocsDocoDoca(int index) async {
+    final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
 
-  Future<void> saveDocoDoca() async {
+    ///Docs Information
+    Traveller traveller = stepsScreenController.travellers[index];
+    String docsType = stepsScreenController.travellers[0].passportInfo.passportType ?? "";
+    String docsCountry = stepsScreenController.travellers[0].passportInfo.countryOfIssue ?? "";
+    String docsNationality = stepsScreenController.travellers[0].passportInfo.nationality ?? "";
+    String docsDocumentNumber = stepsScreenController.travellers[0].passportInfo.documentNo ?? "";
+    final df = new DateFormat('yyyy-MM-dd');
+    String docsBirthDate = stepsScreenController.travellers[0].passportInfo.dateOfBirth == null ? df.format(stepsScreenController.travellers[0].passportInfo.dateOfBirth!) : "";
+    String docsExpiryDate = stepsScreenController.travellers[0].passportInfo.entryDate == null ? df.format(stepsScreenController.travellers[0].passportInfo.entryDate!) : "";
 
-  }
+    ///Doco Information
+    String docoDestination = stepsScreenController.travellers[0].visaInfo.destination ?? "";
+    String docoDocumentNumber = stepsScreenController.travellers[0].visaInfo.documentNo ?? "";
+    String docoType = stepsScreenController.travellers[0].visaInfo.type ?? "";
+    String docoPlaceOfIssue = stepsScreenController.travellers[0].visaInfo.placeOfIssue ?? "";
+    String docoPlaceOfBirth = stepsScreenController.travellers[0].passportInfo.nationality ?? "";
+    String docoIssueDate = stepsScreenController.travellers[0].visaInfo.issueDate == null ? df.format(stepsScreenController.travellers[0].visaInfo.issueDate!) : "";
 
-  Future<void> saveDocsDocoDoca() async {
+    String fromCityCode = stepsScreenController.welcome!.body.flight[0].fromCity ?? "";
+    String toCityCode = stepsScreenController.welcome!.body.flight[0].toCity ?? "";
+    // print("DocsType" + docsType + "\nDocsCountry" + docsCountry + "\nDocsNationality" + docsNationality + "\nFromCityCode" + fromCityCode + "\nToCityCode" + toCityCode);
+    Response response = await DioClient.saveDocsDocoDoca(
+      execution: "[OnlineCheckin].[SaveDocsDocoDoca]",
+      token: traveller.token,
+      request: {
+        "PassengerId": traveller.welcome.body.passengers[0].id,
+        "DocaAddress": "",
+        "DocaCity": "",
+        "DocaCountry": "",
+        "DocaType": "",
+        "DocaZipCode": "",
+        "DocsCountry": docsCountry,
+        "DocsNationality": docsNationality,
+        "DocsBirthDate": docsBirthDate,
+        "DocsExpiryDate": docsExpiryDate, // todo  is Valid?
+        "DocsDocumentNumber": docsDocumentNumber,
+        "DocsType": docsType,
+        "DocsSecondName": traveller.welcome.body.passengers[0].lastName, // todo  is Valid?
+        "DocoDestination": docoDestination,
+        "DocoDocumentNumber": docoDocumentNumber,
+        "DocoType": docoType,
+        "DocoPlaceOfIssue": docoPlaceOfIssue,
+        "DocoPlaceOfBirth": docoPlaceOfBirth, //todo  is Valid? (Docs nationality)
+        "DocoIssueDate": docoIssueDate,
+        "DocsTitle": traveller.welcome.body.passengers[0].title
+      },
+    );
 
+    if (response.statusCode == 200) {
+      if (response.data["ResultCode"] == 1) {
+      }
+    } else {}
   }
 
   void travellersList() {
@@ -308,7 +346,7 @@ class VisaStepController extends MainController {
   @override
   void onClose() {
     print("VisaStepController Close");
-    close();
+
     super.onClose();
   }
 
@@ -317,8 +355,6 @@ class VisaStepController extends MainController {
     print("VisaStepController Ready");
     super.onReady();
   }
-
-
 }
 
 class DocumentNoWidget extends StatelessWidget {

@@ -87,6 +87,25 @@ class DataProvider {
     return NetworkRequest(api: api, data: selectBoardingPassRM.toJson(), retry: retry).post();
   }
 
+  static Future<NetworkResponse> boardingPassPDF({required dynamic token, required Map<String, Object> request, required Function retry}) async {
+    String api = Apis.boardingPassPDF;
+    RequestModelBoardingPassPDF boardingPassPDFRM = RequestModelBoardingPassPDF(
+      token: token,
+      request: request,
+    );
+    return NetworkRequest(api: api, data: boardingPassPDFRM.toJson(), retry: retry).post();
+  }
+
+  static Future<NetworkResponse> boardingPassSendEmail({required String execution, required dynamic token, required Map<String, Object> request, required Function retry}) async {
+    String api = Apis.boardingPassSendEmail;
+    RequestModelBoardingPassSendEmail boardingPassSendEmailRM = RequestModelBoardingPassSendEmail(
+      execution: execution,
+      token: token,
+      request: request,
+    );
+    return NetworkRequest(api: api, data: boardingPassSendEmailRM.toJson(), retry: retry).post();
+  }
+
   static Future<NetworkResponse> selectSeatExtras({required String execution, required dynamic token, required Map<String, Object> request, required Function retry}) async {
     String api = Apis.selectSeatExtras;
     RequestModelSelectSeatExtras selectSeatExtrasRM = RequestModelSelectSeatExtras(
@@ -262,6 +281,50 @@ class DioClient {
           "Token": token,
           "Request": request,
         },
+      },
+    );
+    return response;
+  }
+
+  static Future<Response> boardingPassPDF({
+    required String execution,
+    required dynamic token,
+    required Map<String, Object> request,
+  }) async {
+    Response response;
+    // String api = Apis.baseUrl + Apis.selectBoardingPass;
+    String api = Apis.boardingPassPDF;
+    _dio.options.headers['Content-Type'] = 'application/json';
+    response = await _dio.post(
+      api,
+      data: {
+        "Body": {
+          "Token": token,
+          "Request": request,
+        },
+      },
+    );
+    return response;
+  }
+
+  static Future<Response> boardingPassSendEmail({
+    required String execution,
+    required dynamic token,
+    required Map<String, Object> request,
+  }) async {
+    Response response;
+    // String api = Apis.baseUrl + Apis.selectBoardingPass;
+    String api = Apis.selectBoardingPass;
+    _dio.options.headers['Content-Type'] = 'application/json';
+    response = await _dio.post(
+      api,
+      data: {
+        "Body": {
+          "Execution": execution,
+          "Token": token,
+          "Request": request,
+        },
+        "Name": "OnlineCheckinBoardingPass-AB"
       },
     );
     return response;
