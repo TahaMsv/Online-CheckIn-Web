@@ -35,13 +35,13 @@ class PaymentStepController extends MainController {
   void finalReserve() async {
     final myStepScreenController = Get.put(StepsScreenController(model));
     List<Traveller> travellers = myStepScreenController.travellers;
-    // String token = travellers[0].token;
+    String token = travellers[0].token;
     for (var i = 0; i < travellers.length; ++i) {
       String letter = travellers[i].seatId.substring(0, 1);
       int line = int.parse(travellers[i].seatId.substring(1));
-      Response response = await DioClient.selectCountries( //todo how can a group reserve?
+      Response response = await DioClient.selectCountries(
         execution: "[OnlineCheckin].[ReserveSeat]",
-        token: travellers[i].token,
+        token: token,
         request: {
           "SeatsData": [
             {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:onlinecheckin/screens/paymentStepScreen/PaymentStepController.dart';
 import 'package:onlinecheckin/screens/safetyStepScreen/SafetyStepController.dart';
 import 'package:onlinecheckin/screens/seatsStepScreen/SeatsStepController.dart';
 import '../../global/Classes.dart';
@@ -70,6 +71,8 @@ class StepsScreenController extends MainController {
       }
       _isNextButtonDisable[step].value = false;
     } else if (step == 7) {
+      PaymentStepController paymentStepController = Get.put(PaymentStepController(model));
+      // paymentStepController.finalReserve();
     } else if (step == 8) {}
   }
 
@@ -113,7 +116,7 @@ class StepsScreenController extends MainController {
         return;
       }
     }
-    Traveller traveller = new Traveller(token: token,  ticketNumber: ticketNumber, seatId: "--" ,welcome: _welcome!);
+    Traveller traveller = new Traveller(token: token, ticketNumber: ticketNumber, seatId: "--", welcome: _welcome!);
     traveller.setPassportInfo(new PassportInfo());
     traveller.setVisaInfo(new VisaInfo());
     travellers.add(traveller);

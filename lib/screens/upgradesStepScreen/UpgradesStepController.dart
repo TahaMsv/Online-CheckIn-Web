@@ -27,7 +27,8 @@ class UpgradesStepController extends MainController {
       "description": "Sparkling wine is a wine with significant levels of carbon dioxide in it. Making it fizzy",
       "imagePath": "assets/images/sparkling-wine.png",
       "color": Color(0xffffc365),
-      "numberOfSelected": 2,
+      "numberOfSelected": 0,
+      "price":0.0
     },
     {
       "name": "Prosecco",
@@ -35,6 +36,7 @@ class UpgradesStepController extends MainController {
       "imagePath": "assets/images/prosecco-wine.png",
       "color": Color(0xff5f6bff),
       "numberOfSelected": 0,
+      "price":0.0
     },
     {
       "name": "Champagne",
@@ -42,6 +44,15 @@ class UpgradesStepController extends MainController {
       "imagePath": "assets/images/champagne.png",
       "color": Color(0xfffa4b4b),
       "numberOfSelected": 0,
+      "price":0.0
+    },
+    {
+      "name": "Champagne",
+      "description": "Champagne is a French sparkling wine",
+      "imagePath": "assets/images/champagne.png",
+      "color": Color(0xffffc365),
+      "numberOfSelected": 0,
+      "price":0.0
     },
   ].obs;
 
@@ -52,6 +63,7 @@ class UpgradesStepController extends MainController {
       "imagePath": "assets/images/printer.png",
       "color": Color(0xff424242),
       "numberOfSelected": 0,
+      "price":0.0
     },
   ].obs;
 
@@ -73,6 +85,18 @@ class UpgradesStepController extends MainController {
       if (response.data["ResultCode"] == 1) {
         extras = List<Extra>.from(response.data["Body"]["Extras"].map((x) => Extra.fromJson(x)));
         numberOfSelected = List.filled(extras.length, 0.obs);
+        for (var i = 0; i < extras.length ; ++i) {
+          if (i == extras.length - 1) {
+            entertainmentsList[i]["name"] = extras[i].title;
+            entertainmentsList[i]["description"] = extras[i].description;
+            entertainmentsList[i]["price"] = extras[i].price;
+          } else {
+            winesList[i]["name"] = extras[i].title;
+            winesList[i]["description"] = extras[i].description;
+            winesList[i]["price"] = extras[i].price;
+          }
+        }
+
       }
     } else {}
   }
