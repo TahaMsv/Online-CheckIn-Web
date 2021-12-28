@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:onlinecheckin/global/Classes.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
+import 'package:onlinecheckin/utility/DataProvider.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
@@ -18,19 +20,24 @@ class SeatsStepController extends MainController {
     return _instance;
   }
 
+  final double eachLineWidth = 45;
+  List<Cabin> cabins = [];
+
+  final RxMap<String, String> seatsStatus = <String, String>{}.obs;
+
   ///////////// new /////////////////
 
   void init() {
     // String seatMap = SeatMaps.seatMap320;
     // Map<String, dynamic> sm = jsonDecode(seatMap);
     // print(sm);
-    final myStepScreenController = Get.put(StepsScreenController(model));
+    final myStepScreenController = StepsScreenController(model);
     cabins = myStepScreenController.welcome!.body.seatmap.cabins;
     List<Seat> seats = myStepScreenController.welcome!.body.seats;
     // print(seats.length);
     for (int i = 0; i < seats.length; i++) {
       Seat seat = seats[i];
-      String key = seat.letter! + seat.line!;
+      String key = seat.letter + seat.line;
       // if (seatsStatus.containsKey(key)) {
       //   print(key + " existed");
       // }
@@ -39,8 +46,31 @@ class SeatsStepController extends MainController {
     }
   }
 
-  final double eachLineWidth = 45;
-  List<Cabin> cabins = [];
+  void clickOnSeatAndReserve() async {
+    final myStepScreenController = Get.put(StepsScreenController(model));
+    List<Traveller> travellers = myStepScreenController.travellers;
+    List<Map<String, dynamic>> seatsData = [];
+    for (var i = 0; i < travellers.length; ++i) {
+      Traveller traveller = travellers[i];
+      String letter = traveller.seatId.substring(0, 1);
+      int line = int.parse(traveller.seatId.substring(1));
+      seatsData.add({
+        "PassengerID": traveller.welcome.body.passengers[i].id,
+        "Letter": letter,
+        "Line": line,
+      });
+    }
+    Response response = await DioClient.clickOnSeat(
+      execution: "OnlineCheckin.ClickOnSeat",
+      token: travellers[0].token,
+      request: {"SeatsData": seatsData},
+    );
+
+    if (response.statusCode == 200) {
+      if (response.data["ResultCode"] == 1) {
+      }
+    } else {}
+  }
 
   double calculatePlaneBodyLength() {
     double length = 0;
@@ -71,8 +101,6 @@ class SeatsStepController extends MainController {
   }
 
   ///////////////////
-
-  final RxMap<String, String> seatsStatus = <String, String>{}.obs;
 
   // void init() async {
   //   final myStepScreenController = Get.put(StepsScreenController(model));

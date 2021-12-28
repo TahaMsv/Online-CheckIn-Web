@@ -67,6 +67,16 @@ class DataProvider {
     return NetworkRequest(api: api, data: saveDocsDocoDocaRM.toJson(), retry: retry).post();
   }
 
+  static Future<NetworkResponse> clickOnSeat({required String execution, required dynamic token, required Map<String, Object> request, required Function retry}) async {
+    String api = Apis.clickOnSeat;
+    RequestModelClickOnSeat clickOnSeatRM = RequestModelClickOnSeat(
+      execution: execution,
+      token: token,
+      request: request,
+    );
+    return NetworkRequest(api: api, data: clickOnSeatRM.toJson(), retry: retry).post();
+  }
+
   static Future<NetworkResponse> reserveSeat({required String execution, required dynamic token, required Map<String, Object> request, required Function retry}) async {
     String api = Apis.reserveSeat;
     RequestModelReserveSeat reserveSeatRM = RequestModelReserveSeat(
@@ -87,9 +97,10 @@ class DataProvider {
     return NetworkRequest(api: api, data: selectBoardingPassRM.toJson(), retry: retry).post();
   }
 
-  static Future<NetworkResponse> boardingPassPDF({required dynamic token, required Map<String, Object> request, required Function retry}) async {
+  static Future<NetworkResponse> boardingPassPDF({required dynamic token, required dynamic mrtName, required Map<String, Object> request, required Function retry}) async {
     String api = Apis.boardingPassPDF;
     RequestModelBoardingPassPDF boardingPassPDFRM = RequestModelBoardingPassPDF(
+      mrtName: mrtName,
       token: token,
       request: request,
     );
@@ -244,6 +255,28 @@ class DioClient {
     return response;
   }
 
+  static Future<Response> clickOnSeat({
+    required String execution,
+    required dynamic token,
+    required Map<String, Object> request,
+  }) async {
+    Response response;
+    String api = Apis.baseUrl + Apis.clickOnSeat;
+    _dio.options.headers['Content-Type'] = 'application/json';
+    response = await _dio.post(
+      api,
+      data: {
+        "Body": {
+          "Execution": execution,
+          "Token": token,
+          "Request": request,
+        },
+      },
+    );
+    return response;
+  }
+
+
   static Future<Response> reserveSeat({
     required String execution,
     required dynamic token,
@@ -287,7 +320,7 @@ class DioClient {
   }
 
   static Future<Response> boardingPassPDF({
-    required String execution,
+    required String mrtName,
     required dynamic token,
     required Map<String, Object> request,
   }) async {
@@ -299,6 +332,7 @@ class DioClient {
       api,
       data: {
         "Body": {
+          "MrtName": mrtName,
           "Token": token,
           "Request": request,
         },

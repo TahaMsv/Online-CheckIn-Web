@@ -20,6 +20,12 @@ class StepsScreenController extends MainController {
     return _instance;
   }
 
+  Welcome? _welcome;
+
+  Welcome? get welcome => _welcome;
+  RxInt _step = 0.obs;
+
+  int get step => _step.value;
   TextEditingController editSeatC = TextEditingController();
 
   RxInt _whichOneToEdit = (-1).obs;
@@ -58,10 +64,10 @@ class StepsScreenController extends MainController {
     } else if (step == 1) {
       SafetyStepScreenController safetyStepScreenController = Get.put(SafetyStepScreenController(model));
       _isNextButtonDisable[step].value = !safetyStepScreenController.checkValidation();
-    } else if (step == 2) {
-    } else if (step == 3) {
-    } else if (step == 4) {
-    } else if (step == 5) {
+      // } else if (step == 2) {
+      // } else if (step == 3) {
+      // } else if (step == 4) {
+      // } else if (step == 5) {
     } else if (step == 6) {
       for (int i = 0; i < travellers.length; i++) {
         if (travellers[i].seatId == "--") {
@@ -73,15 +79,9 @@ class StepsScreenController extends MainController {
     } else if (step == 7) {
       PaymentStepController paymentStepController = Get.put(PaymentStepController(model));
       // paymentStepController.finalReserve();
-    } else if (step == 8) {}
+    }
+    // else if (step == 8) {}
   }
-
-  Welcome? _welcome;
-
-  Welcome? get welcome => _welcome;
-  RxInt _step = 0.obs;
-
-  int get step => _step.value;
 
   void setStep(int newStep) {
     _step.value = newStep;
@@ -153,12 +153,10 @@ class StepsScreenController extends MainController {
       if (extractedData == null) {
         return null;
       }
-
       _welcome = welcomeFromJson(jsonEncode(extractedData));
-
       model.setLoading(false);
       print("ok");
-    } else {}
+    }
   }
 
   List buttonText = [

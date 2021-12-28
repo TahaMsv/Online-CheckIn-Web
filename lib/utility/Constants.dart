@@ -29,6 +29,7 @@ class Apis {
   static const getDocumentType = 'api/Execute';
   static const getSelectCountries = 'api/Execute';
   static const saveDocsDocoDoca = 'api/Execute';
+  static const clickOnSeat = 'api/Execute';
   static const reserveSeat = 'api/Execute';
   static const selectBoardingPass = 'api/Execute';
   static const boardingPassPDF = 'http://localhost:64328/api/MemoStrm';

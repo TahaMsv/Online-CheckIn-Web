@@ -1,26 +1,25 @@
 class RequestModelGetToken {
   final String execution;
   final dynamic token;
-  final Map<String,dynamic> request;
+  final Map<String, dynamic> request;
 
   RequestModelGetToken({
-    required  this.execution,
-    required  this.token,
+    required this.execution,
+    required this.token,
     required this.request,
   });
 
   Map<String, dynamic> toJson() => {
-    "Execution": execution,
-    "Token": token,
-    "Request": request,
-   };
+        "Execution": execution,
+        "Token": token,
+        "Request": request,
+      };
 }
 
-
-class RequestModelGetInformation{
+class RequestModelGetInformation {
   final String execution;
   final dynamic token;
-  final Map<String,dynamic> request;
+  final Map<String, dynamic> request;
 
   RequestModelGetInformation({
     required this.execution,
@@ -29,17 +28,16 @@ class RequestModelGetInformation{
   });
 
   Map<String, dynamic> toJson() => {
-    "Execution": execution,
-    "Token": token,
-    "Request": request,
-  };
+        "Execution": execution,
+        "Token": token,
+        "Request": request,
+      };
 }
 
-
-class RequestModelGetDocumentTypes{
+class RequestModelGetDocumentTypes {
   final String execution;
   final dynamic token;
-  final Map<String,dynamic> request;
+  final Map<String, dynamic> request;
 
   RequestModelGetDocumentTypes({
     required this.execution,
@@ -48,17 +46,16 @@ class RequestModelGetDocumentTypes{
   });
 
   Map<String, dynamic> toJson() => {
-    "Execution": execution,
-    "Token": token,
-    "Request": request,
-  };
+        "Execution": execution,
+        "Token": token,
+        "Request": request,
+      };
 }
 
-
-class RequestModelSelectCountries{
+class RequestModelSelectCountries {
   final String execution;
   final dynamic token;
-  final Map<String,dynamic> request;
+  final Map<String, dynamic> request;
 
   RequestModelSelectCountries({
     required this.execution,
@@ -67,16 +64,16 @@ class RequestModelSelectCountries{
   });
 
   Map<String, dynamic> toJson() => {
-    "Execution": execution,
-    "Token": token,
-    "Request": request,
-  };
+        "Execution": execution,
+        "Token": token,
+        "Request": request,
+      };
 }
 
-class RequestModelSelectCheckDocoNecessity{
+class RequestModelSelectCheckDocoNecessity {
   final String execution;
   final dynamic token;
-  final Map<String,dynamic> request;
+  final Map<String, dynamic> request;
 
   RequestModelSelectCheckDocoNecessity({
     required this.execution,
@@ -85,17 +82,16 @@ class RequestModelSelectCheckDocoNecessity{
   });
 
   Map<String, dynamic> toJson() => {
-    "Execution": execution,
-    "Token": token,
-    "Request": request,
-  };
+        "Execution": execution,
+        "Token": token,
+        "Request": request,
+      };
 }
 
-
-class RequestModelSaveDocsDocoDoca{
+class RequestModelSaveDocsDocoDoca {
   final String execution;
   final dynamic token;
-  final Map<String,dynamic> request;
+  final Map<String, dynamic> request;
 
   RequestModelSaveDocsDocoDoca({
     required this.execution,
@@ -104,16 +100,34 @@ class RequestModelSaveDocsDocoDoca{
   });
 
   Map<String, dynamic> toJson() => {
-    "Execution": execution,
-    "Token": token,
-    "Request": request,
-  };
+        "Execution": execution,
+        "Token": token,
+        "Request": request,
+      };
 }
 
-class RequestModelReserveSeat{
+class RequestModelClickOnSeat {
   final String execution;
   final dynamic token;
-  final Map<String,dynamic> request;
+  final Map<String, dynamic> request;
+
+  RequestModelClickOnSeat({
+    required this.execution,
+    required this.token,
+    required this.request,
+  });
+
+  Map<String, dynamic> toJson() => {
+        "Execution": execution,
+        "Token": token,
+        "Request": request,
+      };
+}
+
+class RequestModelReserveSeat {
+  final String execution;
+  final dynamic token;
+  final Map<String, dynamic> request;
 
   RequestModelReserveSeat({
     required this.execution,
@@ -128,11 +142,10 @@ class RequestModelReserveSeat{
   };
 }
 
-
-class RequestModelSelectBoardingPass{
+class RequestModelSelectBoardingPass {
   final String execution;
   final dynamic token;
-  final Map<String,dynamic> request;
+  final Map<String, dynamic> request;
 
   RequestModelSelectBoardingPass({
     required this.execution,
@@ -141,31 +154,34 @@ class RequestModelSelectBoardingPass{
   });
 
   Map<String, dynamic> toJson() => {
-    "Execution": execution,
-    "Token": token,
-    "Request": request,
-  };
+        "Execution": execution,
+        "Token": token,
+        "Request": request,
+      };
 }
 
-class RequestModelBoardingPassPDF{
+class RequestModelBoardingPassPDF {
   final dynamic token;
-  final Map<String,dynamic> request;
+  final Map<String, dynamic> request;
+  final String mrtName;
 
   RequestModelBoardingPassPDF({
+    required this.mrtName,
     required this.token,
     required this.request,
   });
 
   Map<String, dynamic> toJson() => {
-    "Token": token,
-    "Request": request,
-  };
+        "MrtName": mrtName,
+        "Token": token,
+        "Request": request,
+      };
 }
 
-class RequestModelBoardingPassSendEmail{
+class RequestModelBoardingPassSendEmail {
   final String execution;
   final dynamic token;
-  final Map<String,dynamic> request;
+  final Map<String, dynamic> request;
 
   RequestModelBoardingPassSendEmail({
     required this.execution,
@@ -174,16 +190,16 @@ class RequestModelBoardingPassSendEmail{
   });
 
   Map<String, dynamic> toJson() => {
-    "Execution": execution,
-    "Token": token,
-    "Request": request,
-  };
+        "Execution": execution,
+        "Token": token,
+        "Request": request,
+      };
 }
 
-class RequestModelSelectSeatExtras{
+class RequestModelSelectSeatExtras {
   final String execution;
   final dynamic token;
-  final Map<String,dynamic> request;
+  final Map<String, dynamic> request;
 
   RequestModelSelectSeatExtras({
     required this.execution,
@@ -192,11 +208,8 @@ class RequestModelSelectSeatExtras{
   });
 
   Map<String, dynamic> toJson() => {
-    "Execution": execution,
-    "Token": token,
-    "Request": request,
-  };
+        "Execution": execution,
+        "Token": token,
+        "Request": request,
+      };
 }
-
-
-

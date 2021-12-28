@@ -199,7 +199,6 @@ class CheckInForm extends StatelessWidget {
                                   errorText: "Booking reference name can't be empty",
                                   isEmpty: myEnterScreenController.isBookingRefNameEmpty.value,
                                 ),
-
                               ],
                             ),
                           ),

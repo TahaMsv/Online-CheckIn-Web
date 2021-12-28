@@ -35,36 +35,26 @@ class PaymentStepController extends MainController {
   void finalReserve() async {
     final myStepScreenController = Get.put(StepsScreenController(model));
     List<Traveller> travellers = myStepScreenController.travellers;
-    String token = travellers[0].token;
+    List<Map<String, dynamic>> seatsData = [];
     for (var i = 0; i < travellers.length; ++i) {
-      String letter = travellers[i].seatId.substring(0, 1);
-      int line = int.parse(travellers[i].seatId.substring(1));
-      Response response = await DioClient.selectCountries(
-        execution: "[OnlineCheckin].[ReserveSeat]",
-        token: token,
-        request: {
-          "SeatsData": [
-            {
-              "PassengerID": travellers[i].welcome.body.passengers[0].id,
-              "Letter": letter,
-              "Line": line,
-            }
-          ],
-          // "TicketData": null
-        },
-      );
-
-      if (response.statusCode == 200) {
-        if (response.data["ResultCode"] == 1) {
-          numberOfReserved++;
-        }
-      } else {}
+      Traveller traveller = travellers[i];
+      String letter = traveller.seatId.substring(0, 1);
+      int line = int.parse(traveller.seatId.substring(1));
+      seatsData.add({
+        "PassengerID": traveller.welcome.body.passengers[i].id,
+        "Letter": letter,
+        "Line": line,
+      });
     }
-    if(numberOfReserved==travellers.length){
-      print("Done");
-    }else{
+    Response response = await DioClient.reserveSeat(
+      execution: "[OnlineCheckin].[ReserveSeat]",
+      token: travellers[0].token,
+      request: {"SeatsData": seatsData},
+    );
 
-    }
+    if (response.statusCode == 200) {
+      if (response.data["ResultCode"] == 1) {}
+    } else {}
   }
 
   @override
