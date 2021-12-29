@@ -55,6 +55,7 @@ class StepsScreenView extends StatelessWidget {
                         Obx(
                           () => LeftSideOFPage(
                             height: height,
+                            width: width * 0.20,
                             step: myStepsScreenController.step,
                             myStepsScreenController: myStepsScreenController,
                           ),
@@ -227,11 +228,13 @@ class LeftSideOFPage extends StatelessWidget {
   const LeftSideOFPage({
     Key? key,
     required this.height,
+    required this.width,
     required this.step,
     required this.myStepsScreenController,
   }) : super(key: key);
 
   final double height;
+  final double width;
   final int step;
   final StepsScreenController myStepsScreenController;
 
@@ -239,6 +242,7 @@ class LeftSideOFPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
+        // width: width,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black.withOpacity(0.1)),
           shape: BoxShape.rectangle,
@@ -247,50 +251,50 @@ class LeftSideOFPage extends StatelessWidget {
         height: height * 0.9 - 13.5,
         child: Column(
           children: [
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TitleWidget(
-                    title: "Travellers",
-                    width: 190,
-                  ),
-                  if (myStepsScreenController.step == 6)
-                    Container(
-                      width: 112,
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 2,
-                            height: double.infinity,
-                            color: Color(0xffededed),
-                          ),
-                          TitleWidget(
-                            title: "Seat",
-                            width: 100,
-                          ),
-                        ],
-                      ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TitleWidget(
+                  title: "Travellers",
+                  width: 190,
+                ),
+                if (myStepsScreenController.step == 6)
+                  Container(
+                    width: 112,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 2,
+                          height: double.infinity,
+                          color: Color(0xffededed),
+                        ),
+                        TitleWidget(
+                          title: "Seat",
+                          width: 100,
+                        ),
+                      ],
                     ),
-                ],
-              ),
+                  ),
+              ],
             ),
             Container(
-              width: double.infinity,
+              // width: width,
               height: 1,
               color: Color(0xffeaeaea),
             ),
             Obx(
               () => Container(
+                width: width,
                 height: height * 0.9 - 65 - 13.5,
                 child: ListView.builder(
-                  itemCount: myStepsScreenController.travellers.length,
-                  itemBuilder: (ctx, index) => TravellerItem(
-                    step: step,
-                    index: index,
-                    myStepsScreenController: myStepsScreenController,
-                  ),
-                ),
+                    itemCount: myStepsScreenController.travellers.length,
+                    itemBuilder: (ctx, index) =>
+                        TravellerItem(
+                      step: step,
+                      index: index,
+                      myStepsScreenController: myStepsScreenController,
+                    ),
+                    ),
               ),
             ),
           ],
@@ -315,118 +319,116 @@ class TravellerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isTravellerSelected = myStepsScreenController.travellers[index].seatId == "--" ? false : true;
-    return Expanded(
-      child: Obx(
-        () => Container(
-          color: myStepsScreenController.whoseTurnToSelect.value == index && step == 6 ? const Color(0xffffae2c).withOpacity(0.5) : Colors.white,
-          height: 60,
-          child: Column(
-            children: [
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: Text(
-                        myStepsScreenController.travellers[index].getFullNameWithGender(),
-                        style: TextStyle(
-                          color: Color(0xff424242),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w300,
-                        ),
+    return
+          Container(
+        color: myStepsScreenController.whoseTurnToSelect.value == index && step == 6 ? const Color(0xffffae2c).withOpacity(0.5) : Colors.white,
+        height: 60,
+        child: Column(
+          children: [
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Text(
+                      myStepsScreenController.travellers[index].getFullNameWithGender(),
+                      style: TextStyle(
+                        color: Color(0xff424242),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w300,
                       ),
                     ),
-                    step == 0
-                        ? IconButton(
-                            onPressed: () => myStepsScreenController.removeFromTravellers(index),
-                            icon: Icon(
-                              Icons.close,
-                              color: Colors.red,
-                            ),
-                          )
-                        : step == 6
-                            ? Container(
-                                width: 112,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 2,
-                                      height: double.infinity,
-                                      color: Color(0xffededed),
-                                    ),
-                                    myStepsScreenController.whichOneToEdit == index
-                                        ? Row(
-                                            children: [
-                                              Container(
-                                                width: 45,
-                                                color: Colors.grey,
-                                                child: TextField(
-                                                  textAlignVertical: TextAlignVertical.center,
-                                                  controller: myStepsScreenController.editSeatC,
-                                                  maxLength: 3,
-                                                  decoration: InputDecoration(
-                                                      contentPadding: EdgeInsets.all(10.0), border: InputBorder.none, counterText: "", hintText: myStepsScreenController.travellers[index].seatId),
-                                                ),
+                  ),
+                  step == 0
+                      ? IconButton(
+                          onPressed: () => myStepsScreenController.removeFromTravellers(index),
+                          icon: Icon(
+                            Icons.close,
+                            color: Colors.red,
+                          ),
+                        )
+                      : step == 6
+                          ? Container(
+                              width: 112,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 2,
+                                    height: double.infinity,
+                                    color: Color(0xffededed),
+                                  ),
+                                  myStepsScreenController.whichOneToEdit == index
+                                      ? Row(
+                                          children: [
+                                            Container(
+                                              width: 45,
+                                              color: Colors.grey,
+                                              child: TextField(
+                                                textAlignVertical: TextAlignVertical.center,
+                                                controller: myStepsScreenController.editSeatC,
+                                                maxLength: 3,
+                                                decoration: InputDecoration(
+                                                    contentPadding: EdgeInsets.all(10.0), border: InputBorder.none, counterText: "", hintText: myStepsScreenController.travellers[index].seatId),
                                               ),
-                                              Container(
-                                                width: 30,
-                                                child: IconButton(
-                                                    onPressed: () {
-                                                      myStepsScreenController.setWhichOneToEdit(-1);
-                                                      myStepsScreenController.changeTravellerSeat(index);
-                                                    },
-                                                    icon: Icon(Icons.check),
-                                                    color: Colors.green),
-                                              ),
-                                              Container(
-                                                width: 30,
-                                                child: IconButton(
+                                            ),
+                                            Container(
+                                              width: 30,
+                                              child: IconButton(
                                                   onPressed: () {
                                                     myStepsScreenController.setWhichOneToEdit(-1);
+                                                    myStepsScreenController.changeTravellerSeat(index);
                                                   },
-                                                  icon: Icon(Icons.close),
-                                                  color: Colors.red,
-                                                ),
+                                                  icon: Icon(Icons.check),
+                                                  color: Colors.green),
+                                            ),
+                                            Container(
+                                              width: 30,
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  myStepsScreenController.setWhichOneToEdit(-1);
+                                                },
+                                                icon: Icon(Icons.close),
+                                                color: Colors.red,
                                               ),
-                                            ],
-                                          )
-                                        : Row(
-                                            children: [
-                                              TitleWidget(
-                                                title: myStepsScreenController.travellers[index].seatId,
-                                                width: 75,
-                                                textColor: isTravellerSelected ? Color(0xff48c0a2) : Color(0xff424242),
+                                            ),
+                                          ],
+                                        )
+                                      : Row(
+                                          children: [
+                                            TitleWidget(
+                                              title: myStepsScreenController.travellers[index].seatId,
+                                              width: 75,
+                                              textColor: isTravellerSelected ? Color(0xff48c0a2) : Color(0xff424242),
+                                            ),
+                                            Container(
+                                              width: 35,
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  myStepsScreenController.setWhichOneToEdit(index);
+                                                },
+                                                icon: Icon(Icons.edit),
+                                                color: myStepsScreenController.whichOneToEdit == index ? Colors.green : Colors.blue,
                                               ),
-                                              Container(
-                                                width: 35,
-                                                child: IconButton(
-                                                  onPressed: () {
-                                                    myStepsScreenController.setWhichOneToEdit(index);
-                                                  },
-                                                  icon: Icon(Icons.edit),
-                                                  color: myStepsScreenController.whichOneToEdit == index ? Colors.green : Colors.blue,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                  ],
-                                ),
-                              )
-                            : Container(),
-                  ],
-                ),
+                                            ),
+                                          ],
+                                        ),
+                                ],
+                              ),
+                            )
+                          : Container(),
+                ],
               ),
-              Container(
-                width: double.infinity,
-                height: 1,
-                color: Color(0xffeaeaea),
-              ),
-            ],
-          ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 1,
+              color: Color(0xffeaeaea),
+            ),
+          ],
         ),
-      ),
-    );
+      )
+    ;
   }
 }
 

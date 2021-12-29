@@ -19,16 +19,18 @@ class SeatsStepView extends StatelessWidget {
   Widget build(BuildContext context) {
     // double width = Get.width;
     // double height = Get.height;
-
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: Expanded(
-          // height: 395,
-          // color: Colors.red,
+      body: Container(
+        height: height,
+        width: width,
+        child: Center(
           child: ScrollConfiguration(
             behavior: MyCustomScrollBehavior(),
-            child: ListView(
+            child:
+            ListView(
               scrollDirection: Axis.horizontal,
               children: [
                 Stack(
@@ -110,24 +112,22 @@ class PlaneBody extends StatelessWidget {
           ),
         ),
         padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Expanded(
-          child: Center(
-            child: Container(
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: mySeatsStepController.cabins.length,
-                itemBuilder: (_, i) {
-                  // print("PlaneBody " + i.toString());
-                  // print("lines: " + mySeatsStepController.cabins[i].linesCount.toString());
-                  return CabinWidget(
-                    width: mySeatsStepController.calculateCabinLength(i),
-                    height: mySeatsStepController.calculateCabinHeight(i),
-                    cabin: mySeatsStepController.cabins[i],
-                    mySeatsStepController: mySeatsStepController,
-                  );
-                },
-              ),
+        child: Center(
+          child: Container(
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: mySeatsStepController.cabins.length,
+              itemBuilder: (_, i) {
+                // print("PlaneBody " + i.toString());
+                // print("lines: " + mySeatsStepController.cabins[i].linesCount.toString());
+                return CabinWidget(
+                  width: mySeatsStepController.calculateCabinLength(i),
+                  height: mySeatsStepController.calculateCabinHeight(i),
+                  cabin: mySeatsStepController.cabins[i],
+                  mySeatsStepController: mySeatsStepController,
+                );
+              },
             ),
           ),
         ),
@@ -275,7 +275,6 @@ class BodyLine extends StatelessWidget {
   }
 }
 
-
 class SeatWidget extends StatelessWidget {
   const SeatWidget({
     Key? key,
@@ -303,7 +302,7 @@ class SeatWidget extends StatelessWidget {
 
         margin: EdgeInsets.all(2),
         decoration: BoxDecoration(
-          color: cell.type == "Seat" ? mySeatsStepController.getColor(cell.code!): Color(0xff5d5d5d),
+          color: cell.type == "Seat" ? mySeatsStepController.getColor(cell.code!) : Color(0xff5d5d5d),
           borderRadius: BorderRadius.all(
             Radius.circular(10),
           ),
@@ -349,21 +348,16 @@ class PlaneHead extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Positioned(
-        left: 20,
-        child: Container(
-          height: height,
-          // width: 413,
-          child: Image.asset(
-            "assets/images/Airplane Head.png",
-            fit: BoxFit.contain,
-            // height: 350,
-          ),
-          // margin: EdgeInsets.only(left: 20),
-          // width: 400,
-        ),
+    return Container(
+      height: height,
+      // width: 413,
+      child: Image.asset(
+        "assets/images/Airplane Head.png",
+        fit: BoxFit.contain,
+        // height: 350,
       ),
+      margin: EdgeInsets.only(left: 20),
+      // width: 400,
     );
   }
 }
@@ -380,16 +374,14 @@ class PlaneTail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.only(top: 30, bottom: 22),
-        margin: EdgeInsets.only(left: margin + 50),
-        // width: 2400,
-        // height: height+100,
-        child: Image.asset(
-          "assets/images/Edited-Tail.png",
-          fit: BoxFit.contain,
-        ),
+    return Container(
+      padding: EdgeInsets.only(top: 30, bottom: 22),
+      margin: EdgeInsets.only(left: margin + 50),
+      // width: 2400,
+      height: height+100,
+      child: Image.asset(
+        "assets/images/Edited-Tail.png",
+        fit: BoxFit.contain,
       ),
     );
   }
