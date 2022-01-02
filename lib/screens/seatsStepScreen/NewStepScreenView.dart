@@ -236,7 +236,7 @@ class HorizontalCodeLine extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                cells[i].type! == "Seat" ? cells[i].value! : "",
+                cells[i].type== "Seat" ? cells[i].value! : "",
                 style: TextStyle(
                   color: Color(0xffd1d1d1),
                 ),
@@ -318,12 +318,12 @@ class SeatWidget extends StatelessWidget {
                     ? CheckedInSeat(seatId: mySeatsStepController.seatsStatus[cell.code]!)
                     : Center(
                         child: Text(
-                          cell.type! == "Seat"
+                          cell.type== "Seat"
                               ? cell.code!
-                              : cell.type! == "VerticalCode"
+                              : cell.type== "VerticalCode"
                                   ? cell.value!
                                   : "",
-                          style: TextStyle(color: cell.type! == "Seat" ? Color(0xffd1d1d1) : Colors.white),
+                          style: TextStyle(color: cell.type== "Seat" ? Color(0xffd1d1d1) : Colors.white),
                         ),
                       ),
         // child: mySeatsStepController.seatsStatus[seatId] == "Block"
@@ -348,16 +348,18 @@ class PlaneHead extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      // width: 413,
-      child: Image.asset(
-        "assets/images/Airplane Head.png",
-        fit: BoxFit.contain,
-        // height: 350,
+    return Center(
+      child: Container(
+        height: height,
+        // width: 413,
+        child: Image.asset(
+          "assets/images/Airplane Head.png",
+          fit: BoxFit.contain,
+          // height: 350,
+        ),
+        margin: EdgeInsets.only(left: 20),
+        // width: 400,
       ),
-      margin: EdgeInsets.only(left: 20),
-      // width: 400,
     );
   }
 }
@@ -374,14 +376,16 @@ class PlaneTail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 30, bottom: 22),
-      margin: EdgeInsets.only(left: margin + 50),
-      // width: 2400,
-      height: height+100,
-      child: Image.asset(
-        "assets/images/Edited-Tail.png",
-        fit: BoxFit.contain,
+    return Center(
+      child: Container(
+        padding: EdgeInsets.only(top: 30, bottom: 22),
+        margin: EdgeInsets.only(left: margin + 50),
+        // width: 2400,
+        height: height+100,
+        child: Image.asset(
+          "assets/images/Edited-Tail.png",
+          fit: BoxFit.contain,
+        ),
       ),
     );
   }

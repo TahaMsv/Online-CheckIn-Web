@@ -63,7 +63,7 @@ class EnterScreenController extends MainController {
     print("here62");
     if (response.statusCode == 200) {
       if (response.data["ResultCode"] == 1) {
-        String? token = response.data["Body"]["Token"];  //todo //dynamic api, now it is static for testing
+        String? token = response.data["Body"]["Token"]; //todo //dynamic api, now it is static for testing
         // String? token = "4C704766-2DD0-4F27-BD8A-A6162FF501DB";
         if (token != null) {
           model.setToken(token);
@@ -82,7 +82,6 @@ class EnterScreenController extends MainController {
   void onInit() {
     print("EnterScreenController Init");
     // initializeApp();
-
     super.onInit();
   }
 

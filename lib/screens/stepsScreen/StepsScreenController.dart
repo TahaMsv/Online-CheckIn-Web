@@ -87,10 +87,18 @@ class StepsScreenController extends MainController {
     _step.value = newStep;
   }
 
-  void increaseStep() {
+  void increaseStep() async {
     int currStep = step;
+    bool isSuccessful = true;
+
     if (currStep < 8) {
-      setStep(currStep + 1);
+      // if (step == 7) {
+      //   PaymentStepController paymentStepController = Get.put(PaymentStepController(model));
+      //   isSuccessful = await paymentStepController.finalReserve();
+      // }
+      if (isSuccessful) {
+        setStep(currStep + 1);
+      }
     }
   }
 

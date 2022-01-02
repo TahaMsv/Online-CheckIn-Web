@@ -32,30 +32,7 @@ class PaymentStepController extends MainController {
 
   int numberOfReserved = 0;
 
-  void finalReserve() async {
-    final myStepScreenController = Get.put(StepsScreenController(model));
-    List<Traveller> travellers = myStepScreenController.travellers;
-    List<Map<String, dynamic>> seatsData = [];
-    for (var i = 0; i < travellers.length; ++i) {
-      Traveller traveller = travellers[i];
-      String letter = traveller.seatId.substring(0, 1);
-      int line = int.parse(traveller.seatId.substring(1));
-      seatsData.add({
-        "PassengerID": traveller.welcome.body.passengers[i].id,
-        "Letter": letter,
-        "Line": line,
-      });
-    }
-    Response response = await DioClient.reserveSeat(
-      execution: "[OnlineCheckin].[ReserveSeat]",
-      token: travellers[0].token,
-      request: {"SeatsData": seatsData},
-    );
 
-    if (response.statusCode == 200) {
-      if (response.data["ResultCode"] == 1) {}
-    } else {}
-  }
 
   @override
   void onInit() {
@@ -66,6 +43,7 @@ class PaymentStepController extends MainController {
   @override
   void onClose() {
     print("PaymentStepController Close");
+
     super.onClose();
   }
 

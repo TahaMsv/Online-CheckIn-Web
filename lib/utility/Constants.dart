@@ -32,7 +32,7 @@ class Apis {
   static const clickOnSeat = 'api/Execute';
   static const reserveSeat = 'api/Execute';
   static const selectBoardingPass = 'api/Execute';
-  static const boardingPassPDF = 'http://localhost:64328/api/MemoStrm';
+  static const boardingPassPDF = 'api/MemoStrm';
   static const boardingPassSendEmail = 'http://localhost:64328/api/SendEmail';
   static const getCheckDocoNecessity = 'api/Execute';
   static const selectSeatExtras = 'api/Execute';

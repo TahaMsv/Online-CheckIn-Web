@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:onlinecheckin/global/Classes.dart';
@@ -10,49 +10,90 @@ import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
 
 class ReceiptStepController extends MainController {
-  ReceiptStepController._();
+  MainModel model;
 
-  static final ReceiptStepController _instance = ReceiptStepController._();
-
-  factory ReceiptStepController(MainModel model) {
-    _instance.model = model;
-    return _instance;
-  }
+  ReceiptStepController(this.model);
 
   late BoardingPassPDF boardingPassPDF;
+  late Uint8List bytes;
+  RxBool successfulResponse = false.obs;
 
   void init() async {
-    // "Token": "1B690A28-96B3-4F0A-AED6-FDD4B6C6893D",
-    // "MrtName": "OnlineCheckinBoardingPass-AB",
-    // "Request": {
-    // "Format": 1, //1->pdf    32->Html
-    // "PassengersId": "<MyTable><MyRow><FlightPax_ID>590529</FlightPax_ID></MyRow></MyTable>",
-    // "IsDarkMode": false
-    // }
+    model.setLoading(true);
+    await finalReserve();
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
+    print("aa");
+    var req = {
+      "Format": 1, //1->pdf    32->Html
+      "PassengersId": "<MyTable><MyRow><FlightPax_ID>${stepsScreenController.travellers[0].welcome.body.passengers[0].id}</FlightPax_ID></MyRow></MyTable>",
+      "IsDarkMode": false,
+    };
+    print(req);
     Response response = await DioClient.boardingPassPDF(
       mrtName: "OnlineCheckinBoardingPass-AB",
       token: stepsScreenController.travellers[0].token,
-      request: {
-        "Format": 1, //1->pdf    32->Html
-        "PassengersId": stepsScreenController.travellers[0].welcome.body.passengers[0].id,
-        "IsDarkMode": false,
-      },
+      request: req,
     );
+    print("aa1");
 
     if (response.statusCode == 200) {
-      if (response.data["ResultCode"] == 1) {
-        boardingPassPDF = BoardingPassPDF.fromJson(response.data);
-      }
-    } else {}
+      print("here1");
+      boardingPassPDF = BoardingPassPDF.fromJson(response.data);
+      print("here2");
+      convertToPDF();
+      print("here4");
+      successfulResponse.value = true;
+      model.setLoading(false);
+      return;
+    }
+    print("here5");
+    successfulResponse.value = false;
+    model.setLoading(false);
   }
 
   void convertToPDF() async {
-    // String buffer = boardingPassPDF.buffer;
-    // String fileName = "boardingPassPdf";
-    // final dir = await getExternalStorageDirectory();
-    // final file = File("${dir.path}/$fileName.pdf");
-    // await file.writeAsBytes(buffer.codeUnits);
+    print("here3");
+    String base64String = boardingPassPDF.buffer;
+    bytes = base64Decode(base64String);
+  }
+
+  Future<bool> finalReserve() async {
+    print("here11");
+    final myStepScreenController = Get.put(StepsScreenController(model));
+    List<Traveller> travellers = myStepScreenController.travellers;
+    List<Map<String, dynamic>> seatsData = [];
+    print("here12");
+    for (var i = 0; i < travellers.length; ++i) {
+      Traveller traveller = travellers[i];
+      String letter = traveller.seatId.substring(0, 1);
+      int line = int.parse(traveller.seatId.substring(1));
+      seatsData.add({
+        "PassengerID": traveller.welcome.body.passengers[i].id,
+        "Letter": letter,
+        "Line": line,
+      });
+    }
+    print(seatsData);
+    print("here13");
+    Response response = await DioClient.reserveSeat(
+      execution: "[OnlineCheckin].[ReserveSeat]",
+      token: travellers[0].token,
+      request: {"SeatsData": seatsData, "TicketData": null},
+    );
+    print("here14");
+
+    print(jsonEncode(response.data));
+    if (response.statusCode == 200) {
+      print("here15");
+      if (response.data["ResultCode"] == 1) {
+        print("here16");
+
+        return Future<bool>.value(true);
+      }
+    }
+    print("here17");
+
+    return Future<bool>.value(false);
   }
 
   @override

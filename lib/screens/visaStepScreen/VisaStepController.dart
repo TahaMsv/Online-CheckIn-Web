@@ -90,8 +90,8 @@ class VisaStepController extends MainController {
     String docoPlaceOfBirth = stepsScreenController.travellers[0].passportInfo.nationality ?? "";
     String docoIssueDate = stepsScreenController.travellers[0].visaInfo.issueDate == null ? df.format(stepsScreenController.travellers[0].visaInfo.issueDate!) : "";
 
-    String fromCityCode = stepsScreenController.welcome!.body.flight[0].fromCity ?? "";
-    String toCityCode = stepsScreenController.welcome!.body.flight[0].toCity ?? "";
+    // String fromCityCode = stepsScreenController.welcome!.body.flight[0].fromCity ?? "";
+    // String toCityCode = stepsScreenController.welcome!.body.flight[0].toCity ?? "";
     // print("DocsType" + docsType + "\nDocsCountry" + docsCountry + "\nDocsNationality" + docsNationality + "\nFromCityCode" + fromCityCode + "\nToCityCode" + toCityCode);
     Response response = await DioClient.saveDocsDocoDoca(
       execution: "[OnlineCheckin].[SaveDocsDocoDoca]",

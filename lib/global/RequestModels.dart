@@ -161,7 +161,7 @@ class RequestModelSelectBoardingPass {
 }
 
 class RequestModelBoardingPassPDF {
-  final dynamic token;
+  final String token;
   final Map<String, dynamic> request;
   final String mrtName;
 
