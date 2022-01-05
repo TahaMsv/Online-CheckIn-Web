@@ -17,9 +17,11 @@ class ReceiptStepController extends MainController {
   late BoardingPassPDF boardingPassPDF;
   late Uint8List bytes;
   RxBool successfulResponse = false.obs;
+  RxBool loading=false.obs;
 
   void init() async {
-    model.setLoading(true);
+    loading.value=true;
+    // model.setLoading(true);
     await finalReserve();
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
     print("aa");
@@ -42,13 +44,15 @@ class ReceiptStepController extends MainController {
       print("here2");
       convertToPDF();
       print("here4");
+      loading.value=false;
       successfulResponse.value = true;
-      model.setLoading(false);
+      // model.setLoading(false);
       return;
     }
     print("here5");
+    loading.value=false;
     successfulResponse.value = false;
-    model.setLoading(false);
+    // model.setLoading(false);
   }
 
   void convertToPDF() async {

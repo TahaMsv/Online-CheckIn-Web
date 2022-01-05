@@ -11,14 +11,10 @@ import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
 
 class SeatsStepController extends MainController {
-  SeatsStepController._();
 
-  static final SeatsStepController _instance = SeatsStepController._();
+  MainModel model;
+  SeatsStepController(this.model);
 
-  factory SeatsStepController(MainModel model) {
-    _instance.model = model;
-    return _instance;
-  }
 
   final double eachLineWidth = 45;
   List<Cabin> cabins = [];
@@ -28,21 +24,13 @@ class SeatsStepController extends MainController {
   ///////////// new /////////////////
 
   void init() {
-    // String seatMap = SeatMaps.seatMap320;
-    // Map<String, dynamic> sm = jsonDecode(seatMap);
-    // print(sm);
     final myStepScreenController = StepsScreenController(model);
     cabins = myStepScreenController.welcome!.body.seatmap.cabins;
     List<Seat> seats = myStepScreenController.welcome!.body.seats;
-    // print(seats.length);
     for (int i = 0; i < seats.length; i++) {
       Seat seat = seats[i];
       String key = seat.letter + seat.line;
-      // if (seatsStatus.containsKey(key)) {
-      //   print(key + " existed");
-      // }
       seatsStatus[key] = seat.isUsedDescription;
-      print(i.toString() + " ==> " + key + " : " + seat.isUsedDescription);
     }
   }
 
@@ -100,23 +88,6 @@ class SeatsStepController extends MainController {
     return number * (32);
   }
 
-  ///////////////////
-
-  // void init() async {
-  //   final myStepScreenController = Get.put(StepsScreenController(model));
-  //   List<Seat> seats = myStepScreenController.welcome!.seats;
-  //   print(seats.length);
-  //   for (int i = 0; i < seats.length; i++) {
-  //     Seat seat = seats[i];
-  //     String key = seat.line! + seat.letter!;
-  //     if (seatsStatus.containsKey(key)) {
-  //       print(key + " existed");
-  //     }
-  //     seatsStatus[key] = seat.isUsedDescription;
-  //     print(i.toString() + " ==> " + key + " : " + seat.isUsedDescription);
-  //   }
-  // }
-
   void changeSeatStatus(String seatId) {
     final myStepScreenController = Get.put(StepsScreenController(model));
     int whoseTurn = myStepScreenController.whoseTurnToSelect.value;
@@ -143,6 +114,7 @@ class SeatsStepController extends MainController {
     }
     myStepScreenController.changeTurnToSelect();
     myStepScreenController.travellers.refresh();
+    seatsStatus.refresh();
     myStepScreenController.updateIsNextButtonDisable();
   }
 

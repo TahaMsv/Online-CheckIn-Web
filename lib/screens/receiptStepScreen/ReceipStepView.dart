@@ -22,32 +22,35 @@ class ReceiptStepView extends StatelessWidget {
     MainModel model = context.watch<MainModel>();
     return Scaffold(
       backgroundColor: Colors.white,
-      body: model.loading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : Obx(
-              () => !myReceiptStepController.successfulResponse.value
-                  ? Center(
-                      child: Text("Unable to load boarding pass"),
-                    )
-                  : Container(
-                      height: height,
-                      width: width,
-                      child: Column(
-                        children: [
-                          StepsScreenTitle(
-                            title: "Finished!",
-                            description: "You can see your check-in below, print it or download it or send it to your mobile",
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Expanded(child: SfPdfViewer.memory(myReceiptStepController.bytes,))
-                        ],
-                      ),
+      body: Obx(
+        () => myReceiptStepController.loading.value
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : !myReceiptStepController.successfulResponse.value
+                ? Center(
+                    child: Text("Unable to load boarding pass"),
+                  )
+                : Container(
+                    height: height,
+                    width: width,
+                    child: Column(
+                      children: [
+                        StepsScreenTitle(
+                          title: "Finished!",
+                          description: "You can see your check-in below, print it or download it or send it to your mobile",
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Expanded(
+                            child: SfPdfViewer.memory(
+                          myReceiptStepController.bytes,
+                        ))
+                      ],
                     ),
-            ),
+                  ),
+      ),
     );
   }
 }

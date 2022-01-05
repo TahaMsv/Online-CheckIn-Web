@@ -265,7 +265,7 @@ class LeftSideOFPage extends StatelessWidget {
                       children: [
                         Container(
                           width: 2,
-                          height: double.infinity,
+                          height: 60,
                           color: Color(0xffededed),
                         ),
                         TitleWidget(
@@ -355,7 +355,7 @@ class TravellerItem extends StatelessWidget {
                                 children: [
                                   Container(
                                     width: 2,
-                                    height: double.infinity,
+                                    height: 100,
                                     color: Color(0xffededed),
                                   ),
                                   myStepsScreenController.whichOneToEdit == index
@@ -432,48 +432,6 @@ class TravellerItem extends StatelessWidget {
   }
 }
 
-// class SeatWidget extends StatelessWidget {
-//   const SeatWidget({
-//     Key? key,
-//   }) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       height: 60,
-//       width: 100,
-//       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-//       decoration: BoxDecoration(
-//         color: Colors.blue,
-//         border: BorderDirectional(
-//           bottom: BorderSide(
-//             width: 1,
-//             color: Color(0xffeaeaea),
-//           ),
-//         ),
-//       ),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Text(
-//             "5E",
-//             style: TextStyle(
-//               fontSize: 20,
-//               color: Color(0xfff5ad2f),
-//             ),
-//           ),
-//           IconButton(
-//             onPressed: () {},
-//             icon: Icon(
-//               Icons.edit,
-//               color: Colors.blue,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 class TitleWidget extends StatelessWidget {
   const TitleWidget({

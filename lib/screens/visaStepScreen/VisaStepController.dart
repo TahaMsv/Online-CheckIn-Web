@@ -13,7 +13,6 @@ import '../../widgets/StepsScreenTitle.dart';
 import '../../widgets/UserTextInput.dart';
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
-import 'package:intl/intl.dart';
 
 class VisaStepController extends MainController {
   MainModel model;
@@ -23,11 +22,13 @@ class VisaStepController extends MainController {
   RxList<Traveller> travellers = <Traveller>[].obs;
   List<TextEditingController> documentNoCs = [];
   List<TextEditingController> destinationCs = [];
+  RxBool loading = false.obs;
 
   RxBool isDocoNecessary = false.obs;
 
   void init() async {
-    model.setLoading(true);
+    loading.value = true;
+    // model.setLoading(true);
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
     String docsType = stepsScreenController.travellers[0].passportInfo.passportType ?? "";
     String docsCountry = stepsScreenController.travellers[0].passportInfo.countryOfIssue ?? "";
@@ -53,6 +54,7 @@ class VisaStepController extends MainController {
         print(response.data["Body"]["IsNecessary"]);
         if (response.data["Body"]["IsNecessary"] == 1) {
           isDocoNecessary.value = true;
+          loading.value = false;
         }
       }
     } else {}
@@ -66,64 +68,8 @@ class VisaStepController extends MainController {
         destinationCs.add(new TextEditingController());
       }
     }
-    model.setLoading(false);
-  }
-
-  Future<void> saveDocsDocoDoca(int index) async {
-    final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-
-    ///Docs Information
-    Traveller traveller = stepsScreenController.travellers[index];
-    String docsType = stepsScreenController.travellers[0].passportInfo.passportType ?? "";
-    String docsCountry = stepsScreenController.travellers[0].passportInfo.countryOfIssue ?? "";
-    String docsNationality = stepsScreenController.travellers[0].passportInfo.nationality ?? "";
-    String docsDocumentNumber = stepsScreenController.travellers[0].passportInfo.documentNo ?? "";
-    final df = new DateFormat('yyyy-MM-dd');
-    String docsBirthDate = stepsScreenController.travellers[0].passportInfo.dateOfBirth == null ? df.format(stepsScreenController.travellers[0].passportInfo.dateOfBirth!) : "";
-    String docsExpiryDate = stepsScreenController.travellers[0].passportInfo.entryDate == null ? df.format(stepsScreenController.travellers[0].passportInfo.entryDate!) : "";
-
-    ///Doco Information
-    String docoDestination = stepsScreenController.travellers[0].visaInfo.destination ?? "";
-    String docoDocumentNumber = stepsScreenController.travellers[0].visaInfo.documentNo ?? "";
-    String docoType = stepsScreenController.travellers[0].visaInfo.type ?? "";
-    String docoPlaceOfIssue = stepsScreenController.travellers[0].visaInfo.placeOfIssue ?? "";
-    String docoPlaceOfBirth = stepsScreenController.travellers[0].passportInfo.nationality ?? "";
-    String docoIssueDate = stepsScreenController.travellers[0].visaInfo.issueDate == null ? df.format(stepsScreenController.travellers[0].visaInfo.issueDate!) : "";
-
-    // String fromCityCode = stepsScreenController.welcome!.body.flight[0].fromCity ?? "";
-    // String toCityCode = stepsScreenController.welcome!.body.flight[0].toCity ?? "";
-    // print("DocsType" + docsType + "\nDocsCountry" + docsCountry + "\nDocsNationality" + docsNationality + "\nFromCityCode" + fromCityCode + "\nToCityCode" + toCityCode);
-    Response response = await DioClient.saveDocsDocoDoca(
-      execution: "[OnlineCheckin].[SaveDocsDocoDoca]",
-      token: traveller.token,
-      request: {
-        "PassengerId": traveller.welcome.body.passengers[0].id,
-        "DocaAddress": "",
-        "DocaCity": "",
-        "DocaCountry": "",
-        "DocaType": "",
-        "DocaZipCode": "",
-        "DocsCountry": docsCountry,
-        "DocsNationality": docsNationality,
-        "DocsBirthDate": docsBirthDate,
-        "DocsExpiryDate": docsExpiryDate, // todo  is Valid?
-        "DocsDocumentNumber": docsDocumentNumber,
-        "DocsType": docsType,
-        "DocsSecondName": traveller.welcome.body.passengers[0].lastName, // todo  is Valid?
-        "DocoDestination": docoDestination,
-        "DocoDocumentNumber": docoDocumentNumber,
-        "DocoType": docoType,
-        "DocoPlaceOfIssue": docoPlaceOfIssue,
-        "DocoPlaceOfBirth": docoPlaceOfBirth, //todo  is Valid? (Docs nationality)
-        "DocoIssueDate": docoIssueDate,
-        "DocsTitle": traveller.welcome.body.passengers[0].title
-      },
-    );
-
-    if (response.statusCode == 200) {
-      if (response.data["ResultCode"] == 1) {
-      }
-    } else {}
+    loading.value = false;
+    // model.setLoading(false);
   }
 
   void travellersList() {
@@ -143,9 +89,11 @@ class VisaStepController extends MainController {
   }
 
   void submitBtnFunction(int index) {
+    final PassportStepController passportStepController = Get.put(PassportStepController(model));
     updateDocuments();
     updateIsCompleted(index);
     travellers.refresh();
+    passportStepController.saveDocsDocoDoca(index);
     Get.back();
   }
 
@@ -282,6 +230,7 @@ class VisaStepController extends MainController {
               value: travellers[index].visaInfo.placeOfIssue == null ? "Place of issue" : travellers[index].visaInfo.placeOfIssue,
               items: listIssuePlace.map(
                 (selectedType) {
+                  travellers[index].visaInfo.placeOfIssueID = selectedType.id;
                   return DropdownMenuItem(
                     child: new Text(
                       selectedType.englishName!,

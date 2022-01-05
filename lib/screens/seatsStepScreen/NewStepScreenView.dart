@@ -326,13 +326,7 @@ class SeatWidget extends StatelessWidget {
                           style: TextStyle(color: cell.type== "Seat" ? Color(0xffd1d1d1) : Colors.white),
                         ),
                       ),
-        // child: mySeatsStepController.seatsStatus[seatId] == "Block"
-        //     ? BlockedSeat()
-        //     : mySeatsStepController.seatsStatus[seatId] == "Checked-in"
-        //     ? CheckedInSeat(seatId: mySeatsStepController.seatsStatus[seatId]!)
-        //     : mySeatsStepController.seatsStatus[seatId] == "Open"
-        //     ? DroppableSeat(mySeatsStepController: mySeatsStepController, seatId: seatId)
-        //     : DraggableSeat(mySeatsStepController: mySeatsStepController, seatId: seatId),
+
       ),
     );
   }

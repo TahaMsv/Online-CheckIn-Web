@@ -24,7 +24,7 @@ class PassportStepView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: !myPassportStepController.checkDocs.value
+      body: myPassportStepController.travellers.length == 0
           ? Center(
               child: Text("No need to add passport"),
             )
@@ -46,10 +46,8 @@ class PassportStepView extends StatelessWidget {
                       children: myPassportStepController.travellers.asMap().entries.map(
                         (entry) {
                           int idx = entry.key;
-                          Traveller traveller = entry.value;
                           return InfoCard(
                             index: idx,
-                            // traveller: traveller,
                             myPassportStepController: myPassportStepController,
                           );
                         },
@@ -66,13 +64,11 @@ class PassportStepView extends StatelessWidget {
 class InfoCard extends StatelessWidget {
   const InfoCard({
     Key? key,
-    // required this.traveller,
     required this.myPassportStepController,
     required this.index,
   }) : super(key: key);
   final int index;
 
-  // final Traveller traveller;
   final PassportStepController myPassportStepController;
 
   @override
@@ -87,7 +83,6 @@ class InfoCard extends StatelessWidget {
       bgColor = Color(0xffffffff);
     }
     return Container(
-      // height: 300,
       padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
       width: 315,
       margin: EdgeInsets.all(10),
@@ -223,14 +218,14 @@ class EditIPassInfo extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
-            Text(
-              "Passport No: ",
-              style: TextStyle(
-                color: Color(0xffffffff),
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+            // Text(
+            //   "Passport No: ",
+            //   style: TextStyle(
+            //     color: Color(0xffffffff),
+            //     fontSize: 12,
+            //     fontWeight: FontWeight.w700,
+            //   ),
+            // ),
           ],
         ),
         GestureDetector(

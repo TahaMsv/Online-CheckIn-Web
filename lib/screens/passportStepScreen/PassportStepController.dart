@@ -11,6 +11,7 @@ import '../../widgets/StepsScreenTitle.dart';
 import '../../widgets/UserTextInput.dart';
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
+import 'package:intl/intl.dart';
 
 class PassportStepController extends MainController {
   MainModel model;
@@ -18,9 +19,11 @@ class PassportStepController extends MainController {
   PassportStepController(this.model);
 
   RxList<Traveller> travellers = <Traveller>[].obs;
+  List<int> travellersIndexInMainList = [];
   List<TextEditingController> documentNoCs = [];
   List<Country> countriesList = [];
-  RxBool checkDocs = false.obs;
+
+  // RxBool checkDocs = false.obs;
 
   void travellersList() {
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
@@ -28,18 +31,24 @@ class PassportStepController extends MainController {
   }
 
   void init() async {
-    final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-    checkDocs.value = stepsScreenController.welcome!.body.flight[0].checkDocs;
-    if (checkDocs.value) {
-      travellersList();
-      await getDocumentTypes();
-      await getSelectCountries();
+    // final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
+    // List<Traveller> tempTravellerList = stepsScreenController.travellers;
+    // for (var i = 0; i < tempTravellerList.length; ++i) {
+    //   if (tempTravellerList[i].welcome!.body.flight[0].checkDocs) {
+    //     travellers.add(tempTravellerList[i]);
+    //     travellersIndexInMainList.add(i);
+    //   }
+    // }
 
-      travellers = stepsScreenController.travellers;
-      for (var i = 0; i < travellers.length; ++i) {
-        documentNoCs.add(new TextEditingController());
+    // if (travellers.length > 0) {
+    travellersList();
+    await getDocumentTypes();
+    await getSelectCountries();
+    // travellers = stepsScreenController.travellers;
+    for (var i = 0; i < travellers.length; ++i) {
+      documentNoCs.add(new TextEditingController());
       }
-    }
+    // }
   }
 
   void close() async {
@@ -48,8 +57,65 @@ class PassportStepController extends MainController {
 
   Future<void> saveDocs() async {
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-    for (var i = 0; i < travellers.length; ++i) {
-      stepsScreenController.travellers[i] = travellers[i];
+    for (var i = 0; i < travellersIndexInMainList.length; ++i) {
+      int mainIndex = travellersIndexInMainList[i];
+      stepsScreenController.travellers[mainIndex] = travellers[i];
+    }
+  }
+
+  Future<void> saveDocsDocoDoca(int index) async {
+    ///Docs Information
+    Traveller traveller = travellers[index];
+    String docsType = traveller.passportInfo.passportType == null ? "" : traveller.passportInfo.passportType!.split("-")[0].trim();
+    String docsCountry = traveller.passportInfo.countryOfIssue == null ? "" : traveller.passportInfo.countryOfIssue!.split("-")[0].trim();
+    String docsNationality = traveller.passportInfo.nationality  == null ? "" : traveller.passportInfo.nationality!.split("-")[0].trim();
+    String docsDocumentNumber = traveller.passportInfo.documentNo ?? "";
+    final df = new DateFormat('yyyy-MM-dd');
+    String docsBirthDate = traveller.passportInfo.dateOfBirth == null ? df.format(traveller.passportInfo.dateOfBirth!) : "";
+    String docsExpiryDate = traveller.passportInfo.entryDate == null ? df.format(traveller.passportInfo.entryDate!) : "";
+
+    ///Doco Information
+    String docoDestination = traveller.visaInfo.destination ?? "";
+    String docoDocumentNumber = traveller.visaInfo.documentNo ?? "";
+    String docoType = traveller.visaInfo.type ?? "";
+    String docoPlaceOfIssue = traveller.visaInfo.placeOfIssueID ?? "";
+    String docoPlaceOfBirth = traveller.passportInfo.nationalityID ?? "";
+    String docoIssueDate = traveller.visaInfo.issueDate == null ? df.format(traveller.visaInfo.issueDate!) : "";
+
+    Response response = await DioClient.saveDocsDocoDoca(
+      execution: "[OnlineCheckin].[SaveDocsDocoDoca]",
+      token: traveller.token,
+      request: {
+        "PassengerId": traveller.welcome.body.passengers[0].id,
+        "DocaAddress": "",
+        "DocaCity": "",
+        "DocaCountry": "",
+        "DocaType": "",
+        "DocaZipCode": "",
+        "DocsCountry": docsCountry,
+        "DocsNationality": docsNationality,
+        "DocsBirthDate": docsBirthDate,
+        "DocsExpiryDate": docsExpiryDate, // todo  is Valid?
+        "DocsDocumentNumber": docsDocumentNumber,
+        "DocsType": docsType,
+        "DocsSecondName": traveller.welcome.body.passengers[0].lastName, // todo  is Valid?
+        "DocoDestination": docoDestination,
+        "DocoDocumentNumber": docoDocumentNumber,
+        "DocoType": docoType,
+        "DocoPlaceOfIssue": docoPlaceOfIssue,
+        "DocoPlaceOfBirth": docoPlaceOfBirth, //todo  is Valid? (Docs nationality)
+        "DocoIssueDate": docoIssueDate,
+        "DocsTitle": traveller.welcome.body.passengers[0].title
+      },
+    );
+
+    if (response.statusCode == 200) {
+      if (response.data["ResultCode"] == 1) {
+        final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
+        int mainIndex = travellersIndexInMainList[index];
+        stepsScreenController.travellers[mainIndex] = traveller;
+        print("taha");
+      }
     }
   }
 
@@ -89,12 +155,6 @@ class PassportStepController extends MainController {
     } else {}
   }
 
-  //
-  // List<Traveller> travellersList() {
-  //   final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-  //   return stepsScreenController.travellers;
-  // }
-
 /////////////////////////////////////////////
 
   List<PassPortType> listPassportType = [new PassPortType(id: -1, shortName: "", name: "", fullName: "Passport Type")];
@@ -109,7 +169,6 @@ class PassportStepController extends MainController {
     }
   }
 
-  // final RxString selectedPassportType = "Passport Type".obs;
   void setSelected(int index, String value) {
     travellers[index].passportInfo.passportType = value;
     updateIsCompleted(index);
@@ -122,7 +181,6 @@ class PassportStepController extends MainController {
     new Country(worldAreaCode: null, currencyId: null, englishName: "Country of Issue", name: null, hasOnHoldBooking: null, regionId: null, code3: null, isDisabled: null, id: null)
   ];
 
-  // final RxString selectedCountryIssue = "Country of Issue".obs;
   void setSelectedCountryIssue(int index, String value) {
     travellers[index].passportInfo.countryOfIssue = value;
     updateIsCompleted(index);
@@ -133,7 +191,6 @@ class PassportStepController extends MainController {
 
   List<String> listGender = ["Gender", "Male", "Female"];
 
-  // final RxString selectedGender = "Male".obs;
   void setSelectedGender(int index, String value) {
     travellers[index].passportInfo.gender = value;
     updateIsCompleted(index);
@@ -260,6 +317,7 @@ class PassportStepController extends MainController {
                   travellers.refresh();
                   updateDocuments();
                   updateIsCompleted(index);
+                  saveDocsDocoDoca(index);
                   Get.back();
                 },
               ),
@@ -294,6 +352,7 @@ class PassportStepController extends MainController {
               value: travellers[index].passportInfo.passportType == null ? "Passport Type" : travellers[index].passportInfo.passportType,
               items: listPassportType.map(
                 (selectedType) {
+
                   return DropdownMenuItem(
                     child: Text(
                       selectedType.fullName,
@@ -333,6 +392,7 @@ class PassportStepController extends MainController {
               value: travellers[index].passportInfo.nationality == null ? "Nationality" : travellers[index].passportInfo.nationality,
               items: nationalitiesList.map(
                 (selectedType) {
+                  travellers[index].passportInfo.nationalityID=selectedType.id;
                   return DropdownMenuItem(
                     child: new Text(
                       selectedType.englishName!,
