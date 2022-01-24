@@ -126,6 +126,24 @@ class DataProvider {
     );
     return NetworkRequest(api: api, data: selectSeatExtrasRM.toJson(), retry: retry).post();
   }
+  static Future<NetworkResponse> addTransaction({required String execution, required dynamic token, required Map<String, dynamic> request, required Function retry}) async {
+    String api = Apis.addTransaction;
+    RequestModelAddTransaction addTransactionRM = RequestModelAddTransaction(
+      execution: execution,
+      token: token,
+      request: request,
+    );
+    return NetworkRequest(api: api, data: addTransactionRM.toJson(), retry: retry).post();
+  }
+  static Future<NetworkResponse> updateTransaction({required String execution, required dynamic token, required Map<String, dynamic> request, required Function retry}) async {
+    String api = Apis.updateTransaction;
+    RequestModelUpdateTransaction updateTransactionRM = RequestModelUpdateTransaction(
+      execution: execution,
+      token: token,
+      request: request,
+    );
+    return NetworkRequest(api: api, data: updateTransactionRM.toJson(), retry: retry).post();
+  }
 }
 
 class DioClient {
@@ -373,6 +391,48 @@ class DioClient {
   }) async {
     Response response;
     String api = Apis.baseUrl + Apis.selectSeatExtras;
+    _dio.options.headers['Content-Type'] = 'application/json';
+    response = await _dio.post(
+      api,
+      data: {
+        "Body": {
+          "Execution": execution,
+          "Token": token,
+          "Request": request,
+        },
+      },
+    );
+    return response;
+  }
+
+  static Future<Response> addTransaction({
+    required String execution,
+    required dynamic token,
+    required Map<String, dynamic> request,
+  }) async {
+    Response response;
+    String api = Apis.baseUrl + Apis.addTransaction;
+    _dio.options.headers['Content-Type'] = 'application/json';
+    response = await _dio.post(
+      api,
+      data: {
+        "Body": {
+          "Execution": execution,
+          "Token": token,
+          "Request": request,
+        },
+      },
+    );
+    return response;
+  }
+
+  static Future<Response> updateTransaction({
+    required String execution,
+    required dynamic token,
+    required Map<String, dynamic> request,
+  }) async {
+    Response response;
+    String api = Apis.baseUrl + Apis.updateTransaction;
     _dio.options.headers['Content-Type'] = 'application/json';
     response = await _dio.post(
       api,

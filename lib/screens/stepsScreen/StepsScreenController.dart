@@ -92,6 +92,10 @@ class StepsScreenController extends MainController {
     bool isSuccessful = true;
 
     if (currStep < 8) {
+      if (step == 6 ) {
+        SeatsStepController seatsStepController = Get.put(SeatsStepController(model));
+        isSuccessful = await seatsStepController.clickOnSeat();
+      }
       // if (step == 7) {
       //   PaymentStepController paymentStepController = Get.put(PaymentStepController(model));
       //   isSuccessful = await paymentStepController.finalReserve();

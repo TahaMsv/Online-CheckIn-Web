@@ -34,20 +34,24 @@ class SeatsStepController extends MainController {
     }
   }
 
-  void clickOnSeatAndReserve() async {
+  Future<bool> clickOnSeat() async {
     final myStepScreenController = Get.put(StepsScreenController(model));
     List<Traveller> travellers = myStepScreenController.travellers;
     List<Map<String, dynamic>> seatsData = [];
+    print(travellers);
     for (var i = 0; i < travellers.length; ++i) {
       Traveller traveller = travellers[i];
+      print("here44");
       String letter = traveller.seatId.substring(0, 1);
       int line = int.parse(traveller.seatId.substring(1));
+      print("here47");
       seatsData.add({
-        "PassengerID": traveller.welcome.body.passengers[i].id,
+        "PassengerID": traveller.welcome.body.passengers[0].id,
         "Letter": letter,
         "Line": line,
       });
     }
+    print("here54");
     Response response = await DioClient.clickOnSeat(
       execution: "OnlineCheckin.ClickOnSeat",
       token: travellers[0].token,
@@ -56,8 +60,11 @@ class SeatsStepController extends MainController {
 
     if (response.statusCode == 200) {
       if (response.data["ResultCode"] == 1) {
+        print("here");
+        return true;
       }
-    } else {}
+    }
+    return false;
   }
 
   double calculatePlaneBodyLength() {
@@ -118,6 +125,20 @@ class SeatsStepController extends MainController {
     myStepScreenController.updateIsNextButtonDisable();
   }
 
+  bool isSeatDisable(String type, String? status){
+    return (type != "Seat" || (status == "Block" || status == "Checked-in" || status == "Click"));
+  }
+
+  int seatViewType(String? cellValue , String cellType , String? seatStatus ){
+    if( cellValue == "ExitDoor") return 1;  //Exit door
+    if(cellType == "Seat" )
+      {
+        if(seatStatus == "Block") return 2;  //Block seat
+        if(seatStatus == "Checked-in" || seatStatus == "Click") return 3; // Checked in or click seat
+      }
+    return 4; // Open seat
+  }
+
   Color getColor(String seatId) {
     if (!seatsStatus.containsKey(seatId)) return Colors.grey;
 
@@ -127,6 +148,8 @@ class SeatsStepController extends MainController {
       case "Open":
         return Colors.white;
       case "Checked-in":
+        return Colors.grey;
+      case "Click":
         return Colors.grey;
       default:
         return Color(0xffffae2c);

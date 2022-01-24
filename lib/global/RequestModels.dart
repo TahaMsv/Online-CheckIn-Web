@@ -142,23 +142,6 @@ class RequestModelReserveSeat {
   };
 }
 
-class RequestModelSelectBoardingPass {
-  final String execution;
-  final dynamic token;
-  final Map<String, dynamic> request;
-
-  RequestModelSelectBoardingPass({
-    required this.execution,
-    required this.token,
-    required this.request,
-  });
-
-  Map<String, dynamic> toJson() => {
-        "Execution": execution,
-        "Token": token,
-        "Request": request,
-      };
-}
 
 class RequestModelBoardingPassPDF {
   final String token;
@@ -177,6 +160,25 @@ class RequestModelBoardingPassPDF {
         "Request": request,
       };
 }
+
+class RequestModelSelectBoardingPass {
+  final String execution;
+  final dynamic token;
+  final Map<String, dynamic> request;
+
+  RequestModelSelectBoardingPass({
+    required this.execution,
+    required this.token,
+    required this.request,
+  });
+
+  Map<String, dynamic> toJson() => {
+    "Execution": execution,
+    "Token": token,
+    "Request": request,
+  };
+}
+
 
 class RequestModelBoardingPassSendEmail {
   final String execution;
@@ -212,4 +214,40 @@ class RequestModelSelectSeatExtras {
         "Token": token,
         "Request": request,
       };
+}
+
+class RequestModelAddTransaction {
+  final String execution;
+  final dynamic token;
+  final Map<String, dynamic> request;
+
+  RequestModelAddTransaction({
+    required this.execution,
+    required this.token,
+    required this.request,
+  });
+
+  Map<String, dynamic> toJson() => {
+    "Execution": execution,
+    "Token": token,
+    "Request": request,
+  };
+}
+
+class RequestModelUpdateTransaction {
+  final String execution;
+  final dynamic token;
+  final Map<String, dynamic> request;
+
+  RequestModelUpdateTransaction({
+    required this.execution,
+    required this.token,
+    required this.request,
+  });
+
+  Map<String, dynamic> toJson() => {
+    "Execution": execution,
+    "Token": token,
+    "Request": request,
+  };
 }

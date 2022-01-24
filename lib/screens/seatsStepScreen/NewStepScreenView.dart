@@ -29,8 +29,7 @@ class SeatsStepView extends StatelessWidget {
         child: Center(
           child: ScrollConfiguration(
             behavior: MyCustomScrollBehavior(),
-            child:
-            ListView(
+            child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
                 Stack(
@@ -236,7 +235,7 @@ class HorizontalCodeLine extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                cells[i].type== "Seat" ? cells[i].value! : "",
+                cells[i].type == "Seat" ? cells[i].value! : "",
                 style: TextStyle(
                   color: Color(0xffd1d1d1),
                 ),
@@ -288,18 +287,15 @@ class SeatWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: cell.type != "Seat"
+      onTap: mySeatsStepController.isSeatDisable(cell.type, mySeatsStepController.seatsStatus[cell.code])
           ? null
-          : mySeatsStepController.seatsStatus[cell.code] == "Block" || mySeatsStepController.seatsStatus[cell.code] == "Checked-in"
-              ? null
-              : () {
-                  print("here" + cell.code!);
-                  mySeatsStepController.changeSeatStatus(cell.code!);
-                },
+          : () {
+              // print("here" + cell.code!);
+              mySeatsStepController.changeSeatStatus(cell.code!);
+            },
       child: Container(
         width: cell.type == "Seat" || cell.type == "OutEquipmentExit" ? 35 : 15,
         height: cell.type == "Seat" || cell.type == "OutEquipmentExit" ? 35 : 15,
-
         margin: EdgeInsets.all(2),
         decoration: BoxDecoration(
           color: cell.type == "Seat" ? mySeatsStepController.getColor(cell.code!) : Color(0xff5d5d5d),
@@ -307,28 +303,39 @@ class SeatWidget extends StatelessWidget {
             Radius.circular(10),
           ),
         ),
-        child: cell.value == "ExitDoor"
-            ? Icon(
-                Icons.sensor_door_outlined,
-                color: Colors.red,
-              )
-            : cell.type == "Seat" && mySeatsStepController.seatsStatus[cell.code] == "Block"
-                ? BlockedSeat()
-                : cell.type == "Seat" && mySeatsStepController.seatsStatus[cell.code] == "Checked-in"
-                    ? CheckedInSeat(seatId: mySeatsStepController.seatsStatus[cell.code]!)
-                    : Center(
-                        child: Text(
-                          cell.type== "Seat"
-                              ? cell.code!
-                              : cell.type== "VerticalCode"
-                                  ? cell.value!
-                                  : "",
-                          style: TextStyle(color: cell.type== "Seat" ? Color(0xffd1d1d1) : Colors.white),
-                        ),
-                      ),
-
+        child: (() {
+          switch(mySeatsStepController.seatViewType(cell.value, cell.type, mySeatsStepController.seatsStatus[cell.code] )){
+            case 1: return ExitDoor();
+            case 2: return BlockedSeat();
+            case 3: return CheckedInSeat(seatId: mySeatsStepController.seatsStatus[cell.code]!);
+            case 4: return Center(
+              child: Text(
+                cell.type == "Seat"
+                    ? cell.code!
+                    : cell.type == "VerticalCode"
+                    ? cell.value!
+                    : "",
+                style: TextStyle(color: cell.type == "Seat" ? Color(0xffd1d1d1) : Colors.white),
+              ),
+            );
+          }
+        }())
       ),
     );
+  }
+}
+
+class ExitDoor extends StatelessWidget {
+  const ExitDoor({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+        Icons.sensor_door_outlined,
+        color: Colors.red,
+      );
   }
 }
 
@@ -375,7 +382,7 @@ class PlaneTail extends StatelessWidget {
         padding: EdgeInsets.only(top: 30, bottom: 22),
         margin: EdgeInsets.only(left: margin + 50),
         // width: 2400,
-        height: height+100,
+        height: height + 100,
         child: Image.asset(
           "assets/images/Edited-Tail.png",
           fit: BoxFit.contain,
