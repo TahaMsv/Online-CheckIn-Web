@@ -237,7 +237,7 @@ class HorizontalCodeLine extends StatelessWidget {
               child: Text(
                 cells[i].type == "Seat" ? cells[i].value! : "",
                 style: TextStyle(
-                  color: Color(0xffd1d1d1),
+                  color:    Colors.white,
                 ),
               ),
             ),
@@ -286,41 +286,89 @@ class SeatWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = 35;
+    double height = 35;
+    bool isSeatClickable = false;
+    Color color = Color(0xff5d5d5d);
+    String seatText = "";
+    Color    textColor = Colors.white;
+    switch (mySeatsStepController.seatViewType(cell.value, cell.type, cell.code)) {
+      case 1:
+        color = Color(0xff5d5d5d);
+        break;
+      case 2:
+        seatText = cell.code!;
+        width = height = 15;
+
+        break;
+      case 3:
+        color = Colors.black;
+        break;
+      case 4:
+        color =  Colors.grey;
+        break;
+      case 5:
+        color =  Colors.grey.withOpacity(0.5);
+        break;
+      case 6:
+        color =  Colors.white;
+        isSeatClickable = true;
+        seatText = cell.code!;
+        textColor = Color(0xffd1d1d1);
+        break;
+      case 7:
+        isSeatClickable = true;
+        color = Color(0xffffae2c);
+        seatText = mySeatsStepController.seatsStatus[cell.code]!;
+        break;
+      case 8:
+        break;
+      case 9:
+        break;
+      case 10:
+        width = height = 15;
+        break;
+      case 11:
+        width = height = 15;
+        seatText = cell.value!;
+        break;
+      case 12:
+        width = height = 15;
+        break;
+    }
+
     return GestureDetector(
-      onTap: mySeatsStepController.isSeatDisable(cell.type, mySeatsStepController.seatsStatus[cell.code])
-          ? null
-          : () {
-              // print("here" + cell.code!);
+      onTap: isSeatClickable
+          ? () {
               mySeatsStepController.changeSeatStatus(cell.code!);
-            },
+            }
+          : null,
       child: Container(
-        width: cell.type == "Seat" || cell.type == "OutEquipmentExit" ? 35 : 15,
-        height: cell.type == "Seat" || cell.type == "OutEquipmentExit" ? 35 : 15,
-        margin: EdgeInsets.all(2),
-        decoration: BoxDecoration(
-          color: cell.type == "Seat" ? mySeatsStepController.getColor(cell.code!) : Color(0xff5d5d5d),
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
+          width: width,
+          height: height,
+          margin: EdgeInsets.all(2),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
+            ),
           ),
-        ),
-        child: (() {
-          switch(mySeatsStepController.seatViewType(cell.value, cell.type, mySeatsStepController.seatsStatus[cell.code] )){
-            case 1: return ExitDoor();
-            case 2: return BlockedSeat();
-            case 3: return CheckedInSeat(seatId: mySeatsStepController.seatsStatus[cell.code]!);
-            case 4: return Center(
-              child: Text(
-                cell.type == "Seat"
-                    ? cell.code!
-                    : cell.type == "VerticalCode"
-                    ? cell.value!
-                    : "",
-                style: TextStyle(color: cell.type == "Seat" ? Color(0xffd1d1d1) : Colors.white),
-              ),
-            );
-          }
-        }())
-      ),
+          child: (() {
+            switch (mySeatsStepController.seatViewType(cell.value, cell.type, cell.code)) {
+              case 9:
+                return ExitDoor();
+              case 3:
+                return BlockedSeat();
+              case 4:
+                return CheckedInSeat(seatId: mySeatsStepController.seatsStatus[cell.code]!);
+              default:
+                return Center(
+                  child: Text(seatText,
+                    style: TextStyle(color: textColor),
+                  ),
+                );
+            }
+          }())),
     );
   }
 }
@@ -333,9 +381,9 @@ class ExitDoor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Icon(
-        Icons.sensor_door_outlined,
-        color: Colors.red,
-      );
+      Icons.sensor_door_outlined,
+      color: Colors.red,
+    );
   }
 }
 

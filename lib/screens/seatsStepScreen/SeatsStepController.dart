@@ -11,10 +11,9 @@ import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
 
 class SeatsStepController extends MainController {
-
   MainModel model;
-  SeatsStepController(this.model);
 
+  SeatsStepController(this.model);
 
   final double eachLineWidth = 45;
   List<Cabin> cabins = [];
@@ -125,18 +124,37 @@ class SeatsStepController extends MainController {
     myStepScreenController.updateIsNextButtonDisable();
   }
 
-  bool isSeatDisable(String type, String? status){
+  bool isSeatDisable(String type, String? status) {
     return (type != "Seat" || (status == "Block" || status == "Checked-in" || status == "Click"));
   }
 
-  int seatViewType(String? cellValue , String cellType , String? seatStatus ){
-    if( cellValue == "ExitDoor") return 1;  //Exit door
-    if(cellType == "Seat" )
-      {
-        if(seatStatus == "Block") return 2;  //Block seat
-        if(seatStatus == "Checked-in" || seatStatus == "Click") return 3; // Checked in or click seat
+  int seatViewType(String? cellValue, String cellType, String? code) {
+    if (cellType == "Seat") {
+      if (cellValue == null) {
+        return 1; // empty area
+      } else if (cellValue.length == 1)
+        return 2; // letter => Horizontal code
+      else {
+        if (seatsStatus[code] == "Block")
+          return 3;
+        else if (seatsStatus[code] == "Checked-in")
+          return 4;
+        else if (seatsStatus[code] == "Click")
+          return 5;
+        else if (seatsStatus[code] == "Open")
+          return 6;
+        else
+          return 7; // selected seat
       }
-    return 4; // Open seat
+    } else if (cellType == "OutEquipmentExit") {
+      if (cellValue == null) return 8;
+      else if (cellValue == "ExitDoor") return 9;
+    } else if (cellType == "OutEquipmentWing")
+      return 10;
+    else if (cellType == "VerticalCode")
+      return 11;
+    else if (cellType == "Aile") return 12;
+    return 0;
   }
 
   Color getColor(String seatId) {

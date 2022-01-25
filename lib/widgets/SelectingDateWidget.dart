@@ -36,7 +36,7 @@ class _SelectingDateWidgetState extends State<SelectingDateWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
+
     currentDate = widget.currDateTime;
     super.initState();
   }

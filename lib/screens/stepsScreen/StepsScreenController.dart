@@ -22,6 +22,15 @@ class StepsScreenController extends MainController {
 
   Welcome? _welcome;
 
+  List<RxBool> _isNextButtonDisable = [false.obs, true.obs, false.obs, false.obs, false.obs, false.obs, true.obs, false.obs, false.obs];
+
+
+  RxList<Traveller> travellers = <Traveller>[].obs;
+  RxInt whoseTurnToSelect = 0.obs;
+
+
+  bool get isNextButtonDisable => _isNextButtonDisable[step].value;
+
   Welcome? get welcome => _welcome;
   RxInt _step = 0.obs;
 
@@ -54,9 +63,7 @@ class StepsScreenController extends MainController {
     } else {}
   }
 
-  List<RxBool> _isNextButtonDisable = [false.obs, true.obs, false.obs, false.obs, false.obs, false.obs, true.obs, false.obs, false.obs];
 
-  bool get isNextButtonDisable => _isNextButtonDisable[step].value;
 
   void updateIsNextButtonDisable() {
     if (step == 0) {
@@ -106,9 +113,6 @@ class StepsScreenController extends MainController {
     }
   }
 
-  RxList<Traveller> travellers = <Traveller>[].obs;
-  RxInt whoseTurnToSelect = 0.obs;
-
   void changeTurnToSelect() {
     for (int i = 0; i < travellers.length; i++) {
       if (travellers[i].seatId == "--") {
@@ -153,7 +157,6 @@ class StepsScreenController extends MainController {
 
   getInformation(String token) async {
     model.setLoading(true);
-    // String token = "4C704766-2DD0-4F27-BD8A-A6162FF501DB";   //todo    //dynamic api, now it is static for testing
     Response response = await DioClient.getInformation(
       execution: "[OnlineCheckin].[SelectFlightInformation]",
       token: token,

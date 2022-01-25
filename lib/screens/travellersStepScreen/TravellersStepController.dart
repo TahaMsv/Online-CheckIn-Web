@@ -39,7 +39,6 @@ class TravellersStepScreenController extends MainController {
     }
     if (ticketNumber != "" && lastName != "") {
       String token = await checkTravellerValidation(ticketNumber, lastName);
-      // String token = "4C704766-2DD0-4F27-BD8A-A6162FF501DB" ; //todo    //dynamic api, now it is static for testing
       if (token != "") {
         myStepScreenController.addToTravellers(token, lastName, ticketNumber);
         lastNameC.text = "";
