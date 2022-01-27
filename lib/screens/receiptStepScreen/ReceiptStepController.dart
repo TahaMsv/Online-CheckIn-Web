@@ -72,7 +72,7 @@ class ReceiptStepController extends MainController {
       String letter = traveller.seatId.substring(0, 1);
       int line = int.parse(traveller.seatId.substring(1));
       seatsData.add({
-        "PassengerID": traveller.welcome.body.passengers[i].id,
+        "PassengerID": traveller.welcome.body.passengers[0].id,
         "Letter": letter,
         "Line": line,
       });

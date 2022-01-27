@@ -126,7 +126,6 @@ class StepsScreenController extends MainController {
 
   void addToTravellers(String token, String lastName, String ticketNumber) async {
     await getInformation(token);
-    Passenger passenger = welcome!.body.passengers.first;
     for (int i = 0; i < travellers.length; i++) {
       if (travellers[i].welcome.body.passengers[0].lastName == lastName && travellers[i].ticketNumber == ticketNumber) {
         return;
@@ -137,6 +136,7 @@ class StepsScreenController extends MainController {
     traveller.setVisaInfo(new VisaInfo());
     travellers.add(traveller);
     updateIsNextButtonDisable();
+    changeTurnToSelect();
   }
 
   void removeFromTravellers(int index) {

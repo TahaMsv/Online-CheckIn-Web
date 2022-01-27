@@ -61,7 +61,8 @@ class StepsScreenView extends StatelessWidget {
                           ),
                         ),
                         Obx(
-                          () => Container(
+                          () =>
+                              Container(
                             width: width * 0.80,
                             height: height * 0.9,
                             child: Column(

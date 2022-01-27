@@ -237,7 +237,7 @@ class HorizontalCodeLine extends StatelessWidget {
               child: Text(
                 cells[i].type == "Seat" ? cells[i].value! : "",
                 style: TextStyle(
-                  color:    Colors.white,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -267,6 +267,7 @@ class BodyLine extends StatelessWidget {
           return SeatWidget(
             mySeatsStepController: mySeatsStepController,
             cell: cells[i],
+            seatsStatus: mySeatsStepController.seatsStatus,
           );
         },
       ),
@@ -274,16 +275,23 @@ class BodyLine extends StatelessWidget {
   }
 }
 
-class SeatWidget extends StatelessWidget {
+class SeatWidget extends StatefulWidget {
   const SeatWidget({
     Key? key,
     required this.mySeatsStepController,
     required this.cell,
+    required this.seatsStatus,
   }) : super(key: key);
   final Cell cell;
 
   final SeatsStepController mySeatsStepController;
+  final RxMap<String, String> seatsStatus;
 
+  @override
+  State<SeatWidget> createState() => _SeatWidgetState();
+}
+
+class _SeatWidgetState extends State<SeatWidget> {
   @override
   Widget build(BuildContext context) {
     double width = 35;
@@ -291,13 +299,13 @@ class SeatWidget extends StatelessWidget {
     bool isSeatClickable = false;
     Color color = Color(0xff5d5d5d);
     String seatText = "";
-    Color    textColor = Colors.white;
-    switch (mySeatsStepController.seatViewType(cell.value, cell.type, cell.code)) {
+    Color textColor = Colors.white;
+    switch (widget.mySeatsStepController.seatViewType(widget.cell.value, widget.cell.type, widget.cell.code)) {
       case 1:
         color = Color(0xff5d5d5d);
         break;
       case 2:
-        seatText = cell.code!;
+        seatText = widget.cell.code!;
         width = height = 15;
 
         break;
@@ -305,21 +313,21 @@ class SeatWidget extends StatelessWidget {
         color = Colors.black;
         break;
       case 4:
-        color =  Colors.grey;
+        color = Colors.grey;
         break;
       case 5:
-        color =  Colors.grey.withOpacity(0.5);
+        color = Colors.grey.withOpacity(0.5);
         break;
       case 6:
-        color =  Colors.white;
+        color = Colors.white;
         isSeatClickable = true;
-        seatText = cell.code!;
+        seatText = widget.cell.code!;
         textColor = Color(0xffd1d1d1);
         break;
       case 7:
         isSeatClickable = true;
         color = Color(0xffffae2c);
-        seatText = mySeatsStepController.seatsStatus[cell.code]!;
+        seatText = widget.mySeatsStepController.seatsStatus[widget.cell.code]!;
         break;
       case 8:
         break;
@@ -330,7 +338,7 @@ class SeatWidget extends StatelessWidget {
         break;
       case 11:
         width = height = 15;
-        seatText = cell.value!;
+        seatText = widget.cell.value!;
         break;
       case 12:
         width = height = 15;
@@ -340,7 +348,9 @@ class SeatWidget extends StatelessWidget {
     return GestureDetector(
       onTap: isSeatClickable
           ? () {
-              mySeatsStepController.changeSeatStatus(cell.code!);
+              setState(() {
+                widget.mySeatsStepController.changeSeatStatus(widget.cell.code!);
+              });
             }
           : null,
       child: Container(
@@ -354,16 +364,17 @@ class SeatWidget extends StatelessWidget {
             ),
           ),
           child: (() {
-            switch (mySeatsStepController.seatViewType(cell.value, cell.type, cell.code)) {
+            switch (widget.mySeatsStepController.seatViewType(widget.cell.value, widget.cell.type, widget.cell.code)) {
               case 9:
                 return ExitDoor();
               case 3:
                 return BlockedSeat();
               case 4:
-                return CheckedInSeat(seatId: mySeatsStepController.seatsStatus[cell.code]!);
+                return CheckedInSeat();
               default:
                 return Center(
-                  child: Text(seatText,
+                  child: Text(
+                    seatText,
                     style: TextStyle(color: textColor),
                   ),
                 );
@@ -476,10 +487,7 @@ class BlockedSeat extends StatelessWidget {
 class CheckedInSeat extends StatelessWidget {
   const CheckedInSeat({
     Key? key,
-    required this.seatId,
   }) : super(key: key);
-
-  final String seatId;
 
   @override
   Widget build(BuildContext context) {
@@ -490,14 +498,6 @@ class CheckedInSeat extends StatelessWidget {
         color: Colors.grey,
         borderRadius: BorderRadius.all(
           Radius.circular(10),
-        ),
-      ),
-      child: Center(
-        child: Text(
-          seatId,
-          style: TextStyle(
-            color: Colors.grey,
-          ),
         ),
       ),
     );
