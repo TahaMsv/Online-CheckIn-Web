@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:onlinecheckin/global/Classes.dart';
+import 'package:onlinecheckin/screens/seatsStepScreen/SeatsStepController.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
 import '../../utility/DataProvider.dart';
 import '../../global/MainController.dart';
@@ -17,58 +18,50 @@ class ReceiptStepController extends MainController {
   late BoardingPassPDF boardingPassPDF;
   late Uint8List bytes;
   RxBool successfulResponse = false.obs;
-  RxBool loading=false.obs;
+  RxBool loading = false.obs;
 
   void init() async {
-    loading.value=true;
+    loading.value = true;
     // model.setLoading(true);
     await finalReserve();
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-    print("aa");
     var req = {
       "Format": 1, //1->pdf    32->Html
       "PassengersId": "<MyTable><MyRow><FlightPax_ID>${stepsScreenController.travellers[0].welcome.body.passengers[0].id}</FlightPax_ID></MyRow></MyTable>",
       "IsDarkMode": false,
     };
-    print(req);
     Response response = await DioClient.boardingPassPDF(
       mrtName: "OnlineCheckinBoardingPass-AB",
       token: stepsScreenController.travellers[0].token,
       request: req,
     );
-    print("aa1");
 
     if (response.statusCode == 200) {
-      print("here1");
       boardingPassPDF = BoardingPassPDF.fromJson(response.data);
-      print("here2");
       convertToPDF();
-      print("here4");
-      loading.value=false;
+      loading.value = false;
       successfulResponse.value = true;
       // model.setLoading(false);
       return;
     }
-    print("here5");
-    loading.value=false;
+    loading.value = false;
     successfulResponse.value = false;
     // model.setLoading(false);
   }
 
   void convertToPDF() async {
-    print("here3");
     String base64String = boardingPassPDF.buffer;
     bytes = base64Decode(base64String);
   }
 
   Future<bool> finalReserve() async {
-    print("here11");
     final myStepScreenController = Get.put(StepsScreenController(model));
+    final seatsStepController = Get.put(SeatsStepController(model));
     List<Traveller> travellers = myStepScreenController.travellers;
     List<Map<String, dynamic>> seatsData = [];
-    print("here12");
-    for (var i = 0; i < travellers.length; ++i) {
-      Traveller traveller = travellers[i];
+    String token = "";
+    travellers.where((t) => !seatsStepController.reservedSeats.containsKey(t.seatId)).toList().forEach((traveller) {
+      token = traveller.token;
       String letter = traveller.seatId.substring(0, 1);
       int line = int.parse(traveller.seatId.substring(1));
       seatsData.add({
@@ -76,27 +69,25 @@ class ReceiptStepController extends MainController {
         "Letter": letter,
         "Line": line,
       });
-    }
+    });
+    print(token);
     print(seatsData);
-    print("here13");
     Response response = await DioClient.reserveSeat(
       execution: "[OnlineCheckin].[ReserveSeat]",
-      token: travellers[0].token,
+      token: token,
       request: {"SeatsData": seatsData, "TicketData": null},
     );
-    print("here14");
-
-    print(jsonEncode(response.data));
     if (response.statusCode == 200) {
-      print("here15");
       if (response.data["ResultCode"] == 1) {
-        print("here16");
-
+        final seatsStepController = Get.put(SeatsStepController(model));
+        travellers.forEach((traveller) {
+          seatsStepController.reservedSeats[traveller.seatId] = traveller.getNickName();
+          seatsStepController.clickedOnSeats.remove(traveller.seatId);
+        });
         return Future<bool>.value(true);
       }
     }
-    print("here17");
-
+    if (seatsStepController.reservedSeats.length == travellers.length) return true;
     return Future<bool>.value(false);
   }
 

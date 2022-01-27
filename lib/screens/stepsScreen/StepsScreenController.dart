@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:onlinecheckin/screens/paymentStepScreen/PaymentStepController.dart';
+import 'package:onlinecheckin/screens/receiptStepScreen/ReceiptStepController.dart';
 import 'package:onlinecheckin/screens/safetyStepScreen/SafetyStepController.dart';
 import 'package:onlinecheckin/screens/seatsStepScreen/SeatsStepController.dart';
 import '../../global/Classes.dart';
@@ -92,6 +93,11 @@ class StepsScreenController extends MainController {
 
   void setStep(int newStep) {
     _step.value = newStep;
+    if(step == 6){
+      updateIsNextButtonDisable();
+      SeatsStepController seatsStepController = Get.put(SeatsStepController(model));
+      seatsStepController.updateSeatMap();
+    }
   }
 
   void increaseStep() async {
@@ -103,10 +109,10 @@ class StepsScreenController extends MainController {
         SeatsStepController seatsStepController = Get.put(SeatsStepController(model));
         isSuccessful = await seatsStepController.clickOnSeat();
       }
-      // if (step == 7) {
-      //   PaymentStepController paymentStepController = Get.put(PaymentStepController(model));
-      //   isSuccessful = await paymentStepController.finalReserve();
-      // }
+      if (step == 7) {
+        ReceiptStepController receiptStepController = Get.put(ReceiptStepController(model));
+        isSuccessful = await receiptStepController.finalReserve();
+      }
       if (isSuccessful) {
         setStep(currStep + 1);
       }

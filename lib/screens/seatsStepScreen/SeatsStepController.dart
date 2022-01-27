@@ -19,6 +19,9 @@ class SeatsStepController extends MainController {
   List<Cabin> cabins = [];
 
   final RxMap<String, String> seatsStatus = <String, String>{}.obs;
+  final RxMap<String, String> selectedSeats = <String, String>{}.obs;
+  final RxMap<String, String> clickedOnSeats = <String, String>{}.obs;
+  final RxMap<String, String> reservedSeats = <String, String>{}.obs;
 
   ///////////// new /////////////////
 
@@ -33,36 +36,48 @@ class SeatsStepController extends MainController {
     }
   }
 
+  void updateSeatMap() {
+    final myStepScreenController = StepsScreenController(model);
+    List<Seat> seats = myStepScreenController.welcome!.body.seats;
+    seats.forEach((seat) {
+      String key = seat.letter + seat.line;
+      seatsStatus[key] = seat.isUsedDescription;
+    });
+    selectedSeats.forEach((k, v) => seatsStatus[k] = v);
+    // clickedOnSeats.forEach((k, v) => seatsStatus[k] = v);
+    // reservedSeats.forEach((k, v) => seatsStatus[k] = v);
+  }
+
   Future<bool> clickOnSeat() async {
     final myStepScreenController = Get.put(StepsScreenController(model));
     List<Traveller> travellers = myStepScreenController.travellers;
     List<Map<String, dynamic>> seatsData = [];
-    print(travellers);
-    for (var i = 0; i < travellers.length; ++i) {
-      Traveller traveller = travellers[i];
-      print("here44");
+    String token ="";
+    travellers.where((t) => !reservedSeats.containsKey(t.seatId)).toList().forEach((traveller) {
+      token = traveller.token;
       String letter = traveller.seatId.substring(0, 1);
       int line = int.parse(traveller.seatId.substring(1));
-      print("here47");
       seatsData.add({
         "PassengerID": traveller.welcome.body.passengers[0].id,
         "Letter": letter,
         "Line": line,
       });
-    }
-    print("here54");
+    });
     Response response = await DioClient.clickOnSeat(
       execution: "OnlineCheckin.ClickOnSeat",
-      token: travellers[0].token,
+      token: token,
       request: {"SeatsData": seatsData},
     );
 
     if (response.statusCode == 200) {
       if (response.data["ResultCode"] == 1) {
-        print("here");
+        travellers.forEach((traveller) {
+          clickedOnSeats[traveller.seatId] = traveller.getNickName();
+        });
         return true;
       }
     }
+    if(reservedSeats.length == travellers.length) return true; //All of them reserved a seat
     return false;
   }
 
@@ -96,19 +111,26 @@ class SeatsStepController extends MainController {
 
   void changeSeatStatus(String seatId) {
     final myStepScreenController = Get.put(StepsScreenController(model));
+
     int whoseTurn = myStepScreenController.whoseTurnToSelect.value;
     bool unSelectedTravellerExist = whoseTurn == -1 ? false : true;
     if (unSelectedTravellerExist) {
       String currStatus = seatsStatus[seatId]!;
+      if (currStatus == "Click" && clickedOnSeats.containsKey(seatId)) {
+        currStatus = "Open";
+      }
       if (currStatus == "Open") {
         String newSeatId = myStepScreenController.travellers[whoseTurn].getNickName();
         seatsStatus[seatId] = newSeatId;
+        selectedSeats[seatId] = newSeatId;
         myStepScreenController.travellers[whoseTurn].seatId = seatId;
       } else {
         int travellerIndex = myStepScreenController.findTravellerIndexBySeatId(seatId);
         if (travellerIndex != -1) {
           myStepScreenController.travellers[travellerIndex].seatId = "--";
           seatsStatus[seatId] = "Open";
+          selectedSeats.remove(seatId);
+          // clickedOnSeats.remove(seatId);
         }
       }
     } else {
@@ -116,6 +138,8 @@ class SeatsStepController extends MainController {
       if (travellerIndex != -1) {
         myStepScreenController.travellers[travellerIndex].seatId = "--";
         seatsStatus[seatId] = "Open";
+        selectedSeats.remove(seatId);
+        // clickedOnSeats.remove(seatId);
       }
     }
     myStepScreenController.changeTurnToSelect();
@@ -137,17 +161,23 @@ class SeatsStepController extends MainController {
       else {
         if (seatsStatus[code] == "Block")
           return 3;
+        else if (reservedSeats.containsKey(code))
+          return 13;
         else if (seatsStatus[code] == "Checked-in")
           return 4;
-        else if (seatsStatus[code] == "Click")
-          return 5;
-        else if (seatsStatus[code] == "Open")
+        else if (seatsStatus[code] == "Click") {
+          if (clickedOnSeats.containsKey(code))
+            return 6;
+          else
+            return 5;
+        } else if (seatsStatus[code] == "Open")
           return 6;
         else
           return 7; // selected seat
       }
     } else if (cellType == "OutEquipmentExit") {
-      if (cellValue == null) return 8;
+      if (cellValue == null)
+        return 8;
       else if (cellValue == "ExitDoor") return 9;
     } else if (cellType == "OutEquipmentWing")
       return 10;

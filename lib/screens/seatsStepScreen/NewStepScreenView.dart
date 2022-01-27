@@ -267,7 +267,6 @@ class BodyLine extends StatelessWidget {
           return SeatWidget(
             mySeatsStepController: mySeatsStepController,
             cell: cells[i],
-            seatsStatus: mySeatsStepController.seatsStatus,
           );
         },
       ),
@@ -280,12 +279,10 @@ class SeatWidget extends StatefulWidget {
     Key? key,
     required this.mySeatsStepController,
     required this.cell,
-    required this.seatsStatus,
   }) : super(key: key);
   final Cell cell;
 
   final SeatsStepController mySeatsStepController;
-  final RxMap<String, String> seatsStatus;
 
   @override
   State<SeatWidget> createState() => _SeatWidgetState();
@@ -342,6 +339,11 @@ class _SeatWidgetState extends State<SeatWidget> {
         break;
       case 12:
         width = height = 15;
+        break;
+      case 13:
+        isSeatClickable = false;
+        color = Color(0xff48c0a2);
+        seatText = widget.mySeatsStepController.seatsStatus[widget.cell.code]!;
         break;
     }
 
