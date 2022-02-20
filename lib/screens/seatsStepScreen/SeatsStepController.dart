@@ -15,10 +15,12 @@ class SeatsStepController extends MainController {
 
   SeatsStepController(this.model);
 
-  final double eachLineWidth = 45;
+  int seatPrices = 0;
+  final double eachLineWidth = 50;
   List<Cabin> cabins = [];
 
   final RxMap<String, String> seatsStatus = <String, String>{}.obs;
+  final RxMap<String, int> seatsPrice = <String, int>{}.obs;
   final RxMap<String, String> selectedSeats = <String, String>{}.obs;
   final RxMap<String, String> clickedOnSeats = <String, String>{}.obs;
   final RxMap<String, String> reservedSeats = <String, String>{}.obs;
@@ -33,6 +35,7 @@ class SeatsStepController extends MainController {
       Seat seat = seats[i];
       String key = seat.letter + seat.line;
       seatsStatus[key] = seat.isUsedDescription;
+      seatsPrice[key] = seat.price;
     }
   }
 
@@ -52,7 +55,7 @@ class SeatsStepController extends MainController {
     final myStepScreenController = Get.put(StepsScreenController(model));
     List<Traveller> travellers = myStepScreenController.travellers;
     List<Map<String, dynamic>> seatsData = [];
-    String token ="";
+    String token = "";
     travellers.where((t) => !reservedSeats.containsKey(t.seatId)).toList().forEach((traveller) {
       token = traveller.token;
       String letter = traveller.seatId.substring(0, 1);
@@ -77,7 +80,7 @@ class SeatsStepController extends MainController {
         return true;
       }
     }
-    if(reservedSeats.length == travellers.length) return true; //All of them reserved a seat
+    if (reservedSeats.length == travellers.length) return true; //All of them reserved a seat
     return false;
   }
 
@@ -86,11 +89,11 @@ class SeatsStepController extends MainController {
     for (var i = 0; i < cabins.length; ++i) {
       length += cabins[i].linesCount;
     }
-    return length * (eachLineWidth + 10) + (cabins.length * 60);
+    return length * (eachLineWidth + 15) + (cabins.length * 100);
   }
 
   double calculateCabinLength(int index) {
-    return cabins[index].linesCount * (eachLineWidth + 11);
+    return cabins[index].linesCount * (eachLineWidth + 15);
   }
 
   double calculatePlaneBodyHeight() {
@@ -111,17 +114,19 @@ class SeatsStepController extends MainController {
 
   void changeSeatStatus(String seatId) {
     final myStepScreenController = Get.put(StepsScreenController(model));
-
+    int price = seatsPrice[seatId]!;
     int whoseTurn = myStepScreenController.whoseTurnToSelect.value;
     bool unSelectedTravellerExist = whoseTurn == -1 ? false : true;
     if (unSelectedTravellerExist) {
       String currStatus = seatsStatus[seatId]!;
       if (currStatus == "Click" && clickedOnSeats.containsKey(seatId)) {
         currStatus = "Open";
+        seatPrices -= price;
       }
       if (currStatus == "Open") {
         String newSeatId = myStepScreenController.travellers[whoseTurn].getNickName();
         seatsStatus[seatId] = newSeatId;
+        seatPrices += price;
         selectedSeats[seatId] = newSeatId;
         myStepScreenController.travellers[whoseTurn].seatId = seatId;
       } else {
@@ -129,6 +134,7 @@ class SeatsStepController extends MainController {
         if (travellerIndex != -1) {
           myStepScreenController.travellers[travellerIndex].seatId = "--";
           seatsStatus[seatId] = "Open";
+          seatPrices -= price;
           selectedSeats.remove(seatId);
           // clickedOnSeats.remove(seatId);
         }
@@ -138,6 +144,7 @@ class SeatsStepController extends MainController {
       if (travellerIndex != -1) {
         myStepScreenController.travellers[travellerIndex].seatId = "--";
         seatsStatus[seatId] = "Open";
+        seatPrices -= price;
         selectedSeats.remove(seatId);
         // clickedOnSeats.remove(seatId);
       }

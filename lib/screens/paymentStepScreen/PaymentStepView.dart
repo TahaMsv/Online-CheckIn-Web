@@ -6,6 +6,8 @@ import '../../screens/paymentStepScreen/PaymentStepController.dart';
 import '../../widgets/StepsScreenTitle.dart';
 import '../../global/MainModel.dart';
 import 'package:get/get.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_stripe_web/flutter_stripe_web.dart';
 
 class PaymentStepView extends StatelessWidget {
   final PaymentStepController myPaymentStepController;
@@ -54,7 +56,9 @@ class PaymentStepView extends StatelessWidget {
                     ),
                   ],
                 ),
-                TaxesAndFees()
+                Obx(
+                  () => TaxesAndFees(myPaymentStepController: myPaymentStepController),
+                ),
               ],
             )
           ],
@@ -65,21 +69,10 @@ class PaymentStepView extends StatelessWidget {
 class TaxesAndFees extends StatelessWidget {
   const TaxesAndFees({
     Key? key,
+    required this.myPaymentStepController,
   }) : super(key: key);
 
-  static const taxes = [
-    {"title": "Goods & Services Tax (GST)", "price": "\$ 6.40"},
-    {"title": "Goods & Services Tax (GST)", "price": "\$ 6.40"},
-    {"title": "Goods & Services Tax (GST)", "price": "\$ 6.40"},
-    {"title": "Goods & Services Tax (GST)", "price": "\$ 6.40"},
-    {"title": "Goods & Services Tax (GST)", "price": "\$ 6.40"},
-    {"title": "Goods & Services Tax (GST)", "price": "\$ 6.40"},
-    {"title": "Goods & Services Tax (GST)", "price": "\$ 6.40"},
-    {"title": "Goods & Services Tax (GST)", "price": "\$ 6.40"},
-    {"title": "Goods & Services Tax (GST)", "price": "\$ 6.40"},
-    {"title": "Goods & Services Tax (GST)", "price": "\$ 6.40"},
-    {"title": "Goods & Services Tax (GST)", "price": "\$ 6.40"},
-  ];
+  final PaymentStepController myPaymentStepController;
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +89,7 @@ class TaxesAndFees extends StatelessWidget {
                 style: TextStyle(color: Color(0xff424242), fontSize: 17, fontWeight: FontWeight.w500),
               ),
               Text(
-                "\$ 6.40",
+                "\$ 0.00",
                 style: TextStyle(color: Color(0xff424242), fontSize: 15, fontWeight: FontWeight.bold),
               ),
             ],
@@ -114,18 +107,18 @@ class TaxesAndFees extends StatelessWidget {
           Container(
             height: 200,
             child: ListView.builder(
-              itemCount: taxes.length,
+              itemCount: myPaymentStepController.taxes.length,
               itemBuilder: (context, index) => Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      taxes[index]["title"]!,
+                      myPaymentStepController.taxes[index]["title"]!,
                       style: TextStyle(color: Color(0xff424242), fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                     Text(
-                      taxes[index]["price"]!,
+                      "\$ ${(myPaymentStepController.taxes[index]["price"]! as double).toStringAsFixed(2)}",
                       style: TextStyle(color: Color(0xff424242), fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -152,7 +145,7 @@ class TaxesAndFees extends StatelessWidget {
                 style: TextStyle(color: Color(0xff424242), fontSize: 17, fontWeight: FontWeight.bold),
               ),
               Text(
-                "\$ 6.40",
+                "\$ ${myPaymentStepController.totalPrice.toStringAsFixed(2)}",
                 style: TextStyle(color: Color(0xff48c0a2), fontSize: 15, fontWeight: FontWeight.bold),
               ),
             ],
@@ -307,63 +300,84 @@ class CardInfo extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          UserTextInput(
-            controller: myPaymentStepController.cardNumberC,
-            hint: "Card Number",
-            errorText: "",
-            isEmpty: false,
+          // UserTextInput(
+          //   controller: myPaymentStepController.cardNumberC,
+          //   hint: "Card Number",
+          //   errorText: "",
+          //   isEmpty: false,
+          // ),
+          // SizedBox(
+          //   height: 20,
+          // ),
+          // Row(
+          //   children: [
+          //     Expanded(
+          //         child: UserTextInput(
+          //       controller: myPaymentStepController.expiryMonthC,
+          //       hint: "Expiry Month",
+          //       errorText: "",
+          //       isEmpty: false,
+          //     )),
+          //     SizedBox(
+          //       width: 10,
+          //     ),
+          //     Expanded(
+          //         child: UserTextInput(
+          //       controller: myPaymentStepController.expiryYearC,
+          //       hint: "Expiry Year",
+          //       errorText: "",
+          //       isEmpty: false,
+          //     )),
+          //   ],
+          // ),
+          // SizedBox(
+          //   height: 20,
+          // ),
+          // Row(
+          //   children: [
+          //     Expanded(
+          //         child: UserTextInput(
+          //       controller: myPaymentStepController.cvv2C,
+          //       hint: "CVV2",
+          //       errorText: "",
+          //       isEmpty: false,
+          //     )),
+          //     SizedBox(
+          //       width: 10,
+          //     ),
+          //     Expanded(
+          //       child: Text(
+          //         "3 or 4 digits usually found on the signature strip",
+          //         style: TextStyle(
+          //           fontSize: 13,
+          //           color: Color(0xff989898),
+          //         ),
+          //         overflow: TextOverflow.clip,
+          //       ),
+          //     )
+          //   ],
+          // ),
+          SizedBox(
+            height: 40,
+            child: CardField(
+              onCardChanged: (card) {
+                print(card);
+              },
+            ),
           ),
           SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: [
-              Expanded(
-                  child: UserTextInput(
-                controller: myPaymentStepController.expiryMonthC,
-                hint: "Expiry Month",
-                errorText: "",
-                isEmpty: false,
-              )),
-              SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                  child: UserTextInput(
-                controller: myPaymentStepController.expiryYearC,
-                hint: "Expiry Year",
-                errorText: "",
-                isEmpty: false,
-              )),
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: [
-              Expanded(
-                  child: UserTextInput(
-                controller: myPaymentStepController.cvv2C,
-                hint: "CVV2",
-                errorText: "",
-                isEmpty: false,
-              )),
-              SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: Text(
-                  "3 or 4 digits usually found on the signature strip",
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Color(0xff989898),
-                  ),
-                  overflow: TextOverflow.clip,
-                ),
-              )
-            ],
-          ),
+            height: 40,
+            width: 375,
+            child: TextButton(
+              onPressed: () async {
+                // create payment method
+                final paymentMethod = await Stripe.instance.createPaymentMethod(PaymentMethodParams.card());
+                String stripeID = paymentMethod.id;
+                print(stripeID);
+              },
+              child: Text('pay'),
+            ),
+          )
         ],
       ),
     );

@@ -145,7 +145,7 @@ class CabinWidget extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Container(
-      width: width + 60,
+      width: width + 100,
       height: height,
       child: ListView(
         scrollDirection: Axis.horizontal,
@@ -197,7 +197,7 @@ class LineWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 45,
+      width: 50,
       margin: EdgeInsets.all(3),
       child: line.type == "HorizontalCode"
           ? HorizontalCodeLine(

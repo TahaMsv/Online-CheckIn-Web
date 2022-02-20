@@ -359,43 +359,44 @@ class TravellerItem extends StatelessWidget {
                                     height: 100,
                                     color: Color(0xffededed),
                                   ),
-                                  myStepsScreenController.whichOneToEdit == index
-                                      ? Row(
-                                          children: [
-                                            Container(
-                                              width: 45,
-                                              color: Colors.grey,
-                                              child: TextField(
-                                                textAlignVertical: TextAlignVertical.center,
-                                                controller: myStepsScreenController.editSeatC,
-                                                maxLength: 3,
-                                                decoration: InputDecoration(
-                                                    contentPadding: EdgeInsets.all(10.0), border: InputBorder.none, counterText: "", hintText: myStepsScreenController.travellers[index].seatId),
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 30,
-                                              child: IconButton(
-                                                  onPressed: () {
-                                                    myStepsScreenController.setWhichOneToEdit(-1);
-                                                    myStepsScreenController.changeTravellerSeat(index);
-                                                  },
-                                                  icon: Icon(Icons.check),
-                                                  color: Colors.green),
-                                            ),
-                                            Container(
-                                              width: 30,
-                                              child: IconButton(
-                                                onPressed: () {
-                                                  myStepsScreenController.setWhichOneToEdit(-1);
-                                                },
-                                                icon: Icon(Icons.close),
-                                                color: Colors.red,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      : Row(
+                                  // myStepsScreenController.whichOneToEdit == index
+                                  //     ? Row(
+                                  //         children: [
+                                  //           Container(
+                                  //             width: 45,
+                                  //             color: Colors.grey,
+                                  //             child: TextField(
+                                  //               textAlignVertical: TextAlignVertical.center,
+                                  //               controller: myStepsScreenController.editSeatC,
+                                  //               maxLength: 3,
+                                  //               decoration: InputDecoration(
+                                  //                   contentPadding: EdgeInsets.all(10.0), border: InputBorder.none, counterText: "", hintText: myStepsScreenController.travellers[index].seatId),
+                                  //             ),
+                                  //           ),
+                                  //           Container(
+                                  //             width: 30,
+                                  //             child: IconButton(
+                                  //                 onPressed: () {
+                                  //                   myStepsScreenController.setWhichOneToEdit(-1);
+                                  //                   myStepsScreenController.changeTravellerSeat(index);
+                                  //                 },
+                                  //                 icon: Icon(Icons.check),
+                                  //                 color: Colors.green),
+                                  //           ),
+                                  //           Container(
+                                  //             width: 30,
+                                  //             child: IconButton(
+                                  //               onPressed: () {
+                                  //                 myStepsScreenController.setWhichOneToEdit(-1);
+                                  //               },
+                                  //               icon: Icon(Icons.close),
+                                  //               color: Colors.red,
+                                  //             ),
+                                  //           ),
+                                  //         ],
+                                  //       )
+                                  //     :
+                                  Row(
                                           children: [
                                             TitleWidget(
                                               title: myStepsScreenController.travellers[index].seatId,
@@ -404,13 +405,13 @@ class TravellerItem extends StatelessWidget {
                                             ),
                                             Container(
                                               width: 35,
-                                              child: IconButton(
-                                                onPressed: () {
-                                                  myStepsScreenController.setWhichOneToEdit(index);
-                                                },
-                                                icon: Icon(Icons.edit),
-                                                color: myStepsScreenController.whichOneToEdit == index ? Colors.green : Colors.blue,
-                                              ),
+                                              // child: IconButton(
+                                              //   onPressed: () {
+                                              //     myStepsScreenController.setWhichOneToEdit(index);
+                                              //   },
+                                              //   icon: Icon(Icons.edit),
+                                              //   color: myStepsScreenController.whichOneToEdit == index ? Colors.green : Colors.blue,
+                                              // ),
                                             ),
                                           ],
                                         ),

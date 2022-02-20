@@ -25,10 +25,8 @@ class StepsScreenController extends MainController {
 
   List<RxBool> _isNextButtonDisable = [false.obs, true.obs, false.obs, false.obs, false.obs, false.obs, true.obs, false.obs, false.obs];
 
-
   RxList<Traveller> travellers = <Traveller>[].obs;
   RxInt whoseTurnToSelect = 0.obs;
-
 
   bool get isNextButtonDisable => _isNextButtonDisable[step].value;
 
@@ -64,8 +62,6 @@ class StepsScreenController extends MainController {
     } else {}
   }
 
-
-
   void updateIsNextButtonDisable() {
     if (step == 0) {
       _isNextButtonDisable[step].value = travellers.length == 0 ? true : false;
@@ -93,10 +89,15 @@ class StepsScreenController extends MainController {
 
   void setStep(int newStep) {
     _step.value = newStep;
-    if(step == 6){
+    if (step == 6) {
       updateIsNextButtonDisable();
       SeatsStepController seatsStepController = Get.put(SeatsStepController(model));
       seatsStepController.updateSeatMap();
+    }
+    if (step == 7) {
+      updateIsNextButtonDisable();
+      PaymentStepController paymentStepController = Get.put(PaymentStepController(model));
+      paymentStepController.calculatePrices();
     }
   }
 
@@ -105,7 +106,7 @@ class StepsScreenController extends MainController {
     bool isSuccessful = true;
 
     if (currStep < 8) {
-      if (step == 6 ) {
+      if (step == 6) {
         SeatsStepController seatsStepController = Get.put(SeatsStepController(model));
         isSuccessful = await seatsStepController.clickOnSeat();
       }

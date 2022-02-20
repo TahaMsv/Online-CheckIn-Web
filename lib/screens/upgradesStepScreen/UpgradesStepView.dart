@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import '../../global/Classes.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../screens/upgradesStepScreen/UpgradesStepController.dart';
 import '../../widgets/StepsScreenTitle.dart';
@@ -170,14 +171,23 @@ class UpgradeItemWidget extends StatelessWidget {
     required this.index,
   }) : super(key: key);
 
-  final Map<String, dynamic> value;
+  final Extra value;
   final bool isPrinter;
   final UpgradesStepController upgradesStepController;
   final int index;
 
   @override
   Widget build(BuildContext context) {
-    double margin = isPrinter ? 40 : 30;
+    Color color;
+    int numberOfSelected;
+    if (isPrinter) {
+      color = upgradesStepController.colors[4];
+      numberOfSelected = upgradesStepController.entertainmentsNumberOfSelected[index].value;
+    } else {
+      color = upgradesStepController.colors[index % 4];
+      numberOfSelected = upgradesStepController.winesNumberOfSelected[index].value;
+    }
+    // double margin = isPrinter ? 40 : 30;
     return Container(
       // height: 100,
       width: 330,
@@ -187,7 +197,7 @@ class UpgradeItemWidget extends StatelessWidget {
         children: [
           Container(
             height: 180,
-            color: (value["color"]! as Color).withOpacity(0.1),
+            color: (color).withOpacity(0.1),
             padding: EdgeInsets.only(right: 20, top: 20, bottom: 20, left: 50),
             margin: EdgeInsets.only(left: 30),
             child: Column(
@@ -198,7 +208,7 @@ class UpgradeItemWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      value["name"]!,
+                      value.title,
                       style: TextStyle(
                         fontSize: 12,
                         color: Color(0xff424242),
@@ -206,7 +216,7 @@ class UpgradeItemWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Starts from \$ ${value['price']}!",
+                      "Starts from \$ ${value.price}!",
                       style: TextStyle(
                         fontSize: 12,
                         color: Color(0xff424242),
@@ -216,7 +226,7 @@ class UpgradeItemWidget extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  value["description"]!,
+                  value.description,
                   overflow: TextOverflow.clip,
                   style: TextStyle(
                     fontSize: 12,
@@ -224,12 +234,12 @@ class UpgradeItemWidget extends StatelessWidget {
                     fontWeight: FontWeight.w300,
                   ),
                 ),
-                value["numberOfSelected"] == 0
+                numberOfSelected == 0
                     ? MyElevatedButton(
                         width: 80,
                         height: 30,
                         fgColor: Colors.white,
-                        bgColor: value["color"]!,
+                        bgColor: color,
                         buttonText: "Add",
                         function: () {
                           isPrinter ? upgradesStepController.addEntertainment(index) : upgradesStepController.addWine(index);
@@ -240,6 +250,8 @@ class UpgradeItemWidget extends StatelessWidget {
                         index: index,
                         upgradesStepController: upgradesStepController,
                         isPrinter: isPrinter,
+                        color: color,
+                        numberOfSelected: numberOfSelected,
                       ),
               ],
             ),
@@ -256,7 +268,7 @@ class UpgradeItemWidget extends StatelessWidget {
                     height: isPrinter ? 100 : 130,
                     // color: Colors.green,
                     child: Image.asset(
-                      value["imagePath"]!,
+                      value.imageUrl,
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -277,12 +289,16 @@ class ChangeNumOfSelected extends StatelessWidget {
     required this.upgradesStepController,
     required this.index,
     required this.isPrinter,
+    required this.color,
+    required this.numberOfSelected,
   }) : super(key: key);
 
-  final Map<String, dynamic> value;
+  final Extra value;
   final UpgradesStepController upgradesStepController;
   final int index;
+  final int numberOfSelected;
   final bool isPrinter;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -298,7 +314,7 @@ class ChangeNumOfSelected extends StatelessWidget {
           Container(
             width: 25,
             child: Material(
-              color: (value["color"]! as Color).withOpacity(0.5),
+              color: (color).withOpacity(0.5),
               child: InkWell(
                 onTap: () {
                   isPrinter ? upgradesStepController.removeEntertainment(index) : upgradesStepController.removeWine(index);
@@ -319,10 +335,10 @@ class ChangeNumOfSelected extends StatelessWidget {
           ),
           Container(
             width: 30,
-            color: (value["color"]! as Color).withOpacity(0.7),
+            color: (color).withOpacity(0.7),
             child: Center(
               child: Text(
-                "${value["numberOfSelected"]}",
+                "$numberOfSelected",
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -330,7 +346,7 @@ class ChangeNumOfSelected extends StatelessWidget {
           Container(
             width: 25,
             child: Material(
-              color: value["color"]!,
+              color: color,
               child: InkWell(
                 onTap: () {
                   isPrinter ? upgradesStepController.addEntertainment(index) : upgradesStepController.addWine(index);
