@@ -113,27 +113,25 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                   ),
                   Obx(
                     () => Expanded(
-                      child: Container(
-                        child: ListView(
+                      child: ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: scrollDirection,
                           controller: controller,
-                          children: widget.upgradesStepController.winesList.map((value) {
-                            int index = widget.upgradesStepController.winesList.indexOf(value);
+                          itemCount: widget.upgradesStepController.winesList.length,
+                          itemBuilder: (BuildContext context, int index) {
                             return AutoScrollTag(
                               key: ValueKey(index),
                               controller: controller,
                               index: index,
                               child: UpgradeItemWidget(
                                 index: index,
-                                value: value,
+                                value: widget.upgradesStepController.winesList[index],
                                 upgradesStepController: widget.upgradesStepController,
+                                isPrinter: false,
                               ),
                               highlightColor: Colors.black.withOpacity(0.1),
                             );
-                          }).toList(),
-                        ),
-                      ),
+                          }),
                     ),
                   ),
                   SizedBox(
@@ -166,7 +164,7 @@ class UpgradeItemWidget extends StatelessWidget {
   const UpgradeItemWidget({
     Key? key,
     required this.value,
-    this.isPrinter = false,
+    required this.isPrinter,
     required this.upgradesStepController,
     required this.index,
   }) : super(key: key);
@@ -179,13 +177,13 @@ class UpgradeItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color color;
-    int numberOfSelected;
+    // RxInt numberOfSelected=0.obs;
     if (isPrinter) {
       color = upgradesStepController.colors[4];
-      numberOfSelected = upgradesStepController.entertainmentsNumberOfSelected[index].value;
+      // numberOfSelected.value = upgradesStepController.entertainmentsNumberOfSelected[index];
     } else {
       color = upgradesStepController.colors[index % 4];
-      numberOfSelected = upgradesStepController.winesNumberOfSelected[index].value;
+      // numberOfSelected.value = upgradesStepController.winesNumberOfSelected[index];
     }
     // double margin = isPrinter ? 40 : 30;
     return Container(
@@ -234,25 +232,50 @@ class UpgradeItemWidget extends StatelessWidget {
                     fontWeight: FontWeight.w300,
                   ),
                 ),
-                numberOfSelected == 0
-                    ? MyElevatedButton(
-                        width: 80,
-                        height: 30,
-                        fgColor: Colors.white,
-                        bgColor: color,
-                        buttonText: "Add",
-                        function: () {
-                          isPrinter ? upgradesStepController.addEntertainment(index) : upgradesStepController.addWine(index);
-                        },
-                      )
-                    : ChangeNumOfSelected(
-                        value: value,
-                        index: index,
-                        upgradesStepController: upgradesStepController,
-                        isPrinter: isPrinter,
-                        color: color,
-                        numberOfSelected: numberOfSelected,
-                      ),
+                Obx(() =>  (() {
+                  if (isPrinter) {
+                    return upgradesStepController.entertainmentsNumberOfSelected[index] == 0
+                        ? MyElevatedButton(
+                      width: 80,
+                      height: 30,
+                      fgColor: Colors.white,
+                      bgColor: color,
+                      buttonText: "Add",
+                      function: () {
+                        upgradesStepController.addEntertainment(index);
+                      },
+                    )
+                        : ChangeNumOfSelected(
+                      value: value,
+                      index: index,
+                      upgradesStepController: upgradesStepController,
+                      isPrinter: isPrinter,
+                      color: color,
+                      numberOfSelected: upgradesStepController.entertainmentsNumberOfSelected[index],
+                    );
+                  } else {
+                    return upgradesStepController.winesNumberOfSelected[index] == 0
+                        ? MyElevatedButton(
+                      width: 80,
+                      height: 30,
+                      fgColor: Colors.white,
+                      bgColor: color,
+                      buttonText: "Add",
+                      function: () {
+                        upgradesStepController.addWine(index);
+                      },
+                    )
+                        : ChangeNumOfSelected(
+                      value: value,
+                      index: index,
+                      upgradesStepController: upgradesStepController,
+                      isPrinter: isPrinter,
+                      color: color,
+                      numberOfSelected: upgradesStepController.winesNumberOfSelected[index],
+                    );
+                  }
+                }()),)
+
               ],
             ),
           ),

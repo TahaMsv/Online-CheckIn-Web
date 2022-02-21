@@ -19,10 +19,10 @@ class UpgradesStepController extends MainController {
   }
 
   List<Color> colors = [Color(0xff5f6bff), Color(0xffffc365), Color(0xfffa4b4b), Color(0xffffc365), Color(0xff424242)];
-  List<String> imagesPath =[];
+  List<String> imagesPath = [];
   List<Extra> extras = [];
-  List<RxInt> winesNumberOfSelected = [];
-  List<RxInt> entertainmentsNumberOfSelected = [];
+  RxList<int> winesNumberOfSelected = <int>[].obs;
+  RxList<int> entertainmentsNumberOfSelected = <int>[].obs;
 
   RxList<Extra> winesList = <Extra>[].obs;
 
@@ -39,15 +39,17 @@ class UpgradesStepController extends MainController {
     if (response.statusCode == 200) {
       if (response.data["ResultCode"] == 1) {
         extras = List<Extra>.from(response.data["Body"]["Extras"].map((x) => Extra.fromJson(x)));
-        winesNumberOfSelected = List.filled(extras.length - 1, 0.obs);
-        entertainmentsNumberOfSelected = List.filled(1, 0.obs);
+        for (var i = 0; i < extras.length - 1; ++i) {
+          winesNumberOfSelected.add(0);
+        }
+        entertainmentsNumberOfSelected.add(0);
         for (var i = 0; i < extras.length; ++i) {
           if (i == extras.length - 1) {
             entertainmentsList.add(extras[i]);
-            print("here1");
+            // print("here1");
           } else {
             winesList.add(extras[i]);
-            print("here2");
+            // print("here2");
           }
         }
       }
@@ -55,26 +57,33 @@ class UpgradesStepController extends MainController {
   }
 
   void addWine(int index) {
-    winesNumberOfSelected[index].value++;
-    print(index.toString() + " " + winesNumberOfSelected[index].value.toString());
+    winesNumberOfSelected[index]++;
+    winesNumberOfSelected.refresh();
+    Get.snackbar("wine" + index.toString(), "${winesNumberOfSelected[index]}").show();
+    // print(index.toString() + " " + winesNumberOfSelected[index].toString());
   }
 
   void removeWine(int index) {
-    if (winesNumberOfSelected[index].value > 0) {
-      winesNumberOfSelected[index].value--;
-      print(index.toString() + " " + winesNumberOfSelected[index].value.toString());
+    if (winesNumberOfSelected[index]> 0) {
+      winesNumberOfSelected[index]--;
+      winesNumberOfSelected.refresh();
+      Get.snackbar("wine" + index.toString(), "${winesNumberOfSelected[index]}").show();
+      // print(index.toString() + " " + winesNumberOfSelected[index].toString());
     }
   }
 
   void addEntertainment(int index) {
-    entertainmentsNumberOfSelected[index].value++;
-    print(index.toString() + " " + entertainmentsNumberOfSelected[index].value.toString());
+    entertainmentsNumberOfSelected[index]++;
+    entertainmentsNumberOfSelected.refresh();
+
+    // print(index.toString() + " " + entertainmentsNumberOfSelected[index].toString());
   }
 
   void removeEntertainment(int index) {
-    if (entertainmentsNumberOfSelected[index].value > 0) {
-      entertainmentsNumberOfSelected[index].value--;
-      print(index.toString() + " " + entertainmentsNumberOfSelected[index].value.toString());
+    if (entertainmentsNumberOfSelected[index] > 0) {
+      entertainmentsNumberOfSelected[index]--;
+      entertainmentsNumberOfSelected.refresh();
+      // print(index.toString() + " " + entertainmentsNumberOfSelected[index].toString());
     }
   }
 
