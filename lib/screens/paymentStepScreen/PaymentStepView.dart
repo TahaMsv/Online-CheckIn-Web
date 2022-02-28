@@ -56,9 +56,8 @@ class PaymentStepView extends StatelessWidget {
                     ),
                   ],
                 ),
-                Obx(
-                  () => TaxesAndFees(myPaymentStepController: myPaymentStepController),
-                ),
+               TaxesAndFees(myPaymentStepController: myPaymentStepController),
+
               ],
             )
           ],
@@ -97,12 +96,13 @@ class TaxesAndFees extends StatelessWidget {
           SizedBox(
             height: 5,
           ),
-          SizedBox(
-            height: 5,
-          ),
+
           MyDottedLine(
             color: Color(0xffeaeaea),
             lineLength: double.infinity,
+          ),
+          SizedBox(
+            height: 5,
           ),
           Container(
             height: 200,

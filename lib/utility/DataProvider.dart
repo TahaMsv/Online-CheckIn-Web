@@ -17,6 +17,8 @@ class DataProvider {
     return NetworkRequest(api: api, data: getTokenRM.toJson(), retry: retry).post();
   }
 
+
+
   static Future<NetworkResponse> getInformation({required String execution, required dynamic token, required Map<String, dynamic> request, required Function retry}) async {
     String api = Apis.getInformation;
     RequestModelGetInformation getInformationRM = RequestModelGetInformation(

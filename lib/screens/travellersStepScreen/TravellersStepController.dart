@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:network_manager/network_manager.dart';
 import '../../global/Classes.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
 import '../../utility/DataProvider.dart';
@@ -52,7 +53,24 @@ class TravellersStepScreenController extends MainController {
   Future<String> checkTravellerValidation(String ticketNumber, String lastName) async {
     String lastName = lastNameC.text.trim();
     String ticketNumber = ticketNumberC.text.trim();
-    String token = model.token;
+    String token = model.token!;
+
+    // NetworkResponse response = await DataProvider.getToken(
+    //   execution: "[OnlineCheckin].[Authenticate]",
+    //   token: token,
+    //   request: {
+    //     "Code": ticketNumber,
+    //     "Code2": lastName,
+    //     "UrlType": 1,
+    //   }, retry: checkTravellerValidation,
+    // );
+    // if (response.responseCode == 200) {
+    //   if (response.responseBody["ResultCode"] == 1) {
+    //     String? token = response.responseBody["Body"]["Token"];
+    //     return Future<String>.value(token);
+    //   }
+    // }
+
     Response response = await DioClient.getToken(
       execution: "[OnlineCheckin].[Authenticate]",
       token: token,
@@ -68,7 +86,7 @@ class TravellersStepScreenController extends MainController {
         String? token = response.data["Body"]["Token"];
         return Future<String>.value(token);
       }
-    } else {}
+    }
     return Future<String>.value("");
   }
 

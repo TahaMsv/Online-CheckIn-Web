@@ -22,13 +22,10 @@ class PaymentStepController extends MainController {
     return _instance;
   }
 
-  double _totalPrice = 0;
+  RxDouble totalPrice = 0.0.obs;
 
-  double get totalPrice => _totalPrice;
+  RxInt seatPrices = 0.obs;
 
-  int _seatPrices = 0;
-
-  int get seatPrices => _seatPrices;
   RxList<Map<String, dynamic>> taxes = <Map<String, dynamic>>[].obs;
   List<Map<String, dynamic>> seatExtrasDetail = [];
 
@@ -49,38 +46,47 @@ class PaymentStepController extends MainController {
   void calculatePrices() {
     final mySeatStepScreenController = Get.put(SeatsStepController(model));
     final myUpgradesStepController = Get.put(UpgradesStepController(model));
-    _totalPrice = 0;
-    _seatPrices = mySeatStepScreenController.seatPrices;
-    _totalPrice += _seatPrices;
+    totalPrice.value = 0;
+    seatPrices.value = mySeatStepScreenController.seatPrices;
+    totalPrice.value += seatPrices.value;
     seatExtrasDetail = [];
-    // myUpgradesStepController.winesList.where((w) => w["numberOfSelected"] > 0).forEach((element) {
-    //   seatExtrasDetail.add({
-    //     "Id": element["id"],
-    //     "name": element["name"],
-    //     "Price": element['price'],
-    //     "Count": element['numberOfSelected'],
-    //     "SubTotal": element['price'] * element['numberOfSelected'],
-    //   });
-    // });
-    // myUpgradesStepController.entertainmentsList.where((w) => w["numberOfSelected"] > 0).forEach((element) {
-    //   seatExtrasDetail.add({
-    //     "Id": element["id"],
-    //     "name": element["name"],
-    //     "Price": element['price'],
-    //     "Count": element['numberOfSelected'],
-    //     "SubTotal": element['price'] * element['numberOfSelected'],
-    //   });
-    // });
 
     taxes.clear();
-    taxes.add({"title": "Seats price", "price": seatPrices});
-    seatExtrasDetail.forEach(
-      (element) {
+    taxes.add({"title": "Seats price", "price": seatPrices.value});
+
+    for (int i = 0; i < myUpgradesStepController.entertainmentsList.length; ++i) {
+      int numOFSelected = myUpgradesStepController.entertainmentsNumberOfSelected[i];
+      if (numOFSelected > 0) {
+        Extra e = myUpgradesStepController.entertainmentsList[i];
+        seatExtrasDetail.add({
+          "Id": e.id,
+          "Price": e.price * numOFSelected,
+          "Count": numOFSelected,
+          "SubTotal": e.price * numOFSelected,
+        });
         taxes.add(
-          {"title": element["name"], "price": element["SubTotal"]},
+          {"title": e.title, "price": e.price * numOFSelected},
         );
-      },
-    );
+        totalPrice.value += e.price * numOFSelected;
+      }
+    }
+
+    for (int i = 0; i < myUpgradesStepController.winesList.length; ++i) {
+      int numOFSelected = myUpgradesStepController.winesNumberOfSelected[i];
+      if (numOFSelected > 0) {
+        Extra e = myUpgradesStepController.winesList[i];
+        seatExtrasDetail.add({
+          "Id": e.id,
+          "Price": e.price * numOFSelected,
+          "Count": numOFSelected,
+          "SubTotal": e.price * numOFSelected,
+        });
+        taxes.add(
+          {"title": e.title, "price": e.price * numOFSelected},
+        );
+        totalPrice.value += e.price * numOFSelected;
+      }
+    }
     taxes.refresh();
   }
 
@@ -91,9 +97,10 @@ class PaymentStepController extends MainController {
     final mySeatStepScreenController = Get.put(SeatsStepController(model));
     final myUpgradesStepController = Get.put(UpgradesStepController(model));
 
-    _totalPrice = 0;
-    _seatPrices = mySeatStepScreenController.seatPrices;
-    _totalPrice += _seatPrices;
+    totalPrice.value = 0;
+    seatPrices.value = mySeatStepScreenController.seatPrices;
+    totalPrice.value += seatPrices.value;
+
     seatExtrasDetail = [];
     // myUpgradesStepController.winesList.where((w) => w["numberOfSelected"] > 0).forEach((element) {
     //   seatExtrasDetail.add({
@@ -112,7 +119,7 @@ class PaymentStepController extends MainController {
     //   });
     // });
 
-    Map<String, dynamic> request = {"StripeID": stripeID, "SeatsPrice": _seatPrices, "SeatExtrasDetail": seatExtrasDetail, "TotalPrice": totalPrice};
+    Map<String, dynamic> request = {"StripeID": stripeID, "SeatsPrice": seatPrices.value, "SeatExtrasDetail": seatExtrasDetail, "TotalPrice": totalPrice.value};
     Response response = await DioClient.addTransaction(
       execution: "[OnlineCheckin].[AddTransaction]",
       token: myStepScreenController.travellers[0].token,

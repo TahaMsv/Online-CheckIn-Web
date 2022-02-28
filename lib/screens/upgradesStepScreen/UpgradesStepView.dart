@@ -177,15 +177,11 @@ class UpgradeItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color color;
-    // RxInt numberOfSelected=0.obs;
     if (isPrinter) {
       color = upgradesStepController.colors[4];
-      // numberOfSelected.value = upgradesStepController.entertainmentsNumberOfSelected[index];
     } else {
       color = upgradesStepController.colors[index % 4];
-      // numberOfSelected.value = upgradesStepController.winesNumberOfSelected[index];
     }
-    // double margin = isPrinter ? 40 : 30;
     return Container(
       // height: 100,
       width: 330,

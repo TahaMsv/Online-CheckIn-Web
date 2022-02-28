@@ -3,7 +3,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:network_manager/network_manager.dart';
 import 'package:onlinecheckin/screens/stepsScreen/StepsScreenController.dart';
+import 'package:onlinecheckin/utility/Constants.dart';
 
 import '../../utility/DataProvider.dart';
 import '../../global/MainController.dart';
@@ -50,7 +52,7 @@ class EnterScreenController extends MainController {
   Future<bool> loginValidation() async {
     String lastName = lastNameC.text.trim();
     String bookingRefName = bookingRefNameC.text.trim();
-    print("here53");
+    print("here55");
     Response response = await DioClient.getToken(
       execution: "[OnlineCheckin].[Authenticate]",
       token: null,
@@ -60,11 +62,14 @@ class EnterScreenController extends MainController {
         "UrlType": 1,
       },
     );
-    print("here62");
+    print("here65");
     if (response.statusCode == 200) {
+      print(response.data);
       if (response.data["ResultCode"] == 1) {
         String? token = response.data["Body"]["Token"];
+        print("here70");
         if (token != null) {
+          print("here72");
           model.setToken(token);
           print(model.token);
           StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
@@ -72,11 +77,82 @@ class EnterScreenController extends MainController {
           return Future<bool>.value(true);
         }
       }
-    } else {}
+    }
+
+    // NetworkResponse response = await DataProvider.getToken(
+    //   execution: "[OnlineCheckin].[Authenticate]",
+    //     token: null,
+    //     request: {
+    //       "Code": bookingRefName,
+    //       "Code2": lastName,
+    //       "UrlType": 1,
+    //     }, retry: loginValidation,
+    // );
+    //
+    // if (response.responseCode == 200) {
+    //   if (response.responseBody["ResultCode"] == 1) {
+    //     String? token = response.responseBody["Body"]["Token"];
+    //     if (token != null) {
+    //       model.setToken(token);
+    //       print(model.token);
+    //       StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
+    //       stepsScreenController.addToTravellers(token, lastName, bookingRefName);
+    //       return Future<bool>.value(true);
+    //     }
+    //   }
+    // }
+
     print("not ok validation");
     return Future<bool>.value(false);
   }
 
+  // initializeApp() async {
+  //   // const String token =
+  //   //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUb2tlbktleSI6IjBmZmVmMzg0LWFlY2QtNDY0ZC1hMDRlLTRhZTAxODA4MWJmOSIsInJvbGUiOiJNZXJjaGFudCIsIm5iZiI6MTYyNTczNzc1NywiZXhwIjoxNjM0Mzc3NzU3LCJpYXQiOjE2MjU3Mzc3NTd9.hWGpASk2cn3pwxsMvnozhUT4KiZYOoRU55-Hp1cyEv4";
+  //
+  //   // model.token == null ? await initializeNetworkManager(baseURL: Apis.baseUrl) :
+  //                         await initializeNetworkManager( baseURL: Apis.baseUrl);
+  //
+  //   // await initializePreferencesSettings();
+  //   //
+  //   // await initializeRoute();
+  //   //
+  //   // initializeLocalNotification();
+  //   //
+  //   // initializeFlutterFire();
+  // }
+  //
+  // initializeNetworkManager({String? token, required String baseURL}) {
+  //   NetworkOption.initialize(
+  //       baseUrl: baseURL,
+  //       timeout: 30000,
+  //       // token: token,
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         // "Authorization": "Bearer $token",
+  //       },
+  //       onStartDefault: () {
+  //         print("Start");
+  //         model.setLoading(true);
+  //       },
+  //       onEndDefault: () {
+  //         print("End");
+  //         model.setLoading(false);
+  //       },
+  //       onSuccessDefault: (res) {
+  //         print("Success");
+  //       },
+  //       onFailedDefault: (NetworkResponse res) {
+  //         print("Failed");
+  //       },
+  //       errorMsgExtractor: (res) {
+  //         return res["Message"] ?? "Unknown Error";
+  //       },
+  //       successMsgExtractor: (res) {
+  //         return res["Message"] ?? "Done";
+  //       });
+  // }
+  //
   @override
   void onInit() {
     print("EnterScreenController Init");

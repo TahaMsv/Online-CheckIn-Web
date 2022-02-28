@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:network_manager/network_manager.dart';
 import 'package:onlinecheckin/screens/paymentStepScreen/PaymentStepController.dart';
 import 'package:onlinecheckin/screens/receiptStepScreen/ReceiptStepController.dart';
 import 'package:onlinecheckin/screens/safetyStepScreen/SafetyStepController.dart';
 import 'package:onlinecheckin/screens/seatsStepScreen/SeatsStepController.dart';
+import 'package:onlinecheckin/utility/Constants.dart';
 import '../../global/Classes.dart';
 import '../../utility/DataProvider.dart';
 import '../../global/MainController.dart';
@@ -179,6 +181,43 @@ class StepsScreenController extends MainController {
       model.setLoading(false);
       print("ok");
     }
+
+    // NetworkResponse response = await DataProvider.getInformation(
+    //   execution: "[OnlineCheckin].[SelectFlightInformation]",
+    //   token: token,
+    //   request: {},
+    //   retry: getInformation,
+    // );
+    // print(response.responseDetails);
+    // print("here190");
+    // if (response.responseStatus) {
+    //   print("here192");
+    //   final extractedData = response.responseBody;
+    //   if (extractedData == null) {
+    //     return null;
+    //   }
+    //   print(extractedData);
+    //   _welcome = welcomeFromJson(jsonEncode(extractedData));
+    //   print("here198");
+    //   model.setLoading(false);
+    //   print("ok");
+    // }
+
+    // Response response = await DioClient.getInformation(
+    //   execution: "[OnlineCheckin].[SelectFlightInformation]",
+    //   token: token,
+    //   request: {},
+    // );
+    // print(response.statusCode);
+    // if (response.statusCode == 200) {
+    //   final extractedData = response.data;
+    //   if (extractedData == null) {
+    //     return null;
+    //   }
+    //   _welcome = welcomeFromJson(jsonEncode(extractedData));
+    //   model.setLoading(false);
+    //   print("ok");
+    // }
   }
 
   List buttonText = [
@@ -192,10 +231,57 @@ class StepsScreenController extends MainController {
     "Get Boarding Pass",
   ];
 
+  // initializeApp() async {
+  //   // const String token =
+  //   //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUb2tlbktleSI6IjBmZmVmMzg0LWFlY2QtNDY0ZC1hMDRlLTRhZTAxODA4MWJmOSIsInJvbGUiOiJNZXJjaGFudCIsIm5iZiI6MTYyNTczNzc1NywiZXhwIjoxNjM0Mzc3NzU3LCJpYXQiOjE2MjU3Mzc3NTd9.hWGpASk2cn3pwxsMvnozhUT4KiZYOoRU55-Hp1cyEv4";
+  //
+  //   // model.token == null ? await initializeNetworkManager(baseURL: Apis.baseUrl) :
+  //   await initializeNetworkManager(token: model.token, baseURL: Apis.baseUrl);
+  //
+  //   // await initializePreferencesSettings();
+  //   //
+  //   // await initializeRoute();
+  //   //
+  //   // initializeLocalNotification();
+  //   //
+  //   // initializeFlutterFire();
+  // }
+  //
+  // initializeNetworkManager({String? token, required String baseURL}) {
+  //   NetworkOption.initialize(
+  //       baseUrl: baseURL,
+  //       timeout: 30000,
+  //       token: token,
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         "Authorization": "Bearer $token",
+  //       },
+  //       onStartDefault: () {
+  //         print("Start");
+  //         model.setLoading(true);
+  //       },
+  //       onEndDefault: () {
+  //         print("End");
+  //         model.setLoading(false);
+  //       },
+  //       onSuccessDefault: (res) {
+  //         print("Success");
+  //       },
+  //       onFailedDefault: (NetworkResponse res) {
+  //         print("Failed");
+  //       },
+  //       errorMsgExtractor: (res) {
+  //         return res["Message"] ?? "Unknown Error";
+  //       },
+  //       successMsgExtractor: (res) {
+  //         return res["Message"] ?? "Done";
+  //       });
+  // }
+
   @override
   void onInit() {
     print("StepsScreenController Init");
-
+    // initializeApp();
     super.onInit();
   }
 

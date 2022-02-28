@@ -59,7 +59,7 @@ class UpgradesStepController extends MainController {
   void addWine(int index) {
     winesNumberOfSelected[index]++;
     winesNumberOfSelected.refresh();
-    Get.snackbar("wine" + index.toString(), "${winesNumberOfSelected[index]}").show();
+    // Get.snackbar("wine" + index.toString(), "${winesNumberOfSelected[index]}").show();
     // print(index.toString() + " " + winesNumberOfSelected[index].toString());
   }
 
@@ -67,7 +67,7 @@ class UpgradesStepController extends MainController {
     if (winesNumberOfSelected[index]> 0) {
       winesNumberOfSelected[index]--;
       winesNumberOfSelected.refresh();
-      Get.snackbar("wine" + index.toString(), "${winesNumberOfSelected[index]}").show();
+      // Get.snackbar("wine" + index.toString(), "${winesNumberOfSelected[index]}").show();
       // print(index.toString() + " " + winesNumberOfSelected[index].toString());
     }
   }
