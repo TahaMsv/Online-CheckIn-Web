@@ -112,7 +112,7 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                     width: 10,
                   ),
                   Obx(
-                    () => Expanded(
+                        () => Expanded(
                       child: ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: scrollDirection,
@@ -287,7 +287,7 @@ class UpgradeItemWidget extends StatelessWidget {
                     height: isPrinter ? 100 : 130,
                     // color: Colors.green,
                     child: Image.asset(
-                      value.imageUrl,
+                      value.imageUrl.substring(1), // To remove "/" from beginning of the url.
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -419,7 +419,7 @@ class Entertainment extends StatelessWidget {
               height: 15,
             ),
             Obx(
-              () => Expanded(
+                  () => Expanded(
                 child: UpgradeItemWidget(
                   value: upgradesStepController.entertainmentsList[0],
                   index: 0,

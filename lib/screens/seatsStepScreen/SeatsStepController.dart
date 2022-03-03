@@ -84,16 +84,33 @@ class SeatsStepController extends MainController {
     return false;
   }
 
+  // double calculatePlaneBodyLength() {
+  //   double length = 0;
+  //   for (var i = 0; i < cabins.length; ++i) {
+  //     length += cabins[i].linesCount;
+  //   }
+  //   return length * (eachLineWidth + 15) + (cabins.length * 100);
+  // }
+
   double calculatePlaneBodyLength() {
     double length = 0;
     for (var i = 0; i < cabins.length; ++i) {
-      length += cabins[i].linesCount;
+      length += calculateCabinLength(i);
+      length += 5; // Left margin
     }
-    return length * (eachLineWidth + 15) + (cabins.length * 100);
+    return length;
   }
 
   double calculateCabinLength(int index) {
-    return cabins[index].linesCount * (eachLineWidth + 15);
+    return calculateCabinNameLength(index) + calculateCabinLinesLength(index);
+  }
+
+  double calculateCabinNameLength(int index) {
+    return (cabins[index].cabinTitle.length * 13);
+  }
+
+  double calculateCabinLinesLength(int index) {
+    return cabins[index].linesCount * (eachLineWidth + 8);
   }
 
   double calculatePlaneBodyHeight() {

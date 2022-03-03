@@ -125,6 +125,7 @@ class PlaneBody extends StatelessWidget {
                   height: mySeatsStepController.calculateCabinHeight(i),
                   cabin: mySeatsStepController.cabins[i],
                   mySeatsStepController: mySeatsStepController,
+                  index: i,
                 );
               },
             ),
@@ -140,18 +141,20 @@ class CabinWidget extends StatelessWidget {
   final SeatsStepController mySeatsStepController;
   final double height;
   final double width;
+  final int index;
 
-  const CabinWidget({Key? key, required this.cabin, required this.mySeatsStepController, required this.height, required this.width}) : super(key: key);
+  const CabinWidget({Key? key, required this.cabin, required this.mySeatsStepController, required this.height, required this.width, required this.index}) : super(key: key);
 
   Widget build(BuildContext context) {
     return Container(
-      width: width + 100,
+      width: width,
       height: height,
       child: ListView(
         scrollDirection: Axis.horizontal,
         physics: const NeverScrollableScrollPhysics(),
         children: [
           Container(
+            width: mySeatsStepController.calculateCabinNameLength(index),
               margin: EdgeInsets.only(top: 10, left: 5),
               child: Text(
                 cabin.cabinTitle,
@@ -160,7 +163,7 @@ class CabinWidget extends StatelessWidget {
           Center(
             child: Container(
               height: height,
-              width: width,
+              width: mySeatsStepController.calculateCabinLinesLength(index),
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.horizontal,

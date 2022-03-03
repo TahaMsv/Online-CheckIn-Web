@@ -94,30 +94,6 @@ class PaymentStepController extends MainController {
     final paymentMethod = await Stripe.instance.createPaymentMethod(PaymentMethodParams.card());
     String stripeID = paymentMethod.id;
     final myStepScreenController = Get.put(StepsScreenController(model));
-    final mySeatStepScreenController = Get.put(SeatsStepController(model));
-    final myUpgradesStepController = Get.put(UpgradesStepController(model));
-
-    totalPrice.value = 0;
-    seatPrices.value = mySeatStepScreenController.seatPrices;
-    totalPrice.value += seatPrices.value;
-
-    seatExtrasDetail = [];
-    // myUpgradesStepController.winesList.where((w) => w["numberOfSelected"] > 0).forEach((element) {
-    //   seatExtrasDetail.add({
-    //     "Id": element["id"],
-    //     "Price": element['price'],
-    //     "Count": element['numberOfSelected'],
-    //     "SubTotal": element['price'] * element['numberOfSelected'],
-    //   });
-    // });
-    // myUpgradesStepController.entertainmentsList.where((w) => w["numberOfSelected"] > 0).forEach((element) {
-    //   seatExtrasDetail.add({
-    //     "Id": element["id"],
-    //     "Price": element['price'],
-    //     "Count": element['numberOfSelected'],
-    //     "SubTotal": element['price'] * element['numberOfSelected'],
-    //   });
-    // });
 
     Map<String, dynamic> request = {"StripeID": stripeID, "SeatsPrice": seatPrices.value, "SeatExtrasDetail": seatExtrasDetail, "TotalPrice": totalPrice.value};
     Response response = await DioClient.addTransaction(
