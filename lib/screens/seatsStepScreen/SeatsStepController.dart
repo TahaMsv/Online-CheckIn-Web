@@ -84,14 +84,6 @@ class SeatsStepController extends MainController {
     return false;
   }
 
-  // double calculatePlaneBodyLength() {
-  //   double length = 0;
-  //   for (var i = 0; i < cabins.length; ++i) {
-  //     length += cabins[i].linesCount;
-  //   }
-  //   return length * (eachLineWidth + 15) + (cabins.length * 100);
-  // }
-
   double calculatePlaneBodyLength() {
     double length = 0;
     for (var i = 0; i < cabins.length; ++i) {
@@ -114,19 +106,33 @@ class SeatsStepController extends MainController {
   }
 
   double calculatePlaneBodyHeight() {
-    int maxNumberOFCells = 0;
+    double maxHeight = 0;
     for (var i = 0; i < cabins.length; ++i) {
-      int number = cabins[i].lines[0].cells.length;
-      if (number > maxNumberOFCells) {
-        maxNumberOFCells = number;
+      double height =calculateCabinHeight(i);
+      if (height > maxHeight) {
+        maxHeight = height;
       }
     }
-    return maxNumberOFCells * (32);
+    maxHeight += 20; //Padding and margins
+    return maxHeight;
   }
 
+  // double calculateCabinHeight(int index) {
+  //   int number = cabins[index].lines[0].cells.length;
+  //   return number * (32);
+  // }
+
   double calculateCabinHeight(int index) {
-    int number = cabins[index].lines[0].cells.length;
-    return number * (32);
+    double height = 0;
+    cabins[index].lines[1].cells.forEach((element) {
+      if (element.type == "Seat") {
+        height += 35;
+      } else {
+        height += 15;
+      }
+      height += 5;
+    });
+    return height;
   }
 
   void changeSeatStatus(String seatId) {

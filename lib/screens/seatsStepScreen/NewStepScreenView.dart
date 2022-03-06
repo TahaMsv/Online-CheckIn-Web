@@ -120,12 +120,14 @@ class PlaneBody extends StatelessWidget {
               itemBuilder: (_, i) {
                 // print("PlaneBody " + i.toString());
                 // print("lines: " + mySeatsStepController.cabins[i].linesCount.toString());
-                return CabinWidget(
-                  width: mySeatsStepController.calculateCabinLength(i),
-                  height: mySeatsStepController.calculateCabinHeight(i),
-                  cabin: mySeatsStepController.cabins[i],
-                  mySeatsStepController: mySeatsStepController,
-                  index: i,
+                return Center(
+                  child: CabinWidget(
+                    width: mySeatsStepController.calculateCabinLength(i),
+                    height: mySeatsStepController.calculateCabinHeight(i),
+                    cabin: mySeatsStepController.cabins[i],
+                    mySeatsStepController: mySeatsStepController,
+                    index: i,
+                  ),
                 );
               },
             ),
@@ -147,6 +149,7 @@ class CabinWidget extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Container(
+      // color: Colors.deepPurple,
       width: width,
       height: height,
       child: ListView(
@@ -154,34 +157,38 @@ class CabinWidget extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         children: [
           Container(
-            width: mySeatsStepController.calculateCabinNameLength(index),
-              margin: EdgeInsets.only(top: 10, left: 5),
+              width: mySeatsStepController.calculateCabinNameLength(index),
+              margin: EdgeInsets.only(left: 5),
               child: Text(
                 cabin.cabinTitle,
                 style: TextStyle(color: Colors.white, fontSize: 20),
               )),
           Center(
             child: Container(
+              // color: Colors.blue,
               height: height,
               width: mySeatsStepController.calculateCabinLinesLength(index),
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: cabin.linesCount,
-                itemBuilder: (_, i) {
-                  // print("cabin widget: " + i.toString());
-                  // print("line type: " + cabin.lines[i].type);
-                  return
-                      //   Container(
-                      //   width: 45,
-                      //   margin: EdgeInsets.all(3),
-                      //   color: Colors.greenAccent,
-                      // );
-                      LineWidget(
-                    line: cabin.lines[i],
-                    mySeatsStepController: mySeatsStepController,
-                  );
-                },
+              child: Center(
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: cabin.linesCount,
+                  itemBuilder: (_, i) {
+                    // print("cabin widget: " + i.toString());
+                    // print("line type: " + cabin.lines[i].type);
+                    return
+                        //   Container(
+                        //   width: 45,
+                        //   margin: EdgeInsets.all(3),
+                        //   color: Colors.greenAccent,
+                        // );
+                        LineWidget(
+                      line: cabin.lines[i],
+                      mySeatsStepController: mySeatsStepController,
+                      index: 0,
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -194,22 +201,21 @@ class CabinWidget extends StatelessWidget {
 class LineWidget extends StatelessWidget {
   final Line line;
   final SeatsStepController mySeatsStepController;
+  final int index;
 
-  const LineWidget({Key? key, required this.line, required this.mySeatsStepController}) : super(key: key);
+  const LineWidget({Key? key, required this.line, required this.mySeatsStepController, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      // color: Colors.amberAccent,
       width: 50,
-      margin: EdgeInsets.all(3),
+      margin: EdgeInsets.symmetric(horizontal: 3),
       child: line.type == "HorizontalCode"
           ? HorizontalCodeLine(
               cells: line.cells,
             )
-          : BodyLine(
-              cells: line.cells,
-              mySeatsStepController: mySeatsStepController,
-            ),
+          : BodyLine(cells: line.cells, mySeatsStepController: mySeatsStepController, index: index),
     );
   }
 }
@@ -222,30 +228,37 @@ class HorizontalCodeLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // color: Colors.red,
       width: 45,
-      height: 300,
-      child: ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        scrollDirection: Axis.vertical,
-        itemCount: cells.length,
-        itemBuilder: (_, i) {
-          return Container(
-            margin: EdgeInsets.all(2),
-            width: cells[i].type == "Seat" || cells[i].type == "OutEquipmentExit" ? 35 : 15,
-            height: cells[i].type == "Seat" || cells[i].type == "OutEquipmentExit" ? 35 : 15,
-            decoration: BoxDecoration(
-              color: Color(0xff5d5d5d),
-            ),
-            child: Center(
-              child: Text(
-                cells[i].type == "Seat" ? cells[i].value! : "",
-                style: TextStyle(
-                  color: Colors.white,
+      // height: 300,
+      child: Center(
+        child: ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          itemCount: cells.length,
+          itemBuilder: (_, i) {
+            return Container(
+              margin: EdgeInsets.all(2),
+              width: cells[i].type == "Seat" || cells[i].type == "OutEquipmentExit" ? 35 : 15,
+              height: cells[i].type == "Seat" || cells[i].type == "OutEquipmentExit"
+                  ? 35
+                  : cells[i].type == "OutEquipmentWing"
+                      ? 5
+                      : 15,
+              decoration: BoxDecoration(
+                color: Color(0xff5d5d5d),
+              ),
+              child: Center(
+                child: Text(
+                  cells[i].type == "Seat" ? cells[i].value! : "",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -254,14 +267,16 @@ class HorizontalCodeLine extends StatelessWidget {
 class BodyLine extends StatelessWidget {
   final List<Cell> cells;
   final SeatsStepController mySeatsStepController;
+  final int index;
 
-  const BodyLine({Key? key, required this.cells, required this.mySeatsStepController}) : super(key: key);
+  const BodyLine({Key? key, required this.cells, required this.mySeatsStepController, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      // color: Colors.green,
       width: 50,
-      height: 300,
+      // height: mySeatsStepController.calculateCabinHeight(index),
       child: ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         scrollDirection: Axis.vertical,
@@ -334,7 +349,7 @@ class _SeatWidgetState extends State<SeatWidget> {
       case 9:
         break;
       case 10:
-        width = height = 15;
+        width = height = 5;
         break;
       case 11:
         width = height = 15;
