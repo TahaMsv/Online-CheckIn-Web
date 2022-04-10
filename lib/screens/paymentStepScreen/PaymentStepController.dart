@@ -22,8 +22,9 @@ class PaymentStepController extends MainController {
     return _instance;
   }
 
-  RxDouble totalPrice = 0.0.obs;
+  bool wasPayed = false;
 
+  RxDouble totalPrice = 0.0.obs;
   RxInt seatPrices = 0.obs;
 
   RxList<Map<String, dynamic>> taxes = <Map<String, dynamic>>[].obs;
@@ -90,11 +91,8 @@ class PaymentStepController extends MainController {
     taxes.refresh();
   }
 
-  void pay() async {
-    final paymentMethod = await Stripe.instance.createPaymentMethod(PaymentMethodParams.card());
-    String stripeID = paymentMethod.id;
+  void pay(String stripeID) async {
     final myStepScreenController = Get.put(StepsScreenController(model));
-
     Map<String, dynamic> request = {"StripeID": stripeID, "SeatsPrice": seatPrices.value, "SeatExtrasDetail": seatExtrasDetail, "TotalPrice": totalPrice.value};
     Response response = await DioClient.addTransaction(
       execution: "[OnlineCheckin].[AddTransaction]",
@@ -102,8 +100,29 @@ class PaymentStepController extends MainController {
       request: request,
     );
     if (response.statusCode == 200) {
-      if (response.data["ResultCode"] == 1) {}
+      if (response.data["ResultCode"] == 1) {
+        wasPayed = true;
+        myStepScreenController.setNextButton(wasPayed);
+        myStepScreenController.setPreviousButton(!wasPayed);
+
+        showResultDialog();
+        return;
+      }
     }
+    showResultDialog();
+  }
+
+  void showResultDialog() {
+    String text = wasPayed ? "Payment was successful" : "Payment failed";
+    Get.defaultDialog(
+      middleText: text,
+      title: "",
+      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+      backgroundColor: wasPayed ? Colors.green : Colors.red,
+      buttonColor: wasPayed ? Colors.greenAccent : Colors.redAccent,
+      barrierDismissible: true,
+      radius: 10,
+    );
   }
 
   @override

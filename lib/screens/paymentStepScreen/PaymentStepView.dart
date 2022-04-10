@@ -374,6 +374,9 @@ class CardInfo extends StatelessWidget {
                 final paymentMethod = await Stripe.instance.createPaymentMethod(PaymentMethodParams.card());
                 String stripeID = paymentMethod.id;
                 print(stripeID);
+                if(stripeID != null ){
+                  myPaymentStepController.pay(stripeID);
+                }
               },
               child: Text('pay'),
             ),

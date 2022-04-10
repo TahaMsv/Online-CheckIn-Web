@@ -25,12 +25,25 @@ class StepsScreenController extends MainController {
 
   Welcome? _welcome;
 
-  List<RxBool> _isNextButtonDisable = [false.obs, true.obs, false.obs, false.obs, false.obs, false.obs, true.obs, false.obs, false.obs];
+  // List<RxBool> _isNextButtonDisable = [false.obs, true.obs, false.obs, false.obs, false.obs, false.obs, true.obs, false.obs, false.obs];
+  // List<RxBool> _isPreviousButtonDisable = [false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs];
+
+  RxBool _isNextButtonEnable = true.obs;
+  RxBool _isPreviousButtonEnable = true.obs;
+
+  void setNextButton(bool newValue){
+    _isNextButtonEnable.value = newValue;
+  }
+
+  void setPreviousButton(bool newValue){
+    _isPreviousButtonEnable.value = newValue;
+  }
+
+  bool get isNextButtonEnable => _isNextButtonEnable.value;
+  bool get isPreviousButtonEnable => _isPreviousButtonEnable.value;
 
   RxList<Traveller> travellers = <Traveller>[].obs;
   RxInt whoseTurnToSelect = 0.obs;
-
-  bool get isNextButtonDisable => _isNextButtonDisable[step].value;
 
   Welcome? get welcome => _welcome;
   RxInt _step = 0.obs;
@@ -66,22 +79,18 @@ class StepsScreenController extends MainController {
 
   void updateIsNextButtonDisable() {
     if (step == 0) {
-      _isNextButtonDisable[step].value = travellers.length == 0 ? true : false;
+      setNextButton(travellers.length != 0);
     } else if (step == 1) {
       SafetyStepScreenController safetyStepScreenController = Get.put(SafetyStepScreenController(model));
-      _isNextButtonDisable[step].value = !safetyStepScreenController.checkValidation();
-      // } else if (step == 2) {
-      // } else if (step == 3) {
-      // } else if (step == 4) {
-      // } else if (step == 5) {
+      setNextButton(safetyStepScreenController.checkValidation());
     } else if (step == 6) {
       for (int i = 0; i < travellers.length; i++) {
         if (travellers[i].seatId == "--") {
-          _isNextButtonDisable[step].value = true;
+          setNextButton(false);
           return;
         }
       }
-      _isNextButtonDisable[step].value = false;
+      setNextButton(true);
     } else if (step == 7) {
       PaymentStepController paymentStepController = Get.put(PaymentStepController(model));
       // paymentStepController.finalReserve();
@@ -91,14 +100,18 @@ class StepsScreenController extends MainController {
 
   void setStep(int newStep) {
     _step.value = newStep;
-    if (step == 6) {
+    if (step == 1) {
+      updateIsNextButtonDisable();
+    }
+    else if (step == 6) {
       updateIsNextButtonDisable();
       SeatsStepController seatsStepController = Get.put(SeatsStepController(model));
       seatsStepController.updateSeatMap();
     }
-    if (step == 7) {
+    else if (step == 7) {
       updateIsNextButtonDisable();
       PaymentStepController paymentStepController = Get.put(PaymentStepController(model));
+      setNextButton(paymentStepController.wasPayed);
       paymentStepController.calculatePrices();
     }
   }
