@@ -120,14 +120,12 @@ class PlaneBody extends StatelessWidget {
               itemBuilder: (_, i) {
                 // print("PlaneBody " + i.toString());
                 // print("lines: " + mySeatsStepController.cabins[i].linesCount.toString());
-                return Center(
-                  child: CabinWidget(
-                    width: mySeatsStepController.calculateCabinLength(i),
-                    height: mySeatsStepController.calculateCabinHeight(i),
-                    cabin: mySeatsStepController.cabins[i],
-                    mySeatsStepController: mySeatsStepController,
-                    index: i,
-                  ),
+                return CabinWidget(
+                  width: mySeatsStepController.calculateCabinLength(i),
+                  height: mySeatsStepController.calculateCabinHeight(i),
+                  cabin: mySeatsStepController.cabins[i],
+                  mySeatsStepController: mySeatsStepController,
+                  index: i,
                 );
               },
             ),

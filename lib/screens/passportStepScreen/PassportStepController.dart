@@ -225,6 +225,7 @@ class PassportStepController extends MainController {
   }
 
   void showDOCSPopup(int index) {
+
     Get.defaultDialog(
       title: "",
       backgroundColor: Colors.white,

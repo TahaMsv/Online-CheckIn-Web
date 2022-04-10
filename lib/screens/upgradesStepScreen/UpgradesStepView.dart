@@ -20,7 +20,11 @@ class UpgradesStepView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
+      body:Obx(() => !myUpgradesStepController.loading.value
+          ? Center(
+        child: CircularProgressIndicator(),
+      )
+          :Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           StepsScreenTitle(
@@ -40,7 +44,8 @@ class UpgradesStepView extends StatelessWidget {
             upgradesStepController: myUpgradesStepController,
           ),
         ],
-      ),
+      ),)
+
     );
   }
 }

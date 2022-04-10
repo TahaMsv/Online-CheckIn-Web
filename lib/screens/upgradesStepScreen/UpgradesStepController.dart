@@ -18,6 +18,8 @@ class UpgradesStepController extends MainController {
     return _instance;
   }
 
+  RxBool loading = false.obs;
+
   List<Color> colors = [Color(0xff5f6bff), Color(0xffffc365), Color(0xfffa4b4b), Color(0xffffc365), Color(0xff424242)];
   List<String> imagesPath = [];
   List<Extra> extras = [];
@@ -52,6 +54,7 @@ class UpgradesStepController extends MainController {
             // print("here2");
           }
         }
+        loading.value= true;
       }
     }
   }
