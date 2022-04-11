@@ -8,7 +8,7 @@ import '../../global/MainModel.dart';
 import 'package:get/get.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_stripe_web/flutter_stripe_web.dart';
-
+import 'package:provider/provider.dart';
 class PaymentStepView extends StatelessWidget {
   final PaymentStepController myPaymentStepController;
 
@@ -260,6 +260,7 @@ class CardInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MainModel model = context.watch<MainModel>();
     return Container(
       width: 380,
       child: Column(
@@ -374,7 +375,7 @@ class CardInfo extends StatelessWidget {
                 final paymentMethod = await Stripe.instance.createPaymentMethod(PaymentMethodParams.card());
                 String stripeID = paymentMethod.id;
                 print(stripeID);
-                if(stripeID != null ){
+                if(stripeID != null && !model.requesting){
                   myPaymentStepController.pay(stripeID);
                 }
               },

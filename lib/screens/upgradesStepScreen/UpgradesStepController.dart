@@ -32,31 +32,35 @@ class UpgradesStepController extends MainController {
 
   void init() async {
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-    Response response = await DioClient.selectSeatExtras(
-      execution: "[OnlineCheckin].[SelectSeatExtras]",
-      token: stepsScreenController.travellers[0].token,
-      request: {},
-    );
+    if (!model.requesting) {
+      model.setRequesting(true);
+      Response response = await DioClient.selectSeatExtras(
+        execution: "[OnlineCheckin].[SelectSeatExtras]",
+        token: stepsScreenController.travellers[0].token,
+        request: {},
+      );
 
-    if (response.statusCode == 200) {
-      if (response.data["ResultCode"] == 1) {
-        extras = List<Extra>.from(response.data["Body"]["Extras"].map((x) => Extra.fromJson(x)));
-        for (var i = 0; i < extras.length - 1; ++i) {
-          winesNumberOfSelected.add(0);
-        }
-        entertainmentsNumberOfSelected.add(0);
-        for (var i = 0; i < extras.length; ++i) {
-          if (i == extras.length - 1) {
-            entertainmentsList.add(extras[i]);
-            // print("here1");
-          } else {
-            winesList.add(extras[i]);
-            // print("here2");
+      if (response.statusCode == 200) {
+        if (response.data["ResultCode"] == 1) {
+          extras = List<Extra>.from(response.data["Body"]["Extras"].map((x) => Extra.fromJson(x)));
+          for (var i = 0; i < extras.length - 1; ++i) {
+            winesNumberOfSelected.add(0);
           }
+          entertainmentsNumberOfSelected.add(0);
+          for (var i = 0; i < extras.length; ++i) {
+            if (i == extras.length - 1) {
+              entertainmentsList.add(extras[i]);
+              // print("here1");
+            } else {
+              winesList.add(extras[i]);
+              // print("here2");
+            }
+          }
+          loading.value = true;
         }
-        loading.value= true;
       }
     }
+    model.setRequesting(false);
   }
 
   void addWine(int index) {
@@ -65,7 +69,7 @@ class UpgradesStepController extends MainController {
   }
 
   void removeWine(int index) {
-    if (winesNumberOfSelected[index]> 0) {
+    if (winesNumberOfSelected[index] > 0) {
       winesNumberOfSelected[index]--;
       winesNumberOfSelected.refresh();
     }

@@ -67,7 +67,7 @@ class Foreground extends StatelessWidget {
         child: Container(
           width: width,
           height: height,
-          padding: EdgeInsets.symmetric(vertical: 30,horizontal: 30),
+          padding: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -96,7 +96,9 @@ class Foreground extends StatelessWidget {
                                   height: 40,
                                   width: 140,
                                 ),
-                                SizedBox(width: 30,),
+                                SizedBox(
+                                  width: 30,
+                                ),
                                 Image.asset(
                                   'assets/images/GooglePlayStore.png',
                                   fit: BoxFit.fill,
@@ -270,6 +272,7 @@ class CheckInButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MainModel model = context.watch<MainModel>();
     return Container(
       height: 40,
       width: double.infinity,
@@ -282,15 +285,17 @@ class CheckInButton extends StatelessWidget {
         ),
       ),
       child: ElevatedButton(
-        onPressed: () async {
-          bool checkBoxesValidation = await myEnterScreenController.checkBoxesValidation();
-          if (checkBoxesValidation) {
-            bool isValid = await myEnterScreenController.loginValidation();
-            if (isValid) {
-              Get.toNamed(RouteNames.steps);
-            } else {}
-          }
-        },
+        onPressed: model.requesting
+            ? null
+            : () async {
+                bool checkBoxesValidation = await myEnterScreenController.checkBoxesValidation();
+                if (checkBoxesValidation) {
+                  bool isValid = await myEnterScreenController.loginValidation();
+                  if (isValid) {
+                    Get.toNamed(RouteNames.steps);
+                  } else {}
+                }
+              },
         child: Text("Check-in"),
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all(Colors.white),

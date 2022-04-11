@@ -47,7 +47,7 @@ class PassportStepController extends MainController {
     // travellers = stepsScreenController.travellers;
     for (var i = 0; i < travellers.length; ++i) {
       documentNoCs.add(new TextEditingController());
-      }
+    }
     // }
   }
 
@@ -68,7 +68,7 @@ class PassportStepController extends MainController {
     Traveller traveller = travellers[index];
     String docsType = traveller.passportInfo.passportType == null ? "" : traveller.passportInfo.passportType!.split("-")[0].trim();
     String docsCountry = traveller.passportInfo.countryOfIssue == null ? "" : traveller.passportInfo.countryOfIssue!.split("-")[0].trim();
-    String docsNationality = traveller.passportInfo.nationality  == null ? "" : traveller.passportInfo.nationality!.split("-")[0].trim();
+    String docsNationality = traveller.passportInfo.nationality == null ? "" : traveller.passportInfo.nationality!.split("-")[0].trim();
     String docsDocumentNumber = traveller.passportInfo.documentNo ?? "";
     final df = new DateFormat('yyyy-MM-dd');
     String docsBirthDate = traveller.passportInfo.dateOfBirth == null ? df.format(traveller.passportInfo.dateOfBirth!) : "";
@@ -81,78 +81,88 @@ class PassportStepController extends MainController {
     String docoPlaceOfIssue = traveller.visaInfo.placeOfIssueID ?? "";
     String docoPlaceOfBirth = traveller.passportInfo.nationalityID ?? "";
     String docoIssueDate = traveller.visaInfo.issueDate == null ? df.format(traveller.visaInfo.issueDate!) : "";
+    if (!model.requesting) {
+      model.setRequesting(true);
+      Response response = await DioClient.saveDocsDocoDoca(
+        execution: "[OnlineCheckin].[SaveDocsDocoDoca]",
+        token: traveller.token,
+        request: {
+          "PassengerId": traveller.welcome.body.passengers[0].id,
+          "DocaAddress": "",
+          "DocaCity": "",
+          "DocaCountry": "",
+          "DocaType": "",
+          "DocaZipCode": "",
+          "DocsCountry": docsCountry,
+          "DocsNationality": docsNationality,
+          "DocsBirthDate": docsBirthDate,
+          "DocsExpiryDate": docsExpiryDate, // todo  is Valid?
+          "DocsDocumentNumber": docsDocumentNumber,
+          "DocsType": docsType,
+          "DocsSecondName": traveller.welcome.body.passengers[0].lastName, // todo  is Valid?
+          "DocoDestination": docoDestination,
+          "DocoDocumentNumber": docoDocumentNumber,
+          "DocoType": docoType,
+          "DocoPlaceOfIssue": docoPlaceOfIssue,
+          "DocoPlaceOfBirth": docoPlaceOfBirth, //todo  is Valid? (Docs nationality)
+          "DocoIssueDate": docoIssueDate,
+          "DocsTitle": traveller.welcome.body.passengers[0].title
+        },
+      );
 
-    Response response = await DioClient.saveDocsDocoDoca(
-      execution: "[OnlineCheckin].[SaveDocsDocoDoca]",
-      token: traveller.token,
-      request: {
-        "PassengerId": traveller.welcome.body.passengers[0].id,
-        "DocaAddress": "",
-        "DocaCity": "",
-        "DocaCountry": "",
-        "DocaType": "",
-        "DocaZipCode": "",
-        "DocsCountry": docsCountry,
-        "DocsNationality": docsNationality,
-        "DocsBirthDate": docsBirthDate,
-        "DocsExpiryDate": docsExpiryDate, // todo  is Valid?
-        "DocsDocumentNumber": docsDocumentNumber,
-        "DocsType": docsType,
-        "DocsSecondName": traveller.welcome.body.passengers[0].lastName, // todo  is Valid?
-        "DocoDestination": docoDestination,
-        "DocoDocumentNumber": docoDocumentNumber,
-        "DocoType": docoType,
-        "DocoPlaceOfIssue": docoPlaceOfIssue,
-        "DocoPlaceOfBirth": docoPlaceOfBirth, //todo  is Valid? (Docs nationality)
-        "DocoIssueDate": docoIssueDate,
-        "DocsTitle": traveller.welcome.body.passengers[0].title
-      },
-    );
-
-    if (response.statusCode == 200) {
-      if (response.data["ResultCode"] == 1) {
-        final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-        int mainIndex = travellersIndexInMainList[index];
-        stepsScreenController.travellers[mainIndex] = traveller;
-        print("taha");
+      if (response.statusCode == 200) {
+        if (response.data["ResultCode"] == 1) {
+          final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
+          int mainIndex = travellersIndexInMainList[index];
+          stepsScreenController.travellers[mainIndex] = traveller;
+        }
       }
     }
+    model.setRequesting(false);
   }
 
   Future<void> getSelectCountries() async {
-    Response response = await DioClient.selectCountries(
-      execution: "[OnlineCheckin].[SelectCountries]",
-      token: model.token,
-      request: {},
-    );
+    if (!model.requesting) {
+      model.setRequesting(true);
+      Response response = await DioClient.selectCountries(
+        execution: "[OnlineCheckin].[SelectCountries]",
+        token: model.token,
+        request: {},
+      );
 
-    if (response.statusCode == 200) {
-      if (response.data["ResultCode"] == 1) {
-        final VisaStepController visaStepController = Get.put(VisaStepController(model));
-        countriesList.addAll(List<Country>.from(response.data["Body"]["Countries"].map((x) => Country.fromJson(x))));
-        for (var i = 0; i < countriesList.length; ++i) {
-          countryOfIssueList.add(countriesList[i]);
-          nationalitiesList.add(countriesList[i]);
-          visaStepController.listIssuePlace.add(countriesList[i]);
+      if (response.statusCode == 200) {
+        if (response.data["ResultCode"] == 1) {
+          final VisaStepController visaStepController = Get.put(VisaStepController(model));
+          countriesList.addAll(List<Country>.from(response.data["Body"]["Countries"].map((x) => Country.fromJson(x))));
+          for (var i = 0; i < countriesList.length; ++i) {
+            countryOfIssueList.add(countriesList[i]);
+            nationalitiesList.add(countriesList[i]);
+            visaStepController.listIssuePlace.add(countriesList[i]);
+          }
         }
       }
-    } else {}
+    }
+    model.setRequesting(false);
   }
 
   Future<void> getDocumentTypes() async {
-    Response response = await DioClient.getDocumentTypes(
-      execution: "[OnlineCheckin].[SelectDocumentTypes]",
-      token: model.token,
-      request: {},
-    );
+    if (!model.requesting) {
+      model.setRequesting(true);
+      Response response = await DioClient.getDocumentTypes(
+        execution: "[OnlineCheckin].[SelectDocumentTypes]",
+        token: model.token,
+        request: {},
+      );
 
-    if (response.statusCode == 200) {
-      if (response.data["ResultCode"] == 1) {
-        final VisaStepController visaStepController = Get.put(VisaStepController(model));
-        listPassportType.addAll(List<PassPortType>.from(response.data["Body"]["PassportTypes"].map((x) => PassPortType.fromJson(x))));
-        visaStepController.listType.addAll(List<VisaType>.from(response.data["Body"]["VisaTypes"].map((x) => VisaType.fromJson(x))));
+      if (response.statusCode == 200) {
+        if (response.data["ResultCode"] == 1) {
+          final VisaStepController visaStepController = Get.put(VisaStepController(model));
+          listPassportType.addAll(List<PassPortType>.from(response.data["Body"]["PassportTypes"].map((x) => PassPortType.fromJson(x))));
+          visaStepController.listType.addAll(List<VisaType>.from(response.data["Body"]["VisaTypes"].map((x) => VisaType.fromJson(x))));
+        }
       }
-    } else {}
+    }
+    model.setRequesting(false);
   }
 
 /////////////////////////////////////////////
@@ -225,7 +235,6 @@ class PassportStepController extends MainController {
   }
 
   void showDOCSPopup(int index) {
-
     Get.defaultDialog(
       title: "",
       backgroundColor: Colors.white,
@@ -314,13 +323,15 @@ class PassportStepController extends MainController {
                 buttonText: "Submit",
                 bgColor: Colors.white,
                 fgColor: Color(0xff4d6ff8),
-                function: () {
-                  travellers.refresh();
-                  updateDocuments();
-                  updateIsCompleted(index);
-                  saveDocsDocoDoca(index);
-                  Get.back();
-                },
+                function: model.requesting
+                    ? () {}
+                    : () {
+                        travellers.refresh();
+                        updateDocuments();
+                        updateIsCompleted(index);
+                        saveDocsDocoDoca(index);
+                        Get.back();
+                      },
               ),
             ],
           )
@@ -353,7 +364,6 @@ class PassportStepController extends MainController {
               value: travellers[index].passportInfo.passportType == null ? "Passport Type" : travellers[index].passportInfo.passportType,
               items: listPassportType.map(
                 (selectedType) {
-
                   return DropdownMenuItem(
                     child: Text(
                       selectedType.fullName,
@@ -393,7 +403,7 @@ class PassportStepController extends MainController {
               value: travellers[index].passportInfo.nationality == null ? "Nationality" : travellers[index].passportInfo.nationality,
               items: nationalitiesList.map(
                 (selectedType) {
-                  travellers[index].passportInfo.nationalityID=selectedType.id;
+                  travellers[index].passportInfo.nationalityID = selectedType.id;
                   return DropdownMenuItem(
                     child: new Text(
                       selectedType.englishName!,

@@ -36,28 +36,31 @@ class VisaStepController extends MainController {
     String fromCityCode = stepsScreenController.welcome!.body.flight[0].fromCity ?? "";
     String toCityCode = stepsScreenController.welcome!.body.flight[0].toCity ?? "";
     // print("DocsType" + docsType + "\nDocsCountry" + docsCountry + "\nDocsNationality" + docsNationality + "\nFromCityCode" + fromCityCode + "\nToCityCode" + toCityCode);
-    Response response = await DioClient.checkDocoNecessity(
-      execution: "[OnlineCheckin].[CheckDocoNecessity]",
-      token: model.token,
-      request: {
-        "DocsType": docsType,
-        "DocsCountry": docsCountry,
-        "DocsNationality": docsNationality,
-        "FromCityCode": fromCityCode,
-        "ToCityCode": toCityCode,
-      },
-    );
+    if (!model.requesting) {
+      model.setRequesting(true);
+      Response response = await DioClient.checkDocoNecessity(
+        execution: "[OnlineCheckin].[CheckDocoNecessity]",
+        token: model.token,
+        request: {
+          "DocsType": docsType,
+          "DocsCountry": docsCountry,
+          "DocsNationality": docsNationality,
+          "FromCityCode": fromCityCode,
+          "ToCityCode": toCityCode,
+        },
+      );
 
-    if (response.statusCode == 200) {
-      print(jsonEncode(response.data));
-      if (response.data["ResultCode"] == 1) {
-        print(response.data["Body"]["IsNecessary"]);
-        if (response.data["Body"]["IsNecessary"] == 1) {
-          isDocoNecessary.value = true;
-          loading.value = false;
+      if (response.statusCode == 200) {
+        print(jsonEncode(response.data));
+        if (response.data["ResultCode"] == 1) {
+          print(response.data["Body"]["IsNecessary"]);
+          if (response.data["Body"]["IsNecessary"] == 1) {
+            isDocoNecessary.value = true;
+            loading.value = false;
+          }
         }
       }
-    } else {}
+    }
 
     if (isDocoNecessary.value) {
       travellersList();
@@ -69,6 +72,7 @@ class VisaStepController extends MainController {
       }
     }
     loading.value = false;
+    model.setRequesting(false);
     // model.setLoading(false);
   }
 
@@ -198,7 +202,7 @@ class VisaStepController extends MainController {
               height: 20,
             ),
             SubmitButton(
-              function: () => submitBtnFunction(index),
+              function: model.requesting ? () {} : () => submitBtnFunction(index),
             )
           ],
         ),

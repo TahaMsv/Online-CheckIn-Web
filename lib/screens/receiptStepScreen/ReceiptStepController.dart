@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:onlinecheckin/global/Classes.dart';
 import 'package:onlinecheckin/screens/seatsStepScreen/SeatsStepController.dart';
@@ -30,22 +31,27 @@ class ReceiptStepController extends MainController {
       "PassengersId": "<MyTable><MyRow><FlightPax_ID>${stepsScreenController.travellers[0].welcome.body.passengers[0].id}</FlightPax_ID></MyRow></MyTable>",
       "IsDarkMode": false,
     };
-    Response response = await DioClient.boardingPassPDF(
-      mrtName: "OnlineCheckinBoardingPass-AB",
-      token: stepsScreenController.travellers[0].token,
-      request: req,
-    );
+    if (!model.requesting) {
+      model.setRequesting(true);
+      Response response = await DioClient.boardingPassPDF(
+        mrtName: "OnlineCheckinBoardingPass-AB",
+        token: stepsScreenController.travellers[0].token,
+        request: req,
+      );
 
-    if (response.statusCode == 200) {
-      boardingPassPDF = BoardingPassPDF.fromJson(response.data);
-      convertToPDF();
+      if (response.statusCode == 200) {
+        boardingPassPDF = BoardingPassPDF.fromJson(response.data);
+        convertToPDF();
+        loading.value = false;
+        successfulResponse.value = true;
+        // model.setLoading(false);
+        model.setRequesting(false);
+        return;
+      }
       loading.value = false;
-      successfulResponse.value = true;
-      // model.setLoading(false);
-      return;
+      successfulResponse.value = false;
     }
-    loading.value = false;
-    successfulResponse.value = false;
+    model.setRequesting(false);
     // model.setLoading(false);
   }
 
@@ -72,22 +78,28 @@ class ReceiptStepController extends MainController {
     });
     print(token);
     print(seatsData);
-    Response response = await DioClient.reserveSeat(
-      execution: "[OnlineCheckin].[ReserveSeat]",
-      token: token,
-      request: {"SeatsData": seatsData, "TicketData": null},
-    );
-    if (response.statusCode == 200) {
-      if (response.data["ResultCode"] == 1) {
-        final seatsStepController = Get.put(SeatsStepController(model));
-        travellers.forEach((traveller) {
-          seatsStepController.reservedSeats[traveller.seatId] = traveller.getNickName();
-          seatsStepController.clickedOnSeats.remove(traveller.seatId);
-        });
-        return Future<bool>.value(true);
+    if (!model.requesting) {
+      model.setRequesting(true);
+      Response response = await DioClient.reserveSeat(
+        execution: "[OnlineCheckin].[ReserveSeat]",
+        token: token,
+        request: {"SeatsData": seatsData, "TicketData": null},
+      );
+      if (response.statusCode == 200) {
+        if (response.data["ResultCode"] == 1) {
+          final seatsStepController = Get.put(SeatsStepController(model));
+          travellers.forEach((traveller) {
+            seatsStepController.reservedSeats[traveller.seatId] = traveller.getNickName();
+            seatsStepController.clickedOnSeats.remove(traveller.seatId);
+          });
+          model.setRequesting(false);
+          return Future<bool>.value(true);
+        }
       }
     }
+    model.setRequesting(false);
     if (seatsStepController.reservedSeats.length == travellers.length) return true;
+    model.setRequesting(false);
     return Future<bool>.value(false);
   }
 

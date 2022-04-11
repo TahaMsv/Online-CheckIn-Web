@@ -94,21 +94,26 @@ class PaymentStepController extends MainController {
   void pay(String stripeID) async {
     final myStepScreenController = Get.put(StepsScreenController(model));
     Map<String, dynamic> request = {"StripeID": stripeID, "SeatsPrice": seatPrices.value, "SeatExtrasDetail": seatExtrasDetail, "TotalPrice": totalPrice.value};
-    Response response = await DioClient.addTransaction(
-      execution: "[OnlineCheckin].[AddTransaction]",
-      token: myStepScreenController.travellers[0].token,
-      request: request,
-    );
-    if (response.statusCode == 200) {
-      if (response.data["ResultCode"] == 1) {
-        wasPayed = true;
-        myStepScreenController.setNextButton(wasPayed);
-        myStepScreenController.setPreviousButton(!wasPayed);
+    if (!model.requesting) {
+      model.setRequesting(true);
+      Response response = await DioClient.addTransaction(
+        execution: "[OnlineCheckin].[AddTransaction]",
+        token: myStepScreenController.travellers[0].token,
+        request: request,
+      );
+      if (response.statusCode == 200) {
+        if (response.data["ResultCode"] == 1) {
+          wasPayed = true;
+          myStepScreenController.setNextButton(wasPayed);
+          myStepScreenController.setPreviousButton(!wasPayed);
 
-        showResultDialog();
-        return;
+          showResultDialog();
+          model.setRequesting(false);
+          return;
+        }
       }
     }
+    model.setRequesting(false);
     showResultDialog();
   }
 

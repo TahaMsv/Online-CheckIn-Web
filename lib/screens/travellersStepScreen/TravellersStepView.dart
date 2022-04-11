@@ -88,13 +88,14 @@ class AddToTravellersButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MainModel model = context.watch<MainModel>();
     return MyElevatedButton(
       height: 40,
       width: double.infinity,
       buttonText: "Add to Travellers",
       bgColor: Color(0xff00bfa2),
       fgColor: Colors.white,
-      function: myTravellersStepScreenController.addTraveller,
+      function: model.requesting ? () {} : myTravellersStepScreenController.addTraveller,
     );
   }
 }

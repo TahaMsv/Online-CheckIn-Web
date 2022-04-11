@@ -35,4 +35,13 @@ class MainModel
     _loading = val;
     notifyListeners();
   }
+
+  bool _requesting = false;
+
+  bool get requesting => _requesting;
+
+  void setRequesting(bool val) {
+    _requesting = val;
+    notifyListeners();
+  }
 }

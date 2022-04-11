@@ -55,38 +55,27 @@ class TravellersStepScreenController extends MainController {
     String ticketNumber = ticketNumberC.text.trim();
     String token = model.token!;
 
-    // NetworkResponse response = await DataProvider.getToken(
-    //   execution: "[OnlineCheckin].[Authenticate]",
-    //   token: token,
-    //   request: {
-    //     "Code": ticketNumber,
-    //     "Code2": lastName,
-    //     "UrlType": 1,
-    //   }, retry: checkTravellerValidation,
-    // );
-    // if (response.responseCode == 200) {
-    //   if (response.responseBody["ResultCode"] == 1) {
-    //     String? token = response.responseBody["Body"]["Token"];
-    //     return Future<String>.value(token);
-    //   }
-    // }
+    if (!model.requesting) {
+      model.setRequesting(true);
+      Response response = await DioClient.getToken(
+        execution: "[OnlineCheckin].[Authenticate]",
+        token: token,
+        request: {
+          "Code": ticketNumber,
+          "Code2": lastName,
+          "UrlType": 1,
+        },
+      );
 
-    Response response = await DioClient.getToken(
-      execution: "[OnlineCheckin].[Authenticate]",
-      token: token,
-      request: {
-        "Code": ticketNumber,
-        "Code2": lastName,
-        "UrlType": 1,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      if (response.data["ResultCode"] == 1) {
-        String? token = response.data["Body"]["Token"];
-        return Future<String>.value(token);
+      if (response.statusCode == 200) {
+        if (response.data["ResultCode"] == 1) {
+          String? token = response.data["Body"]["Token"];
+          model.setRequesting(false);
+          return Future<String>.value(token);
+        }
       }
     }
+    model.setRequesting(false);
     return Future<String>.value("");
   }
 

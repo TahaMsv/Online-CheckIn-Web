@@ -31,15 +31,16 @@ class StepsScreenController extends MainController {
   RxBool _isNextButtonEnable = true.obs;
   RxBool _isPreviousButtonEnable = true.obs;
 
-  void setNextButton(bool newValue){
+  void setNextButton(bool newValue) {
     _isNextButtonEnable.value = newValue;
   }
 
-  void setPreviousButton(bool newValue){
+  void setPreviousButton(bool newValue) {
     _isPreviousButtonEnable.value = newValue;
   }
 
   bool get isNextButtonEnable => _isNextButtonEnable.value;
+
   bool get isPreviousButtonEnable => _isPreviousButtonEnable.value;
 
   RxList<Traveller> travellers = <Traveller>[].obs;
@@ -102,13 +103,11 @@ class StepsScreenController extends MainController {
     _step.value = newStep;
     if (step == 1) {
       updateIsNextButtonDisable();
-    }
-    else if (step == 6) {
+    } else if (step == 6) {
       updateIsNextButtonDisable();
       SeatsStepController seatsStepController = Get.put(SeatsStepController(model));
       seatsStepController.updateSeatMap();
-    }
-    else if (step == 7) {
+    } else if (step == 7) {
       updateIsNextButtonDisable();
       PaymentStepController paymentStepController = Get.put(PaymentStepController(model));
       setNextButton(paymentStepController.wasPayed);
@@ -123,11 +122,15 @@ class StepsScreenController extends MainController {
     if (currStep < 8) {
       if (step == 6) {
         SeatsStepController seatsStepController = Get.put(SeatsStepController(model));
-        isSuccessful = await seatsStepController.clickOnSeat();
+        if (!model.requesting) {
+          isSuccessful = await seatsStepController.clickOnSeat();
+        }
       }
       if (step == 7) {
         ReceiptStepController receiptStepController = Get.put(ReceiptStepController(model));
-        isSuccessful = await receiptStepController.finalReserve();
+        if (!model.requesting) {
+          isSuccessful = await receiptStepController.finalReserve();
+        }
       }
       if (isSuccessful) {
         setStep(currStep + 1);
@@ -184,53 +187,16 @@ class StepsScreenController extends MainController {
       token: token,
       request: {},
     );
-    print(response.statusCode);
     if (response.statusCode == 200) {
       final extractedData = response.data;
       if (extractedData == null) {
+        model.setRequesting(false);
         return null;
       }
       _welcome = welcomeFromJson(jsonEncode(extractedData));
       model.setLoading(false);
       print("ok");
     }
-
-    // NetworkResponse response = await DataProvider.getInformation(
-    //   execution: "[OnlineCheckin].[SelectFlightInformation]",
-    //   token: token,
-    //   request: {},
-    //   retry: getInformation,
-    // );
-    // print(response.responseDetails);
-    // print("here190");
-    // if (response.responseStatus) {
-    //   print("here192");
-    //   final extractedData = response.responseBody;
-    //   if (extractedData == null) {
-    //     return null;
-    //   }
-    //   print(extractedData);
-    //   _welcome = welcomeFromJson(jsonEncode(extractedData));
-    //   print("here198");
-    //   model.setLoading(false);
-    //   print("ok");
-    // }
-
-    // Response response = await DioClient.getInformation(
-    //   execution: "[OnlineCheckin].[SelectFlightInformation]",
-    //   token: token,
-    //   request: {},
-    // );
-    // print(response.statusCode);
-    // if (response.statusCode == 200) {
-    //   final extractedData = response.data;
-    //   if (extractedData == null) {
-    //     return null;
-    //   }
-    //   _welcome = welcomeFromJson(jsonEncode(extractedData));
-    //   model.setLoading(false);
-    //   print("ok");
-    // }
   }
 
   List buttonText = [

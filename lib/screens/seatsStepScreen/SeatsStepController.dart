@@ -66,21 +66,27 @@ class SeatsStepController extends MainController {
         "Line": line,
       });
     });
-    Response response = await DioClient.clickOnSeat(
-      execution: "OnlineCheckin.ClickOnSeat",
-      token: token,
-      request: {"SeatsData": seatsData},
-    );
+    if (!model.requesting) {
+      model.setRequesting(true);
+      Response response = await DioClient.clickOnSeat(
+        execution: "OnlineCheckin.ClickOnSeat",
+        token: token,
+        request: {"SeatsData": seatsData},
+      );
 
-    if (response.statusCode == 200) {
-      if (response.data["ResultCode"] == 1) {
-        travellers.forEach((traveller) {
-          clickedOnSeats[traveller.seatId] = traveller.getNickName();
-        });
-        return true;
+      if (response.statusCode == 200) {
+        if (response.data["ResultCode"] == 1) {
+          travellers.forEach((traveller) {
+            clickedOnSeats[traveller.seatId] = traveller.getNickName();
+          });
+          model.setRequesting(false);
+          return true;
+        }
       }
     }
+    model.setRequesting(false);
     if (reservedSeats.length == travellers.length) return true; //All of them reserved a seat
+    model.setRequesting(false);
     return false;
   }
 
@@ -108,7 +114,7 @@ class SeatsStepController extends MainController {
   double calculatePlaneBodyHeight() {
     double maxHeight = 0;
     for (var i = 0; i < cabins.length; ++i) {
-      double height =calculateCabinHeight(i);
+      double height = calculateCabinHeight(i);
       if (height > maxHeight) {
         maxHeight = height;
       }
