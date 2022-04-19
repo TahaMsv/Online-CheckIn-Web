@@ -1,16 +1,13 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:network_manager/network_manager.dart';
 import 'package:onlinecheckin/screens/stepsScreen/StepsScreenController.dart';
-import 'package:onlinecheckin/utility/Constants.dart';
-
+import 'package:onlinecheckin/widgets/CustomFlutterWidget.dart';
 import '../../utility/DataProvider.dart';
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
 import 'package:dio/dio.dart';
+import 'package:flash/flash.dart';
+
 
 class EnterScreenController extends MainController {
   EnterScreenController._();
@@ -77,6 +74,13 @@ class EnterScreenController extends MainController {
         }
       }
     }
+    showFlash(
+      context: Get.context!,
+      duration: const Duration(seconds: 4),
+      builder: (context, controller) {
+        return CustomFlashBar(controller: controller,contentMessage: "Wrong LastName or Booking reference name",titleMessage: "Error",);
+      },
+    );
     print("not ok validation");
     model.setRequesting(false);
     return Future<bool>.value(false);

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import '../../widgets/CustomFlutterWidget.dart';
 import '../../widgets/UserTextInput.dart';
 import '../../widgets/CountryListPicker/country.dart';
 import '../../widgets/CountryListPicker/country_picker_dropdown.dart';
@@ -12,6 +13,7 @@ import '../../utility/Constants.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:flash/flash.dart';
 
 class EnterScreenView extends StatelessWidget {
   final EnterScreenController myEnterScreenController;
@@ -293,7 +295,9 @@ class CheckInButton extends StatelessWidget {
                   bool isValid = await myEnterScreenController.loginValidation();
                   if (isValid) {
                     Get.toNamed(RouteNames.steps);
-                  } else {}
+                  } else {
+
+                  }
                 }
               },
         child: Text("Check-in"),
@@ -310,6 +314,7 @@ class CheckInButton extends StatelessWidget {
     );
   }
 }
+
 
 class CopyRightText extends StatelessWidget {
   const CopyRightText({

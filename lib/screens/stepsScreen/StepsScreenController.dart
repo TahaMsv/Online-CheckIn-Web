@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:network_manager/network_manager.dart';
@@ -7,6 +8,7 @@ import 'package:onlinecheckin/screens/receiptStepScreen/ReceiptStepController.da
 import 'package:onlinecheckin/screens/safetyStepScreen/SafetyStepController.dart';
 import 'package:onlinecheckin/screens/seatsStepScreen/SeatsStepController.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
+import 'package:onlinecheckin/widgets/CustomFlutterWidget.dart';
 import '../../global/Classes.dart';
 import '../../utility/DataProvider.dart';
 import '../../global/MainController.dart';
@@ -152,7 +154,21 @@ class StepsScreenController extends MainController {
   void addToTravellers(String token, String lastName, String ticketNumber) async {
     await getInformation(token);
     for (int i = 0; i < travellers.length; i++) {
-      if (travellers[i].welcome.body.passengers[0].lastName == lastName && travellers[i].ticketNumber == ticketNumber) {
+      print(travellers[i].welcome.body.passengers[0].id);
+      print(_welcome!.body.passengers[0].id);
+      if (travellers[i].welcome.body.passengers[0].id == _welcome!.body.passengers[0].id) {
+        print("here");
+        showFlash(
+          context: Get.context!,
+          duration: const Duration(seconds: 4),
+          builder: (context, controller) {
+            return CustomFlashBar(
+              controller: controller,
+              contentMessage: "This passenger was added before",
+              titleMessage: "Duplicate traveller",
+            );
+          },
+        );
         return;
       }
     }
@@ -187,13 +203,16 @@ class StepsScreenController extends MainController {
       token: token,
       request: {},
     );
+    print("here190");
     if (response.statusCode == 200) {
       final extractedData = response.data;
       if (extractedData == null) {
         model.setRequesting(false);
         return null;
       }
+      print("here197");
       _welcome = welcomeFromJson(jsonEncode(extractedData));
+
       model.setLoading(false);
       print("ok");
     }

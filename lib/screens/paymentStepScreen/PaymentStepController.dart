@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:onlinecheckin/screens/seatsStepScreen/SeatsStepController.dart';
 import 'package:onlinecheckin/screens/upgradesStepScreen/UpgradesStepController.dart';
+import 'package:onlinecheckin/widgets/CustomFlutterWidget.dart';
 import '../../utility/DataProvider.dart';
 import '../../global/Classes.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
@@ -119,14 +121,13 @@ class PaymentStepController extends MainController {
 
   void showResultDialog() {
     String text = wasPayed ? "Payment was successful" : "Payment failed";
-    Get.defaultDialog(
-      middleText: text,
-      title: "",
-      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-      backgroundColor: wasPayed ? Colors.green : Colors.red,
-      buttonColor: wasPayed ? Colors.greenAccent : Colors.redAccent,
-      barrierDismissible: true,
-      radius: 10,
+    String title = wasPayed ? "" : "Error";
+    showFlash(
+      context: Get.context!,
+      duration: const Duration(seconds: 4),
+      builder: (context, controller) {
+        return CustomFlashBar(controller: controller,contentMessage: text,titleMessage: title,colors: [Colors.greenAccent, Colors.green],);
+      },
     );
   }
 

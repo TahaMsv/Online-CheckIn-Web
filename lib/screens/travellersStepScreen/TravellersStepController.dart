@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:network_manager/network_manager.dart';
+import 'package:onlinecheckin/widgets/CustomFlutterWidget.dart';
 import '../../global/Classes.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
 import '../../utility/DataProvider.dart';
@@ -46,6 +48,14 @@ class TravellersStepScreenController extends MainController {
         ticketNumberC.text = "";
         isTicketNumberEmpty.value = false;
         isLastNameEmpty.value = false;
+      }else{
+        showFlash(
+          context: Get.context!,
+          duration: const Duration(seconds: 4),
+          builder: (context, controller) {
+            return CustomFlashBar(controller: controller,contentMessage: "Wrong LastName or Booking reference name",titleMessage: "Error",);
+          },
+        );
       }
     }
   }

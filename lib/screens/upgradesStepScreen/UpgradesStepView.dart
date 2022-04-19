@@ -215,7 +215,7 @@ class UpgradeItemWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Starts from \$ ${value.price}!",
+                      "Starts from \$ ${value.price}",
                       style: TextStyle(
                         fontSize: 12,
                         color: Color(0xff424242),

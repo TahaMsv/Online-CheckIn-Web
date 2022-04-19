@@ -322,7 +322,7 @@ class Flight {
   // String alName;
   // String aircraftShowName;
   // String boardingTime;
-  bool checkDocs;
+  int checkDocs;
 
   factory Flight.fromJson(Map<String, dynamic> json) => Flight(
         // id: json["ID"],
