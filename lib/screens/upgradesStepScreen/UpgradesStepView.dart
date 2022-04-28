@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:onlinecheckin/utility/Constants.dart';
 import '../../global/Classes.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../screens/upgradesStepScreen/UpgradesStepController.dart';
@@ -109,7 +110,7 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                       }
                     },
                     icon: Icon(
-                      Icons.navigate_before,
+                      MenuIcons.iconLeftArrow,
                       size: 35,
                     ),
                   ),
@@ -151,7 +152,7 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                       }
                     },
                     icon: Icon(
-                      Icons.navigate_next,
+                      MenuIcons.iconRightArrow,
                       size: 35,
                     ),
                   ),

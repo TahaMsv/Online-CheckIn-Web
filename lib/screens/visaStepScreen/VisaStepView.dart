@@ -3,6 +3,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:onlinecheckin/global/Classes.dart';
+import 'package:onlinecheckin/utility/Constants.dart';
 import '../../widgets/StepsScreenTitle.dart';
 import '../../screens/visaStepScreen/VisaStepController.dart';
 import '../../global/MainModel.dart';
@@ -259,7 +260,7 @@ class EditVisaInfo extends StatelessWidget {
             myVisaStepController.showDOCOPopup(index);
           },
           child: Icon(
-            Icons.edit,
+            MenuIcons.iconEdit,
             color: Colors.white,
             size: 18,
           ),

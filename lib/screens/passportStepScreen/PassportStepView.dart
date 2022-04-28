@@ -4,6 +4,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:onlinecheckin/global/Classes.dart';
+import 'package:onlinecheckin/utility/Constants.dart';
 import 'package:onlinecheckin/widgets/MyElevatedButton.dart';
 import 'package:onlinecheckin/widgets/UserTextInput.dart';
 import '../../widgets/StepsScreenTitle.dart';
@@ -233,7 +234,7 @@ class EditIPassInfo extends StatelessWidget {
             myPassportStepController.showDOCSPopup(index);
           },
           child: Icon(
-            Icons.edit,
+            MenuIcons.iconEdit,
             color: Colors.white,
             size: 18,
           ),

@@ -31,12 +31,26 @@ class TravellersStepScreenController extends MainController {
     String lastName = lastNameC.text;
     String ticketNumber = ticketNumberC.text;
     if (ticketNumber == "") {
-      isTicketNumberEmpty.value = true;
+      // isTicketNumberEmpty.value = true;
+      showFlash(
+        context: Get.context!,
+        duration: const Duration(seconds: 4),
+        builder: (context, controller) {
+          return CustomFlashBar(controller: controller,contentMessage: "Ticket Number can not be empty",titleMessage: "Error",);
+        },
+      );
     } else {
       isTicketNumberEmpty.value = false;
     }
     if (lastName == "") {
-      isLastNameEmpty.value = true;
+      // isLastNameEmpty.value = true;
+      showFlash(
+        context: Get.context!,
+        duration: const Duration(seconds: 4),
+        builder: (context, controller) {
+          return CustomFlashBar(controller: controller,contentMessage: "LastName can not be empty",titleMessage: "Error",);
+        },
+      );
     } else {
       isLastNameEmpty.value = false;
     }

@@ -35,11 +35,11 @@ class SeatsStepView extends StatelessWidget {
                 Stack(
                   children: [
                     PlaneHead(
-                      height: mySeatsStepController.calculatePlaneBodyHeight() + 47,
+                      height: mySeatsStepController.calculatePlaneBodyHeight() ,
                     ),
                     // PlaneWings(),
                     PlaneTail(
-                      height: mySeatsStepController.calculatePlaneBodyHeight() + 150,
+                      height: mySeatsStepController.calculatePlaneBodyHeight() + 85,
                       margin: mySeatsStepController.calculatePlaneBodyLength(),
                     ),
                     PlaneBody(
@@ -172,14 +172,7 @@ class CabinWidget extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: cabin.linesCount,
                   itemBuilder: (_, i) {
-                    // print("cabin widget: " + i.toString());
-                    // print("line type: " + cabin.lines[i].type);
                     return
-                        //   Container(
-                        //   width: 45,
-                        //   margin: EdgeInsets.all(3),
-                        //   color: Colors.greenAccent,
-                        // );
                         LineWidget(
                       line: cabin.lines[i],
                       mySeatsStepController: mySeatsStepController,
@@ -207,11 +200,13 @@ class LineWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // color: Colors.amberAccent,
-      width: 50,
-      margin: EdgeInsets.symmetric(horizontal: 3),
+      width: mySeatsStepController.seatWidth,
+      margin: EdgeInsets.symmetric(horizontal: mySeatsStepController.linesMargin),
       child: line.type == "HorizontalCode"
           ? HorizontalCodeLine(
               cells: line.cells,
+              width: mySeatsStepController.seatWidth,
+              height: mySeatsStepController.seatHeight,
             )
           : BodyLine(cells: line.cells, mySeatsStepController: mySeatsStepController, index: index),
     );
@@ -220,14 +215,16 @@ class LineWidget extends StatelessWidget {
 
 class HorizontalCodeLine extends StatelessWidget {
   final List<Cell> cells;
+  final double width;
+  final double height;
 
-  const HorizontalCodeLine({Key? key, required this.cells}) : super(key: key);
+  const HorizontalCodeLine({Key? key, required this.cells, required this.width, required this.height}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       // color: Colors.red,
-      width: 45,
+      // width: 45,
       // height: 300,
       child: Center(
         child: ListView.builder(
@@ -237,12 +234,12 @@ class HorizontalCodeLine extends StatelessWidget {
           itemBuilder: (_, i) {
             return Container(
               margin: EdgeInsets.all(2),
-              width: cells[i].type == "Seat" || cells[i].type == "OutEquipmentExit" ? 35 : 15,
-              height: cells[i].type == "Seat" || cells[i].type == "OutEquipmentExit"
-                  ? 35
-                  : cells[i].type == "OutEquipmentWing"
-                      ? 5
-                      : 15,
+              width: cells[i].type == "Seat" || cells[i].type == "OutEquipmentExit" ? width : width - 15,
+              height: cells[i].type == "Seat"
+                  ? height
+                  : cells[i].type == "OutEquipmentWing" || cells[i].type == "OutEquipmentExit"
+                      ? 0
+                      : height - 15,
               decoration: BoxDecoration(
                 color: Color(0xff5d5d5d),
               ),
@@ -273,7 +270,7 @@ class BodyLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // color: Colors.green,
-      width: 50,
+      // width: 50,
       // height: mySeatsStepController.calculateCabinHeight(index),
       child: ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
@@ -307,8 +304,8 @@ class SeatWidget extends StatefulWidget {
 class _SeatWidgetState extends State<SeatWidget> {
   @override
   Widget build(BuildContext context) {
-    double width = 35;
-    double height = 35;
+    double width = widget.mySeatsStepController.seatWidth;
+    double height = widget.mySeatsStepController.seatHeight;
     bool isSeatClickable = false;
     Color color = Color(0xff5d5d5d);
     String seatText = "";
@@ -319,7 +316,7 @@ class _SeatWidgetState extends State<SeatWidget> {
         break;
       case 2:
         seatText = widget.cell.code!;
-        width = height = 15;
+        width = height = (width - 15);
 
         break;
       case 3:
@@ -343,23 +340,30 @@ class _SeatWidgetState extends State<SeatWidget> {
         seatText = widget.mySeatsStepController.seatsStatus[widget.cell.code]!;
         break;
       case 8:
-        break;
+
       case 9:
+        width = (width - 15);
+        height = 0;
         break;
       case 10:
-        width = height = 5;
+        width = height = 0;
         break;
       case 11:
-        width = height = 15;
+        width = height = (width - 15);
         seatText = widget.cell.value!;
         break;
       case 12:
-        width = height = 15;
+        width = height = (width - 15);
         break;
       case 13:
         isSeatClickable = false;
         color = Color(0xff48c0a2);
         seatText = widget.mySeatsStepController.seatsStatus[widget.cell.code]!;
+        break;
+      case 14:
+        isSeatClickable = false;
+        // color = Color(0xff48c0a2);
+        seatText = "";
         break;
     }
 
@@ -374,7 +378,7 @@ class _SeatWidgetState extends State<SeatWidget> {
       child: Container(
           width: width,
           height: height,
-          margin: EdgeInsets.all(2),
+          margin: EdgeInsets.symmetric(vertical: 2),
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.all(
@@ -384,11 +388,15 @@ class _SeatWidgetState extends State<SeatWidget> {
           child: (() {
             switch (widget.mySeatsStepController.seatViewType(widget.cell.value, widget.cell.type, widget.cell.code)) {
               case 9:
-                return ExitDoor();
+                return Container();
+              // ExitDoor();
               case 3:
                 return BlockedSeat();
               case 4:
-                return CheckedInSeat();
+                return CheckedInSeat(
+                  width: widget.mySeatsStepController.seatWidth,
+                  height: widget.mySeatsStepController.seatHeight,
+                );
               default:
                 return Center(
                   child: Text(
@@ -429,13 +437,13 @@ class PlaneHead extends StatelessWidget {
     return Center(
       child: Container(
         height: height,
-        // width: 413,
+        width: 390,
         child: Image.asset(
           "assets/images/Airplane Head.png",
-          fit: BoxFit.contain,
+          fit: BoxFit.fill,
           // height: 350,
         ),
-        margin: EdgeInsets.only(left: 20),
+        margin: EdgeInsets.only(left: 20,top: 7),
         // width: 400,
       ),
     );
@@ -456,13 +464,12 @@ class PlaneTail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        padding: EdgeInsets.only(top: 30, bottom: 22),
-        margin: EdgeInsets.only(left: margin + 50),
+        margin: EdgeInsets.only(left: margin + 50, top :7),
         // width: 2400,
-        height: height + 100,
+        height: height ,
         child: Image.asset(
           "assets/images/Edited-Tail.png",
-          fit: BoxFit.contain,
+          fit: BoxFit.fill,
         ),
       ),
     );
@@ -505,13 +512,18 @@ class BlockedSeat extends StatelessWidget {
 class CheckedInSeat extends StatelessWidget {
   const CheckedInSeat({
     Key? key,
+    required this.width,
+    required this.height,
   }) : super(key: key);
+
+  final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 35,
-      height: 35,
+      width: width,
+      height: height,
       decoration: BoxDecoration(
         color: Colors.grey,
         borderRadius: BorderRadius.all(

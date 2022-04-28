@@ -16,7 +16,10 @@ class SeatsStepController extends MainController {
   SeatsStepController(this.model);
 
   int seatPrices = 0;
-  final double eachLineWidth = 50;
+  final double eachLineWidth = 35;
+  final double seatWidth = 35;
+  final double seatHeight = 35;
+  final double linesMargin = 7;
   List<Cabin> cabins = [];
 
   final RxMap<String, String> seatsStatus = <String, String>{}.obs;
@@ -33,7 +36,7 @@ class SeatsStepController extends MainController {
     List<Seat> seats = myStepScreenController.welcome!.body.seats;
     for (int i = 0; i < seats.length; i++) {
       Seat seat = seats[i];
-      String key = seat.letter + seat.line;
+      String key = seat.line + seat.letter;
       seatsStatus[key] = seat.isUsedDescription;
       seatsPrice[key] = seat.price;
     }
@@ -94,7 +97,7 @@ class SeatsStepController extends MainController {
     double length = 0;
     for (var i = 0; i < cabins.length; ++i) {
       length += calculateCabinLength(i);
-      length += 5; // Left margin
+      length += 15; // Left margin
     }
     return length;
   }
@@ -108,7 +111,7 @@ class SeatsStepController extends MainController {
   }
 
   double calculateCabinLinesLength(int index) {
-    return cabins[index].linesCount * (eachLineWidth + 8);
+    return cabins[index].linesCount * (eachLineWidth + linesMargin * 2 + 2);
   }
 
   double calculatePlaneBodyHeight() {
@@ -119,22 +122,17 @@ class SeatsStepController extends MainController {
         maxHeight = height;
       }
     }
-    maxHeight += 20; //Padding and margins
+    maxHeight += 60; //Padding and margins
     return maxHeight;
   }
-
-  // double calculateCabinHeight(int index) {
-  //   int number = cabins[index].lines[0].cells.length;
-  //   return number * (32);
-  // }
 
   double calculateCabinHeight(int index) {
     double height = 0;
     cabins[index].lines[1].cells.forEach((element) {
       if (element.type == "Seat") {
-        height += 35;
-      } else {
-        height += 15;
+        height += seatHeight;
+      } else if (element.type == "VerticalCode") {
+        height += (seatHeight - 15);
       }
       height += 5;
     });
@@ -197,6 +195,8 @@ class SeatsStepController extends MainController {
       else {
         if (seatsStatus[code] == "Block")
           return 3;
+        else if (seatsStatus[code] == "TemporaryBlock")
+          return 14;
         else if (reservedSeats.containsKey(code))
           return 13;
         else if (seatsStatus[code] == "Checked-in")
@@ -232,7 +232,7 @@ class SeatsStepController extends MainController {
       case "Open":
         return Colors.white;
       case "Checked-in":
-        return Colors.grey;
+      case "TemporaryBlock":
       case "Click":
         return Colors.grey;
       default:

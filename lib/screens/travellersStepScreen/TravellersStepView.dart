@@ -52,6 +52,7 @@ class TravellersStepView extends StatelessWidget {
                   hint: "Reservation ID / Ticket Number",
                   errorText: "Reservation ID / Ticket Number can't be empty",
                   isEmpty: myTravellersStepScreenController.isTicketNumberEmpty.value,
+                  obscureText: true,
                 ),
               ),
               SizedBox(

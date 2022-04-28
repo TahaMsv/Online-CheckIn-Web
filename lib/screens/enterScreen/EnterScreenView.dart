@@ -202,6 +202,7 @@ class CheckInForm extends StatelessWidget {
                                   hint: "Booking reference name",
                                   errorText: "Booking reference name can't be empty",
                                   isEmpty: myEnterScreenController.isBookingRefNameEmpty.value,
+                                  obscureText: true,
                                 ),
                               ],
                             ),
@@ -407,7 +408,7 @@ class Texts extends StatelessWidget {
               children: [
                 Container(
                   child: Icon(
-                    Icons.fact_check_outlined,
+                    MenuIcons.iconEvent,
                     color: Colors.white,
                   ),
                   margin: EdgeInsets.only(right: 15),
@@ -463,7 +464,7 @@ class NextButton extends StatelessWidget {
             ),
           ),
           Icon(
-            Icons.arrow_right_alt,
+            MenuIcons.iconRight,
             color: Colors.white,
           ),
         ],
@@ -487,14 +488,11 @@ class PrevButton extends StatelessWidget {
         onPressed: null,
         child: Row(
           children: [
-            Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.rotationY(math.pi),
-              child: Icon(
-                Icons.arrow_right_alt,
+             Icon(
+                MenuIcons.iconLeft,
                 color: Colors.white,
               ),
-            ),
+
             Container(
               margin: EdgeInsets.only(left: 18),
               child: Text(

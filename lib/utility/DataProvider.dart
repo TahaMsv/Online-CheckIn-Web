@@ -165,7 +165,7 @@ class DioClient {
         "Token": null,
         "Request": request,
       },
-    });
+    },);
 
     return response;
   }

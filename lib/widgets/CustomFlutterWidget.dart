@@ -36,8 +36,8 @@ class CustomFlashBar extends StatelessWidget {
           titleMessage,
           style: Theme.of(context).textTheme.headline6,
         ),
-        shouldIconPulse: false,
-        showProgressIndicator: true,
+        // shouldIconPulse: false,
+        // showProgressIndicator: true,
       ),
     );
   }

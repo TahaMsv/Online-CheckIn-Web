@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:onlinecheckin/utility/Constants.dart';
 import '../../screens/seatsStepScreen/NewStepScreenView.dart';
 
 import '../../screens/paymentStepScreen/PaymentStepView.dart';
@@ -148,16 +149,27 @@ class StepWidget extends StatelessWidget {
     "Payment",
     "Receipt",
   ];
+
+  // static const List<IconData> icons = [
+  //   MenuIcons.iconAccount,
+  //   MenuIcons.iconInfo,
+  //   MenuIcons.iconPassport,
+  //   MenuIcons.iconVisa,
+  //   MenuIcons.star,
+  //   MenuIcons.iconSeat,
+  //   MenuIcons.iconCard,
+  //   MenuIcons.iconTask,
+  // ];
   static const List<IconData> icons = [
-    Icons.person_pin,
-    Icons.person_pin,
-    Icons.person_pin,
-    Icons.person_pin,
-    Icons.person_pin,
-    Icons.person_pin,
-    Icons.person_pin,
-    Icons.person_pin,
-    Icons.person_pin,
+    MenuIcons.iconAccount,
+    Icons.health_and_safety,
+    MenuIcons.iconInfo,
+    MenuIcons.iconPassport,
+    MenuIcons.iconVisa,
+    MenuIcons.star,
+    MenuIcons.iconSeat,
+    MenuIcons.iconCard,
+    MenuIcons.iconTask,
   ];
 
   @override
@@ -671,8 +683,9 @@ class PreviousButton extends StatelessWidget {
         child: Row(
           children: [
             Icon(
-              Icons.keyboard_arrow_left,
+              MenuIcons.iconLeftArrow,
               color: isDisable ? Color(0xff767676).withOpacity(0.5) : Color(0xff767676),
+              size: 14,
             ),
             Container(
               margin: EdgeInsets.only(left: 4),

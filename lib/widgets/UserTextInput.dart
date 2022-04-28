@@ -7,7 +7,7 @@ class UserTextInput extends StatelessWidget {
     required this.hint,
     this.height = 40,
      this.errorText="",
-     this.isEmpty=false,
+     this.isEmpty=false, this.obscureText = false,
   }) : super(key: key);
 
   final TextEditingController controller;
@@ -15,6 +15,7 @@ class UserTextInput extends StatelessWidget {
   final String errorText;
   final bool isEmpty;
   final double height;
+  final bool obscureText;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,7 @@ class UserTextInput extends StatelessWidget {
           ),
           borderRadius: BorderRadius.all(Radius.circular(5))),
       child: TextField(
+        obscureText: obscureText,
         textAlignVertical: TextAlignVertical.center,
         controller: controller,
         decoration: InputDecoration(

@@ -29,14 +29,29 @@ class EnterScreenController extends MainController {
     String lastName = lastNameC.text;
     String bookingRefName = bookingRefNameC.text;
     if (bookingRefName == "") {
-      isBookingRefNameEmpty.value = true;
+      // isBookingRefNameEmpty.value = true;
+      showFlash(
+        context: Get.context!,
+        duration: const Duration(seconds: 4),
+        builder: (context, controller) {
+          return CustomFlashBar(controller: controller,contentMessage: "Booking reference name can not be empty",titleMessage: "Error",);
+        },
+      );
     } else {
       isBookingRefNameEmpty.value = false;
     }
     if (lastName == "") {
-      isLastNameEmpty.value = true;
+      // isLastNameEmpty.value = true;
+      showFlash(
+        context: Get.context!,
+        duration: const Duration(seconds: 4),
+        builder: (context, controller) {
+          return CustomFlashBar(controller: controller,contentMessage: "LastName can not be empty",titleMessage: "Error",);
+        },
+      );
     } else {
       isLastNameEmpty.value = false;
+
     }
     if (bookingRefName != "" && lastName != "") {
       isBookingRefNameEmpty.value = false;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:onlinecheckin/utility/Constants.dart';
 
 class SelectingDateWidget extends StatefulWidget {
   const SelectingDateWidget({
@@ -66,7 +67,7 @@ class _SelectingDateWidgetState extends State<SelectingDateWidget> {
               child: IconButton(
                 onPressed: () => _selectDate(context),
                 icon: Icon(
-                  Icons.calendar_today_outlined,
+                  MenuIcons.iconCalendar,
                   color: Color(0xff4d6fff),
                   size: 15,
                 ),
