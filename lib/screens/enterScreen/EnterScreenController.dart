@@ -8,7 +8,6 @@ import '../../global/MainModel.dart';
 import 'package:dio/dio.dart';
 import 'package:flash/flash.dart';
 
-
 class EnterScreenController extends MainController {
   EnterScreenController._();
 
@@ -34,7 +33,11 @@ class EnterScreenController extends MainController {
         context: Get.context!,
         duration: const Duration(seconds: 4),
         builder: (context, controller) {
-          return CustomFlashBar(controller: controller,contentMessage: "Booking reference name can not be empty",titleMessage: "Error",);
+          return CustomFlashBar(
+            controller: controller,
+            contentMessage: "Booking reference name can not be empty",
+            titleMessage: "Error",
+          );
         },
       );
     } else {
@@ -46,12 +49,15 @@ class EnterScreenController extends MainController {
         context: Get.context!,
         duration: const Duration(seconds: 4),
         builder: (context, controller) {
-          return CustomFlashBar(controller: controller,contentMessage: "LastName can not be empty",titleMessage: "Error",);
+          return CustomFlashBar(
+            controller: controller,
+            contentMessage: "LastName can not be empty",
+            titleMessage: "Error",
+          );
         },
       );
     } else {
       isLastNameEmpty.value = false;
-
     }
     if (bookingRefName != "" && lastName != "") {
       isBookingRefNameEmpty.value = false;
@@ -64,7 +70,7 @@ class EnterScreenController extends MainController {
   Future<bool> loginValidation() async {
     String lastName = lastNameC.text.trim();
     String bookingRefName = bookingRefNameC.text.trim();
-    if(!model.requesting){
+    if (!model.requesting) {
       model.setRequesting(true);
       Response response = await DioClient.getToken(
         execution: "[OnlineCheckin].[Authenticate]",
@@ -83,6 +89,8 @@ class EnterScreenController extends MainController {
             model.setToken(token);
             StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
             stepsScreenController.addToTravellers(token, lastName, bookingRefName);
+
+
             model.setRequesting(false);
             return Future<bool>.value(true);
           }
@@ -93,7 +101,11 @@ class EnterScreenController extends MainController {
       context: Get.context!,
       duration: const Duration(seconds: 4),
       builder: (context, controller) {
-        return CustomFlashBar(controller: controller,contentMessage: "Wrong LastName or Booking reference name",titleMessage: "Error",);
+        return CustomFlashBar(
+          controller: controller,
+          contentMessage: "Wrong LastName or Booking reference name",
+          titleMessage: "Error",
+        );
       },
     );
     print("not ok validation");

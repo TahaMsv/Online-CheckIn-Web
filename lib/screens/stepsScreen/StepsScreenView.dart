@@ -80,7 +80,13 @@ class StepsScreenView extends StatelessWidget {
                                               color: Color(0xff48c0a2),
                                             ),
                                     ),
-                                    for (int i = 0; i <= 8; i++) StepWidget(step: myStepsScreenController.step, index: i),
+                                    for (int i = 0; i <= 8; i++)
+                                      if (myStepsScreenController.isStepNeeded(i))
+                                        StepWidget(
+                                          step: myStepsScreenController.step,
+                                          index: i,
+                                          checkDocs: myStepsScreenController.welcome!.body.flight[0].checkDocs,
+                                        ),
                                     Expanded(
                                       child: Container(
                                         height: 1,
@@ -133,10 +139,12 @@ class StepWidget extends StatelessWidget {
     Key? key,
     required this.step,
     required this.index,
+    required this.checkDocs,
   }) : super(key: key);
 
   final int step;
   final int index;
+  final int checkDocs;
 
   static const titles = [
     "Travellers",
@@ -150,16 +158,6 @@ class StepWidget extends StatelessWidget {
     "Receipt",
   ];
 
-  // static const List<IconData> icons = [
-  //   MenuIcons.iconAccount,
-  //   MenuIcons.iconInfo,
-  //   MenuIcons.iconPassport,
-  //   MenuIcons.iconVisa,
-  //   MenuIcons.star,
-  //   MenuIcons.iconSeat,
-  //   MenuIcons.iconCard,
-  //   MenuIcons.iconTask,
-  // ];
   static const List<IconData> icons = [
     MenuIcons.iconAccount,
     Icons.health_and_safety,
@@ -236,242 +234,6 @@ class StepWidget extends StatelessWidget {
   }
 }
 
-class LeftSideOFPage extends StatelessWidget {
-  const LeftSideOFPage({
-    Key? key,
-    required this.height,
-    required this.width,
-    required this.step,
-    required this.myStepsScreenController,
-  }) : super(key: key);
-
-  final double height;
-  final double width;
-  final int step;
-  final StepsScreenController myStepsScreenController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        // width: width,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black.withOpacity(0.1)),
-          shape: BoxShape.rectangle,
-        ),
-        margin: EdgeInsets.only(top: 13.5),
-        height: height * 0.9 - 13.5,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TitleWidget(
-                  title: "Travellers",
-                  width: 190,
-                ),
-                if (myStepsScreenController.step == 6)
-                  Container(
-                    width: 112,
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 2,
-                          height: 60,
-                          color: Color(0xffededed),
-                        ),
-                        TitleWidget(
-                          title: "Seat",
-                          width: 100,
-                        ),
-                      ],
-                    ),
-                  ),
-              ],
-            ),
-            Container(
-              // width: width,
-              height: 1,
-              color: Color(0xffeaeaea),
-            ),
-            Obx(
-              () => Container(
-                width: width,
-                height: height * 0.9 - 65 - 13.5,
-                child: ListView.builder(
-                  itemCount: myStepsScreenController.travellers.length,
-                  itemBuilder: (ctx, index) => TravellerItem(
-                    step: step,
-                    index: index,
-                    myStepsScreenController: myStepsScreenController,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        // color: Colors.red,
-      ),
-    );
-  }
-}
-
-class TravellerItem extends StatelessWidget {
-  const TravellerItem({
-    Key? key,
-    required this.step,
-    required this.index,
-    required this.myStepsScreenController,
-  }) : super(key: key);
-  final int step;
-  final int index;
-  final StepsScreenController myStepsScreenController;
-
-  @override
-  Widget build(BuildContext context) {
-    bool isTravellerSelected = myStepsScreenController.travellers[index].seatId == "--" ? false : true;
-    return Container(
-      color: myStepsScreenController.whoseTurnToSelect.value == index && step == 6 ? const Color(0xffffae2c).withOpacity(0.5) : Colors.white,
-      height: 60,
-      child: Column(
-        children: [
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: Text(
-                    myStepsScreenController.travellers[index].getFullNameWithGender(),
-                    style: TextStyle(
-                      color: Color(0xff424242),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                ),
-                step == 0
-                    ? IconButton(
-                        onPressed: () => myStepsScreenController.removeFromTravellers(index),
-                        icon: Icon(
-                          Icons.close,
-                          color: Colors.red,
-                        ),
-                      )
-                    : step == 6
-                        ? Container(
-                            width: 112,
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 2,
-                                  height: 100,
-                                  color: Color(0xffededed),
-                                ),
-                                // myStepsScreenController.whichOneToEdit == index
-                                //     ? Row(
-                                //         children: [
-                                //           Container(
-                                //             width: 45,
-                                //             color: Colors.grey,
-                                //             child: TextField(
-                                //               textAlignVertical: TextAlignVertical.center,
-                                //               controller: myStepsScreenController.editSeatC,
-                                //               maxLength: 3,
-                                //               decoration: InputDecoration(
-                                //                   contentPadding: EdgeInsets.all(10.0), border: InputBorder.none, counterText: "", hintText: myStepsScreenController.travellers[index].seatId),
-                                //             ),
-                                //           ),
-                                //           Container(
-                                //             width: 30,
-                                //             child: IconButton(
-                                //                 onPressed: () {
-                                //                   myStepsScreenController.setWhichOneToEdit(-1);
-                                //                   myStepsScreenController.changeTravellerSeat(index);
-                                //                 },
-                                //                 icon: Icon(Icons.check),
-                                //                 color: Colors.green),
-                                //           ),
-                                //           Container(
-                                //             width: 30,
-                                //             child: IconButton(
-                                //               onPressed: () {
-                                //                 myStepsScreenController.setWhichOneToEdit(-1);
-                                //               },
-                                //               icon: Icon(Icons.close),
-                                //               color: Colors.red,
-                                //             ),
-                                //           ),
-                                //         ],
-                                //       )
-                                //     :
-                                Row(
-                                  children: [
-                                    TitleWidget(
-                                      title: myStepsScreenController.travellers[index].seatId,
-                                      width: 75,
-                                      textColor: isTravellerSelected ? Color(0xff48c0a2) : Color(0xff424242),
-                                    ),
-                                    Container(
-                                      width: 35,
-                                      // child: IconButton(
-                                      //   onPressed: () {
-                                      //     myStepsScreenController.setWhichOneToEdit(index);
-                                      //   },
-                                      //   icon: Icon(Icons.edit),
-                                      //   color: myStepsScreenController.whichOneToEdit == index ? Colors.green : Colors.blue,
-                                      // ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                        : Container(),
-              ],
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            height: 1,
-            color: Color(0xffeaeaea),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class TitleWidget extends StatelessWidget {
-  const TitleWidget({
-    Key? key,
-    required this.title,
-    required this.width,
-    this.textColor = const Color(0xff424242),
-  }) : super(key: key);
-
-  final String title;
-  final double width;
-  final Color textColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      width: width,
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      child: Text(
-        title,
-        style: TextStyle(
-          color: textColor,
-          fontSize: 17,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-}
-
 class TopOfPage extends StatelessWidget {
   const TopOfPage({
     Key? key,
@@ -500,62 +262,6 @@ class TopOfPage extends StatelessWidget {
     );
   }
 }
-
-class AbomisLogo extends StatelessWidget {
-  const AbomisLogo({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Image.asset(
-        'assets/images/company-logo-blue.png',
-        fit: BoxFit.fill,
-      ),
-      height: 60,
-      width: 160,
-    );
-  }
-}
-
-class LanguagePicker extends StatelessWidget {
-  const LanguagePicker({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 200,
-      child: CountryPickerDropdown(
-        initialValue: 'GB-NIR',
-        itemBuilder: _buildDropdownItem,
-        // itemFilter:  ['AR', 'DE', 'GB', 'CN'].contains(c.isoCode),
-        priorityList: [
-          CountryPickerUtils.getCountryByIsoCode('GB'),
-          CountryPickerUtils.getCountryByIsoCode('CN'),
-        ],
-        sortComparator: (Country a, Country b) => a.isoCode.compareTo(b.isoCode),
-        onValuePicked: (Country country) {
-          print("${country.name}");
-        },
-      ),
-    );
-  }
-}
-
-Widget _buildDropdownItem(Country country) => Container(
-      child: Row(
-        children: <Widget>[
-          CountryPickerUtils.getDefaultFlagImage(country),
-          SizedBox(
-            width: 8.0,
-          ),
-          Text("+${country.phoneCode}(${country.isoCode})"),
-        ],
-      ),
-    );
 
 class BottomOfPage extends StatelessWidget {
   const BottomOfPage({
@@ -591,7 +297,7 @@ class BottomOfPage extends StatelessWidget {
                   : MyElevatedButton(
                       height: 40,
                       width: 300,
-                      buttonText: myStepsScreenController.buttonText[myStepsScreenController.step],
+                      buttonText: myStepsScreenController.buttonsText[myStepsScreenController.currButtonTextIndex],
                       bgColor: Color(0xff4c6ef6),
                       fgColor: Colors.white,
                       function: myStepsScreenController.increaseStep,
@@ -674,10 +380,7 @@ class PreviousButton extends StatelessWidget {
         ),
         onPressed: () {
           if (!isDisable) {
-            int currStep = myStepsScreenController.step;
-            if (currStep > 0) {
-              myStepsScreenController.setStep(currStep - 1);
-            }
+            myStepsScreenController.decreaseStep();
           }
         },
         child: Row(
@@ -703,3 +406,295 @@ class PreviousButton extends StatelessWidget {
     );
   }
 }
+
+class LeftSideOFPage extends StatelessWidget {
+  const LeftSideOFPage({
+    Key? key,
+    required this.height,
+    required this.width,
+    required this.step,
+    required this.myStepsScreenController,
+  }) : super(key: key);
+
+  final double height;
+  final double width;
+  final int step;
+  final StepsScreenController myStepsScreenController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        // width: width,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black.withOpacity(0.1)),
+          shape: BoxShape.rectangle,
+        ),
+        margin: EdgeInsets.only(top: 13.5),
+        height: height * 0.9 - 13.5,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TitleWidget(
+                  title: "Travellers",
+                  width: 190,
+                ),
+                if (myStepsScreenController.step == 6)
+                  Container(
+                    width: 112,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 2,
+                          height: 60,
+                          color: Color(0xffededed),
+                        ),
+                        TitleWidget(
+                          title: "Seat",
+                          width: 100,
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+            Container(
+              // width: width,
+              height: 1,
+              color: Color(0xffeaeaea),
+            ),
+            Obx(
+                  () => Container(
+                width: width,
+                height: height * 0.9 - 65 - 13.5,
+                child: ListView.builder(
+                  itemCount: myStepsScreenController.travellers.length,
+                  itemBuilder: (ctx, index) => TravellerItem(
+                    step: step,
+                    index: index,
+                    myStepsScreenController: myStepsScreenController,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        // color: Colors.red,
+      ),
+    );
+  }
+}
+
+class TravellerItem extends StatelessWidget {
+  const TravellerItem({
+    Key? key,
+    required this.step,
+    required this.index,
+    required this.myStepsScreenController,
+  }) : super(key: key);
+  final int step;
+  final int index;
+  final StepsScreenController myStepsScreenController;
+
+  @override
+  Widget build(BuildContext context) {
+    bool isTravellerSelected = myStepsScreenController.travellers[index].seatId == "--" ? false : true;
+    return Container(
+      color: myStepsScreenController.whoseTurnToSelect.value == index && step == 6 ? const Color(0xffffae2c).withOpacity(0.5) : Colors.white,
+      height: 60,
+      child: Column(
+        children: [
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0),
+                  child: Text(
+                    myStepsScreenController.travellers[index].getFullNameWithGender(),
+                    style: TextStyle(
+                      color: Color(0xff424242),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                ),
+                step == 0
+                    ? IconButton(
+                  onPressed: () => myStepsScreenController.removeFromTravellers(index),
+                  icon: Icon(
+                    Icons.close,
+                    color: Colors.red,
+                  ),
+                )
+                    : step == 6
+                    ? Container(
+                  width: 112,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 2,
+                        height: 100,
+                        color: Color(0xffededed),
+                      ),
+                      // myStepsScreenController.whichOneToEdit == index
+                      //     ? Row(
+                      //         children: [
+                      //           Container(
+                      //             width: 45,
+                      //             color: Colors.grey,
+                      //             child: TextField(
+                      //               textAlignVertical: TextAlignVertical.center,
+                      //               controller: myStepsScreenController.editSeatC,
+                      //               maxLength: 3,
+                      //               decoration: InputDecoration(
+                      //                   contentPadding: EdgeInsets.all(10.0), border: InputBorder.none, counterText: "", hintText: myStepsScreenController.travellers[index].seatId),
+                      //             ),
+                      //           ),
+                      //           Container(
+                      //             width: 30,
+                      //             child: IconButton(
+                      //                 onPressed: () {
+                      //                   myStepsScreenController.setWhichOneToEdit(-1);
+                      //                   myStepsScreenController.changeTravellerSeat(index);
+                      //                 },
+                      //                 icon: Icon(Icons.check),
+                      //                 color: Colors.green),
+                      //           ),
+                      //           Container(
+                      //             width: 30,
+                      //             child: IconButton(
+                      //               onPressed: () {
+                      //                 myStepsScreenController.setWhichOneToEdit(-1);
+                      //               },
+                      //               icon: Icon(Icons.close),
+                      //               color: Colors.red,
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       )
+                      //     :
+                      Row(
+                        children: [
+                          TitleWidget(
+                            title: myStepsScreenController.travellers[index].seatId,
+                            width: 75,
+                            textColor: isTravellerSelected ? Color(0xff48c0a2) : Color(0xff424242),
+                          ),
+                          Container(
+                            width: 35,
+                            // child: IconButton(
+                            //   onPressed: () {
+                            //     myStepsScreenController.setWhichOneToEdit(index);
+                            //   },
+                            //   icon: Icon(Icons.edit),
+                            //   color: myStepsScreenController.whichOneToEdit == index ? Colors.green : Colors.blue,
+                            // ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+                    : Container(),
+              ],
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            height: 1,
+            color: Color(0xffeaeaea),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TitleWidget extends StatelessWidget {
+  const TitleWidget({
+    Key? key,
+    required this.title,
+    required this.width,
+    this.textColor = const Color(0xff424242),
+  }) : super(key: key);
+
+  final String title;
+  final double width;
+  final Color textColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 60,
+      width: width,
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      child: Text(
+        title,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 17,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
+class AbomisLogo extends StatelessWidget {
+  const AbomisLogo({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Image.asset(
+        'assets/images/company-logo-blue.png',
+        fit: BoxFit.fill,
+      ),
+      height: 60,
+      width: 160,
+    );
+  }
+}
+
+class LanguagePicker extends StatelessWidget {
+  const LanguagePicker({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 200,
+      child: CountryPickerDropdown(
+        initialValue: 'GB-NIR',
+        itemBuilder: _buildDropdownItem,
+        // itemFilter:  ['AR', 'DE', 'GB', 'CN'].contains(c.isoCode),
+        priorityList: [
+          CountryPickerUtils.getCountryByIsoCode('GB'),
+          CountryPickerUtils.getCountryByIsoCode('CN'),
+        ],
+        sortComparator: (Country a, Country b) => a.isoCode.compareTo(b.isoCode),
+        onValuePicked: (Country country) {
+          print("${country.name}");
+        },
+      ),
+    );
+  }
+}
+
+Widget _buildDropdownItem(Country country) => Container(
+  child: Row(
+    children: <Widget>[
+      CountryPickerUtils.getDefaultFlagImage(country),
+      SizedBox(
+        width: 8.0,
+      ),
+      Text("+${country.phoneCode}(${country.isoCode})"),
+    ],
+  ),
+);

@@ -24,7 +24,7 @@ class VisaStepController extends MainController {
   List<TextEditingController> destinationCs = [];
   RxBool loading = false.obs;
 
-  RxBool isDocoNecessary = false.obs;
+
 
   void init() async {
     loading.value = true;
@@ -55,14 +55,14 @@ class VisaStepController extends MainController {
         if (response.data["ResultCode"] == 1) {
           print(response.data["Body"]["IsNecessary"]);
           if (response.data["Body"]["IsNecessary"] == 1) {
-            isDocoNecessary.value = true;
+            stepsScreenController.isDocoNecessary.value = true;
             loading.value = false;
           }
         }
       }
     }
 
-    if (isDocoNecessary.value) {
+    if (stepsScreenController.isDocoNecessary.value) {
       travellersList();
 
       travellers = stepsScreenController.travellers;

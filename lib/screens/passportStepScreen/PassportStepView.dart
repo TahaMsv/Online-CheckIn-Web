@@ -25,11 +25,7 @@ class PassportStepView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: myPassportStepController.travellers.length == 0
-          ? Center(
-              child: Text("No need to add passport"),
-            )
-          : Column(
+      body: Column(
               children: [
                 StepsScreenTitle(
                   title: "Passport",

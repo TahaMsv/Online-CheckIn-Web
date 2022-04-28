@@ -3,6 +3,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:onlinecheckin/global/Classes.dart';
+import 'package:onlinecheckin/screens/stepsScreen/StepsScreenController.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
 import '../../widgets/StepsScreenTitle.dart';
 import '../../screens/visaStepScreen/VisaStepController.dart';
@@ -20,6 +21,7 @@ class VisaStepView extends StatelessWidget {
     // double width = Get.width;
     // double height = Get.height;
     MainModel model = context.watch<MainModel>();
+    final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
     return Scaffold(
       backgroundColor: Colors.white,
       body: Obx(
@@ -27,7 +29,7 @@ class VisaStepView extends StatelessWidget {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : !myVisaStepController.isDocoNecessary.value
+            : !stepsScreenController.isDocoNecessary.value
                 ? Center(
                     child: Text("No need to add visa"),
                   )
@@ -269,4 +271,3 @@ class EditVisaInfo extends StatelessWidget {
     );
   }
 }
-

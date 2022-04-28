@@ -26,12 +26,24 @@ class StepsScreenController extends MainController {
   }
 
   Welcome? _welcome;
+  int numOFSteps = 9;
+
+  RxBool isDocoNecessary = false.obs;
+  RxBool isDocsNecessary = false.obs;
 
   // List<RxBool> _isNextButtonDisable = [false.obs, true.obs, false.obs, false.obs, false.obs, false.obs, true.obs, false.obs, false.obs];
   // List<RxBool> _isPreviousButtonDisable = [false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs];
 
   RxBool _isNextButtonEnable = true.obs;
   RxBool _isPreviousButtonEnable = true.obs;
+
+  RxList<Traveller> travellers = <Traveller>[].obs;
+  RxInt whoseTurnToSelect = 0.obs;
+  RxInt _step = 0.obs;
+
+
+  int currButtonTextIndex = 0;
+  int nextButtonTextIndex = 0;
 
   void setNextButton(bool newValue) {
     _isNextButtonEnable.value = newValue;
@@ -41,15 +53,19 @@ class StepsScreenController extends MainController {
     _isPreviousButtonEnable.value = newValue;
   }
 
+  void setDocoNecessary(bool newValue) {
+    isDocoNecessary.value = newValue;
+  }
+
+  void setDocsNecessary(bool newValue) {
+    isDocsNecessary.value = newValue;
+  }
+
   bool get isNextButtonEnable => _isNextButtonEnable.value;
 
   bool get isPreviousButtonEnable => _isPreviousButtonEnable.value;
 
-  RxList<Traveller> travellers = <Traveller>[].obs;
-  RxInt whoseTurnToSelect = 0.obs;
-
   Welcome? get welcome => _welcome;
-  RxInt _step = 0.obs;
 
   int get step => _step.value;
   TextEditingController editSeatC = TextEditingController();
@@ -57,6 +73,19 @@ class StepsScreenController extends MainController {
   RxInt _whichOneToEdit = (-1).obs;
 
   int get whichOneToEdit => _whichOneToEdit.value;
+
+  bool isStepNeeded(int index) {
+    if (index == 3 && !isDocsNecessary.value) {
+      return false;
+    }
+    if (index == 4 && !isDocsNecessary.value) {
+      return false;
+    }
+    if (index == 4 && !isDocoNecessary.value) {
+      return false;
+    }
+    return true;
+  }
 
   void setWhichOneToEdit(int whichOne) {
     _whichOneToEdit.value = whichOne;
@@ -83,9 +112,11 @@ class StepsScreenController extends MainController {
   void updateIsNextButtonDisable() {
     if (step == 0) {
       setNextButton(travellers.length != 0);
+      return;
     } else if (step == 1) {
       SafetyStepScreenController safetyStepScreenController = Get.put(SafetyStepScreenController(model));
       setNextButton(safetyStepScreenController.checkValidation());
+      return;
     } else if (step == 6) {
       for (int i = 0; i < travellers.length; i++) {
         if (travellers[i].seatId == "--") {
@@ -94,11 +125,65 @@ class StepsScreenController extends MainController {
         }
       }
       setNextButton(true);
+      return;
     } else if (step == 7) {
       PaymentStepController paymentStepController = Get.put(PaymentStepController(model));
       // paymentStepController.finalReserve();
     }
+    setNextButton(true);
     // else if (step == 8) {}
+  }
+
+  void prepareNextButtonText() {
+    if (step == 1 && !isDocsNecessary.value) {
+      nextButtonTextIndex += 3;
+      return;
+    }
+    if (step == 2) {
+      if (!isDocoNecessary.value) {
+        nextButtonTextIndex += 2;
+        return;
+      }
+    }
+    nextButtonTextIndex += 1;
+  }
+
+  List buttonsText = [
+    "Check Pandemic Safety",
+    "Check Rules",
+    "Add Passports",
+    "Add Visa",
+    "Select Upgrades",
+    "Select Seats",
+    "Payment",
+    "Get Boarding Pass",
+  ];
+
+  void preparePreviousButtonText() {
+    // int currStep = step;
+    if(step== 2) {
+      if (!isDocsNecessary.value) {
+        nextButtonTextIndex -= 3;
+        return;
+      }
+    }
+    if(step== 3){
+      if (!isDocoNecessary.value) {
+        nextButtonTextIndex -= 2;
+        return;
+      }
+    }
+    // else if (step == 5) {
+    //   if (!isDocsNecessary.value) {
+    //     nextButtonTextIndex -= 3;
+    //     return;
+    //   }
+    //   if (!isDocoNecessary.value) {
+    //     nextButtonTextIndex -= 2;
+    //     return;
+    //   }
+    // }
+    nextButtonTextIndex -= 1;
   }
 
   void setStep(int newStep) {
@@ -115,9 +200,11 @@ class StepsScreenController extends MainController {
       setNextButton(paymentStepController.wasPayed);
       paymentStepController.calculatePrices();
     }
+    updateIsNextButtonDisable();
   }
 
   void increaseStep() async {
+    prepareNextButtonText();
     int currStep = step;
     bool isSuccessful = true;
 
@@ -127,16 +214,50 @@ class StepsScreenController extends MainController {
         if (!model.requesting) {
           isSuccessful = await seatsStepController.clickOnSeat();
         }
-      }
-      if (step == 7) {
+      } else if (step == 7) {
         ReceiptStepController receiptStepController = Get.put(ReceiptStepController(model));
         if (!model.requesting) {
           isSuccessful = await receiptStepController.finalReserve();
         }
       }
       if (isSuccessful) {
+        if (step == 2 && !isDocsNecessary.value) {
+          setStep(currStep + 3);
+          currButtonTextIndex = nextButtonTextIndex;
+          return;
+        }
+        if (step == 3) {
+          if (!isDocoNecessary.value) {
+            setStep(currStep + 2);
+            currButtonTextIndex = nextButtonTextIndex;
+
+            return;
+          }
+        }
         setStep(currStep + 1);
+        currButtonTextIndex = nextButtonTextIndex;
       }
+    }
+  }
+
+  void decreaseStep() async {
+    preparePreviousButtonText();
+    int currStep = step;
+    if (currStep > 0) {
+      if (step == 5) {
+        if (!isDocsNecessary.value) {
+          setStep(currStep - 3);
+          currButtonTextIndex = nextButtonTextIndex;
+          return;
+        }
+        if (!isDocoNecessary.value) {
+          setStep(currStep - 2);
+          currButtonTextIndex = nextButtonTextIndex;
+          return;
+        }
+      }
+      setStep(currStep - 1);
+      currButtonTextIndex = nextButtonTextIndex;
     }
   }
 
@@ -175,7 +296,9 @@ class StepsScreenController extends MainController {
     Traveller traveller = new Traveller(token: token, ticketNumber: ticketNumber, seatId: "--", welcome: _welcome!);
     traveller.setPassportInfo(new PassportInfo());
     traveller.setVisaInfo(new VisaInfo());
+    welcome!.body.flight[0].checkDocs == 1 ? setDocsNecessary(true) : setDocsNecessary(true);
     travellers.add(traveller);
+
     updateIsNextButtonDisable();
     changeTurnToSelect();
   }
@@ -217,17 +340,6 @@ class StepsScreenController extends MainController {
       print("ok");
     }
   }
-
-  List buttonText = [
-    "Check Pandemic Safety",
-    "Check Rules",
-    "Add Passports",
-    "Add Visa",
-    "Select Upgrades",
-    "Select Seats",
-    "Payment",
-    "Get Boarding Pass",
-  ];
 
   // initializeApp() async {
   //   // const String token =

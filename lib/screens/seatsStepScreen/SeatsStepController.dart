@@ -36,7 +36,7 @@ class SeatsStepController extends MainController {
     List<Seat> seats = myStepScreenController.welcome!.body.seats;
     for (int i = 0; i < seats.length; i++) {
       Seat seat = seats[i];
-      String key = seat.line + seat.letter;
+      String key = seat.letter+ seat.line;
       seatsStatus[key] = seat.isUsedDescription;
       seatsPrice[key] = seat.price;
     }
@@ -50,8 +50,6 @@ class SeatsStepController extends MainController {
       seatsStatus[key] = seat.isUsedDescription;
     });
     selectedSeats.forEach((k, v) => seatsStatus[k] = v);
-    // clickedOnSeats.forEach((k, v) => seatsStatus[k] = v);
-    // reservedSeats.forEach((k, v) => seatsStatus[k] = v);
   }
 
   Future<bool> clickOnSeat() async {
