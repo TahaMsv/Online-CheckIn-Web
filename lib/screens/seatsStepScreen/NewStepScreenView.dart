@@ -332,7 +332,7 @@ class _SeatWidgetState extends State<SeatWidget> {
         color = Colors.white;
         isSeatClickable = true;
         seatText = widget.cell.code!;
-        textColor = Color(0xffd1d1d1);
+        textColor = Color(0xff424242);
         break;
       case 7:
         isSeatClickable = true;

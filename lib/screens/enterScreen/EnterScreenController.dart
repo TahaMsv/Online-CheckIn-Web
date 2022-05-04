@@ -27,49 +27,51 @@ class EnterScreenController extends MainController {
   Future<bool> checkBoxesValidation() async {
     String lastName = lastNameC.text;
     String bookingRefName = bookingRefNameC.text;
-    if (bookingRefName == "") {
-      // isBookingRefNameEmpty.value = true;
-      showFlash(
-        context: Get.context!,
-        duration: const Duration(seconds: 4),
-        builder: (context, controller) {
-          return CustomFlashBar(
-            controller: controller,
-            contentMessage: "Booking reference name can not be empty",
-            titleMessage: "Error",
-          );
-        },
-      );
-    } else {
-      isBookingRefNameEmpty.value = false;
-    }
-    if (lastName == "") {
-      // isLastNameEmpty.value = true;
-      showFlash(
-        context: Get.context!,
-        duration: const Duration(seconds: 4),
-        builder: (context, controller) {
-          return CustomFlashBar(
-            controller: controller,
-            contentMessage: "LastName can not be empty",
-            titleMessage: "Error",
-          );
-        },
-      );
-    } else {
-      isLastNameEmpty.value = false;
-    }
-    if (bookingRefName != "" && lastName != "") {
-      isBookingRefNameEmpty.value = false;
-      isLastNameEmpty.value = false;
-      return true;
-    }
+    // if (bookingRefName == "") {
+    //   // isBookingRefNameEmpty.value = true;
+    //   showFlash(
+    //     context: Get.context!,
+    //     duration: const Duration(seconds: 4),
+    //     builder: (context, controller) {
+    //       return CustomFlashBar(
+    //         controller: controller,
+    //         contentMessage: "Booking reference name can not be empty",
+    //         titleMessage: "Error",
+    //       );
+    //     },
+    //   );
+    // } else {
+    //   isBookingRefNameEmpty.value = false;
+    // }
+    // if (lastName == "") {
+    //   // isLastNameEmpty.value = true;
+    //   showFlash(
+    //     context: Get.context!,
+    //     duration: const Duration(seconds: 4),
+    //     builder: (context, controller) {
+    //       return CustomFlashBar(
+    //         controller: controller,
+    //         contentMessage: "LastName can not be empty",
+    //         titleMessage: "Error",
+    //       );
+    //     },
+    //   );
+    // } else {
+    //   isLastNameEmpty.value = false;
+    // }
+    // if (bookingRefName != "" && lastName != "") {
+    //   isBookingRefNameEmpty.value = false;
+    //   isLastNameEmpty.value = false;
+    //   return true;
+    // }
+
+    return true;  // for test, should be remove
     return false;
   }
 
   Future<bool> loginValidation() async {
-    String lastName = lastNameC.text.trim();
-    String bookingRefName = bookingRefNameC.text.trim();
+    String lastName = "test" ; //lastNameC.text.trim();
+    String bookingRefName = "9999999999"; //bookingRefNameC.text.trim();
     if (!model.requesting) {
       model.setRequesting(true);
       Response response = await DioClient.getToken(

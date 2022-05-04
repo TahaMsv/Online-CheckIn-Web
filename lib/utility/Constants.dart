@@ -88,5 +88,6 @@ class MenuIcons {
   static const IconData iconRightArrow= IconData(0xe910, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData iconDownLoad= IconData(0xe946, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData iconPrint= IconData(0xe906, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData iconAdd= IconData(0xe909, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 
 }

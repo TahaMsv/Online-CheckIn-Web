@@ -34,6 +34,7 @@ class UserTextInput extends StatelessWidget {
           contentPadding: EdgeInsets.all(10.0),
           border: InputBorder.none,
           hintText: hint,
+
           errorText: isEmpty ? errorText : null,
         ),
       ),

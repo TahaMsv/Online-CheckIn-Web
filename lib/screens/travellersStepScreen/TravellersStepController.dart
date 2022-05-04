@@ -25,6 +25,11 @@ class TravellersStepScreenController extends MainController {
 
   RxBool isLastNameEmpty = false.obs;
   RxBool isTicketNumberEmpty = false.obs;
+  Welcome? welcome;
+  void init() {
+    final myStepScreenController = Get.put(StepsScreenController(model));
+    welcome= myStepScreenController.welcome!;
+  }
 
   void addTraveller() async {
     final myStepScreenController = Get.put(StepsScreenController(model));
@@ -107,6 +112,7 @@ class TravellersStepScreenController extends MainController {
   void onInit() {
     print("TravellersStepScreenController Init");
     super.onInit();
+    init();
   }
 
   @override
@@ -120,4 +126,6 @@ class TravellersStepScreenController extends MainController {
     print("TravellersStepScreenController Ready");
     super.onReady();
   }
+
+
 }

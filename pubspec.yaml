@@ -60,6 +60,7 @@ flutter:
     - assets/images/
     - assets/images/countries/
     - assets/images/upgrades/
+    - assets/images/addTravellers/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -30,6 +30,7 @@ class StepsScreenController extends MainController {
 
   RxBool isDocoNecessary = false.obs;
   RxBool isDocsNecessary = false.obs;
+  RxBool isAddingBoxOpen = false.obs;
 
   // List<RxBool> _isNextButtonDisable = [false.obs, true.obs, false.obs, false.obs, false.obs, false.obs, true.obs, false.obs, false.obs];
   // List<RxBool> _isPreviousButtonDisable = [false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs];
@@ -40,7 +41,6 @@ class StepsScreenController extends MainController {
   RxList<Traveller> travellers = <Traveller>[].obs;
   RxInt whoseTurnToSelect = 0.obs;
   RxInt _step = 0.obs;
-
 
   int currButtonTextIndex = 0;
   int nextButtonTextIndex = 0;
@@ -73,6 +73,11 @@ class StepsScreenController extends MainController {
   RxInt _whichOneToEdit = (-1).obs;
 
   int get whichOneToEdit => _whichOneToEdit.value;
+
+  void changeStateOFAddingBox() {
+    bool currState = isAddingBoxOpen.value;
+    isAddingBoxOpen.value = !currState;
+  }
 
   bool isStepNeeded(int index) {
     if (index == 3 && !isDocsNecessary.value) {
@@ -161,13 +166,13 @@ class StepsScreenController extends MainController {
 
   void preparePreviousButtonText() {
     // int currStep = step;
-    if(step== 2) {
+    if (step == 2) {
       if (!isDocsNecessary.value) {
         nextButtonTextIndex -= 3;
         return;
       }
     }
-    if(step== 3){
+    if (step == 3) {
       if (!isDocoNecessary.value) {
         nextButtonTextIndex -= 2;
         return;

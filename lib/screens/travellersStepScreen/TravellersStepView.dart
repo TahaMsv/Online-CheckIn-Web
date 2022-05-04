@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/UserTextInput.dart';
@@ -80,23 +81,4 @@ class TravellersStepView extends StatelessWidget {
   }
 }
 
-class AddToTravellersButton extends StatelessWidget {
-  const AddToTravellersButton({
-    Key? key,
-    required this.myTravellersStepScreenController,
-  }) : super(key: key);
-  final TravellersStepScreenController myTravellersStepScreenController;
-
-  @override
-  Widget build(BuildContext context) {
-    MainModel model = context.watch<MainModel>();
-    return MyElevatedButton(
-      height: 40,
-      width: double.infinity,
-      buttonText: "Add to Travellers",
-      bgColor: Color(0xff00bfa2),
-      fgColor: Colors.white,
-      function: model.requesting ? () {} : myTravellersStepScreenController.addTraveller,
-    );
-  }
-}
+*/

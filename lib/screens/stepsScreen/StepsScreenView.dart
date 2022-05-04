@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:onlinecheckin/screens/travellersStepScreen/NewTravellersStepScreen.dart';
+import 'package:onlinecheckin/screens/travellersStepScreen/TravellersStepController.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
+import 'package:onlinecheckin/widgets/UserTextInput.dart';
 import '../../screens/seatsStepScreen/NewStepScreenView.dart';
 
 import '../../screens/paymentStepScreen/PaymentStepView.dart';
@@ -13,7 +16,6 @@ import '../../screens/passportStepScreen/PassportStepView.dart';
 import '../../screens/rulesStepScreen/RulesStepView.dart';
 import '../../screens/visaStepScreen/VisaStepView.dart';
 import '../../screens/safetyStepScreen/SafetyStepView.dart';
-import '../../screens/travellersStepScreen/TravellersStepView.dart';
 import '../../widgets/MtDottedLine.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
@@ -466,16 +468,22 @@ class LeftSideOFPage extends StatelessWidget {
               color: Color(0xffeaeaea),
             ),
             Obx(
-                  () => Container(
+              () => Container(
                 width: width,
                 height: height * 0.9 - 65 - 13.5,
                 child: ListView.builder(
-                  itemCount: myStepsScreenController.travellers.length,
-                  itemBuilder: (ctx, index) => TravellerItem(
-                    step: step,
-                    index: index,
-                    myStepsScreenController: myStepsScreenController,
-                  ),
+                  itemCount: myStepsScreenController.travellers.length + 1,
+                  itemBuilder: (ctx, index) {
+                    return index < myStepsScreenController.travellers.length
+                        ? TravellerItem(
+                            step: step,
+                            index: index,
+                            myStepsScreenController: myStepsScreenController,
+                          )
+                        : AddNewTraveller(
+                            myStepsScreenController: myStepsScreenController,
+                          );
+                  },
                 ),
               ),
             ),
@@ -483,6 +491,131 @@ class LeftSideOFPage extends StatelessWidget {
         ),
         // color: Colors.red,
       ),
+    );
+  }
+}
+
+class AddNewTraveller extends StatelessWidget {
+  const AddNewTraveller({
+    Key? key,
+    required this.myStepsScreenController,
+  }) : super(key: key);
+  final StepsScreenController myStepsScreenController;
+
+  @override
+  Widget build(BuildContext context) {
+    MainModel model = context.watch<MainModel>();
+    TravellersStepScreenController myTravellersStepScreenController = Get.put(TravellersStepScreenController(model));
+    return Obx(
+      () => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          children: [
+            InkWell(
+              onTap: () {
+                myStepsScreenController.changeStateOFAddingBox();
+              },
+              child: Container(
+                margin: EdgeInsets.only(top: 20),
+                child: Row(
+                  children: [
+                    myStepsScreenController.isAddingBoxOpen.value
+                        ? RotationTransition(
+                            turns: AlwaysStoppedAnimation(45 / 360),
+                            child: Icon(
+                              MenuIcons.iconAdd,
+                              color: Color(0xff48c0a2),
+                              size: 20,
+                            ),
+                          )
+                        : Icon(
+                            MenuIcons.iconAdd,
+                            color: Color(0xff48c0a2),
+                            size: 20,
+                          ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      "Add Travellers",
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Color(0xff48c0a2),
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            if (myStepsScreenController.isAddingBoxOpen.value)
+              Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Add all passengers to the list on the left here",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Color(0xff808080),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Obx(
+                    () => UserTextInput(
+                      controller: myTravellersStepScreenController.ticketNumberC,
+                      hint: "Reservation ID / Ticket Number",
+                      errorText: "Reservation ID / Ticket Number can't be empty",
+                      isEmpty: myTravellersStepScreenController.isTicketNumberEmpty.value,
+                      obscureText: true,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Obx(
+                    () => UserTextInput(
+                      controller: myTravellersStepScreenController.lastNameC,
+                      hint: "Last Name",
+                      errorText: "Last Name can't be empty",
+                      isEmpty: myTravellersStepScreenController.isLastNameEmpty.value,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  AddToTravellersButton(
+                    myTravellersStepScreenController: myTravellersStepScreenController,
+                  ),
+                ],
+              )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AddToTravellersButton extends StatelessWidget {
+  const AddToTravellersButton({
+    Key? key,
+    required this.myTravellersStepScreenController,
+  }) : super(key: key);
+  final TravellersStepScreenController myTravellersStepScreenController;
+
+  @override
+  Widget build(BuildContext context) {
+    MainModel model = context.watch<MainModel>();
+    return MyElevatedButton(
+      height: 40,
+      width: double.infinity,
+      buttonText: "Add to Travellers",
+      bgColor: Color(0xff00bfa2),
+      fgColor: Colors.white,
+      function: model.requesting ? () {} : myTravellersStepScreenController.addTraveller,
     );
   }
 }
@@ -523,82 +656,82 @@ class TravellerItem extends StatelessWidget {
                 ),
                 step == 0
                     ? IconButton(
-                  onPressed: () => myStepsScreenController.removeFromTravellers(index),
-                  icon: Icon(
-                    Icons.close,
-                    color: Colors.red,
-                  ),
-                )
+                        onPressed: () => myStepsScreenController.removeFromTravellers(index),
+                        icon: Icon(
+                          Icons.close,
+                          color: Colors.red,
+                        ),
+                      )
                     : step == 6
-                    ? Container(
-                  width: 112,
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 2,
-                        height: 100,
-                        color: Color(0xffededed),
-                      ),
-                      // myStepsScreenController.whichOneToEdit == index
-                      //     ? Row(
-                      //         children: [
-                      //           Container(
-                      //             width: 45,
-                      //             color: Colors.grey,
-                      //             child: TextField(
-                      //               textAlignVertical: TextAlignVertical.center,
-                      //               controller: myStepsScreenController.editSeatC,
-                      //               maxLength: 3,
-                      //               decoration: InputDecoration(
-                      //                   contentPadding: EdgeInsets.all(10.0), border: InputBorder.none, counterText: "", hintText: myStepsScreenController.travellers[index].seatId),
-                      //             ),
-                      //           ),
-                      //           Container(
-                      //             width: 30,
-                      //             child: IconButton(
-                      //                 onPressed: () {
-                      //                   myStepsScreenController.setWhichOneToEdit(-1);
-                      //                   myStepsScreenController.changeTravellerSeat(index);
-                      //                 },
-                      //                 icon: Icon(Icons.check),
-                      //                 color: Colors.green),
-                      //           ),
-                      //           Container(
-                      //             width: 30,
-                      //             child: IconButton(
-                      //               onPressed: () {
-                      //                 myStepsScreenController.setWhichOneToEdit(-1);
-                      //               },
-                      //               icon: Icon(Icons.close),
-                      //               color: Colors.red,
-                      //             ),
-                      //           ),
-                      //         ],
-                      //       )
-                      //     :
-                      Row(
-                        children: [
-                          TitleWidget(
-                            title: myStepsScreenController.travellers[index].seatId,
-                            width: 75,
-                            textColor: isTravellerSelected ? Color(0xff48c0a2) : Color(0xff424242),
-                          ),
-                          Container(
-                            width: 35,
-                            // child: IconButton(
-                            //   onPressed: () {
-                            //     myStepsScreenController.setWhichOneToEdit(index);
-                            //   },
-                            //   icon: Icon(Icons.edit),
-                            //   color: myStepsScreenController.whichOneToEdit == index ? Colors.green : Colors.blue,
-                            // ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-                    : Container(),
+                        ? Container(
+                            width: 112,
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 2,
+                                  height: 100,
+                                  color: Color(0xffededed),
+                                ),
+                                // myStepsScreenController.whichOneToEdit == index
+                                //     ? Row(
+                                //         children: [
+                                //           Container(
+                                //             width: 45,
+                                //             color: Colors.grey,
+                                //             child: TextField(
+                                //               textAlignVertical: TextAlignVertical.center,
+                                //               controller: myStepsScreenController.editSeatC,
+                                //               maxLength: 3,
+                                //               decoration: InputDecoration(
+                                //                   contentPadding: EdgeInsets.all(10.0), border: InputBorder.none, counterText: "", hintText: myStepsScreenController.travellers[index].seatId),
+                                //             ),
+                                //           ),
+                                //           Container(
+                                //             width: 30,
+                                //             child: IconButton(
+                                //                 onPressed: () {
+                                //                   myStepsScreenController.setWhichOneToEdit(-1);
+                                //                   myStepsScreenController.changeTravellerSeat(index);
+                                //                 },
+                                //                 icon: Icon(Icons.check),
+                                //                 color: Colors.green),
+                                //           ),
+                                //           Container(
+                                //             width: 30,
+                                //             child: IconButton(
+                                //               onPressed: () {
+                                //                 myStepsScreenController.setWhichOneToEdit(-1);
+                                //               },
+                                //               icon: Icon(Icons.close),
+                                //               color: Colors.red,
+                                //             ),
+                                //           ),
+                                //         ],
+                                //       )
+                                //     :
+                                Row(
+                                  children: [
+                                    TitleWidget(
+                                      title: myStepsScreenController.travellers[index].seatId,
+                                      width: 75,
+                                      textColor: isTravellerSelected ? Color(0xff48c0a2) : Color(0xff424242),
+                                    ),
+                                    Container(
+                                      width: 35,
+                                      // child: IconButton(
+                                      //   onPressed: () {
+                                      //     myStepsScreenController.setWhichOneToEdit(index);
+                                      //   },
+                                      //   icon: Icon(Icons.edit),
+                                      //   color: myStepsScreenController.whichOneToEdit == index ? Colors.green : Colors.blue,
+                                      // ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(),
               ],
             ),
           ),
@@ -688,13 +821,13 @@ class LanguagePicker extends StatelessWidget {
 }
 
 Widget _buildDropdownItem(Country country) => Container(
-  child: Row(
-    children: <Widget>[
-      CountryPickerUtils.getDefaultFlagImage(country),
-      SizedBox(
-        width: 8.0,
+      child: Row(
+        children: <Widget>[
+          CountryPickerUtils.getDefaultFlagImage(country),
+          SizedBox(
+            width: 8.0,
+          ),
+          Text("+${country.phoneCode}(${country.isoCode})"),
+        ],
       ),
-      Text("+${country.phoneCode}(${country.isoCode})"),
-    ],
-  ),
-);
+    );
