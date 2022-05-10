@@ -35,7 +35,7 @@ class SeatsStepView extends StatelessWidget {
                 Stack(
                   children: [
                     PlaneHead(
-                      height: mySeatsStepController.calculatePlaneBodyHeight() ,
+                      height: mySeatsStepController.calculatePlaneBodyHeight(),
                     ),
                     // PlaneWings(),
                     PlaneTail(
@@ -56,40 +56,6 @@ class SeatsStepView extends StatelessWidget {
   }
 }
 
-class PlaneWings extends StatelessWidget {
-  const PlaneWings({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: 1000),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            child: Image.asset(
-              "assets/images/Up Wing.png",
-              fit: BoxFit.contain,
-              // height: 350,
-            ),
-            width: 720,
-          ),
-          Container(
-            child: Image.asset(
-              "assets/images/Down Wing.png",
-              fit: BoxFit.contain,
-              // height: 350,
-            ),
-            width: 720,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class PlaneBody extends StatelessWidget {
   const PlaneBody({
     Key? key,
@@ -101,35 +67,43 @@ class PlaneBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: mySeatsStepController.calculatePlaneBodyHeight(),
-        margin: EdgeInsets.only(left: 395, top: 7),
-        width: mySeatsStepController.calculatePlaneBodyLength(),
-        decoration: BoxDecoration(
-          color: Color(0xff5d5d5d),
-          borderRadius: BorderRadius.all(
-            Radius.circular(20),
-          ),
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Center(
-          child: Container(
-            child: ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: mySeatsStepController.cabins.length,
-              itemBuilder: (_, i) {
-                // print("PlaneBody " + i.toString());
-                // print("lines: " + mySeatsStepController.cabins[i].linesCount.toString());
-                return CabinWidget(
-                  width: mySeatsStepController.calculateCabinLength(i),
-                  height: mySeatsStepController.calculateCabinHeight(i),
-                  cabin: mySeatsStepController.cabins[i],
-                  mySeatsStepController: mySeatsStepController,
-                  index: i,
-                );
-              },
+        height: mySeatsStepController.calculatePlaneBodyHeight() + 20,
+        child: Stack(
+          children: [
+            Positioned(
+              top: 10,
+              child: Container(
+                height: mySeatsStepController.calculatePlaneBodyHeight(),
+                margin: EdgeInsets.only(left: 395),
+                width: mySeatsStepController.calculatePlaneBodyLength(),
+                decoration: BoxDecoration(
+                  color: Color(0xff5d5d5d),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+              ),
             ),
-          ),
+            Container(
+              height: mySeatsStepController.calculatePlaneBodyHeight() + 20,
+              margin: EdgeInsets.only(left: 395),
+              width: mySeatsStepController.calculatePlaneBodyLength(),
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemCount: mySeatsStepController.cabins.length,
+                itemBuilder: (_, i) {
+                  return CabinWidget(
+                    width: mySeatsStepController.calculateCabinLength(i),
+                    cabin: mySeatsStepController.cabins[i],
+                    mySeatsStepController: mySeatsStepController,
+                    index: i,
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -139,51 +113,87 @@ class PlaneBody extends StatelessWidget {
 class CabinWidget extends StatelessWidget {
   final Cabin cabin;
   final SeatsStepController mySeatsStepController;
-  final double height;
+
+  // final double height;
   final double width;
   final int index;
 
-  const CabinWidget({Key? key, required this.cabin, required this.mySeatsStepController, required this.height, required this.width, required this.index}) : super(key: key);
+  const CabinWidget({
+    Key? key,
+    required this.cabin,
+    required this.mySeatsStepController,
+    required this.width,
+    required this.index,
+  }) : super(key: key);
 
   Widget build(BuildContext context) {
-    return Container(
-      // color: Colors.deepPurple,
-      width: width,
-      height: height,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        physics: const NeverScrollableScrollPhysics(),
-        children: [
-          Container(
-              width: mySeatsStepController.calculateCabinNameLength(index),
-              margin: EdgeInsets.only(left: 5),
-              child: Text(
-                cabin.cabinTitle,
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              )),
-          Center(
-            child: Container(
-              // color: Colors.blue,
-              height: height,
-              width: mySeatsStepController.calculateCabinLinesLength(index),
-              child: Center(
+    double height = mySeatsStepController.calculatePlaneBodyHeight() + 85;
+    return Center(
+      child: Container(
+        // color: Colors.deepPurple,
+        width: width,
+        height: height,
+        child: Row(
+          children: [
+            RotatedBox(
+              quarterTurns: -1,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 40),
+                child: Text(
+                  cabin.cabinTitle,
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Color(0xff424242),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                // color: Colors.blue,
+                height: height,
+                width: mySeatsStepController.calculateCabinLinesLength(index),
                 child: ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemCount: cabin.linesCount,
                   itemBuilder: (_, i) {
-                    return
+                    int upExitDoors =  cabin.lines[i].cells.indexWhere((element) => (element.type == "OutEquipmentExit" && element.value != null));
+                    int downExitDoors = cabin.lines[i].cells.lastIndexWhere((element) => (element.type == "OutEquipmentExit" && element.value != null));
+                    print("/////////");
+                    print(upExitDoors);
+                    print(downExitDoors);
+                    print("/////////");
+                    bool upDoorEnable = (i != 0 && upExitDoors != -1);
+                    bool downDoorEnable = (i != 0 && downExitDoors != -1 && downExitDoors != upExitDoors);
+
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ExitDoor(
+                          width: mySeatsStepController.seatWidth,
+                          height: 20,
+                          isEnable: upDoorEnable,
+                        ),
                         LineWidget(
-                      line: cabin.lines[i],
-                      mySeatsStepController: mySeatsStepController,
-                      index: 0,
+                          line: cabin.lines[i],
+                          mySeatsStepController: mySeatsStepController,
+                          height: mySeatsStepController.calculateCabinHeight(index),
+                        ),
+                        ExitDoor(
+                          width: mySeatsStepController.seatWidth,
+                          height: 20,
+                          isEnable: downDoorEnable,
+                        ),
+                      ],
                     );
                   },
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -192,13 +202,19 @@ class CabinWidget extends StatelessWidget {
 class LineWidget extends StatelessWidget {
   final Line line;
   final SeatsStepController mySeatsStepController;
-  final int index;
+  final double height;
 
-  const LineWidget({Key? key, required this.line, required this.mySeatsStepController, required this.index}) : super(key: key);
+  const LineWidget({
+    Key? key,
+    required this.line,
+    required this.mySeatsStepController,
+    required this.height,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: height,
       // color: Colors.amberAccent,
       width: mySeatsStepController.seatWidth,
       margin: EdgeInsets.symmetric(horizontal: mySeatsStepController.linesMargin),
@@ -208,7 +224,10 @@ class LineWidget extends StatelessWidget {
               width: mySeatsStepController.seatWidth,
               height: mySeatsStepController.seatHeight,
             )
-          : BodyLine(cells: line.cells, mySeatsStepController: mySeatsStepController, index: index),
+          : BodyLine(
+              cells: line.cells,
+              mySeatsStepController: mySeatsStepController,
+            ),
     );
   }
 }
@@ -232,27 +251,49 @@ class HorizontalCodeLine extends StatelessWidget {
           scrollDirection: Axis.vertical,
           itemCount: cells.length,
           itemBuilder: (_, i) {
-            return Container(
-              margin: EdgeInsets.all(2),
-              width: cells[i].type == "Seat" || cells[i].type == "OutEquipmentExit" ? width : width - 15,
-              height: cells[i].type == "Seat"
-                  ? height
-                  : cells[i].type == "OutEquipmentWing" || cells[i].type == "OutEquipmentExit"
-                      ? 0
-                      : height - 15,
-              decoration: BoxDecoration(
-                color: Color(0xff5d5d5d),
-              ),
-              child: Center(
-                child: Text(
-                  cells[i].type == "Seat" ? cells[i].value! : "",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+            return CodeSeat(
+              cell: cells[i],
+              width: width,
+              height: height,
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class CodeSeat extends StatelessWidget {
+  const CodeSeat({
+    Key? key,
+    required this.cell,
+    required this.width,
+    required this.height,
+  }) : super(key: key);
+
+  final Cell cell;
+  final double width;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(2),
+      width: cell.type == "Seat" || cell.type == "OutEquipmentExit" ? width : width - 15,
+      height: cell.type == "Seat"
+          ? height
+          : cell.type == "OutEquipmentWing" || cell.type == "OutEquipmentExit"
+              ? 0
+              : height - 15,
+      decoration: BoxDecoration(
+        color: Color(0xff5d5d5d),
+      ),
+      child: Center(
+        child: Text(
+          cell.type == "Seat" ? cell.value! : "",
+          style: TextStyle(
+            color: Colors.white,
+          ),
         ),
       ),
     );
@@ -262,9 +303,12 @@ class HorizontalCodeLine extends StatelessWidget {
 class BodyLine extends StatelessWidget {
   final List<Cell> cells;
   final SeatsStepController mySeatsStepController;
-  final int index;
 
-  const BodyLine({Key? key, required this.cells, required this.mySeatsStepController, required this.index}) : super(key: key);
+  const BodyLine({
+    Key? key,
+    required this.cells,
+    required this.mySeatsStepController,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -413,14 +457,32 @@ class _SeatWidgetState extends State<SeatWidget> {
 class ExitDoor extends StatelessWidget {
   const ExitDoor({
     Key? key,
+    required this.width,
+    required this.height,
+    required this.isEnable,
   }) : super(key: key);
+  final double width;
+  final double height;
+  final bool isEnable;
 
   @override
   Widget build(BuildContext context) {
-    return Icon(
-      Icons.sensor_door_outlined,
-      color: Colors.red,
-    );
+    return isEnable
+        ? Container(
+            width: width,
+            height: height,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.red,
+            ),
+            child: Center(
+              child: Text(
+                "Exit",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            ),
+          )
+        : Container();
   }
 }
 
@@ -443,7 +505,7 @@ class PlaneHead extends StatelessWidget {
           fit: BoxFit.fill,
           // height: 350,
         ),
-        margin: EdgeInsets.only(left: 20,top: 7),
+        margin: EdgeInsets.only(left: 20),
         // width: 400,
       ),
     );
@@ -464,9 +526,9 @@ class PlaneTail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: EdgeInsets.only(left: margin + 50, top :7),
+        margin: EdgeInsets.only(left: margin + 50),
         // width: 2400,
-        height: height ,
+        height: height,
         child: Image.asset(
           "assets/images/Edited-Tail.png",
           fit: BoxFit.fill,
@@ -529,6 +591,40 @@ class CheckedInSeat extends StatelessWidget {
         borderRadius: BorderRadius.all(
           Radius.circular(10),
         ),
+      ),
+    );
+  }
+}
+
+class PlaneWings extends StatelessWidget {
+  const PlaneWings({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: 1000),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            child: Image.asset(
+              "assets/images/Up Wing.png",
+              fit: BoxFit.contain,
+              // height: 350,
+            ),
+            width: 720,
+          ),
+          Container(
+            child: Image.asset(
+              "assets/images/Down Wing.png",
+              fit: BoxFit.contain,
+              // height: 350,
+            ),
+            width: 720,
+          ),
+        ],
       ),
     );
   }

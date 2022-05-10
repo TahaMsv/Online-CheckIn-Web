@@ -27,7 +27,7 @@ class EnterScreenController extends MainController {
   Future<bool> checkBoxesValidation() async {
     String lastName = lastNameC.text;
     String bookingRefName = bookingRefNameC.text;
-    // if (bookingRefName == "") {
+       // if (bookingRefName == "") {
     //   // isBookingRefNameEmpty.value = true;
     //   showFlash(
     //     context: Get.context!,
@@ -65,12 +65,12 @@ class EnterScreenController extends MainController {
     //   return true;
     // }
 
-    return true;  // for test, should be remove
+     return true;  // for test, should be remove
     return false;
   }
 
   Future<bool> loginValidation() async {
-    String lastName = "test" ; //lastNameC.text.trim();
+    String lastName = "test"; //lastNameC.text.trim();
     String bookingRefName = "9999999999"; //bookingRefNameC.text.trim();
     if (!model.requesting) {
       model.setRequesting(true);
@@ -86,7 +86,7 @@ class EnterScreenController extends MainController {
       if (response.statusCode == 200) {
         print(response.data);
         if (response.data["ResultCode"] == 1) {
-          String? token = response.data["Body"]["Token"];
+          String? token = "0B458C79-B484-4DFA-8252-BE98A1FFB853"; //response.data["Body"]["Token"];
           if (token != null) {
             model.setToken(token);
             StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));

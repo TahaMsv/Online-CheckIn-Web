@@ -40,7 +40,7 @@ class StepsScreenController extends MainController {
 
   RxList<Traveller> travellers = <Traveller>[].obs;
   RxInt whoseTurnToSelect = 0.obs;
-  RxInt _step = 0.obs;
+  RxInt _step = 6.obs;
 
   int currButtonTextIndex = 0;
   int nextButtonTextIndex = 0;

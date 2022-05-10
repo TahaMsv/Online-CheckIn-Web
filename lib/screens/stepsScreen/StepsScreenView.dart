@@ -7,7 +7,7 @@ import 'package:onlinecheckin/screens/travellersStepScreen/NewTravellersStepScre
 import 'package:onlinecheckin/screens/travellersStepScreen/TravellersStepController.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
 import 'package:onlinecheckin/widgets/UserTextInput.dart';
-import '../../screens/seatsStepScreen/NewStepScreenView.dart';
+import '../../screens/seatsStepScreen/SeatStepScreenView.dart';
 
 import '../../screens/paymentStepScreen/PaymentStepView.dart';
 import '../../screens/receiptStepScreen/ReceipStepView.dart';
@@ -480,9 +480,9 @@ class LeftSideOFPage extends StatelessWidget {
                             index: index,
                             myStepsScreenController: myStepsScreenController,
                           )
-                        : AddNewTraveller(
+                        : myStepsScreenController.step == 0? AddNewTraveller(
                             myStepsScreenController: myStepsScreenController,
-                          );
+                          ) : Container();
                   },
                 ),
               ),
