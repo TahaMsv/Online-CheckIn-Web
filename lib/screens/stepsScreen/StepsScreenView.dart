@@ -296,15 +296,15 @@ class BottomOfPage extends StatelessWidget {
               ),
               myStepsScreenController.step == 8
                   ? ReceiptStepButtons()
-                  : MyElevatedButton(
-                      height: 40,
-                      width: 300,
-                      buttonText: myStepsScreenController.buttonsText[myStepsScreenController.currButtonTextIndex],
-                      bgColor: Color(0xff4c6ef6),
-                      fgColor: Colors.white,
-                      function: myStepsScreenController.increaseStep,
-                      isDisable: !myStepsScreenController.isNextButtonEnable,
-                    ),
+                  :Obx(() => MyElevatedButton(
+                height: 40,
+                width: 300,
+                buttonText: myStepsScreenController.buttonsText[myStepsScreenController.currButtonTextIndex.value],
+                bgColor: Color(0xff4c6ef6),
+                fgColor: Colors.white,
+                function: myStepsScreenController.increaseStep,
+                isDisable: !myStepsScreenController.isNextButtonEnable,
+              ),)
             ],
           ),
         ),

@@ -312,10 +312,12 @@ class PassportStepController extends MainController {
                 function: model.requesting
                     ? () {}
                     : () {
+                        StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
                         travellers.refresh();
                         updateDocuments();
                         updateIsCompleted(index);
                         saveDocsDocoDoca(index);
+                        // stepsScreenController.setDocoNecessary(true);
                         Get.back();
                       },
               ),

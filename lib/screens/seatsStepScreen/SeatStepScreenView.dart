@@ -37,7 +37,7 @@ class SeatsStepView extends StatelessWidget {
                     PlaneHead(
                       height: mySeatsStepController.calculatePlaneBodyHeight(),
                     ),
-                    // PlaneWings(),
+                    PlaneWings(),
                     PlaneTail(
                       height: mySeatsStepController.calculatePlaneBodyHeight() + 85,
                       margin: mySeatsStepController.calculatePlaneBodyLength(),
@@ -161,10 +161,6 @@ class CabinWidget extends StatelessWidget {
                   itemBuilder: (_, i) {
                     int upExitDoors =  cabin.lines[i].cells.indexWhere((element) => (element.type == "OutEquipmentExit" && element.value != null));
                     int downExitDoors = cabin.lines[i].cells.lastIndexWhere((element) => (element.type == "OutEquipmentExit" && element.value != null));
-                    print("/////////");
-                    print(upExitDoors);
-                    print(downExitDoors);
-                    print("/////////");
                     bool upDoorEnable = (i != 0 && upExitDoors != -1);
                     bool downDoorEnable = (i != 0 && downExitDoors != -1 && downExitDoors != upExitDoors);
 
@@ -611,18 +607,18 @@ class PlaneWings extends StatelessWidget {
           Container(
             child: Image.asset(
               "assets/images/Up Wing.png",
-              fit: BoxFit.contain,
+              fit: BoxFit.fill,
               // height: 350,
             ),
-            width: 720,
+            width: 400,
           ),
           Container(
             child: Image.asset(
               "assets/images/Down Wing.png",
-              fit: BoxFit.contain,
+              fit: BoxFit.fill,
               // height: 350,
             ),
-            width: 720,
+            width: 400,
           ),
         ],
       ),

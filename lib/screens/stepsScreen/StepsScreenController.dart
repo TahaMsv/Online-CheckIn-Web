@@ -32,17 +32,14 @@ class StepsScreenController extends MainController {
   RxBool isDocsNecessary = false.obs;
   RxBool isAddingBoxOpen = false.obs;
 
-  // List<RxBool> _isNextButtonDisable = [false.obs, true.obs, false.obs, false.obs, false.obs, false.obs, true.obs, false.obs, false.obs];
-  // List<RxBool> _isPreviousButtonDisable = [false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs];
-
   RxBool _isNextButtonEnable = true.obs;
   RxBool _isPreviousButtonEnable = true.obs;
 
   RxList<Traveller> travellers = <Traveller>[].obs;
   RxInt whoseTurnToSelect = 0.obs;
-  RxInt _step = 6.obs;
+  RxInt _step = 0.obs;
 
-  int currButtonTextIndex = 0;
+  RxInt currButtonTextIndex = 0.obs;
   int nextButtonTextIndex = 0;
 
   void setNextButton(bool newValue) {
@@ -55,10 +52,18 @@ class StepsScreenController extends MainController {
 
   void setDocoNecessary(bool newValue) {
     isDocoNecessary.value = newValue;
+    if (step == 3 && newValue) {
+      currButtonTextIndex.value = 3;
+      setNextButtonIndex(3);
+    }else if (step == 3 && !newValue) {
+      currButtonTextIndex.value = 4;
+      setNextButtonIndex(4);
+    }
   }
 
   void setDocsNecessary(bool newValue) {
     isDocsNecessary.value = newValue;
+
   }
 
   bool get isNextButtonEnable => _isNextButtonEnable.value;
@@ -141,16 +146,24 @@ class StepsScreenController extends MainController {
 
   void prepareNextButtonText() {
     if (step == 1 && !isDocsNecessary.value) {
-      nextButtonTextIndex += 3;
+      setNextButtonIndex(4);
       return;
     }
     if (step == 2) {
-      if (!isDocoNecessary.value) {
-        nextButtonTextIndex += 2;
+      // if () {
+      //   setNextButtonIndex(nextButtonTextIndex + 1);
+      //   return;
+      // }
+      if (isDocsNecessary.value && !isDocoNecessary.value) {
+        setNextButtonIndex(nextButtonTextIndex + 2);
         return;
       }
     }
-    nextButtonTextIndex += 1;
+    setNextButtonIndex(nextButtonTextIndex + 1);
+  }
+
+  setNextButtonIndex(int newIndex) {
+    nextButtonTextIndex = newIndex;
   }
 
   List buttonsText = [
@@ -226,21 +239,22 @@ class StepsScreenController extends MainController {
         }
       }
       if (isSuccessful) {
+
         if (step == 2 && !isDocsNecessary.value) {
           setStep(currStep + 3);
-          currButtonTextIndex = nextButtonTextIndex;
+          currButtonTextIndex.value = nextButtonTextIndex;
           return;
         }
         if (step == 3) {
           if (!isDocoNecessary.value) {
             setStep(currStep + 2);
-            currButtonTextIndex = nextButtonTextIndex;
+            currButtonTextIndex.value = nextButtonTextIndex;
 
             return;
           }
         }
         setStep(currStep + 1);
-        currButtonTextIndex = nextButtonTextIndex;
+        currButtonTextIndex.value = nextButtonTextIndex;
       }
     }
   }
@@ -252,17 +266,17 @@ class StepsScreenController extends MainController {
       if (step == 5) {
         if (!isDocsNecessary.value) {
           setStep(currStep - 3);
-          currButtonTextIndex = nextButtonTextIndex;
+          currButtonTextIndex.value = nextButtonTextIndex;
           return;
         }
         if (!isDocoNecessary.value) {
           setStep(currStep - 2);
-          currButtonTextIndex = nextButtonTextIndex;
+          currButtonTextIndex.value = nextButtonTextIndex;
           return;
         }
       }
       setStep(currStep - 1);
-      currButtonTextIndex = nextButtonTextIndex;
+      currButtonTextIndex.value = nextButtonTextIndex;
     }
   }
 
@@ -280,10 +294,7 @@ class StepsScreenController extends MainController {
   void addToTravellers(String token, String lastName, String ticketNumber) async {
     await getInformation(token);
     for (int i = 0; i < travellers.length; i++) {
-      print(travellers[i].welcome.body.passengers[0].id);
-      print(_welcome!.body.passengers[0].id);
       if (travellers[i].welcome.body.passengers[0].id == _welcome!.body.passengers[0].id) {
-        print("here");
         showFlash(
           context: Get.context!,
           duration: const Duration(seconds: 4),
@@ -301,7 +312,8 @@ class StepsScreenController extends MainController {
     Traveller traveller = new Traveller(token: token, ticketNumber: ticketNumber, seatId: "--", welcome: _welcome!);
     traveller.setPassportInfo(new PassportInfo());
     traveller.setVisaInfo(new VisaInfo());
-    welcome!.body.flight[0].checkDocs == 1 ? setDocsNecessary(true) : setDocsNecessary(true);
+    setDocsNecessary(true);
+    // welcome!.body.flight[0].checkDocs == 1 ? setDocsNecessary(true) : setDocsNecessary(false);
     travellers.add(traveller);
 
     updateIsNextButtonDisable();
