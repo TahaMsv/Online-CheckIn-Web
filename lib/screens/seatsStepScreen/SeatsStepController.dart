@@ -21,6 +21,8 @@ class SeatsStepController extends MainController {
   final double seatHeight = 35;
   final double linesMargin = 7;
   List<Cabin> cabins = [];
+  double firstClassCabinsRatio = 1.5;
+  double businessCabinsRatio = 1.5;
 
   final RxMap<String, String> seatsStatus = <String, String>{}.obs;
   final RxMap<String, int> seatsPrice = <String, int>{}.obs;
@@ -36,10 +38,29 @@ class SeatsStepController extends MainController {
     List<Seat> seats = myStepScreenController.welcome!.body.seats;
     for (int i = 0; i < seats.length; i++) {
       Seat seat = seats[i];
-      String key = seat.letter+ seat.line;
+      String key = seat.letter + seat.line;
       seatsStatus[key] = seat.isUsedDescription;
       seatsPrice[key] = seat.price;
     }
+    double numOfBusinessCabinCells = numberOfCabinCellsInLine("Business") as double;
+    double numOfFirstClassCabinCells = numberOfCabinCellsInLine("First Class") as double;
+    double numOfEconomyCabinCells = numberOfCabinCellsInLine("Economy") as double;
+    if (numOfFirstClassCabinCells > 0 && numOfEconomyCabinCells > 0 && 1.5 > (numOfEconomyCabinCells / numOfFirstClassCabinCells)) {
+      firstClassCabinsRatio = numOfEconomyCabinCells / numOfFirstClassCabinCells;
+      print("firstClassCabinsRatio => " + firstClassCabinsRatio.toString());
+    }
+    if (numOfBusinessCabinCells > 0 && numOfEconomyCabinCells > 0 && 1.5 > (numOfEconomyCabinCells / numOfBusinessCabinCells)) {
+      businessCabinsRatio = numOfEconomyCabinCells / numOfBusinessCabinCells;
+      print("businessCabinsRatio => " + businessCabinsRatio.toString());
+    }
+  }
+
+  int numberOfCabinCellsInLine(String cabinTitle) {
+    Iterable<Cabin> targetCabins = cabins.where((element) => element.cabinTitle == cabinTitle);
+    if (targetCabins.length != 0) {
+      return targetCabins.first.lines.where((line) => line.type == "HorizontalCode").first.cells.length;
+    }
+    return 0;
   }
 
   void updateSeatMap() {
@@ -95,7 +116,7 @@ class SeatsStepController extends MainController {
     double length = 0;
     for (var i = 0; i < cabins.length; ++i) {
       length += calculateCabinLength(i);
-      length += 15; // Left margin
+      length += 5; // Left margin
     }
     return length;
   }
@@ -105,11 +126,17 @@ class SeatsStepController extends MainController {
   }
 
   double calculateCabinNameLength(int index) {
-    return (cabins[index].cabinTitle.length * 13);
+    return 50;
   }
 
   double calculateCabinLinesLength(int index) {
-    return cabins[index].linesCount * (eachLineWidth + linesMargin * 2 + 2);
+    String cabinTitle = cabins[index].cabinTitle;
+    double ratio = (cabinTitle == "First Class"
+        ? firstClassCabinsRatio
+        : cabinTitle == "Business"
+            ? businessCabinsRatio
+            : 1.0);
+    return ratio * (cabins[index].linesCount * (eachLineWidth + linesMargin * 2 + 2));
   }
 
   double calculatePlaneBodyHeight() {
@@ -125,6 +152,12 @@ class SeatsStepController extends MainController {
   }
 
   double calculateCabinHeight(int index) {
+    String cabinTitle = cabins[index].cabinTitle;
+    double ratio = (cabinTitle == "First Class"
+        ? firstClassCabinsRatio
+        : cabinTitle == "Business"
+            ? businessCabinsRatio
+            : 1.0);
     double height = 0;
     cabins[index].lines[1].cells.forEach((element) {
       if (element.type == "Seat") {
@@ -134,7 +167,7 @@ class SeatsStepController extends MainController {
       }
       height += 5;
     });
-    return height;
+    return ratio * height;
   }
 
   void changeSeatStatus(String seatId) {
@@ -204,9 +237,11 @@ class SeatsStepController extends MainController {
             return 6;
           else
             return 5;
-        } else if (seatsStatus[code] == "Open")
+        } else if (seatsStatus[code] == "Open") {
           return 6;
-        else
+        } else if (seatsStatus[code] == "Check in other Flight") {
+          return 15;
+        } else
           return 7; // selected seat
       }
     } else if (cellType == "OutEquipmentExit") {
@@ -232,6 +267,7 @@ class SeatsStepController extends MainController {
       case "Checked-in":
       case "TemporaryBlock":
       case "Click":
+      case "Check in other Flight":
         return Colors.grey;
       default:
         return Color(0xffffae2c);

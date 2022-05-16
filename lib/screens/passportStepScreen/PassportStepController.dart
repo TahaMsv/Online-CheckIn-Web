@@ -317,7 +317,7 @@ class PassportStepController extends MainController {
                         updateDocuments();
                         updateIsCompleted(index);
                         saveDocsDocoDoca(index);
-                        // stepsScreenController.setDocoNecessary(true);
+                        stepsScreenController.setDocoNecessary(true);
                         Get.back();
                       },
               ),
