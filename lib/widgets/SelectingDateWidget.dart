@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:date_time_picker/date_time_picker.dart';
+// import 'package:date_time_picker/date_time_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
+import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
 
 class SelectingDateWidget extends StatefulWidget {
   const SelectingDateWidget({
@@ -27,17 +28,27 @@ class _SelectingDateWidgetState extends State<SelectingDateWidget> {
   late DateTime currentDate;
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(context: context, initialDate: currentDate, firstDate: DateTime(1900), lastDate: DateTime(2050));
-    if (pickedDate != null && pickedDate != currentDate)
-      setState(() {
-        currentDate = pickedDate;
-        widget.updateDate(widget.index, currentDate);
-      });
+    // final DateTime? pickedDate = await showDatePicker(context: context, initialDate: currentDate, firstDate: DateTime(1900), lastDate: DateTime(2050));
+    // if (pickedDate != null && pickedDate != currentDate)
+    //   setState(() {
+    //     currentDate = pickedDate;
+    //     widget.updateDate(widget.index, currentDate);
+    //   });
+    var datePicked = await DatePicker.showSimpleDatePicker(
+      context,
+      initialDate: DateTime(1994),
+      firstDate: DateTime(1960),
+      lastDate: DateTime(2012),
+      dateFormat: "dd-M-yyyy",
+      locale: DateTimePickerLocale.en_us,
+      looping: true,
+    );
+    currentDate = datePicked!;
+    widget.updateDate(widget.index, currentDate);
   }
 
   @override
   void initState() {
-
     currentDate = widget.currDateTime;
     super.initState();
   }

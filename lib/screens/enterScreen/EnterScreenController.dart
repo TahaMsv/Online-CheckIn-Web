@@ -70,7 +70,7 @@ class EnterScreenController extends MainController {
   }
 
   Future<bool> loginValidation() async {
-    String lastName = "test"; // lastNameC.text.trim();
+    String lastName = "test";// lastNameC.text.trim();
     String bookingRefName = "9999999999"; //bookingRefNameC.text.trim();
     print(lastName);
     print(bookingRefName);
@@ -90,8 +90,8 @@ class EnterScreenController extends MainController {
         print(response.data);
         if (response.data["ResultCode"] == 1) {
           String? token =
-              // "B995CBE3-2666-4E80-8281-315CCEF7BDE6";
-              response.data["Body"]["Token"];
+              "B995CBE3-2666-4E80-8281-315CCEF7BDE6";
+              // response.data["Body"]["Token"];
           if (token != null) {
             model.setToken(token);
             print(token);

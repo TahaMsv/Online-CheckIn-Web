@@ -164,6 +164,11 @@ class CabinWidget extends StatelessWidget {
                     bool upDoorEnable = (i != 0 && upExitDoors != -1);
                     bool downDoorEnable = (i != 0 && downExitDoors != -1 && downExitDoors != upExitDoors);
                     String cabinTitle = cabin.cabinTitle;
+                    double cabinRatio = (cabinTitle == "First Class"
+                        ? mySeatsStepController.firstClassCabinsRatio
+                        : cabinTitle == "Business"
+                        ? mySeatsStepController.businessCabinsRatio
+                        : 1.0);
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -176,11 +181,7 @@ class CabinWidget extends StatelessWidget {
                           line: cabin.lines[i],
                           mySeatsStepController: mySeatsStepController,
                           height: mySeatsStepController.calculateCabinHeight(index),
-                          cabinRatio: (cabinTitle == "First Class"
-                              ? mySeatsStepController.firstClassCabinsRatio
-                              : cabinTitle == "Business"
-                                  ? mySeatsStepController.businessCabinsRatio
-                                  : 1.0),
+                          cabinRatio: cabinRatio,
                         ),
                         ExitDoor(
                           width: mySeatsStepController.seatWidth,
@@ -217,6 +218,7 @@ class LineWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // color: Colors.green,
       height: height,
       width: cabinRatio * mySeatsStepController.seatWidth,
       margin: EdgeInsets.symmetric(horizontal: mySeatsStepController.linesMargin),
@@ -281,25 +283,9 @@ class CodeSeat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = cabinRatio * mySeatsStepController.seatWidth;
-    double height = cabinRatio * mySeatsStepController.seatHeight;
     int seatType = mySeatsStepController.seatViewType(cell.value, cell.type, cell.code);
-    switch (seatType) {
-      case 8:
-      case 9:
-        width = cabinRatio * (width - 15);
-        height = 0;
-        break;
-      case 10:
-        width = height = 0;
-        break;
-      case 11:
-        width = height = cabinRatio * (width - 15);
-        break;
-      case 12:
-        width = height = cabinRatio * (width - 25);
-        break;
-    }
+    double width = cabinRatio * mySeatsStepController.getSeatWidth(seatType);
+    double height = cabinRatio * mySeatsStepController.getSeatHeight(seatType);
     return Container(
       margin: EdgeInsets.all(2),
       width: width,
@@ -372,25 +358,20 @@ class SeatWidget extends StatefulWidget {
 class _SeatWidgetState extends State<SeatWidget> {
   @override
   Widget build(BuildContext context) {
-    double width = widget.cabinRatio * widget.mySeatsStepController.seatWidth;
-    double height = widget.cabinRatio * widget.mySeatsStepController.seatHeight;
+    int seatType = widget.mySeatsStepController.seatViewType(widget.cell.value, widget.cell.type, widget.cell.code);
+    double width = widget.cabinRatio * widget.mySeatsStepController.getSeatWidth(seatType);
+    double height = widget.cabinRatio * widget.mySeatsStepController.getSeatHeight(seatType);
     bool isSeatClickable = false;
     bool hasShadow = false;
     Color color = Color(0xff5d5d5d);
     String seatText = "";
     Color textColor = Colors.white;
-    int seatType = widget.mySeatsStepController.seatViewType(widget.cell.value, widget.cell.type, widget.cell.code);
-    // if (seatType < 4 && seatType > 7) {
-    //   hasShadow = false;
-    // }
     switch (seatType) {
       case 1:
         color = Color(0xff5d5d5d);
         break;
       case 2:
         seatText = widget.cell.code!;
-        width = height = widget.cabinRatio * (width - 15);
-
         break;
       case 3:
         color = Colors.black;
@@ -416,21 +397,8 @@ class _SeatWidgetState extends State<SeatWidget> {
         seatText = widget.mySeatsStepController.seatsStatus[widget.cell.code]!;
         hasShadow = true;
         break;
-      case 8:
-
-      case 9:
-        width = widget.cabinRatio * (width - 15);
-        height = 0;
-        break;
-      case 10:
-        width = height = 0;
-        break;
       case 11:
-        width = height = widget.cabinRatio * (width - 15);
         seatText = widget.cell.value!;
-        break;
-      case 12:
-        width = height = widget.cabinRatio * (width - 25);
         break;
       case 13:
         isSeatClickable = false;
@@ -463,19 +431,14 @@ class _SeatWidgetState extends State<SeatWidget> {
           margin: EdgeInsets.symmetric(vertical: 2),
           decoration: BoxDecoration(
             color: color,
+              border:widget.inExitDoorLIne && hasShadow? Border.all(
+                color: Colors.red,
+                width: 2
+              ) : null,
             borderRadius: BorderRadius.all(
               Radius.circular(10),
+
             ),
-            boxShadow: widget.inExitDoorLIne && hasShadow
-                ? [
-                    BoxShadow(
-                      color: Colors.red.withOpacity(0.5),
-                      spreadRadius: 1,
-                      blurRadius: 10,
-                      offset: Offset(0, 1), // changes position of shadow
-                    ),
-                  ]
-                : null,
           ),
           child: (() {
             switch (widget.mySeatsStepController.seatViewType(widget.cell.value, widget.cell.type, widget.cell.code)) {

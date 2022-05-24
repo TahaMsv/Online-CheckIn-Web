@@ -152,22 +152,54 @@ class SeatsStepController extends MainController {
   }
 
   double calculateCabinHeight(int index) {
+    double heightSum = 0;
     String cabinTitle = cabins[index].cabinTitle;
     double ratio = (cabinTitle == "First Class"
         ? firstClassCabinsRatio
         : cabinTitle == "Business"
             ? businessCabinsRatio
             : 1.0);
-    double height = 0;
-    cabins[index].lines[1].cells.forEach((element) {
-      if (element.type == "Seat") {
-        height += seatHeight;
-      } else if (element.type == "VerticalCode") {
-        height += (seatHeight - 15);
-      }
-      height += 5;
+    cabins[index].lines[1].cells.forEach((cell) {
+      int seatType = seatViewType(cell.value, cell.type, cell.code);
+      double height = ratio * getSeatHeight(seatType);
+      heightSum += height;
+      heightSum += 4;
     });
-    return ratio * height;
+    return heightSum;
+  }
+
+  double getSeatHeight(int seatType) {
+    double height = seatHeight;
+    switch (seatType) {
+      case 8:
+      case 9:
+      case 10:
+        return 0;
+      case 11:
+
+        return height - 15;
+      case 12:
+        return height - 25;
+      default:
+        return height;
+    }
+  }
+
+  double getSeatWidth(int seatType) {
+    double width = seatWidth;
+    switch (seatType) {
+      case 2:
+      case 8:
+      case 9:
+      case 11:
+        return width - 15;
+      case 10:
+        return -0;
+      case 12:
+        return width - 25;
+      default:
+        return width;
+    }
   }
 
   void changeSeatStatus(String seatId) {
@@ -224,7 +256,7 @@ class SeatsStepController extends MainController {
       } else if (cellValue.length == 1)
         return 2; // letter => Horizontal code
       else {
-        if (seatsStatus[code] == "Block")
+        if (seatsStatus[code] == "Block" || seatsStatus[code] == "TemporaryBlock" || seatsStatus[code] == "WBTemporaryBlock")
           return 3;
         else if (seatsStatus[code] == "TemporaryBlock")
           return 14;
@@ -260,12 +292,13 @@ class SeatsStepController extends MainController {
     if (!seatsStatus.containsKey(seatId)) return Colors.grey;
 
     switch (seatsStatus[seatId]) {
+      case "TemporaryBlock":
       case "Block":
+      case "WBTemporaryBlock":
         return Colors.black;
       case "Open":
         return Colors.white;
       case "Checked-in":
-      case "TemporaryBlock":
       case "Click":
       case "Check in other Flight":
         return Colors.grey;
