@@ -37,7 +37,7 @@ class StepsScreenController extends MainController {
 
   RxList<Traveller> travellers = <Traveller>[].obs;
   RxInt whoseTurnToSelect = 0.obs;
-  RxInt _step = 3.obs;
+  RxInt _step = 0.obs;
 
   RxInt currButtonTextIndex = 0.obs;
   int nextButtonTextIndex = 0;
@@ -218,6 +218,7 @@ class StepsScreenController extends MainController {
       setNextButton(paymentStepController.wasPayed);
       paymentStepController.calculatePrices();
     }
+    print(_step.value);
     updateIsNextButtonDisable();
   }
 
@@ -260,9 +261,10 @@ class StepsScreenController extends MainController {
   }
 
   void decreaseStep() async {
-    preparePreviousButtonText();
+
     int currStep = step;
     if (currStep > 0) {
+      preparePreviousButtonText();
       if (step == 5) {
         if (!isDocsNecessary.value) {
           setStep(currStep - 3);

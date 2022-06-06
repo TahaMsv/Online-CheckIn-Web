@@ -4,6 +4,7 @@
 
 import 'package:meta/meta.dart';
 import 'dart:convert';
+import '../widgets/CountryListPicker/countries.dart';
 
 class Traveller {
   late String token;
@@ -793,3 +794,23 @@ class BoardingPassPDF {
 //   "Body": LineType.BODY,
 //   "HorizontalCode": LineType.HORIZONTAL_CODE
 // });
+
+class Language {
+  Language({
+    // required this.country,
+    required this.languageCode,
+
+  });
+
+  // Country country;
+  String languageCode;
+
+  static List<Language> languageList(){
+    return <Language>[
+      Language( languageCode: "en"),
+      Language( languageCode: "fa"),
+
+    ];
+  }
+
+}

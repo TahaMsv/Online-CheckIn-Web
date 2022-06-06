@@ -28,8 +28,8 @@ class PassportStepView extends StatelessWidget {
       body: Column(
               children: [
                 StepsScreenTitle(
-                  title: "Passport",
-                  description: "Enter passport data (DOCS) for all the passengers.",
+                  title: "Passport".tr,
+                  description: "Enter passport data (DOCS) for all the passengers.".tr,
                 ),
                 SizedBox(
                   height: 10,
@@ -178,7 +178,7 @@ class AddPassInfo extends StatelessWidget {
             width: 5,
           ),
           Text(
-            "Add Passport Info",
+            "Add Passport Info".tr,
             style: TextStyle(
               color: Color(0xff4d6fff),
               fontSize: 12,

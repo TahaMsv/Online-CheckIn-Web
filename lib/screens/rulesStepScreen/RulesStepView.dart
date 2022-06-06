@@ -28,8 +28,8 @@ class RulesStepView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             StepsScreenTitle(
-              title: "Dangerous Goods",
-              description: "Every items can become dangerous when transported by air. Example of dangerous goods are:",
+              title: "Dangerous Goods".tr,
+              description: "Every items can become dangerous when transported by air. Example of dangerous goods are:".tr,
             ),
             SizedBox(
               height: 20,

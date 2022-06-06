@@ -24,8 +24,8 @@ class PaymentStepView extends StatelessWidget {
         body: Column(
           children: [
             StepsScreenTitle(
-              title: "Payment",
-              description: "Pay with credit card, Visa or debit or Mastercard debit",
+              title: "Payment".tr,
+              description: "Pay with credit card, Visa or debit or Mastercard debit".tr,
             ),
             SizedBox(
               height: 30,
@@ -84,7 +84,7 @@ class TaxesAndFees extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Taxes & Fees",
+                "Taxes & Fees".tr,
                 style: TextStyle(color: Color(0xff424242), fontSize: 17, fontWeight: FontWeight.w500),
               ),
               Text(
@@ -141,7 +141,7 @@ class TaxesAndFees extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Total",
+                "Total".tr,
                 style: TextStyle(color: Color(0xff424242), fontSize: 17, fontWeight: FontWeight.bold),
               ),
               Text(
@@ -151,7 +151,7 @@ class TaxesAndFees extends StatelessWidget {
             ],
           ),
           Text(
-            "Including taxes and fees",
+            "Including taxes and fees".tr,
             style: TextStyle(color: Color(0xff424242), fontSize: 12),
           ),
         ],
@@ -174,7 +174,7 @@ class BillingAddress extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Billing Address",
+            "Billing Address".tr,
             style: TextStyle(color: Color(0xff424242), fontWeight: FontWeight.bold, fontSize: 15),
           ),
           SizedBox(
@@ -182,7 +182,7 @@ class BillingAddress extends StatelessWidget {
           ),
           UserTextInput(
             controller: myPaymentStepController.addressC,
-            hint: "Address",
+            hint: "Address".tr,
             height: 90,
             errorText: "",
             isEmpty: false,
@@ -192,7 +192,7 @@ class BillingAddress extends StatelessWidget {
           ),
           UserTextInput(
             controller: myPaymentStepController.billingAddressCardNumberC,
-            hint: "Card Number",
+            hint: "Card Number".tr,
             errorText: "",
             isEmpty: false,
           ),
@@ -204,7 +204,7 @@ class BillingAddress extends StatelessWidget {
               Expanded(
                   child: UserTextInput(
                 controller: myPaymentStepController.countryC,
-                hint: "Card Number",
+                hint: "Card Number".tr,
                 errorText: "",
                 isEmpty: false,
               )),
@@ -214,7 +214,7 @@ class BillingAddress extends StatelessWidget {
               Expanded(
                   child: UserTextInput(
                 controller: myPaymentStepController.provinceC,
-                hint: "Province / State",
+                hint: "Province / State".tr,
                 errorText: "",
                 isEmpty: false,
               )),
@@ -228,7 +228,7 @@ class BillingAddress extends StatelessWidget {
               Expanded(
                   child: UserTextInput(
                 controller: myPaymentStepController.cityC,
-                hint: "City",
+                hint: "City".tr,
                 errorText: "",
                 isEmpty: false,
               )),
@@ -238,7 +238,7 @@ class BillingAddress extends StatelessWidget {
               Expanded(
                   child: UserTextInput(
                 controller: myPaymentStepController.postalC,
-                hint: "Postal / Zip Code",
+                hint: "Postal / Zip Code".tr,
                 errorText: "",
                 isEmpty: false,
               )),
@@ -267,7 +267,7 @@ class CardInfo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Card Info",
+            "Card Info".tr,
             style: TextStyle(color: Color(0xff424242), fontWeight: FontWeight.bold, fontSize: 15),
           ),
           SizedBox(
@@ -294,7 +294,7 @@ class CardInfo extends StatelessWidget {
           ),
           UserTextInput(
             controller: myPaymentStepController.cardHolderNameC,
-            hint: "Cardholder Name",
+            hint: "Cardholder Name".tr,
             errorText: "",
             isEmpty: false,
           ),
@@ -379,7 +379,7 @@ class CardInfo extends StatelessWidget {
                   myPaymentStepController.pay(stripeID);
                 }
               },
-              child: Text('pay'),
+              child: Text('pay'.tr),
             ),
           )
         ],

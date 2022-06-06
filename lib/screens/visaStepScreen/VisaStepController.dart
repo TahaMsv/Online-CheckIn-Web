@@ -24,15 +24,19 @@ class VisaStepController extends MainController {
   List<TextEditingController> destinationCs = [];
   RxBool loading = false.obs;
 
-
-
   void init() async {
     loading.value = true;
-    // model.setLoading(true);
+    loading.value = false;
+    model.setRequesting(false);
+    // model.setLoading(false);
+  }
+
+  void CheckDocoNecessity(Traveller traveller) async {
+    if (travellers.contains(traveller)) return;
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-    String docsType = stepsScreenController.travellers[0].passportInfo.passportType ?? "";
-    String docsCountry = stepsScreenController.travellers[0].passportInfo.countryOfIssue ?? "";
-    String docsNationality = stepsScreenController.travellers[0].passportInfo.nationality ?? "";
+    String docsType = traveller.passportInfo.passportType ?? "";
+    String docsCountry = traveller.passportInfo.countryOfIssue ?? "";
+    String docsNationality = traveller.passportInfo.nationality ?? "";
     String fromCityCode = stepsScreenController.welcome!.body.flight[0].fromCity ?? "";
     String toCityCode = stepsScreenController.welcome!.body.flight[0].toCity ?? "";
     // print("DocsType" + docsType + "\nDocsCountry" + docsCountry + "\nDocsNationality" + docsNationality + "\nFromCityCode" + fromCityCode + "\nToCityCode" + toCityCode);
@@ -55,25 +59,16 @@ class VisaStepController extends MainController {
         if (response.data["ResultCode"] == 1) {
           print(response.data["Body"]["IsNecessary"]);
           if (response.data["Body"]["IsNecessary"] == 1) {
-            stepsScreenController.isDocoNecessary.value = true;
+            stepsScreenController.setDocoNecessary(true);
             loading.value = false;
+            travellers.add(traveller);
+            documentNoCs.add(new TextEditingController());
+            destinationCs.add(new TextEditingController());
           }
         }
       }
     }
-
-    if (stepsScreenController.isDocoNecessary.value) {
-      travellersList();
-
-      travellers = stepsScreenController.travellers;
-      for (var i = 0; i < travellers.length; ++i) {
-        documentNoCs.add(new TextEditingController());
-        destinationCs.add(new TextEditingController());
-      }
-    }
-    loading.value = false;
     model.setRequesting(false);
-    // model.setLoading(false);
   }
 
   void travellersList() {
@@ -292,7 +287,7 @@ class VisaStepController extends MainController {
   @override
   void onInit() {
     print("VisaStepController Init");
-    init();
+    // init();
     super.onInit();
   }
 

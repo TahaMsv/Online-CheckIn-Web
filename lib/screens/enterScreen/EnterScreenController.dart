@@ -66,12 +66,12 @@ class EnterScreenController extends MainController {
     // }
 
     return true; // for test, should be remove
-    return false;
+   // return false;
   }
 
   Future<bool> loginValidation() async {
-    String lastName = "test";// lastNameC.text.trim();
-    String bookingRefName = "9999999999"; //bookingRefNameC.text.trim();
+    String lastName = lastNameC.text.trim();
+    String bookingRefName =  bookingRefNameC.text.trim();
     print(lastName);
     print(bookingRefName);
     if (!model.requesting) {
@@ -90,8 +90,8 @@ class EnterScreenController extends MainController {
         print(response.data);
         if (response.data["ResultCode"] == 1) {
           String? token =
-              "B995CBE3-2666-4E80-8281-315CCEF7BDE6";
-              // response.data["Body"]["Token"];
+              // "B995CBE3-2666-4E80-8281-315CCEF7BDE6";
+              response.data["Body"]["Token"];
           if (token != null) {
             model.setToken(token);
             print(token);

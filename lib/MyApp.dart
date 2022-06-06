@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 import 'global/MainModel.dart';
 import 'screens/splashScreen/SplashView.dart';
 import 'global/AppConfig.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppConfig.themeLight,
       initialRoute: RouteNames.enter,
+      translations: TranslatedWords(),
+      locale:  Locale('en', 'US'),
+      fallbackLocale:  Locale('en', 'US'),
       getPages: [
         // GetPage(name: RouteNames.initialRoute, page: () => SplashView(_model)),
         GetPage(name: RouteNames.home, page: () => HomeView(_model)),

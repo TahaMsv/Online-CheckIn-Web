@@ -21,6 +21,8 @@ class SeatsStepView extends StatelessWidget {
     // double height = Get.height;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    double planeBodyHeight =mySeatsStepController.calculatePlaneBodyHeight();
+    double planeBodyLength = mySeatsStepController.calculatePlaneBodyLength();
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
@@ -35,12 +37,12 @@ class SeatsStepView extends StatelessWidget {
                 Stack(
                   children: [
                     PlaneHead(
-                      height: mySeatsStepController.calculatePlaneBodyHeight(),
+                      height:planeBodyHeight ,
                     ),
-                    PlaneWings(),
+                    PlaneWings( planeBodyLength: planeBodyLength,),
                     PlaneTail(
-                      height: mySeatsStepController.calculatePlaneBodyHeight() + 85,
-                      margin: mySeatsStepController.calculatePlaneBodyLength(),
+                      height:planeBodyHeight + 85,
+                      margin: planeBodyLength,
                     ),
                     PlaneBody(
                       mySeatsStepController: mySeatsStepController,
@@ -164,9 +166,9 @@ class CabinWidget extends StatelessWidget {
                     bool upDoorEnable = (i != 0 && upExitDoors != -1);
                     bool downDoorEnable = (i != 0 && downExitDoors != -1 && downExitDoors != upExitDoors);
                     String cabinTitle = cabin.cabinTitle;
-                    double cabinRatio = (cabinTitle == "First Class"
+                    double cabinRatio = (cabinTitle == "First Class".tr
                         ? mySeatsStepController.firstClassCabinsRatio
-                        : cabinTitle == "Business"
+                        : cabinTitle == "Business".tr
                         ? mySeatsStepController.businessCabinsRatio
                         : 1.0);
                     return Column(
@@ -488,7 +490,7 @@ class ExitDoor extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                "Exit",
+                "Exit".tr,
                 style: TextStyle(color: Colors.white, fontSize: 12),
               ),
             ),
@@ -609,13 +611,15 @@ class CheckedInSeat extends StatelessWidget {
 
 class PlaneWings extends StatelessWidget {
   const PlaneWings({
-    Key? key,
+    Key? key, required this.planeBodyLength,
   }) : super(key: key);
+
+  final double planeBodyLength;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 1000),
+      margin: EdgeInsets.only(left:400 + planeBodyLength/2),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -10,4 +10,8 @@ class MainController extends GetxController {
   }
   MainController({this.mainModel});
 
+  void changeLanguage(Locale locale){
+    Get.updateLocale(locale);
+  }
+
 }

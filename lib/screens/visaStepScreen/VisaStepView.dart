@@ -31,13 +31,13 @@ class VisaStepView extends StatelessWidget {
               )
             : !stepsScreenController.isDocoNecessary.value
                 ? Center(
-                    child: Text("No need to add visa"),
+                    child: Text("No need to add visa".tr),
                   )
                 : Column(
                     children: [
                       StepsScreenTitle(
-                        title: "Visa",
-                        description: "Enter visa data (DOCO) for all the passengers.",
+                        title: "Visa".tr,
+                        description: "Enter visa data (DOCO) for all the passengers.".tr,
                       ),
                       SizedBox(
                         height: 10,
@@ -149,7 +149,7 @@ class InfoCard extends StatelessWidget {
                 width: 5,
               ),
               Text(
-                "Passport No: ",
+                "Passport No: ".tr,
                 style: TextStyle(
                   color: textColor,
                   fontSize: 13,
@@ -210,7 +210,7 @@ class AddVisaInfo extends StatelessWidget {
             width: 5,
           ),
           Text(
-            "Add Visa Info",
+            "Add Visa Info".tr,
             style: TextStyle(
               color: Color(0xff4d6fff),
               fontSize: 12,
@@ -248,7 +248,7 @@ class EditVisaInfo extends StatelessWidget {
               width: 5,
             ),
             Text(
-              "Visa No: 45687",
+              "Visa No: 45687".tr,
               style: TextStyle(
                 color: Color(0xffffffff),
                 fontSize: 12,

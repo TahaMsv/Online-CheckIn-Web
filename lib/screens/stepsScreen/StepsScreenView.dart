@@ -225,7 +225,7 @@ class StepWidget extends StatelessWidget {
                 width: 3,
               ),
               Text(
-                titles[index],
+                titles[index].tr,
                 style: TextStyle(color: frColor),
               ),
             ],
@@ -296,15 +296,17 @@ class BottomOfPage extends StatelessWidget {
               ),
               myStepsScreenController.step == 8
                   ? ReceiptStepButtons()
-                  :Obx(() => MyElevatedButton(
-                height: 40,
-                width: 300,
-                buttonText: myStepsScreenController.buttonsText[myStepsScreenController.currButtonTextIndex.value],
-                bgColor: Color(0xff4c6ef6),
-                fgColor: Colors.white,
-                function: myStepsScreenController.increaseStep,
-                isDisable: !myStepsScreenController.isNextButtonEnable,
-              ),)
+                  : Obx(
+                      () => MyElevatedButton(
+                        height: 40,
+                        width: 300,
+                        buttonText: myStepsScreenController.buttonsText[myStepsScreenController.currButtonTextIndex.value],
+                        bgColor: Color(0xff4c6ef6),
+                        fgColor: Colors.white,
+                        function: myStepsScreenController.increaseStep,
+                        isDisable: !myStepsScreenController.isNextButtonEnable,
+                      ),
+                    )
             ],
           ),
         ),
@@ -326,7 +328,7 @@ class ReceiptStepButtons extends StatelessWidget {
           MyElevatedButton(
             height: 40,
             width: 100,
-            buttonText: "Download",
+            buttonText: "Download".tr,
             bgColor: Color(0xff424242),
             fgColor: Colors.white,
             function: () {},
@@ -337,7 +339,7 @@ class ReceiptStepButtons extends StatelessWidget {
           MyElevatedButton(
             height: 40,
             width: 100,
-            buttonText: "Print",
+            buttonText: "Print".tr,
             bgColor: Color(0xff48c0a2),
             fgColor: Colors.white,
             function: () {},
@@ -348,7 +350,7 @@ class ReceiptStepButtons extends StatelessWidget {
           MyElevatedButton(
             height: 40,
             width: 200,
-            buttonText: "Sent to Mobile",
+            buttonText: "Sent to Mobile".tr,
             bgColor: Color(0xff4c6ef6),
             fgColor: Colors.white,
             function: () {},
@@ -395,7 +397,7 @@ class PreviousButton extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(left: 4),
               child: Text(
-                "Previous",
+                "Previous".tr,
                 style: TextStyle(
                   fontSize: 12,
                   color: isDisable ? Color(0xff767676).withOpacity(0.5) : Color(0xff767676),
@@ -440,7 +442,7 @@ class LeftSideOFPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TitleWidget(
-                  title: "Travellers",
+                  title: "Travellers".tr,
                   width: 190,
                 ),
                 if (myStepsScreenController.step == 6)
@@ -454,7 +456,7 @@ class LeftSideOFPage extends StatelessWidget {
                           color: Color(0xffededed),
                         ),
                         TitleWidget(
-                          title: "Seat",
+                          title: "Seat".tr,
                           width: 100,
                         ),
                       ],
@@ -480,9 +482,11 @@ class LeftSideOFPage extends StatelessWidget {
                             index: index,
                             myStepsScreenController: myStepsScreenController,
                           )
-                        : myStepsScreenController.step == 0? AddNewTraveller(
-                            myStepsScreenController: myStepsScreenController,
-                          ) : Container();
+                        : myStepsScreenController.step == 0
+                            ? AddNewTraveller(
+                                myStepsScreenController: myStepsScreenController,
+                              )
+                            : Container();
                   },
                 ),
               ),
@@ -537,7 +541,7 @@ class AddNewTraveller extends StatelessWidget {
                       width: 15,
                     ),
                     Text(
-                      "Add Travellers",
+                      "Add Travellers".tr,
                       style: TextStyle(
                         fontSize: 15,
                         color: Color(0xff48c0a2),
@@ -555,7 +559,7 @@ class AddNewTraveller extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    "Add all passengers to the list on the left here",
+                    "Add all passengers to the list on the left here".tr,
                     style: TextStyle(
                       fontSize: 14,
                       color: Color(0xff808080),
@@ -566,11 +570,10 @@ class AddNewTraveller extends StatelessWidget {
                   ),
                   Obx(
                     () => UserTextInput(
-                      controller: myTravellersStepScreenController.ticketNumberC,
-                      hint: "Reservation ID / Ticket Number",
-                      errorText: "Reservation ID / Ticket Number can't be empty",
-                      isEmpty: myTravellersStepScreenController.isTicketNumberEmpty.value,
-                      obscureText: true,
+                      controller: myTravellersStepScreenController.lastNameC,
+                      hint: "Last Name".tr,
+                      errorText: "Last Name can't be empty".tr,
+                      isEmpty: myTravellersStepScreenController.isLastNameEmpty.value,
                     ),
                   ),
                   SizedBox(
@@ -578,10 +581,11 @@ class AddNewTraveller extends StatelessWidget {
                   ),
                   Obx(
                     () => UserTextInput(
-                      controller: myTravellersStepScreenController.lastNameC,
-                      hint: "Last Name",
-                      errorText: "Last Name can't be empty",
-                      isEmpty: myTravellersStepScreenController.isLastNameEmpty.value,
+                      controller: myTravellersStepScreenController.ticketNumberC,
+                      hint: "Reservation ID / Ticket Number".tr,
+                      errorText: "Reservation ID / Ticket Number can't be empty".tr,
+                      isEmpty: myTravellersStepScreenController.isTicketNumberEmpty.value,
+                      obscureText: true,
                     ),
                   ),
                   SizedBox(
@@ -612,7 +616,7 @@ class AddToTravellersButton extends StatelessWidget {
     return MyElevatedButton(
       height: 40,
       width: double.infinity,
-      buttonText: "Add to Travellers",
+      buttonText: "Add to Travellers".tr,
       bgColor: Color(0xff00bfa2),
       fgColor: Colors.white,
       function: model.requesting ? () {} : myTravellersStepScreenController.addTraveller,

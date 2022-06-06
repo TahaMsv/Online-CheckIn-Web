@@ -29,7 +29,7 @@ class ReceiptStepView extends StatelessWidget {
               )
             : !myReceiptStepController.successfulResponse.value
                 ? Center(
-                    child: Text("Unable to load boarding pass"),
+                    child: Text("Unable to load boarding pass".tr),
                   )
                 : Container(
                     height: height,
@@ -37,8 +37,8 @@ class ReceiptStepView extends StatelessWidget {
                     child: Column(
                       children: [
                         StepsScreenTitle(
-                          title: "Finished!",
-                          description: "You can see your check-in below, print it or download it or send it to your mobile",
+                          title: "Finished!".tr,
+                          description: "You can see your check-in below, print it or download it or send it to your mobile".tr,
                         ),
                         SizedBox(
                           height: 20,

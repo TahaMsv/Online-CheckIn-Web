@@ -2,7 +2,6 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import '../../widgets/CustomFlutterWidget.dart';
 import '../../widgets/UserTextInput.dart';
 import '../../widgets/CountryListPicker/country.dart';
 import '../../widgets/CountryListPicker/country_picker_dropdown.dart';
@@ -10,10 +9,9 @@ import '../../widgets/CountryListPicker/utils/utils.dart';
 import '../../screens/enterScreen/EnterScreenController.dart';
 import '../../global/MainModel.dart';
 import '../../utility/Constants.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:flash/flash.dart';
+
 
 class EnterScreenView extends StatelessWidget {
   final EnterScreenController myEnterScreenController;
@@ -23,15 +21,9 @@ class EnterScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MainModel model = context.watch<MainModel>();
-    // double width = Get.width;
-    // double height = Get.height;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   backgroundColor: Colors.blue,
-      // ),
       body: Container(
         width: width,
         height: height,
@@ -141,7 +133,7 @@ class CheckInForm extends StatelessWidget {
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          LanguagePicker(),
+          LanguagePicker(myEnterScreenController: myEnterScreenController),
           Divider(),
           Expanded(
             child: Padding(
@@ -161,7 +153,7 @@ class CheckInForm extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Online Check-in",
+                              "Online Check-in".tr,
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -171,7 +163,7 @@ class CheckInForm extends StatelessWidget {
                             Container(
                               margin: EdgeInsets.only(top: 15),
                               child: Text(
-                                "Input Requested info in order to continue",
+                                "Input Requested info in order to continue".tr,
                                 style: TextStyle(
                                   color: Color(0xff808080),
                                 ),
@@ -185,22 +177,16 @@ class CheckInForm extends StatelessWidget {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                // UserTextInput(
-                                //   controller: myEnterScreenController.firstNameC,
-                                //   hint: "First Name",
-                                //   errorText: "First Name can't be empty",
-                                //   isEmpty: myEnterScreenController.isFirstNameEmpty.value,
-                                // ),
                                 UserTextInput(
                                   controller: myEnterScreenController.lastNameC,
-                                  hint: "Last Name",
-                                  errorText: "Last Name can't be empty",
+                                  hint: "Last Name".tr,
+                                  errorText: "Last Name can't be empty".tr,
                                   isEmpty: myEnterScreenController.isLastNameEmpty.value,
                                 ),
                                 UserTextInput(
                                   controller: myEnterScreenController.bookingRefNameC,
-                                  hint: "Booking reference name",
-                                  errorText: "Booking reference name can't be empty",
+                                  hint: "Booking reference name".tr,
+                                  errorText: "Booking reference name can't be empty".tr,
                                   isEmpty: myEnterScreenController.isBookingRefNameEmpty.value,
                                   obscureText: true,
                                 ),
@@ -243,23 +229,34 @@ class Divider extends StatelessWidget {
 class LanguagePicker extends StatelessWidget {
   const LanguagePicker({
     Key? key,
+    required this.myEnterScreenController,
   }) : super(key: key);
+
+  final EnterScreenController myEnterScreenController;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       child: CountryPickerDropdown(
-        initialValue: 'GB-NIR',
+        initialValue: 'GB',
         itemBuilder: _buildDropdownItem,
         // itemFilter:  ['AR', 'DE', 'GB', 'CN'].contains(c.isoCode),
-        priorityList: [
-          CountryPickerUtils.getCountryByIsoCode('GB'),
-          CountryPickerUtils.getCountryByIsoCode('CN'),
-        ],
+        // priorityList: [
+        //   CountryPickerUtils.getCountryByIsoCode('GB'),
+        //
+        // ],
         sortComparator: (Country a, Country b) => a.isoCode.compareTo(b.isoCode),
         onValuePicked: (Country country) {
           print("${country.name}");
+          switch (country.languageCode) {
+            case "en":
+              myEnterScreenController.changeLanguage(Locale(country.languageCode, "US"));
+              break;
+            case "fa":
+              myEnterScreenController.changeLanguage(Locale(country.languageCode, "IR"));
+              break;
+          }
         },
       ),
     );
@@ -296,12 +293,12 @@ class CheckInButton extends StatelessWidget {
                   bool isValid = await myEnterScreenController.loginValidation();
                   if (isValid) {
                     Get.toNamed(RouteNames.steps);
-                  } else {
-
-                  }
+                  } else {}
                 }
               },
-        child: Text("Check-in"),
+        child: Text(
+          "Check-in".tr,
+        ),
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all(Colors.white),
           backgroundColor: MaterialStateProperty.all(
@@ -316,7 +313,6 @@ class CheckInButton extends StatelessWidget {
   }
 }
 
-
 class CopyRightText extends StatelessWidget {
   const CopyRightText({
     Key? key,
@@ -327,7 +323,10 @@ class CopyRightText extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Container(margin: EdgeInsets.only(bottom: 20), child: Text("© Copyright 2021 Abomis All rights reserved")),
+        Container(
+          margin: EdgeInsets.only(bottom: 20),
+          child: Text("© Copyright 2021 Abomis All rights reserved".tr),
+        ),
       ],
     );
   }
@@ -392,11 +391,11 @@ class Texts extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Ready to go?",
+                  "Ready to go?".tr,
                   style: TextStyle(fontSize: 23, color: Colors.white, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "There are a few things to know before boarding.",
+                  "There are a few things to know before boarding.".tr,
                   style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -414,7 +413,7 @@ class Texts extends StatelessWidget {
                   margin: EdgeInsets.only(right: 15),
                 ),
                 Text(
-                  "When can I check in?",
+                  "When can I check in?".tr,
                   style: TextStyle(fontSize: 15, color: Colors.white),
                 ),
               ],
@@ -423,7 +422,7 @@ class Texts extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(bottom: 42, left: 5),
             child: Text(
-              "You can check in on our website up to 24 hours before departure until one (1) hour before departure. Airport check-in opens three hours (3) prior to departure.",
+              "You can check in on our website up to 24 hours before departure until one (1) hour before departure. Airport check-in opens three hours (3) prior to departure.".tr,
               style: TextStyle(fontSize: 12, color: Colors.white),
             ),
           ),
@@ -459,7 +458,7 @@ class NextButton extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(right: 18),
             child: Text(
-              "Next",
+              "Next".tr,
               style: TextStyle(fontSize: 12, color: Colors.white),
             ),
           ),
@@ -488,15 +487,14 @@ class PrevButton extends StatelessWidget {
         onPressed: null,
         child: Row(
           children: [
-             Icon(
-                MenuIcons.iconLeft,
-                color: Colors.white,
-              ),
-
+            Icon(
+              MenuIcons.iconLeft,
+              color: Colors.white,
+            ),
             Container(
               margin: EdgeInsets.only(left: 18),
               child: Text(
-                "Previous",
+                "Previous".tr,
                 style: TextStyle(fontSize: 12, color: Colors.white),
               ),
             ),
