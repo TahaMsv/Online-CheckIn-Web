@@ -12,7 +12,6 @@ import '../../utility/Constants.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-
 class EnterScreenView extends StatelessWidget {
   final EnterScreenController myEnterScreenController;
 
@@ -248,7 +247,7 @@ class LanguagePicker extends StatelessWidget {
         // ],
         sortComparator: (Country a, Country b) => a.isoCode.compareTo(b.isoCode),
         onValuePicked: (Country country) {
-          print("${country.name}");
+          // print("${country.name}");
           switch (country.languageCode) {
             case "en":
               myEnterScreenController.changeLanguage(Locale(country.languageCode, "US"));
@@ -448,6 +447,7 @@ class NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String languageCode = Get.locale!.languageCode;
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Colors.white.withOpacity(0)),
@@ -456,15 +456,18 @@ class NextButton extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(right: 18),
+            margin: languageCode == "en" ? EdgeInsets.only(right: 18) : EdgeInsets.only(left: 18),
             child: Text(
               "Next".tr,
               style: TextStyle(fontSize: 12, color: Colors.white),
             ),
           ),
-          Icon(
-            MenuIcons.iconRight,
-            color: Colors.white,
+          RotationTransition(
+            turns: languageCode == "en" ? AlwaysStoppedAnimation(0 / 360) : AlwaysStoppedAnimation(180 / 360),
+            child: Icon(
+              MenuIcons.iconRight,
+              color: Colors.white,
+            ),
           ),
         ],
       ),
@@ -479,6 +482,7 @@ class PrevButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String languageCode = Get.locale!.languageCode;
     return Container(
       child: ElevatedButton(
         style: ButtonStyle(
@@ -487,12 +491,15 @@ class PrevButton extends StatelessWidget {
         onPressed: null,
         child: Row(
           children: [
-            Icon(
-              MenuIcons.iconLeft,
-              color: Colors.white,
+            RotationTransition(
+              turns: languageCode == "en" ? AlwaysStoppedAnimation(0 / 360) : AlwaysStoppedAnimation(180 / 360),
+              child: Icon(
+                MenuIcons.iconLeft,
+                color: Colors.white,
+              ),
             ),
             Container(
-              margin: EdgeInsets.only(left: 18),
+              margin: languageCode == "en" ? EdgeInsets.only(left: 18) : EdgeInsets.only(right: 18),
               child: Text(
                 "Previous".tr,
                 style: TextStyle(fontSize: 12, color: Colors.white),
@@ -501,7 +508,7 @@ class PrevButton extends StatelessWidget {
           ],
         ),
       ),
-      margin: EdgeInsets.only(right: 85),
+      margin:languageCode == "en" ? EdgeInsets.only(right: 85):EdgeInsets.only(left: 85),
     );
   }
 }

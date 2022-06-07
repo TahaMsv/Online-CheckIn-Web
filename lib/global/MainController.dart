@@ -14,4 +14,8 @@ class MainController extends GetxController {
     Get.updateLocale(locale);
   }
 
+  String getLocal(){
+    return Get.deviceLocale!.languageCode;
+  }
+
 }
