@@ -29,13 +29,7 @@ final List<Country> countryList = [
     iso3Code: "GBR",
     languageCode: "en",
   ),
-  Country(
-    isoCode: "US",
-    phoneCode: "1",
-    name: "United States",
-    iso3Code: "USA",
-    languageCode: "en",
-  ),
+
 
 
 ];

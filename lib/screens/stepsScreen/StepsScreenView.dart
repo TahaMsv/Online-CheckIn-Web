@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:onlinecheckin/screens/travellersStepScreen/NewTravellersStepScreen.dart';
 import 'package:onlinecheckin/screens/travellersStepScreen/TravellersStepController.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
+import 'package:onlinecheckin/widgets/LanguagePicker.dart';
 import 'package:onlinecheckin/widgets/UserTextInput.dart';
 import '../../screens/seatsStepScreen/SeatStepScreenView.dart';
 
@@ -34,8 +35,6 @@ class StepsScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MainModel model = context.watch<MainModel>();
-    // double width = Get.width;
-    // double height = Get.height;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -50,7 +49,11 @@ class StepsScreenView extends StatelessWidget {
               color: Colors.white,
               child: ListView(
                 children: [
-                  TopOfPage(height: height, width: width),
+                  TopOfPage(
+                    height: height,
+                    width: width,
+                    stepsScreenController: myStepsScreenController,
+                  ),
                   Container(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,13 +244,16 @@ class TopOfPage extends StatelessWidget {
     Key? key,
     required this.height,
     required this.width,
+    required this.stepsScreenController,
   }) : super(key: key);
 
   final double height;
   final double width;
+  final StepsScreenController stepsScreenController;
 
   @override
   Widget build(BuildContext context) {
+    String languageCode = Get.locale!.languageCode;
     return Container(
       height: height * 0.1,
       width: width,
@@ -257,7 +263,11 @@ class TopOfPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             AbomisLogo(),
-            LanguagePicker(),
+            LanguagePicker(
+              mainController: stepsScreenController,
+              width: 200,
+              initialValue: languageCode =='en' ? "GB" : "IR",
+            ),
           ],
         ),
       ),
@@ -372,6 +382,7 @@ class PreviousButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String languageCode = Get.locale!.languageCode;
     return Container(
       height: 30,
       width: 80,
@@ -389,13 +400,17 @@ class PreviousButton extends StatelessWidget {
         },
         child: Row(
           children: [
-            Icon(
-              MenuIcons.iconLeftArrow,
-              color: isDisable ? Color(0xff767676).withOpacity(0.5) : Color(0xff767676),
-              size: 14,
-            ),
+            RotationTransition(
+              turns: languageCode == "en" ? AlwaysStoppedAnimation(0 / 360) : AlwaysStoppedAnimation(180 / 360),
+              child:  Icon(
+                MenuIcons.iconLeftArrow,
+                color: isDisable ? Color(0xff767676).withOpacity(0.5) : Color(0xff767676),
+                size: 14,
+              ),
+            )
+           ,
             Container(
-              margin: EdgeInsets.only(left: 4),
+              margin:languageCode == "en" ? EdgeInsets.only(left: 4):EdgeInsets.only(right: 4),
               child: Text(
                 "Previous".tr,
                 style: TextStyle(
@@ -637,6 +652,7 @@ class TravellerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String languageCode = Get.locale!.languageCode;
     bool isTravellerSelected = myStepsScreenController.travellers[index].seatId == "--" ? false : true;
     return Container(
       color: myStepsScreenController.whoseTurnToSelect.value == index && step == 6 ? const Color(0xffffae2c).withOpacity(0.5) : Colors.white,
@@ -648,7 +664,7 @@ class TravellerItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
+                  padding:languageCode == 'en' ? const EdgeInsets.only(left: 20.0) :const EdgeInsets.only(right: 20.0) ,
                   child: Text(
                     myStepsScreenController.travellers[index].getFullNameWithGender(),
                     style: TextStyle(
@@ -797,41 +813,3 @@ class AbomisLogo extends StatelessWidget {
     );
   }
 }
-
-class LanguagePicker extends StatelessWidget {
-  const LanguagePicker({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 200,
-      child: CountryPickerDropdown(
-        initialValue: 'GB-NIR',
-        itemBuilder: _buildDropdownItem,
-        // itemFilter:  ['AR', 'DE', 'GB', 'CN'].contains(c.isoCode),
-        priorityList: [
-          CountryPickerUtils.getCountryByIsoCode('GB'),
-          CountryPickerUtils.getCountryByIsoCode('CN'),
-        ],
-        sortComparator: (Country a, Country b) => a.isoCode.compareTo(b.isoCode),
-        onValuePicked: (Country country) {
-          print("${country.name}");
-        },
-      ),
-    );
-  }
-}
-
-Widget _buildDropdownItem(Country country) => Container(
-      child: Row(
-        children: <Widget>[
-          CountryPickerUtils.getDefaultFlagImage(country),
-          SizedBox(
-            width: 8.0,
-          ),
-          Text("+${country.phoneCode}(${country.isoCode})"),
-        ],
-      ),
-    );

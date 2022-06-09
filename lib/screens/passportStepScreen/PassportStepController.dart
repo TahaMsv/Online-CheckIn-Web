@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:onlinecheckin/screens/stepsScreen/StepsScreenController.dart';
 import 'package:onlinecheckin/screens/visaStepScreen/VisaStepController.dart';
+import 'package:onlinecheckin/utility/Constants.dart';
 import 'package:onlinecheckin/utility/DataProvider.dart';
 import '../../global/Classes.dart';
 import '../../widgets/SelectingDateWidget.dart';
@@ -185,7 +186,7 @@ class PassportStepController extends MainController {
 
 /////////////////////////////////////////////
 
-  List<String> listGender = ["Gender", "Male", "Female"];
+  List<String> listGender = ["Gender".tr, "Male".tr, "Female".tr];
 
   void setSelectedGender(int index, String value) {
     travellers[index].passportInfo.gender = value;
@@ -220,7 +221,15 @@ class PassportStepController extends MainController {
     travellers.refresh();
   }
 
+  String getKeyFromLanguageWords(Locale locale, String value) {
+    String languageKey = locale.languageCode + "_" + locale.countryCode.toString();
+    var map = TranslatedWords().keys[languageKey];
+    String key = map!.keys.firstWhere((k) => map[k] == value, orElse: () => "");
+    return key == "" ? value : key;
+  }
+
   void showDOCSPopup(int index) {
+    Locale locale = Get.locale!;
     Get.defaultDialog(
       title: "",
       backgroundColor: Colors.white,
@@ -230,20 +239,20 @@ class PassportStepController extends MainController {
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          StepsScreenTitle(title: "Passport / Visa Details - Jack Taylor", description: ""),
+          StepsScreenTitle(title: "Passport / Visa Details".tr, description: ""),
           SizedBox(
             height: 20,
           ),
           Row(
             children: [
-              passportTypeDropDown(index),
+              passportTypeDropDown(index, locale),
               SizedBox(
                 width: 20,
               ),
               Expanded(
                 child: UserTextInput(
                   controller: documentNoCs[index],
-                  hint: "Document No.",
+                  hint: "Document No.".tr,
                   errorText: "",
                   isEmpty: false,
                 ),
@@ -255,17 +264,17 @@ class PassportStepController extends MainController {
           ),
           Row(
             children: [
-              genderDropDown(index),
+              genderDropDown(index, locale),
               SizedBox(
                 width: 20,
               ),
-              countryOfIssueDropDown(index),
+              countryOfIssueDropDown(index, locale),
               SizedBox(
                 width: 20,
               ),
               Obx(
                 () => SelectingDateWidget(
-                  hint: "Entry Date",
+                  hint: "Entry Date".tr,
                   index: index,
                   updateDate: selectEntryDate,
                   currDateTime: travellers[index].passportInfo.entryDate == null ? DateTime.now() : travellers[index].passportInfo.entryDate!,
@@ -279,13 +288,13 @@ class PassportStepController extends MainController {
           ),
           Row(
             children: [
-              nationalityDropDown(index),
+              nationalityDropDown(index, locale),
               SizedBox(
                 width: 20,
               ),
               Obx(
                 () => SelectingDateWidget(
-                  hint: "Date of Birth",
+                  hint: "Date of Birth".tr,
                   index: index,
                   updateDate: selectDateOfBirth,
                   currDateTime: travellers[index].passportInfo.dateOfBirth == null ? DateTime.now() : travellers[index].passportInfo.dateOfBirth!,
@@ -306,7 +315,7 @@ class PassportStepController extends MainController {
               MyElevatedButton(
                 height: 50,
                 width: 175,
-                buttonText: "Submit",
+                buttonText: "Submit".tr,
                 bgColor: Colors.white,
                 fgColor: Color(0xff4d6ff8),
                 function: model.requesting
@@ -328,7 +337,7 @@ class PassportStepController extends MainController {
     );
   }
 
-  Container passportTypeDropDown(int index) {
+  Container passportTypeDropDown(int index, Locale locale) {
     return Container(
       height: 40,
       width: 200,
@@ -347,14 +356,14 @@ class PassportStepController extends MainController {
                 'Type',
               ),
               onChanged: (newValue) {
-                setSelected(index, newValue.toString());
+                setSelected(index, getKeyFromLanguageWords(locale, newValue.toString()));
               },
-              value: travellers[index].passportInfo.passportType == null ? "Passport Type" : travellers[index].passportInfo.passportType,
+              value: travellers[index].passportInfo.passportType == null ? "Passport Type".tr : travellers[index].passportInfo.passportType,
               items: listPassportType.map(
                 (selectedType) {
                   return DropdownMenuItem(
                     child: Text(
-                      selectedType.fullName,
+                      selectedType.fullName! == "Passport Type" ? ("Passport Type".tr) : selectedType.fullName!,
                     ),
                     value: selectedType.fullName,
                   );
@@ -367,7 +376,7 @@ class PassportStepController extends MainController {
     );
   }
 
-  Container nationalityDropDown(int index) {
+  Container nationalityDropDown(int index, Locale locale) {
     return Container(
       height: 40,
       width: 200,
@@ -386,15 +395,15 @@ class PassportStepController extends MainController {
                 'Nationality',
               ),
               onChanged: (newValue) {
-                setSelectedNationality(index, newValue.toString());
+                setSelectedNationality(index, getKeyFromLanguageWords(locale, newValue.toString()));
               },
-              value: travellers[index].passportInfo.nationality == null ? "Nationality" : travellers[index].passportInfo.nationality,
+              value: travellers[index].passportInfo.nationality == null ? "Nationality".tr : travellers[index].passportInfo.nationality,
               items: nationalitiesList.map(
                 (selectedType) {
                   travellers[index].passportInfo.nationalityID = selectedType.id;
                   return DropdownMenuItem(
                     child: new Text(
-                      selectedType.englishName!,
+                      selectedType.englishName! == "Nationality" ? ("Nationality".tr) : selectedType.englishName!,
                     ),
                     value: selectedType.englishName,
                   );
@@ -407,7 +416,7 @@ class PassportStepController extends MainController {
     );
   }
 
-  Container countryOfIssueDropDown(int index) {
+  Container countryOfIssueDropDown(int index, Locale locale) {
     return Container(
       height: 40,
       width: 200,
@@ -422,20 +431,21 @@ class PassportStepController extends MainController {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 5),
             child: DropdownButton(
-              hint: Text(
-                'Country of Issue',
-              ),
+              // hint: Text(
+              //   'Country of Issue'.tr,
+              // ),
               onChanged: (newValue) {
-                setSelectedCountryIssue(index, newValue.toString());
+                setSelectedCountryIssue(index, getKeyFromLanguageWords(locale, newValue.toString()));
               },
-              value: travellers[index].passportInfo.countryOfIssue == null ? "Country of Issue" : travellers[index].passportInfo.countryOfIssue,
+              value: travellers[index].passportInfo.countryOfIssue == null ? "Country of Issue".tr : travellers[index].passportInfo.countryOfIssue,
               items: countryOfIssueList.map(
                 (selectedType) {
+                  print(selectedType.englishName);
                   return DropdownMenuItem(
                     child: new Text(
-                      selectedType.englishName!,
+                      selectedType.englishName! == "Country of Issue" ? ("Country of Issue".tr) : selectedType.englishName!,
                     ),
-                    value: selectedType.englishName,
+                    value: selectedType.englishName!,
                   );
                 },
               ).toList(),
@@ -446,7 +456,7 @@ class PassportStepController extends MainController {
     );
   }
 
-  Container genderDropDown(int index) {
+  Container genderDropDown(int index, Locale locale) {
     return Container(
       height: 40,
       width: 200,
@@ -461,20 +471,20 @@ class PassportStepController extends MainController {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 5),
             child: DropdownButton(
-              hint: Text(
-                'Gender',
-              ),
+              // hint: Text(
+              //   'Gender'.tr,
+              // ),
               onChanged: (newValue) {
-                setSelectedGender(index, newValue.toString());
+                setSelectedGender(index, getKeyFromLanguageWords(locale, newValue.toString()));
               },
-              value: travellers[index].passportInfo.gender == null ? "Gender" : travellers[index].passportInfo.gender,
+              value: travellers[index].passportInfo.gender == null ? (locale!.languageCode == 'en' ? "Gender" : "جنسیت") : travellers[index].passportInfo.gender!.tr,
               items: listGender.map(
                 (selectedType) {
                   return DropdownMenuItem(
                     child: new Text(
-                      selectedType,
+                      selectedType.tr,
                     ),
-                    value: selectedType,
+                    value: selectedType.tr,
                   );
                 },
               ).toList(),

@@ -116,7 +116,7 @@ class InfoCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                "ID: ",
+                "ID".tr + ": ",
                 style: TextStyle(
                   color: textColor,
                   fontSize: 13,

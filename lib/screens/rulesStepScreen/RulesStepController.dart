@@ -15,7 +15,7 @@ class RulesStepScreenController extends MainController {
   List rules = [
     {
       "imageUrl": "",
-      "title": "Magnetic Objects ",
+      "title": "Magnetic Objects",
       "content": "Magnets, Batteries and Magnetic Objects",
     },
     {
@@ -35,7 +35,7 @@ class RulesStepScreenController extends MainController {
     },
     {
       "imageUrl": "",
-      "title": "Types of Capsule ",
+      "title": "Types of Capsule",
       "content": "Gas Lighters, Oxygen and Any Type of Gas Cylinder",
     },
     {

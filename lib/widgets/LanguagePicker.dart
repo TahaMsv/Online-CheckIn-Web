@@ -1,0 +1,57 @@
+import 'package:flutter/material.dart';
+import 'package:onlinecheckin/global/MainController.dart';
+import 'CountryListPicker/country.dart';
+import 'CountryListPicker/country_picker_dropdown.dart';
+import 'CountryListPicker/utils/utils.dart';
+
+class LanguagePicker extends StatelessWidget {
+  const LanguagePicker({
+    Key? key,
+    required this.mainController, required this.width, this.initialValue = 'GB',
+  }) : super(key: key);
+
+  final MainController mainController;
+  final double width;
+  final String initialValue;
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+      width: width,
+      child: CountryPickerDropdown(
+        initialValue: initialValue,
+        itemBuilder: _buildDropdownItem,
+        // itemFilter:  ['AR', 'DE', 'GB', 'CN'].contains(c.isoCode),
+        // priorityList: [
+        //   CountryPickerUtils.getCountryByIsoCode('GB'),
+        //
+        // ],
+        sortComparator: (Country a, Country b) => a.isoCode.compareTo(b.isoCode),
+        onValuePicked: (Country country) {
+          // print("${country.name}");
+          switch (country.languageCode) {
+            case "en":
+              mainController.changeLanguage(Locale(country.languageCode, "US"));
+              break;
+            case "fa":
+              mainController.changeLanguage(Locale(country.languageCode, "IR"));
+              break;
+          }
+        },
+      ),
+    );
+  }
+}
+
+Widget _buildDropdownItem(Country country) => Container(
+  child: Row(
+    children: <Widget>[
+      CountryPickerUtils.getDefaultFlagImage(country),
+      SizedBox(
+        width: 8.0,
+      ),
+      Text("+${country.phoneCode}(${country.isoCode})"),
+    ],
+  ),
+);

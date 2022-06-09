@@ -89,7 +89,7 @@ class DangerousItem extends StatelessWidget {
             height: 10,
           ),
           Text(
-            value["title"]!,
+            value["title"]!.tr,
             style: TextStyle(
               fontSize: 15,
               color: Color(0xff424242),
@@ -101,7 +101,7 @@ class DangerousItem extends StatelessWidget {
             height: 10,
           ),
           Text(
-            value["content"]!,
+            value["content"]!.tr,
             overflow: TextOverflow.clip,
             style: TextStyle(
               fontSize: 14,

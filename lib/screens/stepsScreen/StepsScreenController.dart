@@ -37,7 +37,7 @@ class StepsScreenController extends MainController {
 
   RxList<Traveller> travellers = <Traveller>[].obs;
   RxInt whoseTurnToSelect = 0.obs;
-  RxInt _step = 0.obs;
+  RxInt _step = 3.obs;
 
   RxInt currButtonTextIndex = 0.obs;
   int nextButtonTextIndex = 0;
@@ -303,8 +303,8 @@ class StepsScreenController extends MainController {
           builder: (context, controller) {
             return CustomFlashBar(
               controller: controller,
-              contentMessage: "This passenger was added before",
-              titleMessage: "Duplicate traveller",
+              contentMessage: "This passenger was added before".tr,
+              titleMessage: "Duplicate traveller".tr,
             );
           },
         );

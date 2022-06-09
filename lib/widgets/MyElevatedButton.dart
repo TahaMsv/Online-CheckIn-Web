@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
 class MyElevatedButton extends StatelessWidget {
   const MyElevatedButton({
@@ -27,7 +28,7 @@ class MyElevatedButton extends StatelessWidget {
       width: width,
       child: ElevatedButton(
         onPressed: isDisable ? null : function,
-        child: Text(buttonText),
+        child: Text(buttonText.tr),
         style: isDisable
             ? ButtonStyle(
                 foregroundColor: MaterialStateProperty.all(fgColor.withOpacity(0.2)),

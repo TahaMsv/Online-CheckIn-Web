@@ -35,8 +35,8 @@ class EnterScreenController extends MainController {
     //     builder: (context, controller) {
     //       return CustomFlashBar(
     //         controller: controller,
-    //         contentMessage: "Booking reference name can not be empty",
-    //         titleMessage: "Error",
+    //         contentMessage: "Booking reference name can not be empty".tr,
+    //         titleMessage: "Error".tr,
     //       );
     //     },
     //   );
@@ -51,8 +51,8 @@ class EnterScreenController extends MainController {
     //     builder: (context, controller) {
     //       return CustomFlashBar(
     //         controller: controller,
-    //         contentMessage: "LastName can not be empty",
-    //         titleMessage: "Error",
+    //         contentMessage: "LastName can not be empty".tr,
+    //         titleMessage: "Error".tr,
     //       );
     //     },
     //   );
@@ -70,8 +70,8 @@ class EnterScreenController extends MainController {
   }
 
   Future<bool> loginValidation() async {
-    String lastName = lastNameC.text.trim();
-    String bookingRefName =  bookingRefNameC.text.trim();
+    String lastName = "test"; //lastNameC.text.trim();
+    String bookingRefName = "9999999999"; // bookingRefNameC.text.trim();
     print(lastName);
     print(bookingRefName);
     if (!model.requesting) {
@@ -110,8 +110,8 @@ class EnterScreenController extends MainController {
       builder: (context, controller) {
         return CustomFlashBar(
           controller: controller,
-          contentMessage: "Wrong LastName or Booking reference name",
-          titleMessage: "Error",
+          contentMessage: "Wrong LastName or Booking reference name".tr,
+          titleMessage: "Error".tr,
         );
       },
     );

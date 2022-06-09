@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:onlinecheckin/widgets/LanguagePicker.dart';
 import '../../widgets/UserTextInput.dart';
 import '../../widgets/CountryListPicker/country.dart';
 import '../../widgets/CountryListPicker/country_picker_dropdown.dart';
@@ -132,7 +133,10 @@ class CheckInForm extends StatelessWidget {
       child: Column(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          LanguagePicker(myEnterScreenController: myEnterScreenController),
+          LanguagePicker(
+            mainController: myEnterScreenController,
+            width: double.infinity,
+          ),
           Divider(),
           Expanded(
             child: Padding(
@@ -225,43 +229,6 @@ class Divider extends StatelessWidget {
   }
 }
 
-class LanguagePicker extends StatelessWidget {
-  const LanguagePicker({
-    Key? key,
-    required this.myEnterScreenController,
-  }) : super(key: key);
-
-  final EnterScreenController myEnterScreenController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: CountryPickerDropdown(
-        initialValue: 'GB',
-        itemBuilder: _buildDropdownItem,
-        // itemFilter:  ['AR', 'DE', 'GB', 'CN'].contains(c.isoCode),
-        // priorityList: [
-        //   CountryPickerUtils.getCountryByIsoCode('GB'),
-        //
-        // ],
-        sortComparator: (Country a, Country b) => a.isoCode.compareTo(b.isoCode),
-        onValuePicked: (Country country) {
-          // print("${country.name}");
-          switch (country.languageCode) {
-            case "en":
-              myEnterScreenController.changeLanguage(Locale(country.languageCode, "US"));
-              break;
-            case "fa":
-              myEnterScreenController.changeLanguage(Locale(country.languageCode, "IR"));
-              break;
-          }
-        },
-      ),
-    );
-  }
-}
-
 class CheckInButton extends StatelessWidget {
   const CheckInButton({
     Key? key,
@@ -330,18 +297,6 @@ class CopyRightText extends StatelessWidget {
     );
   }
 }
-
-Widget _buildDropdownItem(Country country) => Container(
-      child: Row(
-        children: <Widget>[
-          CountryPickerUtils.getDefaultFlagImage(country),
-          SizedBox(
-            width: 8.0,
-          ),
-          Text("+${country.phoneCode}(${country.isoCode})"),
-        ],
-      ),
-    );
 
 class BackgroundImage extends StatelessWidget {
   const BackgroundImage({
@@ -508,7 +463,7 @@ class PrevButton extends StatelessWidget {
           ],
         ),
       ),
-      margin:languageCode == "en" ? EdgeInsets.only(right: 85):EdgeInsets.only(left: 85),
+      margin: languageCode == "en" ? EdgeInsets.only(right: 85) : EdgeInsets.only(left: 85),
     );
   }
 }
