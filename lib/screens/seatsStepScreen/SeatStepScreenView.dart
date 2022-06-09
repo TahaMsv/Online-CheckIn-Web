@@ -21,7 +21,7 @@ class SeatsStepView extends StatelessWidget {
     // double height = Get.height;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    double planeBodyHeight =mySeatsStepController.calculatePlaneBodyHeight();
+    double planeBodyHeight = mySeatsStepController.calculatePlaneBodyHeight();
     double planeBodyLength = mySeatsStepController.calculatePlaneBodyLength();
     return Scaffold(
       backgroundColor: Colors.white,
@@ -37,11 +37,13 @@ class SeatsStepView extends StatelessWidget {
                 Stack(
                   children: [
                     PlaneHead(
-                      height:planeBodyHeight ,
+                      height: planeBodyHeight,
                     ),
-                    PlaneWings( planeBodyLength: planeBodyLength,),
+                    PlaneWings(
+                      planeBodyLength: planeBodyLength,
+                    ),
                     PlaneTail(
-                      height:planeBodyHeight + 85,
+                      height: planeBodyHeight + 85,
                       margin: planeBodyLength,
                     ),
                     PlaneBody(
@@ -67,6 +69,7 @@ class PlaneBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String languageCode = Get.locale!.languageCode;
     return Center(
       child: Container(
         height: mySeatsStepController.calculatePlaneBodyHeight() + 20,
@@ -76,7 +79,7 @@ class PlaneBody extends StatelessWidget {
               top: 10,
               child: Container(
                 height: mySeatsStepController.calculatePlaneBodyHeight(),
-                margin: EdgeInsets.only(left: 395),
+                margin: languageCode == "en" ? EdgeInsets.only(left: 395) : EdgeInsets.only(right: 395),
                 width: mySeatsStepController.calculatePlaneBodyLength(),
                 decoration: BoxDecoration(
                   color: Color(0xff5d5d5d),
@@ -88,7 +91,7 @@ class PlaneBody extends StatelessWidget {
             ),
             Container(
               height: mySeatsStepController.calculatePlaneBodyHeight() + 20,
-              margin: EdgeInsets.only(left: 395),
+              margin: languageCode == "en" ? EdgeInsets.only(left: 395) : EdgeInsets.only(right: 395),
               width: mySeatsStepController.calculatePlaneBodyLength(),
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: ListView.builder(
@@ -142,7 +145,7 @@ class CabinWidget extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 40),
                 child: Text(
-                  cabin.cabinTitle,
+                  cabin.cabinTitle.tr,
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
                 decoration: BoxDecoration(
@@ -169,8 +172,8 @@ class CabinWidget extends StatelessWidget {
                     double cabinRatio = (cabinTitle == "First Class".tr
                         ? mySeatsStepController.firstClassCabinsRatio
                         : cabinTitle == "Business".tr
-                        ? mySeatsStepController.businessCabinsRatio
-                        : 1.0);
+                            ? mySeatsStepController.businessCabinsRatio
+                            : 1.0);
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -433,13 +436,9 @@ class _SeatWidgetState extends State<SeatWidget> {
           margin: EdgeInsets.symmetric(vertical: 2),
           decoration: BoxDecoration(
             color: color,
-              border:widget.inExitDoorLIne && hasShadow? Border.all(
-                color: Colors.red,
-                width: 2
-              ) : null,
+            border: widget.inExitDoorLIne && hasShadow ? Border.all(color: Colors.red, width: 2) : null,
             borderRadius: BorderRadius.all(
               Radius.circular(10),
-
             ),
           ),
           child: (() {
@@ -509,16 +508,21 @@ class PlaneHead extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String languageCode = Get.locale!.languageCode;
     return Center(
       child: Container(
         height: height,
         width: 390,
-        child: Image.asset(
-          "assets/images/Airplane Head.png",
-          fit: BoxFit.fill,
-          // height: 350,
+        child: RotationTransition(
+          turns: languageCode == "en" ? AlwaysStoppedAnimation(0 / 360) : AlwaysStoppedAnimation(180 / 360),
+          child: Image.asset(
+            "assets/images/Airplane Head.png",
+            fit: BoxFit.fill,
+            // height: 350,
+          ),
         ),
-        margin: EdgeInsets.only(left: 20),
+
+        margin: languageCode == "en" ? EdgeInsets.only(left: 20) : EdgeInsets.only(right: 20),
         // width: 400,
       ),
     );
@@ -537,14 +541,18 @@ class PlaneTail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String languageCode = Get.locale!.languageCode;
     return Center(
       child: Container(
-        margin: EdgeInsets.only(left: margin + 50),
+        margin: languageCode == "en" ? EdgeInsets.only(left: margin + 50) : EdgeInsets.only(right: margin + 50),
         // width: 2400,
         height: height,
-        child: Image.asset(
-          "assets/images/Edited-Tail.png",
-          fit: BoxFit.fill,
+        child: RotationTransition(
+          turns: languageCode == "en" ? AlwaysStoppedAnimation(0 / 360) : AlwaysStoppedAnimation(180 / 360),
+          child: Image.asset(
+            "assets/images/Edited-Tail.png",
+            fit: BoxFit.fill,
+          ),
         ),
       ),
     );
@@ -611,31 +619,41 @@ class CheckedInSeat extends StatelessWidget {
 
 class PlaneWings extends StatelessWidget {
   const PlaneWings({
-    Key? key, required this.planeBodyLength,
+    Key? key,
+    required this.planeBodyLength,
   }) : super(key: key);
 
   final double planeBodyLength;
 
   @override
   Widget build(BuildContext context) {
+    String languageCode = Get.locale!.languageCode;
     return Container(
-      margin: EdgeInsets.only(left:400 + planeBodyLength/2),
+      margin: languageCode == "en" ? EdgeInsets.only(left: 400 + planeBodyLength / 2) : EdgeInsets.only(right: 400 + planeBodyLength / 2),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            child: Image.asset(
-              "assets/images/Up Wing.png",
-              fit: BoxFit.fill,
-              // height: 350,
+            child: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(math.pi),
+              child: Image.asset(
+                "assets/images/Up Wing.png",
+                fit: BoxFit.fill,
+                // height: 350,
+              ),
             ),
             width: 400,
           ),
           Container(
-            child: Image.asset(
-              "assets/images/Down Wing.png",
-              fit: BoxFit.fill,
-              // height: 350,
+            child: Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.rotationY(math.pi),
+              child: Image.asset(
+                "assets/images/Down Wing.png",
+                fit: BoxFit.fill,
+                // height: 350,
+              ),
             ),
             width: 400,
           ),

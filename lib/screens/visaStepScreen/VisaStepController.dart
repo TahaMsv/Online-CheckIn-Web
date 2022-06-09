@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:onlinecheckin/utility/Constants.dart';
 import '../../screens/passportStepScreen/PassportStepController.dart';
 import '../../utility/DataProvider.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
@@ -104,7 +105,7 @@ class VisaStepController extends MainController {
 
   //////////////////////////////
 
-  List<VisaType> listType = [new VisaType(id: -1, shortName: "", name: "", fullName: "Type")];
+  List<VisaType> listType = [new VisaType(id: -1, shortName: "", name: "", fullName: "Type".tr)];
 
   // final RxString selectedType = "Type".obs;
   void setSelected(int index, String value) {
@@ -116,7 +117,7 @@ class VisaStepController extends MainController {
   //////////////////////////////
 
   List<Country> listIssuePlace = [
-    new Country(worldAreaCode: null, currencyId: null, englishName: "Place of issue", name: null, hasOnHoldBooking: null, regionId: null, code3: null, isDisabled: null, id: null)
+    new Country(worldAreaCode: null, currencyId: null, englishName: "Place of issue".tr, name: null, hasOnHoldBooking: null, regionId: null, code3: null, isDisabled: null, id: null)
   ];
 
   // final RxString selectedPlace = "Place of issue".obs;
@@ -126,9 +127,16 @@ class VisaStepController extends MainController {
     travellers.refresh();
   }
 
+  String getKeyFromLanguageWords(Locale locale, String value) {
+    String languageKey = locale.languageCode + "_" + locale.countryCode.toString();
+    var map = TranslatedWords().keys[languageKey];
+    String key = map!.keys.firstWhere((k) => map[k] == value, orElse: () => "");
+    return key == "" ? value : key;
+  }
   //////////////////////////////
 
   void showDOCOPopup(int index) {
+    Locale locale = Get.locale!;
     Get.defaultDialog(
       title: "",
       contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
@@ -141,12 +149,12 @@ class VisaStepController extends MainController {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            StepsScreenTitle(title: "Passport / Visa Details - Jack Taylor", description: ""),
+            StepsScreenTitle(title: "Passport / Visa Details".tr, description: ""),
             SizedBox(
               height: 20,
             ),
             Text(
-              "A valid visa is required for entry. please enter here the information about your visa you want to present at your final destination",
+              "A valid visa is required for entry. please enter here the information about your visa you want to present at your final destination".tr,
               overflow: TextOverflow.clip,
               style: TextStyle(color: Color(0xff959595), fontSize: 12),
             ),
@@ -155,7 +163,7 @@ class VisaStepController extends MainController {
             ),
             Row(
               children: [
-                TypeDropDown(index),
+                TypeDropDown(index, locale),
                 SizedBox(
                   width: 20,
                 ),
@@ -167,13 +175,13 @@ class VisaStepController extends MainController {
             ),
             Row(
               children: [
-                placeOfIssueDropDown(index),
+                placeOfIssueDropDown(index,locale),
                 SizedBox(
                   width: 20,
                 ),
                 Obx(
                   () => SelectingDateWidget(
-                    hint: "Issue Date",
+                    hint: "Issue Date".tr,
                     index: index,
                     updateDate: selectEntryDate,
                     currDateTime: travellers[index].visaInfo.issueDate == null ? DateTime.now() : travellers[index].visaInfo.issueDate!,
@@ -186,7 +194,7 @@ class VisaStepController extends MainController {
                 Expanded(
                   child: UserTextInput(
                     controller: destinationCs[index],
-                    hint: "Destination",
+                    hint: "Destination".tr,
                     errorText: "",
                     isEmpty: false,
                   ),
@@ -205,7 +213,7 @@ class VisaStepController extends MainController {
     );
   }
 
-  Container placeOfIssueDropDown(int index) {
+  Container placeOfIssueDropDown(int index, Locale locale) {
     return Container(
       height: 40,
       width: 200,
@@ -220,19 +228,19 @@ class VisaStepController extends MainController {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 5),
             child: DropdownButton(
-              hint: Text(
-                'Place of Issue',
-              ),
+              // hint: Text(
+              //   'Place of Issue',
+              // ),
               onChanged: (newValue) {
-                setSelectedPlace(index, newValue.toString());
+                setSelectedPlace(index, getKeyFromLanguageWords(locale, newValue.toString()));
               },
-              value: travellers[index].visaInfo.placeOfIssue == null ? "Place of issue" : travellers[index].visaInfo.placeOfIssue,
+              value: travellers[index].visaInfo.placeOfIssue == null ? "Place of issue".tr : travellers[index].visaInfo.placeOfIssue,
               items: listIssuePlace.map(
                 (selectedType) {
                   travellers[index].visaInfo.placeOfIssueID = selectedType.id;
                   return DropdownMenuItem(
                     child: new Text(
-                      selectedType.englishName!,
+                      selectedType.englishName! == "Place of issue" ? ("Place of issue".tr) : selectedType.englishName!,
                     ),
                     value: selectedType.englishName,
                   );
@@ -245,7 +253,7 @@ class VisaStepController extends MainController {
     );
   }
 
-  Container TypeDropDown(int index) {
+  Container TypeDropDown(int index, Locale locale) {
     return Container(
       height: 40,
       width: 200,
@@ -260,18 +268,18 @@ class VisaStepController extends MainController {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 5),
             child: DropdownButton(
-              hint: Text(
-                'Type',
-              ),
+              // hint: Text(
+              //   'Type',
+              // ),
               onChanged: (newValue) {
-                setSelected(index, newValue.toString());
+                setSelected(index, getKeyFromLanguageWords(locale, newValue.toString()));
               },
-              value: travellers[index].visaInfo.type == null ? "Type" : travellers[index].visaInfo.type,
+              value: travellers[index].visaInfo.type == null ? "Type".tr : travellers[index].visaInfo.type,
               items: listType.map(
                 (selectedType) {
                   return DropdownMenuItem(
                     child: Text(
-                      selectedType.fullName,
+                      selectedType.fullName! == "Type" ? ("Type".tr) : selectedType.fullName!,
                     ),
                     value: selectedType.fullName,
                   );
@@ -352,7 +360,7 @@ class SubmitButton extends StatelessWidget {
           child: MyElevatedButton(
             height: 50,
             width: 175,
-            buttonText: "Submit",
+            buttonText: "Submit".tr,
             bgColor: Colors.white,
             fgColor: Color(0xff4d6ff8),
             function: () {

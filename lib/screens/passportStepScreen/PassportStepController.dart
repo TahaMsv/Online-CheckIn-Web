@@ -440,7 +440,6 @@ class PassportStepController extends MainController {
               value: travellers[index].passportInfo.countryOfIssue == null ? "Country of Issue".tr : travellers[index].passportInfo.countryOfIssue,
               items: countryOfIssueList.map(
                 (selectedType) {
-                  print(selectedType.englishName);
                   return DropdownMenuItem(
                     child: new Text(
                       selectedType.englishName! == "Country of Issue" ? ("Country of Issue".tr) : selectedType.englishName!,

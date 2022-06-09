@@ -79,6 +79,7 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
 
   @override
   Widget build(BuildContext context) {
+    String languageCode = Get.locale!.languageCode;
     return Expanded(
       child: Container(
         child: Column(
@@ -109,10 +110,16 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                         rightIndex--;
                       }
                     },
-                    icon: Icon(
-                      MenuIcons.iconLeftArrow,
-                      size: 35,
+
+                    icon:RotationTransition(
+                      turns: languageCode == "en" ? AlwaysStoppedAnimation(0 / 360) : AlwaysStoppedAnimation(180 / 360),
+                      child: Icon(
+                        MenuIcons.iconLeftArrow,
+                        size: 35,
+                      ),
                     ),
+
+
                   ),
                   SizedBox(
                     width: 10,
@@ -151,10 +158,15 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                         rightIndex++;
                       }
                     },
-                    icon: Icon(
-                      MenuIcons.iconRightArrow,
-                      size: 35,
+                    icon:RotationTransition(
+                      turns: languageCode == "en" ? AlwaysStoppedAnimation(0 / 360) : AlwaysStoppedAnimation(180 / 360),
+                      child: Icon(
+                        MenuIcons.iconRightArrow,
+                        size: 35,
+                      ),
                     ),
+
+
                   ),
                 ],
               ),

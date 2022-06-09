@@ -165,6 +165,7 @@ class TranslatedWords extends Translations {
               "The Delta CareStandard℠ focuses on creating a safer experience for everyone. We are complying with Federal regulations that require face masks to be worn at all times and your aircraft will be cleaned before every flight.",
           "First Class": "First Class",
           "Business": "Business",
+          "Economy":"Economy",
           "HorizontalCode": "HorizontalCode",
           "Exit": "Exit",
           "All upgrades are non-refundable": "All upgrades are non-refundable",
@@ -224,6 +225,11 @@ class TranslatedWords extends Translations {
           "Entry Date": "Entry Date",
           "Date of Birth": "Date of Birth",
           'Type': 'Type',
+          "Place of issue":"Place of issue",
+          "A valid visa is required for entry. please enter here the information about your visa you want to present at your final destination":"A valid visa is required for entry. please enter here the information about your visa you want to present at your final destination",
+          "Issue Date":"Issue Date",
+          "Destination":"Destination",
+
         },
         'fa_IR': {
           'Last Name': 'نام خانوادگی',
@@ -296,11 +302,12 @@ class TranslatedWords extends Translations {
               "Delta CareStandard℠ بر ایجاد تجربه ایمن تر برای همه تمرکز می کند. ما از قوانین فدرال پیروی می کنیم که ماسک صورت را باید همیشه پوشیده باشد و هواپیمای شما قبل از هر پرواز تمیز می شود.",
           "First Class": "فرست کلاس",
           "Business": "بیزینس",
+          "Economy":"اکونومی",
           "Exit": "خروج",
           "All upgrades are non-refundable": "همه ارتقاءها غیر قابل استرداد هستند",
           "Wines & Drinks": "شراب ها و نوشیدنی ها",
           "Starts from": "شروع از",
-          "Add": "اضافه کردن",
+          "Add": "افزودن",
           "Entertainment": "سرگرمی",
           "No need to add visa": "نیازی به اضافه کردن ویزا نیست",
           "Enter visa data (DOCO) for all the passengers.": "اطلاعات ویزا (DOCO) را برای همه مسافران وارد کنید.",
@@ -354,6 +361,11 @@ class TranslatedWords extends Translations {
           "Entry Date": "تاریخ ورود",
           "Date of Birth": "تاریخ تولد",
           'Type': "نوع",
+          "Place of issue":"محل صدور",
+          "A valid visa is required for entry. please enter here the information about your visa you want to present at your final destination":"ویزای معتبر برای ورود لازم است. لطفاً اطلاعات مربوط به ویزای خود را که می خواهید در مقصد نهایی ارائه دهید را در اینجا وارد کنید.",
+          "Issue Date":"تاریخ صدور",
+          "Destination":"مقصد",
+
         },
       };
 }
