@@ -229,6 +229,9 @@ class TranslatedWords extends Translations {
           "A valid visa is required for entry. please enter here the information about your visa you want to present at your final destination":"A valid visa is required for entry. please enter here the information about your visa you want to present at your final destination",
           "Issue Date":"Issue Date",
           "Destination":"Destination",
+          "Seats price":"Seats price",
+          "price":"price",
+
 
         },
         'fa_IR': {
@@ -257,7 +260,7 @@ class TranslatedWords extends Translations {
           "Payment": "پرداخت",
           "Receipt": "اعلام وصول",
           "Download": "دانلود",
-          "Print": "Print",
+          "Print": "چاپ",
           "Sent to Mobile": "ارسال به موبایل",
           "Seat": "صندلی",
           "Add Travellers": "مسافران را اضافه کنید",
@@ -365,6 +368,8 @@ class TranslatedWords extends Translations {
           "A valid visa is required for entry. please enter here the information about your visa you want to present at your final destination":"ویزای معتبر برای ورود لازم است. لطفاً اطلاعات مربوط به ویزای خود را که می خواهید در مقصد نهایی ارائه دهید را در اینجا وارد کنید.",
           "Issue Date":"تاریخ صدور",
           "Destination":"مقصد",
+          "Seats price":"قیمت صندلی",
+          "price":"قیمت",
 
         },
       };

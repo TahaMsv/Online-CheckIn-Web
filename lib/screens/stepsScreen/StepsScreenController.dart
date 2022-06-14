@@ -26,8 +26,8 @@ class StepsScreenController extends MainController {
   }
 
   Welcome? _welcome;
-  int numOFSteps = 9;
 
+  String language = Get.locale!.languageCode;
   RxBool isDocoNecessary = false.obs;
   RxBool isDocsNecessary = false.obs;
   RxBool isAddingBoxOpen = false.obs;
@@ -37,7 +37,8 @@ class StepsScreenController extends MainController {
 
   RxList<Traveller> travellers = <Traveller>[].obs;
   RxInt whoseTurnToSelect = 0.obs;
-  RxInt _step = 6.obs;
+
+  RxInt _step = 0.obs;
 
   RxInt currButtonTextIndex = 0.obs;
   int nextButtonTextIndex = 0;
@@ -55,7 +56,7 @@ class StepsScreenController extends MainController {
     if (step == 3 && newValue) {
       currButtonTextIndex.value = 3;
       setNextButtonIndex(3);
-    }else if (step == 3 && !newValue) {
+    } else if (step == 3 && !newValue) {
       currButtonTextIndex.value = 4;
       setNextButtonIndex(4);
     }
@@ -63,7 +64,6 @@ class StepsScreenController extends MainController {
 
   void setDocsNecessary(bool newValue) {
     isDocsNecessary.value = newValue;
-
   }
 
   bool get isNextButtonEnable => _isNextButtonEnable.value;
@@ -85,15 +85,10 @@ class StepsScreenController extends MainController {
   }
 
   bool isStepNeeded(int index) {
-    if (index == 3 && !isDocsNecessary.value) {
-      return false;
-    }
-    if (index == 4 && !isDocsNecessary.value) {
-      return false;
-    }
-    if (index == 4 && !isDocoNecessary.value) {
-      return false;
-    }
+    if (index == 3 && !isDocsNecessary.value) return false;
+    if (index == 4 && !isDocsNecessary.value) return false;
+    if (index == 4 && !isDocoNecessary.value) return false;
+    if (index == 5 && language == "fa") return false;
     return true;
   }
 
@@ -138,7 +133,6 @@ class StepsScreenController extends MainController {
       return;
     } else if (step == 7) {
       PaymentStepController paymentStepController = Get.put(PaymentStepController(model));
-      // paymentStepController.finalReserve();
     }
     setNextButton(true);
     // else if (step == 8) {}
@@ -147,19 +141,18 @@ class StepsScreenController extends MainController {
   void prepareNextButtonText() {
     if (step == 1 && !isDocsNecessary.value) {
       setNextButtonIndex(4);
-      return;
+
     }
-    if (step == 2) {
-      // if () {
-      //   setNextButtonIndex(nextButtonTextIndex + 1);
-      //   return;
-      // }
+    else if (step == 2) {
       if (isDocsNecessary.value && !isDocoNecessary.value) {
         setNextButtonIndex(nextButtonTextIndex + 2);
         return;
       }
     }
     setNextButtonIndex(nextButtonTextIndex + 1);
+    if(nextButtonTextIndex == 4 && language=='fa'){
+      setNextButtonIndex(nextButtonTextIndex + 1);
+    }
   }
 
   setNextButtonIndex(int newIndex) {
@@ -180,6 +173,10 @@ class StepsScreenController extends MainController {
   void preparePreviousButtonText() {
     // int currStep = step;
     if (step == 2) {
+      if (language=="fa") {
+        nextButtonTextIndex -= 4;
+        return;
+      }
       if (!isDocsNecessary.value) {
         nextButtonTextIndex -= 3;
         return;
@@ -224,10 +221,9 @@ class StepsScreenController extends MainController {
 
   void increaseStep() async {
     prepareNextButtonText();
-    int currStep = step;
     bool isSuccessful = true;
 
-    if (currStep < 8) {
+    if (step < 8) {
       if (step == 6) {
         SeatsStepController seatsStepController = Get.put(SeatsStepController(model));
         if (!model.requesting) {
@@ -240,28 +236,31 @@ class StepsScreenController extends MainController {
         }
       }
       if (isSuccessful) {
-
-        if (step == 2 && !isDocsNecessary.value) {
-          setStep(currStep + 3);
+        if(step == 2 && language == "fa"){
+          setStep(step + 4);
+          currButtonTextIndex.value = nextButtonTextIndex;
+          return;
+        }
+        else if (step == 2 && !isDocsNecessary.value) {
+          setStep(step + 3);
           currButtonTextIndex.value = nextButtonTextIndex;
           return;
         }
         if (step == 3) {
           if (!isDocoNecessary.value) {
-            setStep(currStep + 2);
+            setStep(step + 2);
             currButtonTextIndex.value = nextButtonTextIndex;
 
             return;
           }
         }
-        setStep(currStep + 1);
+        setStep(step + 1);
         currButtonTextIndex.value = nextButtonTextIndex;
       }
     }
   }
 
   void decreaseStep() async {
-
     int currStep = step;
     if (currStep > 0) {
       preparePreviousButtonText();
@@ -276,6 +275,11 @@ class StepsScreenController extends MainController {
           currButtonTextIndex.value = nextButtonTextIndex;
           return;
         }
+      }
+      if(step == 6 && language == "fa"){
+        setStep(currStep - 4);
+        currButtonTextIndex.value = nextButtonTextIndex;
+        return;
       }
       setStep(currStep - 1);
       currButtonTextIndex.value = nextButtonTextIndex;
@@ -314,10 +318,9 @@ class StepsScreenController extends MainController {
     Traveller traveller = new Traveller(token: token, ticketNumber: ticketNumber, seatId: "--", welcome: _welcome!);
     traveller.setPassportInfo(new PassportInfo());
     traveller.setVisaInfo(new VisaInfo());
-    setDocsNecessary(true);
-    // welcome!.body.flight[0].checkDocs == 1 ? setDocsNecessary(true) : setDocsNecessary(false);
+    // setDocsNecessary(true);
+    welcome!.body.flight[0].checkDocs == 1 && Get.locale!.languageCode == "en" ? setDocsNecessary(true) : setDocsNecessary(false);
     travellers.add(traveller);
-
     updateIsNextButtonDisable();
     changeTurnToSelect();
   }
@@ -410,7 +413,7 @@ class StepsScreenController extends MainController {
   @override
   void onInit() {
     print("StepsScreenController Init");
-    // initializeApp();
+
     super.onInit();
   }
 

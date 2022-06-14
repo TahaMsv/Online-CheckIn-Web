@@ -114,7 +114,7 @@ class TaxesAndFees extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      myPaymentStepController.taxes[index]["title"]!,
+                      (myPaymentStepController.taxes[index]["title"]! as String).tr,
                       style: TextStyle(color: Color(0xff424242), fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                     Text(

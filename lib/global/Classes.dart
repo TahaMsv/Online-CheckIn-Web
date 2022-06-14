@@ -812,5 +812,6 @@ class Language {
 
     ];
   }
-
 }
+
+enum STEP { ADD_TRAVELLER, PASSPORT, VISA, PAYMENT, SEAT, RECEIPT, RULES, SAFETY, UPGRADES }
