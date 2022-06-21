@@ -103,29 +103,20 @@ class VisaStepController extends MainController {
     travellers.refresh();
   }
 
-  //////////////////////////////
-
-  List<VisaType> listType = [new VisaType(id: -1, shortName: "", name: "", fullName: "Type".tr)];
-
-  // final RxString selectedType = "Type".obs;
-  void setSelected(int index, String value) {
-    travellers[index].visaInfo.type = value;
+  void refreshList(int index) {
     updateIsCompleted(index);
     travellers.refresh();
   }
+
+  //////////////////////////////
+
+  List<VisaType> listType = [new VisaType(id: -1, shortName: "", name: "", fullName: "Type")];
 
   //////////////////////////////
 
   List<Country> listIssuePlace = [
-    new Country(worldAreaCode: null, currencyId: null, englishName: "Place of issue".tr, name: null, hasOnHoldBooking: null, regionId: null, code3: null, isDisabled: null, id: null)
+    new Country(worldAreaCode: null, currencyId: null, englishName: "Place of issue", name: null, hasOnHoldBooking: null, regionId: null, code3: null, isDisabled: null, id: null)
   ];
-
-  // final RxString selectedPlace = "Place of issue".obs;
-  void setSelectedPlace(int index, String value) {
-    travellers[index].visaInfo.placeOfIssue = value;
-    updateIsCompleted(index);
-    travellers.refresh();
-  }
 
   String getKeyFromLanguageWords(Locale locale, String value) {
     String languageKey = locale.languageCode + "_" + locale.countryCode.toString();
@@ -133,6 +124,7 @@ class VisaStepController extends MainController {
     String key = map!.keys.firstWhere((k) => map[k] == value, orElse: () => "");
     return key == "" ? value : key;
   }
+
   //////////////////////////////
 
   void showDOCOPopup(int index) {
@@ -175,7 +167,7 @@ class VisaStepController extends MainController {
             ),
             Row(
               children: [
-                placeOfIssueDropDown(index,locale),
+                placeOfIssueDropDown(index, locale),
                 SizedBox(
                   width: 20,
                 ),
@@ -232,9 +224,11 @@ class VisaStepController extends MainController {
               //   'Place of Issue',
               // ),
               onChanged: (newValue) {
-                setSelectedPlace(index, getKeyFromLanguageWords(locale, newValue.toString()));
+                travellers[index].visaInfo.placeOfIssue = getKeyFromLanguageWords(locale, newValue.toString());
+                refreshList(index);
               },
-              value: travellers[index].visaInfo.placeOfIssue == null ? "Place of issue".tr : travellers[index].visaInfo.placeOfIssue,
+              value: travellers[index].visaInfo.placeOfIssue == null ||
+                  travellers[index].visaInfo.placeOfIssue ==  "Place of issue"  ? "Place of issue".tr : travellers[index].visaInfo.placeOfIssue,
               items: listIssuePlace.map(
                 (selectedType) {
                   travellers[index].visaInfo.placeOfIssueID = selectedType.id;
@@ -242,7 +236,7 @@ class VisaStepController extends MainController {
                     child: new Text(
                       selectedType.englishName! == "Place of issue" ? ("Place of issue".tr) : selectedType.englishName!,
                     ),
-                    value: selectedType.englishName,
+                    value:  selectedType.englishName! == "Place of issue" ? ("Place of issue".tr) : selectedType.englishName!,
                   );
                 },
               ).toList(),
@@ -272,16 +266,17 @@ class VisaStepController extends MainController {
               //   'Type',
               // ),
               onChanged: (newValue) {
-                setSelected(index, getKeyFromLanguageWords(locale, newValue.toString()));
+                travellers[index].visaInfo.type = getKeyFromLanguageWords(locale, newValue.toString());
+                refreshList(index);
               },
-              value: travellers[index].visaInfo.type == null ? "Type".tr : travellers[index].visaInfo.type,
+              value: travellers[index].visaInfo.type == null || travellers[index].visaInfo.type == "Type" ? "Type".tr : travellers[index].visaInfo.type,
               items: listType.map(
                 (selectedType) {
                   return DropdownMenuItem(
                     child: Text(
                       selectedType.fullName! == "Type" ? ("Type".tr) : selectedType.fullName!,
                     ),
-                    value: selectedType.fullName,
+                    value: selectedType.fullName! == "Type" ? ("Type".tr) : selectedType.fullName!,
                   );
                 },
               ).toList(),

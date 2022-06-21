@@ -209,10 +209,8 @@ class PassportStepController extends MainController {
 
   String getKeyFromLanguageWords(Locale locale, String value) {
     String languageKey = locale.languageCode + "_" + locale.countryCode.toString();
-    print("value: "+ value);
     var map = TranslatedWords().keys[languageKey];
     String key = map!.keys.firstWhere((k) => map[k] == value, orElse: () => "");
-    print("key: "+ key);
     return key == "" ? value : key;
   }
 
