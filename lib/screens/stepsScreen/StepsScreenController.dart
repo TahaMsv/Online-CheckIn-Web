@@ -26,6 +26,7 @@ class StepsScreenController extends MainController {
   }
 
   Welcome? _welcome;
+  String flightType = "i"; // d = Domestic , i = International
 
   String language = Get.locale!.languageCode;
   RxBool isDocoNecessary = false.obs;
@@ -88,7 +89,7 @@ class StepsScreenController extends MainController {
     if (index == 3 && !isDocsNecessary.value) return false;
     if (index == 4 && !isDocsNecessary.value) return false;
     if (index == 4 && !isDocoNecessary.value) return false;
-    if (index == 5 && language == "fa") return false;
+    if (index == 5 && flightType == "d") return false;
     return true;
   }
 
@@ -141,16 +142,15 @@ class StepsScreenController extends MainController {
   void prepareNextButtonText() {
     if (step == 1 && !isDocsNecessary.value) {
       setNextButtonIndex(4);
-
-    }
-    else if (step == 2) {
+      if (flightType == "i") return;
+    } else if (step == 2) {
       if (isDocsNecessary.value && !isDocoNecessary.value) {
         setNextButtonIndex(nextButtonTextIndex + 2);
         return;
       }
     }
     setNextButtonIndex(nextButtonTextIndex + 1);
-    if(nextButtonTextIndex == 4 && language=='fa'){
+    if (nextButtonTextIndex == 4 && flightType == "d") {
       setNextButtonIndex(nextButtonTextIndex + 1);
     }
   }
@@ -173,7 +173,7 @@ class StepsScreenController extends MainController {
   void preparePreviousButtonText() {
     // int currStep = step;
     if (step == 2) {
-      if (language=="fa") {
+      if (flightType == "d") {
         nextButtonTextIndex -= 4;
         return;
       }
@@ -236,12 +236,11 @@ class StepsScreenController extends MainController {
         }
       }
       if (isSuccessful) {
-        if(step == 2 && language == "fa"){
+        if (step == 2 && flightType == "d") {
           setStep(step + 4);
           currButtonTextIndex.value = nextButtonTextIndex;
           return;
-        }
-        else if (step == 2 && !isDocsNecessary.value) {
+        } else if (step == 2 && !isDocsNecessary.value) {
           setStep(step + 3);
           currButtonTextIndex.value = nextButtonTextIndex;
           return;
@@ -276,7 +275,7 @@ class StepsScreenController extends MainController {
           return;
         }
       }
-      if(step == 6 && language == "fa"){
+      if (step == 6 && flightType == "d") {
         setStep(currStep - 4);
         currButtonTextIndex.value = nextButtonTextIndex;
         return;
@@ -319,7 +318,8 @@ class StepsScreenController extends MainController {
     traveller.setPassportInfo(new PassportInfo());
     traveller.setVisaInfo(new VisaInfo());
     // setDocsNecessary(true);
-    welcome!.body.flight[0].checkDocs == 1 && Get.locale!.languageCode == "en" ? setDocsNecessary(true) : setDocsNecessary(false);
+    // welcome!.body.flight[0].checkDocs == 1 && flightType == "i" ? setDocsNecessary(true) : setDocsNecessary(false);
+    flightType == "i" ? setDocsNecessary(true) : setDocsNecessary(false);
     travellers.add(traveller);
     updateIsNextButtonDisable();
     changeTurnToSelect();

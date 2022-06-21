@@ -178,18 +178,11 @@ class PassportStepController extends MainController {
     new Country(worldAreaCode: null, currencyId: null, englishName: "Country of Issue", name: null, hasOnHoldBooking: null, regionId: null, code3: null, isDisabled: null, id: null)
   ];
 
-  void setSelectedCountryIssue(int index, String value) {
-    travellers[index].passportInfo.countryOfIssue = value;
-    updateIsCompleted(index);
-    travellers.refresh();
-  }
-
 /////////////////////////////////////////////
 
-  List<String> listGender = ["Gender".tr, "Male".tr, "Female".tr];
+  List<String> listGender = ["Gender", "Male", "Female"];
 
-  void setSelectedGender(int index, String value) {
-    travellers[index].passportInfo.gender = value;
+  void refreshList(int index) {
     updateIsCompleted(index);
     travellers.refresh();
   }
@@ -199,13 +192,6 @@ class PassportStepController extends MainController {
   List<Country> nationalitiesList = [
     new Country(worldAreaCode: null, currencyId: null, englishName: "Nationality", name: null, hasOnHoldBooking: null, regionId: null, code3: null, isDisabled: null, id: null)
   ];
-
-  void setSelectedNationality(int index, String value) {
-    travellers[index].passportInfo.nationality = value;
-    updateIsCompleted(index);
-    travellers.refresh();
-  }
-
 /////////////////////////////////////////////
 
   void selectDateOfBirth(int index, DateTime date) {
@@ -223,8 +209,10 @@ class PassportStepController extends MainController {
 
   String getKeyFromLanguageWords(Locale locale, String value) {
     String languageKey = locale.languageCode + "_" + locale.countryCode.toString();
+    print("value: "+ value);
     var map = TranslatedWords().keys[languageKey];
     String key = map!.keys.firstWhere((k) => map[k] == value, orElse: () => "");
+    print("key: "+ key);
     return key == "" ? value : key;
   }
 
@@ -352,20 +340,23 @@ class PassportStepController extends MainController {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 5),
             child: DropdownButton(
-              hint: Text(
-                'Type',
-              ),
+              // hint: Text(
+              //   'Type',
+              // ),
               onChanged: (newValue) {
-                setSelected(index, getKeyFromLanguageWords(locale, newValue.toString()));
+                travellers[index].passportInfo.passportType = getKeyFromLanguageWords(locale, newValue.toString());
+                refreshList(index);
               },
-              value: travellers[index].passportInfo.passportType == null ? "Passport Type".tr : travellers[index].passportInfo.passportType,
+              value: travellers[index].passportInfo.passportType == null ||
+                  travellers[index].passportInfo.passportType== "Passport Type" ? "Passport Type".tr : travellers[index].passportInfo.passportType,
               items: listPassportType.map(
                 (selectedType) {
                   return DropdownMenuItem(
                     child: Text(
-                      selectedType.fullName! == "Passport Type" ? ("Passport Type".tr) : selectedType.fullName!,
+                      selectedType.fullName! == "Passport Type" ? "Passport Type".tr : selectedType.fullName!,
+
                     ),
-                    value: selectedType.fullName,
+                    value: selectedType.fullName! == "Passport Type" ? "Passport Type".tr : selectedType.fullName!,
                   );
                 },
               ).toList(),
@@ -395,9 +386,11 @@ class PassportStepController extends MainController {
                 'Nationality',
               ),
               onChanged: (newValue) {
-                setSelectedNationality(index, getKeyFromLanguageWords(locale, newValue.toString()));
+                travellers[index].passportInfo.nationality = getKeyFromLanguageWords(locale, newValue.toString());
+                refreshList(index);
               },
-              value: travellers[index].passportInfo.nationality == null ? "Nationality".tr : travellers[index].passportInfo.nationality,
+              value: travellers[index].passportInfo.nationality == null ||
+                  travellers[index].passportInfo.nationality == "Nationality" ? "Nationality".tr : travellers[index].passportInfo.nationality,
               items: nationalitiesList.map(
                 (selectedType) {
                   travellers[index].passportInfo.nationalityID = selectedType.id;
@@ -405,7 +398,7 @@ class PassportStepController extends MainController {
                     child: new Text(
                       selectedType.englishName! == "Nationality" ? ("Nationality".tr) : selectedType.englishName!,
                     ),
-                    value: selectedType.englishName,
+                    value: selectedType.englishName! == "Nationality" ? ("Nationality".tr) : selectedType.englishName!,
                   );
                 },
               ).toList(),
@@ -427,7 +420,8 @@ class PassportStepController extends MainController {
         ),
       ),
       child: Obx(
-        () => DropdownButtonHideUnderline(
+        () =>
+            DropdownButtonHideUnderline(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 5),
             child: DropdownButton(
@@ -435,16 +429,18 @@ class PassportStepController extends MainController {
               //   'Country of Issue'.tr,
               // ),
               onChanged: (newValue) {
-                setSelectedCountryIssue(index, getKeyFromLanguageWords(locale, newValue.toString()));
+                travellers[index].passportInfo.countryOfIssue =  getKeyFromLanguageWords(locale, newValue.toString());
+                refreshList(index);
               },
-              value: travellers[index].passportInfo.countryOfIssue == null ? "Country of Issue".tr : travellers[index].passportInfo.countryOfIssue,
+              value: travellers[index].passportInfo.countryOfIssue == null ||
+                  travellers[index].passportInfo.countryOfIssue == "Country of Issue" ? "Country of Issue".tr : travellers[index].passportInfo.countryOfIssue,
               items: countryOfIssueList.map(
                 (selectedType) {
                   return DropdownMenuItem(
                     child: new Text(
                       selectedType.englishName! == "Country of Issue" ? ("Country of Issue".tr) : selectedType.englishName!,
                     ),
-                    value: selectedType.englishName!,
+                    value: selectedType.englishName! == "Country of Issue" ? ("Country of Issue".tr) : selectedType.englishName!,
                   );
                 },
               ).toList(),
@@ -474,16 +470,19 @@ class PassportStepController extends MainController {
               //   'Gender'.tr,
               // ),
               onChanged: (newValue) {
-                setSelectedGender(index, getKeyFromLanguageWords(locale, newValue.toString()));
+                travellers[index].passportInfo.gender =getKeyFromLanguageWords( locale, newValue.toString());
+                refreshList(index);
               },
-              value: travellers[index].passportInfo.gender == null ? (locale!.languageCode == 'en' ? "Gender" : "جنسیت") : travellers[index].passportInfo.gender!.tr,
+              value: travellers[index].passportInfo.gender == null ||
+                  travellers[index].passportInfo.gender == "Gender" ? "Gender".tr : travellers[index].passportInfo.gender!.tr,
               items: listGender.map(
                 (selectedType) {
                   return DropdownMenuItem(
                     child: new Text(
-                      selectedType.tr,
+                      selectedType.tr == "Gender" ? "Gender".tr : selectedType.tr,
+
                     ),
-                    value: selectedType.tr,
+                    value:  selectedType.tr == "Gender" ? "Gender".tr : selectedType.tr,
                   );
                 },
               ).toList(),
