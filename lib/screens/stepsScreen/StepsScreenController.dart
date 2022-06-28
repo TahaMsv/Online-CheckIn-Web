@@ -26,7 +26,7 @@ class StepsScreenController extends MainController {
   }
 
   Welcome? _welcome;
-  String flightType = "i"; // d = Domestic , i = International
+  String flightType = "d"; // d = Domestic , i = International
 
   String language = Get.locale!.languageCode;
   RxBool isDocoNecessary = false.obs;

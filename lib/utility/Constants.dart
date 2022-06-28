@@ -145,6 +145,7 @@ class TranslatedWords extends Translations {
           'pay': 'pay',
           "Unable to load boarding pass": "Unable to load boarding pass",
           "Finished!": "Finished!",
+          "Powder, Liquid and Sprays of Laboratory Products For Infectious Agents":"Powder, Liquid and Sprays of Laboratory Products For Infectious Agents",
           "You can see your check-in below, print it or download it or send it to your mobile": "You can see your check-in below, print it or download it or send it to your mobile",
           "Dangerous Goods": "Dangerous Goods",
           "Every items can become dangerous when transported by air. Example of dangerous goods are:": "Every items can become dangerous when transported by air. Example of dangerous goods are:",
@@ -231,7 +232,6 @@ class TranslatedWords extends Translations {
           "Destination":"Destination",
           "Seats price":"Seats price",
           "price":"price",
-
 
         },
         'fa_IR': {

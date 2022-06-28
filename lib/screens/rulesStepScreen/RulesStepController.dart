@@ -21,7 +21,7 @@ class RulesStepScreenController extends MainController {
     {
       "imageUrl": "",
       "title": "Type of Toxins",
-      "content": " Powder, Liquid and Sprays of Laboratory Products For Infectious Agents",
+      "content": "Powder, Liquid and Sprays of Laboratory Products For Infectious Agents",
     },
     {
       "imageUrl": "",
