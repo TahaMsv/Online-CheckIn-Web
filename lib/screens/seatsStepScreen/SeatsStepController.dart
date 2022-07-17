@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:onlinecheckin/global/Classes.dart';
+import 'package:onlinecheckin/screens/enterScreen/EnterScreenController.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
 import 'package:onlinecheckin/utility/DataProvider.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
@@ -15,7 +16,6 @@ class SeatsStepController extends MainController {
 
   SeatsStepController(this.model);
 
-  int seatPrices = 0;
   final double eachLineWidth = 35;
   final double seatWidth = 35;
   final double seatHeight = 35;
@@ -24,6 +24,7 @@ class SeatsStepController extends MainController {
   double firstClassCabinsRatio = 1.5;
   double businessCabinsRatio = 1.5;
 
+  int seatPrices = 0;
   final RxMap<String, String> seatsStatus = <String, String>{}.obs;
   final RxMap<String, int> seatsPrice = <String, int>{}.obs;
   final RxMap<String, String> selectedSeats = <String, String>{}.obs;
@@ -33,7 +34,7 @@ class SeatsStepController extends MainController {
   ///////////// new /////////////////
 
   void init() {
-    final myStepScreenController = StepsScreenController(model);
+    final myStepScreenController = Get.put(StepsScreenController(model));
     cabins = myStepScreenController.welcome!.body.seatmap.cabins;
     List<Seat> seats = myStepScreenController.welcome!.body.seats;
     for (int i = 0; i < seats.length; i++) {
@@ -55,6 +56,25 @@ class SeatsStepController extends MainController {
     }
   }
 
+  String convertMapToFormattedString(RxMap<String, String> map) {
+    List<String> keyValues = [];
+    map.forEach((k, v) => keyValues.add(k + "=>" + v));
+    String result = keyValues.join(",");
+    return result;
+  }
+
+  void convertFormattedStringToMap(RxMap<String, String> map, String? str) {
+    if (str != null) {
+      List<String> keyValues = str.split(",");
+      for (var i = 0; i < keyValues.length; ++i) {
+        String key = keyValues[i].split("=>")[0];
+        String value = keyValues[i].split("=>")[1];
+        map[key] = value;
+      }
+      map.refresh();
+    }
+  }
+
   int numberOfCabinCellsInLine(String cabinTitle) {
     Iterable<Cabin> targetCabins = cabins.where((element) => element.cabinTitle == cabinTitle);
     if (targetCabins.length != 0) {
@@ -64,7 +84,7 @@ class SeatsStepController extends MainController {
   }
 
   void updateSeatMap() {
-    final myStepScreenController = StepsScreenController(model);
+    final myStepScreenController = Get.put(StepsScreenController(model));
     List<Seat> seats = myStepScreenController.welcome!.body.seats;
     seats.forEach((seat) {
       String key = seat.letter + seat.line;
@@ -176,7 +196,6 @@ class SeatsStepController extends MainController {
       case 10:
         return 0;
       case 11:
-
         return height - 15;
       case 12:
         return height - 25;

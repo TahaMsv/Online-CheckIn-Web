@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:onlinecheckin/screens/enterScreen/EnterScreenController.dart';
 import 'package:onlinecheckin/screens/travellersStepScreen/NewTravellersStepScreen.dart';
 import 'package:onlinecheckin/screens/travellersStepScreen/TravellersStepController.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
@@ -37,7 +38,6 @@ class StepsScreenView extends StatelessWidget {
     MainModel model = context.watch<MainModel>();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: model.loading
           ? Center(
@@ -266,7 +266,7 @@ class TopOfPage extends StatelessWidget {
             LanguagePicker(
               mainController: stepsScreenController,
               width: 200,
-              initialValue: languageCode =='en' ? "GB" : "IR",
+              initialValue: languageCode == 'en' ? "GB" : "IR",
             ),
           ],
         ),
@@ -402,15 +402,14 @@ class PreviousButton extends StatelessWidget {
           children: [
             RotationTransition(
               turns: languageCode == "en" ? AlwaysStoppedAnimation(0 / 360) : AlwaysStoppedAnimation(180 / 360),
-              child:  Icon(
+              child: Icon(
                 MenuIcons.iconLeftArrow,
                 color: isDisable ? Color(0xff767676).withOpacity(0.5) : Color(0xff767676),
                 size: 14,
               ),
-            )
-           ,
+            ),
             Container(
-              margin:languageCode == "en" ? EdgeInsets.only(left: 4):EdgeInsets.only(right: 4),
+              margin: languageCode == "en" ? EdgeInsets.only(left: 4) : EdgeInsets.only(right: 4),
               child: Text(
                 "Previous".tr,
                 style: TextStyle(
@@ -460,7 +459,7 @@ class LeftSideOFPage extends StatelessWidget {
                   title: "Travellers".tr,
                   width: 190,
                 ),
-                if (myStepsScreenController.step == 6)
+                if (step == 6)
                   Container(
                     width: 112,
                     child: Row(
@@ -664,7 +663,7 @@ class TravellerItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding:languageCode == 'en' ? const EdgeInsets.only(left: 20.0) :const EdgeInsets.only(right: 20.0) ,
+                  padding: languageCode == 'en' ? const EdgeInsets.only(left: 20.0) : const EdgeInsets.only(right: 20.0),
                   child: Text(
                     myStepsScreenController.travellers[index].getFullNameWithGender(),
                     style: TextStyle(

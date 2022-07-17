@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:onlinecheckin/screens/enterScreen/EnterScreenController.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
 import '../../screens/passportStepScreen/PassportStepController.dart';
 import '../../utility/DataProvider.dart';
@@ -35,11 +36,12 @@ class VisaStepController extends MainController {
   void CheckDocoNecessity(Traveller traveller) async {
     if (travellers.contains(traveller)) return;
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
+    EnterScreenController enterScreenController = Get.put(EnterScreenController(model));
     String docsType = traveller.passportInfo.passportType ?? "";
     String docsCountry = traveller.passportInfo.countryOfIssue ?? "";
     String docsNationality = traveller.passportInfo.nationality ?? "";
-    String fromCityCode = stepsScreenController.welcome!.body.flight[0].fromCity ?? "";
-    String toCityCode = stepsScreenController.welcome!.body.flight[0].toCity ?? "";
+    String fromCityCode = stepsScreenController.welcome!.body.flight[0].fromCity;
+    String toCityCode = stepsScreenController.welcome!.body.flight[0].toCity;
     // print("DocsType" + docsType + "\nDocsCountry" + docsCountry + "\nDocsNationality" + docsNationality + "\nFromCityCode" + fromCityCode + "\nToCityCode" + toCityCode);
     if (!model.requesting) {
       model.setRequesting(true);
@@ -93,7 +95,7 @@ class VisaStepController extends MainController {
     updateDocuments();
     updateIsCompleted(index);
     travellers.refresh();
-    passportStepController.saveDocsDocoDoca(index);
+    // passportStepController.saveDocsDocoDoca(index);
     Get.back();
   }
 
@@ -227,8 +229,7 @@ class VisaStepController extends MainController {
                 travellers[index].visaInfo.placeOfIssue = getKeyFromLanguageWords(locale, newValue.toString());
                 refreshList(index);
               },
-              value: travellers[index].visaInfo.placeOfIssue == null ||
-                  travellers[index].visaInfo.placeOfIssue ==  "Place of issue"  ? "Place of issue".tr : travellers[index].visaInfo.placeOfIssue,
+              value: travellers[index].visaInfo.placeOfIssue == null || travellers[index].visaInfo.placeOfIssue == "Place of issue" ? "Place of issue".tr : travellers[index].visaInfo.placeOfIssue,
               items: listIssuePlace.map(
                 (selectedType) {
                   travellers[index].visaInfo.placeOfIssueID = selectedType.id;
@@ -236,7 +237,7 @@ class VisaStepController extends MainController {
                     child: new Text(
                       selectedType.englishName! == "Place of issue" ? ("Place of issue".tr) : selectedType.englishName!,
                     ),
-                    value:  selectedType.englishName! == "Place of issue" ? ("Place of issue".tr) : selectedType.englishName!,
+                    value: selectedType.englishName! == "Place of issue" ? ("Place of issue".tr) : selectedType.englishName!,
                   );
                 },
               ).toList(),
@@ -274,9 +275,9 @@ class VisaStepController extends MainController {
                 (selectedType) {
                   return DropdownMenuItem(
                     child: Text(
-                      selectedType.fullName! == "Type" ? ("Type".tr) : selectedType.fullName!,
+                      selectedType.fullName == "Type" ? ("Type".tr) : selectedType.fullName,
                     ),
-                    value: selectedType.fullName! == "Type" ? ("Type".tr) : selectedType.fullName!,
+                    value: selectedType.fullName == "Type" ? ("Type".tr) : selectedType.fullName,
                   );
                 },
               ).toList(),

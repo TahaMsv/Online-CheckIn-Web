@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:onlinecheckin/global/Classes.dart';
 import 'package:onlinecheckin/screens/stepsScreen/StepsScreenController.dart';
 import 'package:onlinecheckin/widgets/CustomFlutterWidget.dart';
 import '../../utility/DataProvider.dart';
@@ -23,6 +24,8 @@ class EnterScreenController extends MainController {
 
   RxBool isLastNameEmpty = false.obs;
   RxBool isBookingRefNameEmpty = false.obs;
+
+
 
   Future<bool> checkBoxesValidation() async {
     String lastName = lastNameC.text;

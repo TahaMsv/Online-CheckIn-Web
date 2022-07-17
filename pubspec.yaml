@@ -43,6 +43,8 @@ dependencies:
   flutter_stripe_web: ^0.1.1
   flash: ^2.0.3+2
   flutter_holo_date_picker: ^1.0.3
+  zarinpal: ^1.0.4+1
+  shared_preferences: ^2.0.15
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -50,63 +50,63 @@ class PassportStepController extends MainController {
     }
   }
 
-  Future<void> saveDocsDocoDoca(int index) async {
-    ///Docs Information
-    Traveller traveller = travellers[index];
-    String docsType = traveller.passportInfo.passportType == null ? "" : traveller.passportInfo.passportType!.split("-")[0].trim();
-    String docsCountry = traveller.passportInfo.countryOfIssue == null ? "" : traveller.passportInfo.countryOfIssue!.split("-")[0].trim();
-    String docsNationality = traveller.passportInfo.nationality == null ? "" : traveller.passportInfo.nationality!.split("-")[0].trim();
-    String docsDocumentNumber = traveller.passportInfo.documentNo ?? "";
-    final df = new DateFormat('yyyy-MM-dd');
-    String docsBirthDate = traveller.passportInfo.dateOfBirth == null ? df.format(traveller.passportInfo.dateOfBirth!) : "";
-    String docsExpiryDate = traveller.passportInfo.entryDate == null ? df.format(traveller.passportInfo.entryDate!) : "";
-
-    ///Doco Information
-    String docoDestination = traveller.visaInfo.destination ?? "";
-    String docoDocumentNumber = traveller.visaInfo.documentNo ?? "";
-    String docoType = traveller.visaInfo.type ?? "";
-    String docoPlaceOfIssue = traveller.visaInfo.placeOfIssueID ?? "";
-    String docoPlaceOfBirth = traveller.passportInfo.nationalityID ?? "";
-    String docoIssueDate = traveller.visaInfo.issueDate == null ? df.format(traveller.visaInfo.issueDate!) : "";
-    if (!model.requesting) {
-      model.setRequesting(true);
-      Response response = await DioClient.saveDocsDocoDoca(
-        execution: "[OnlineCheckin].[SaveDocsDocoDoca]",
-        token: traveller.token,
-        request: {
-          "PassengerId": traveller.welcome.body.passengers[0].id,
-          "DocaAddress": "",
-          "DocaCity": "",
-          "DocaCountry": "",
-          "DocaType": "",
-          "DocaZipCode": "",
-          "DocsCountry": docsCountry,
-          "DocsNationality": docsNationality,
-          "DocsBirthDate": docsBirthDate,
-          "DocsExpiryDate": docsExpiryDate, // todo  is Valid?
-          "DocsDocumentNumber": docsDocumentNumber,
-          "DocsType": docsType,
-          "DocsSecondName": traveller.welcome.body.passengers[0].lastName, // todo  is Valid?
-          "DocoDestination": docoDestination,
-          "DocoDocumentNumber": docoDocumentNumber,
-          "DocoType": docoType,
-          "DocoPlaceOfIssue": docoPlaceOfIssue,
-          "DocoPlaceOfBirth": docoPlaceOfBirth, //todo  is Valid? (Docs nationality)
-          "DocoIssueDate": docoIssueDate,
-          "DocsTitle": traveller.welcome.body.passengers[0].title
-        },
-      );
-
-      if (response.statusCode == 200) {
-        if (response.data["ResultCode"] == 1) {
-          final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-          int mainIndex = travellersIndexInMainList[index];
-          stepsScreenController.travellers[mainIndex] = traveller;
-        }
-      }
-    }
-    model.setRequesting(false);
-  }
+  // Future<void> saveDocsDocoDoca(int index) async {
+  //   ///Docs Information
+  //   Traveller traveller = travellers[index];
+  //   String docsType = traveller.passportInfo.passportType == null ? "" : traveller.passportInfo.passportType!.split("-")[0].trim();
+  //   String docsCountry = traveller.passportInfo.countryOfIssue == null ? "" : traveller.passportInfo.countryOfIssue!.split("-")[0].trim();
+  //   String docsNationality = traveller.passportInfo.nationality == null ? "" : traveller.passportInfo.nationality!.split("-")[0].trim();
+  //   String docsDocumentNumber = traveller.passportInfo.documentNo ?? "";
+  //   final df = new DateFormat('yyyy-MM-dd');
+  //   String docsBirthDate = traveller.passportInfo.dateOfBirth == null ? df.format(traveller.passportInfo.dateOfBirth!) : "";
+  //   String docsExpiryDate = traveller.passportInfo.entryDate == null ? df.format(traveller.passportInfo.entryDate!) : "";
+  //
+  //   ///Doco Information
+  //   String docoDestination = traveller.visaInfo.destination ?? "";
+  //   String docoDocumentNumber = traveller.visaInfo.documentNo ?? "";
+  //   String docoType = traveller.visaInfo.type ?? "";
+  //   String docoPlaceOfIssue = traveller.visaInfo.placeOfIssueID ?? "";
+  //   String docoPlaceOfBirth = traveller.passportInfo.nationalityID ?? "";
+  //   String docoIssueDate = traveller.visaInfo.issueDate == null ? df.format(traveller.visaInfo.issueDate!) : "";
+  //   if (!model.requesting) {
+  //     model.setRequesting(true);
+  //     Response response = await DioClient.saveDocsDocoDoca(
+  //       execution: "[OnlineCheckin].[SaveDocsDocoDoca]",
+  //       token: traveller.token,
+  //       request: {
+  //         "PassengerId": traveller.welcome.body.passengers[0].id,
+  //         "DocaAddress": "",
+  //         "DocaCity": "",
+  //         "DocaCountry": "",
+  //         "DocaType": "",
+  //         "DocaZipCode": "",
+  //         "DocsCountry": docsCountry,
+  //         "DocsNationality": docsNationality,
+  //         "DocsBirthDate": docsBirthDate,
+  //         "DocsExpiryDate": docsExpiryDate, // todo  is Valid?
+  //         "DocsDocumentNumber": docsDocumentNumber,
+  //         "DocsType": docsType,
+  //         "DocsSecondName": traveller.welcome.body.passengers[0].lastName, // todo  is Valid?
+  //         "DocoDestination": docoDestination,
+  //         "DocoDocumentNumber": docoDocumentNumber,
+  //         "DocoType": docoType,
+  //         "DocoPlaceOfIssue": docoPlaceOfIssue,
+  //         "DocoPlaceOfBirth": docoPlaceOfBirth, //todo  is Valid? (Docs nationality)
+  //         "DocoIssueDate": docoIssueDate,
+  //         "DocsTitle": traveller.welcome.body.passengers[0].title
+  //       },
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       if (response.data["ResultCode"] == 1) {
+  //         final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
+  //         int mainIndex = travellersIndexInMainList[index];
+  //         stepsScreenController.travellers[mainIndex] = traveller;
+  //       }
+  //     }
+  //   }
+  //   model.setRequesting(false);
+  // }
 
   Future<void> getSelectCountries() async {
     if (!model.requesting) {
@@ -311,7 +311,7 @@ class PassportStepController extends MainController {
                         travellers.refresh();
                         updateDocuments();
                         updateIsCompleted(index);
-                        saveDocsDocoDoca(index);
+                        // saveDocsDocoDoca(index);
                         visaStepController.CheckDocoNecessity(travellers[index]);
                         Get.back();
                       },
@@ -351,10 +351,10 @@ class PassportStepController extends MainController {
                 (selectedType) {
                   return DropdownMenuItem(
                     child: Text(
-                      selectedType.fullName! == "Passport Type" ? "Passport Type".tr : selectedType.fullName!,
+                      selectedType.fullName== "Passport Type" ? "Passport Type".tr : selectedType.fullName,
 
                     ),
-                    value: selectedType.fullName! == "Passport Type" ? "Passport Type".tr : selectedType.fullName!,
+                    value: selectedType.fullName== "Passport Type" ? "Passport Type".tr : selectedType.fullName,
                   );
                 },
               ).toList(),

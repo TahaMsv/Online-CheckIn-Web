@@ -3,6 +3,7 @@ import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:network_manager/network_manager.dart';
+import 'package:onlinecheckin/screens/enterScreen/EnterScreenController.dart';
 import 'package:onlinecheckin/screens/paymentStepScreen/PaymentStepController.dart';
 import 'package:onlinecheckin/screens/receiptStepScreen/ReceiptStepController.dart';
 import 'package:onlinecheckin/screens/safetyStepScreen/SafetyStepController.dart';
@@ -14,6 +15,7 @@ import '../../utility/DataProvider.dart';
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StepsScreenController extends MainController {
   StepsScreenController._();
@@ -25,7 +27,6 @@ class StepsScreenController extends MainController {
     return _instance;
   }
 
-  Welcome? _welcome;
   String flightType = "d"; // d = Domestic , i = International
 
   String language = Get.locale!.languageCode;
@@ -38,11 +39,76 @@ class StepsScreenController extends MainController {
 
   RxList<Traveller> travellers = <Traveller>[].obs;
   RxInt whoseTurnToSelect = 0.obs;
-
+  RxInt _whichOneToEdit = (-1).obs;
   RxInt _step = 0.obs;
 
   RxInt currButtonTextIndex = 0.obs;
   int nextButtonTextIndex = 0;
+
+  Welcome? _welcome;
+
+  Welcome? get welcome => _welcome;
+
+  void init() async {
+    final prefs = await SharedPreferences.getInstance();
+    /////// StepScreenController
+    _step.value = (prefs.getInt('step') == null ? 0 : prefs.getInt('step')!);
+    currButtonTextIndex.value = (prefs.getInt('currButtonTextIndex') == null ? 0 : prefs.getInt('currButtonTextIndex')!);
+    nextButtonTextIndex = (prefs.getInt('nextButtonTextIndex') == null ? 0 : prefs.getInt('nextButtonTextIndex')!);
+    whoseTurnToSelect.value = (prefs.getInt('whoseTurnToSelect') == null ? 0 : prefs.getInt('nextButtonTextIndex')!);
+    _whichOneToEdit.value = (prefs.getInt('_whichOneToEdit') == null ? -1 : prefs.getInt('nextButtonTextIndex')!);
+    flightType = (prefs.getString('flightType') == null ? 'd' : prefs.getString('flightType')!);
+    isDocoNecessary.value = (prefs.getBool('isDocoNecessary') == null ? false : prefs.getBool('isDocoNecessary')!);
+    isDocsNecessary.value = (prefs.getBool('isDocsNecessary') == null ? false : prefs.getBool('isDocsNecessary')!);
+    if (_welcome == null && prefs.getString('welcome') != null) {
+      setWelcome(welcomeFromJson(prefs.getString('welcome')!));
+    }
+    if (travellers.length == 0 && prefs.getString('travellers') != null) {
+      List<String> travellersString = prefs.getString('travellers')!.split("#(#)@(@)");
+      for (var i = 0; i < travellersString.length; ++i) {
+        var t = travellersString[i];
+        travellers.add(Traveller.fromJson(jsonDecode(t)));
+      }
+    }
+    /////// SeatStepScreenController
+    SeatsStepController seatStepScreenController = Get.put(SeatsStepController(model));
+    seatStepScreenController.seatPrices = prefs.getInt('seatPrices') == null ? 0 : prefs.getInt('seatPrices')!;
+    seatStepScreenController.convertFormattedStringToMap(seatStepScreenController.seatsStatus, prefs.getString('seatsStatus'));
+    seatStepScreenController.convertFormattedStringToMap(seatStepScreenController.selectedSeats, prefs.getString('selectedSeats'));
+    seatStepScreenController.convertFormattedStringToMap(seatStepScreenController.clickedOnSeats, prefs.getString('clickedOnSeats'));
+    seatStepScreenController.convertFormattedStringToMap(seatStepScreenController.reservedSeats, prefs.getString('reservedSeats'));
+  }
+
+  void saveDataInLocalStorage() async {
+    /////// StepScreenController
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('step', _step.value);
+    await prefs.setInt('currButtonTextIndex', currButtonTextIndex.value);
+    await prefs.setInt('nextButtonTextIndex', nextButtonTextIndex);
+    await prefs.setInt('whoseTurnToSelect', whoseTurnToSelect.value);
+    await prefs.setInt('whichOneToEdit', _whichOneToEdit.value);
+    await prefs.setBool('isDocoNecessary', isDocoNecessary.value);
+    await prefs.setBool('isDocsNecessary', isDocsNecessary.value);
+    await prefs.setString('flightType', flightType);
+    await prefs.setString('welcome', jsonEncode(welcome!.toJson()));
+    if (travellers.length != 0) {
+      List<String> travellersString = [];
+      for (var i = 0; i < travellers.length; ++i) {
+        var encoded = jsonEncode(travellers[i].toJson());
+        travellersString.add(encoded);
+      }
+      await prefs.setString('travellers', travellersString.join("#(#)@(@)"));
+    }
+    /////// SeatStepScreenController
+    SeatsStepController seatStepScreenController = Get.put(SeatsStepController(model));
+    await prefs.setInt('seatPrices', seatStepScreenController.seatPrices);
+    await prefs.setString('seatsStatus', seatStepScreenController.convertMapToFormattedString(seatStepScreenController.seatsStatus));
+    await prefs.setString('selectedSeats', seatStepScreenController.convertMapToFormattedString(seatStepScreenController.selectedSeats));
+    await prefs.setString('clickedOnSeats', seatStepScreenController.convertMapToFormattedString(seatStepScreenController.clickedOnSeats));
+    await prefs.setString('reservedSeats', seatStepScreenController.convertMapToFormattedString(seatStepScreenController.reservedSeats));
+  }
+
+  void setWelcome(Welcome welcome) => _welcome = welcome;
 
   void setNextButton(bool newValue) {
     _isNextButtonEnable.value = newValue;
@@ -71,12 +137,8 @@ class StepsScreenController extends MainController {
 
   bool get isPreviousButtonEnable => _isPreviousButtonEnable.value;
 
-  Welcome? get welcome => _welcome;
-
   int get step => _step.value;
   TextEditingController editSeatC = TextEditingController();
-
-  RxInt _whichOneToEdit = (-1).obs;
 
   int get whichOneToEdit => _whichOneToEdit.value;
 
@@ -297,9 +359,10 @@ class StepsScreenController extends MainController {
   }
 
   void addToTravellers(String token, String lastName, String ticketNumber) async {
+    EnterScreenController enterScreenController = Get.put(EnterScreenController(model));
     await getInformation(token);
     for (int i = 0; i < travellers.length; i++) {
-      if (travellers[i].welcome.body.passengers[0].id == _welcome!.body.passengers[0].id) {
+      if (travellers[i].welcome.body.passengers[0].id == welcome!.body.passengers[0].id) {
         showFlash(
           context: Get.context!,
           duration: const Duration(seconds: 4),
@@ -314,13 +377,14 @@ class StepsScreenController extends MainController {
         return;
       }
     }
-    Traveller traveller = new Traveller(token: token, ticketNumber: ticketNumber, seatId: "--", welcome: _welcome!);
+    Traveller traveller = new Traveller(token: token, ticketNumber: ticketNumber, seatId: "--", welcome: welcome!);
     traveller.setPassportInfo(new PassportInfo());
     traveller.setVisaInfo(new VisaInfo());
     // setDocsNecessary(true);
     // welcome!.body.flight[0].checkDocs == 1 && flightType == "i" ? setDocsNecessary(true) : setDocsNecessary(false);
     flightType == "i" ? setDocsNecessary(true) : setDocsNecessary(false);
     travellers.add(traveller);
+    // print(jsonEncode(traveller.toJson()));
     updateIsNextButtonDisable();
     changeTurnToSelect();
   }
@@ -355,65 +419,17 @@ class StepsScreenController extends MainController {
         model.setRequesting(false);
         return null;
       }
-      print("here197");
-      _welcome = welcomeFromJson(jsonEncode(extractedData));
-
+      // p8
+      setWelcome(welcomeFromJson(jsonEncode(extractedData)));
       model.setLoading(false);
       print("ok");
     }
   }
 
-  // initializeApp() async {
-  //   // const String token =
-  //   //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUb2tlbktleSI6IjBmZmVmMzg0LWFlY2QtNDY0ZC1hMDRlLTRhZTAxODA4MWJmOSIsInJvbGUiOiJNZXJjaGFudCIsIm5iZiI6MTYyNTczNzc1NywiZXhwIjoxNjM0Mzc3NzU3LCJpYXQiOjE2MjU3Mzc3NTd9.hWGpASk2cn3pwxsMvnozhUT4KiZYOoRU55-Hp1cyEv4";
-  //
-  //   // model.token == null ? await initializeNetworkManager(baseURL: Apis.baseUrl) :
-  //   await initializeNetworkManager(token: model.token, baseURL: Apis.baseUrl);
-  //
-  //   // await initializePreferencesSettings();
-  //   //
-  //   // await initializeRoute();
-  //   //
-  //   // initializeLocalNotification();
-  //   //
-  //   // initializeFlutterFire();
-  // }
-  //
-  // initializeNetworkManager({String? token, required String baseURL}) {
-  //   NetworkOption.initialize(
-  //       baseUrl: baseURL,
-  //       timeout: 30000,
-  //       token: token,
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         "Authorization": "Bearer $token",
-  //       },
-  //       onStartDefault: () {
-  //         print("Start");
-  //         model.setLoading(true);
-  //       },
-  //       onEndDefault: () {
-  //         print("End");
-  //         model.setLoading(false);
-  //       },
-  //       onSuccessDefault: (res) {
-  //         print("Success");
-  //       },
-  //       onFailedDefault: (NetworkResponse res) {
-  //         print("Failed");
-  //       },
-  //       errorMsgExtractor: (res) {
-  //         return res["Message"] ?? "Unknown Error";
-  //       },
-  //       successMsgExtractor: (res) {
-  //         return res["Message"] ?? "Done";
-  //       });
-  // }
-
   @override
   void onInit() {
     print("StepsScreenController Init");
-
+    init();
     super.onInit();
   }
 

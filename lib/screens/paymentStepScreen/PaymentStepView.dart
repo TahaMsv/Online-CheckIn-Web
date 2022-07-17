@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_stripe_web/flutter_stripe_web.dart';
 import 'package:provider/provider.dart';
+
 class PaymentStepView extends StatelessWidget {
   final PaymentStepController myPaymentStepController;
 
@@ -18,7 +19,7 @@ class PaymentStepView extends StatelessWidget {
   Widget build(BuildContext context) {
     // double width = Get.width;
     // double height = Get.height;
-
+    myPaymentStepController.initPlatformStateForUriUniLinks();
     return Scaffold(
         backgroundColor: Colors.white,
         body: Column(
@@ -56,8 +57,7 @@ class PaymentStepView extends StatelessWidget {
                     ),
                   ],
                 ),
-               TaxesAndFees(myPaymentStepController: myPaymentStepController),
-
+                TaxesAndFees(myPaymentStepController: myPaymentStepController),
               ],
             )
           ],
@@ -96,7 +96,6 @@ class TaxesAndFees extends StatelessWidget {
           SizedBox(
             height: 5,
           ),
-
           MyDottedLine(
             color: Color(0xffeaeaea),
             lineLength: double.infinity,
@@ -372,12 +371,12 @@ class CardInfo extends StatelessWidget {
             child: TextButton(
               onPressed: () async {
                 // create payment method
-                final paymentMethod = await Stripe.instance.createPaymentMethod(PaymentMethodParams.card());
-                String stripeID = paymentMethod.id;
-                print(stripeID);
-                if(stripeID != null && !model.requesting){
-                  myPaymentStepController.pay(stripeID);
-                }
+                // final paymentMethod = await Stripe.instance.createPaymentMethod(PaymentMethodParams.card());
+                // String stripeID = paymentMethod.id;
+                // print(stripeID);
+                // if (stripeID != null && !model.requesting) {
+                  myPaymentStepController.pay("stripeID");
+                // }
               },
               child: Text('pay'.tr),
             ),

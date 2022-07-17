@@ -23,7 +23,7 @@ class Traveller {
   });
 
   String getNickName() {
-    Passenger passengerInfo=welcome.body.passengers[0];
+    Passenger passengerInfo = welcome.body.passengers[0];
     String travellerFullName = passengerInfo.name;
     int idx = travellerFullName.indexOf(" ");
     String nickname = "";
@@ -37,7 +37,7 @@ class Traveller {
   }
 
   String getFullNameWithGender() {
-    Passenger passengerInfo=welcome.body.passengers[0];
+    Passenger passengerInfo = welcome.body.passengers[0];
     String result = "";
     result = (passengerInfo.title == "MR" ? "Mr. " : "Ms. ");
     result += (passengerInfo.name);
@@ -55,8 +55,24 @@ class Traveller {
   void setPassportInfo(PassportInfo value) {
     _passportInfo = value;
   }
-}
 
+  factory Traveller.fromJson(Map<String, dynamic> json) => Traveller(
+        token: json["token"],
+        ticketNumber: json["ticketNumber"],
+        seatId: json["seatId"],
+        // passportInfo: PassportInfo.fromJson(json["passportInfo"]),
+        welcome: Welcome.fromJson(json["welcome"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "token": token,
+        "ticketNumber": ticketNumber,
+        "seatId": seatId,
+        // "passportInfo": passportInfo.toJson(),
+        "welcome": welcome.toJson(),
+      };
+}
+//
 class PassportInfo {
   late bool isPassInfoCompleted = false;
   late String? passportType;
@@ -226,24 +242,15 @@ String welcomeToJson(Welcome data) => json.encode(data.toJson());
 
 class Welcome {
   Welcome({
-    required this.resultCode,
-    required this.resultText,
     required this.body,
   });
-
-  int resultCode;
-  String resultText;
   Body body;
 
   factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
-        resultCode: json["ResultCode"],
-        resultText: json["ResultText"],
         body: Body.fromJson(json["Body"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "ResultCode": resultCode,
-        "ResultText": resultText,
         "Body": body.toJson(),
       };
 }
@@ -310,9 +317,11 @@ class Flight {
   String toCityName;
   String fromTime;
   String toTime;
+
   // String attendanceTime;
   DateTime flightDate;
   int terminal;
+
   // int weightAdl;
   // int weightChd;
   // int weightInf;
@@ -352,16 +361,16 @@ class Flight {
 
   Map<String, dynamic> toJson() => {
         // "ID": id,
-        // "Aircraft": aircraft,
+        "Aircraft": aircraft,
         "From_City": fromCity,
         "To_City": toCity,
-        // "From_CityName": fromCityName,
-        // "To_CityName": toCityName,
-        // "From_Time": fromTime,
-        // "To_Time": toTime,
+        "From_CityName": fromCityName,
+        "To_CityName": toCityName,
+        "From_Time": fromTime,
+        "To_Time": toTime,
         // "AttendanceTime": attendanceTime,
         "FlightDate": "${flightDate.year.toString().padLeft(4, '0')}-${flightDate.month.toString().padLeft(2, '0')}-${flightDate.day.toString().padLeft(2, '0')}",
-        // "Terminal": terminal,
+        "Terminal": terminal,
         // "Weight_ADL": weightAdl,
         // "Weight_CHD": weightChd,
         // "Weight_INF": weightInf,
@@ -371,7 +380,7 @@ class Flight {
         // "AircraftID": aircraftId,
         // "AL_Name": alName,
         // "AircraftShowName": aircraftShowName,
-        // "BoardingTime": boardingTime,
+        "BoardingTime": boardingTime,
         "CheckDocs": checkDocs,
       };
 }
@@ -393,16 +402,20 @@ class Passenger {
   });
 
   int id;
+
   // String reference;
   String name;
+
   // String nationalId;
   // String passengerType;
   // String classType;
   String firstName;
   String lastName;
+
   // String passengerClass;
   String title;
   String docsTitle;
+
   // int flightScheduleId;
 
   factory Passenger.fromJson(Map<String, dynamic> json) => Passenger(
@@ -629,11 +642,13 @@ class Seat {
 
   String line;
   String letter;
+
   // String seatPart;
   // bool isExitDoor;
   // String classType;
   // int isUsed;
   String isUsedDescription;
+
   // String seatProperty;
   // double mainIndex;
   // int isSelectable;
@@ -682,7 +697,6 @@ class EnumValues<T> {
   }
 }
 
-
 class Extra {
   Extra({
     required this.id,
@@ -701,22 +715,22 @@ class Extra {
   String image;
 
   factory Extra.fromJson(Map<String, dynamic> json) => Extra(
-    id: json["Id"],
-    title: json["Title"],
-    description: json["Description"],
-    imageUrl: json["ImageUrl"],
-    price: json["Price"].toDouble(),
-    image: json["Image"],
-  );
+        id: json["Id"],
+        title: json["Title"],
+        description: json["Description"],
+        imageUrl: json["ImageUrl"],
+        price: json["Price"].toDouble(),
+        image: json["Image"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "Id": id,
-    "Title": title,
-    "Description": description,
-    "ImageUrl": imageUrl,
-    "Price": price,
-    "Image": image,
-  };
+        "Id": id,
+        "Title": title,
+        "Description": description,
+        "ImageUrl": imageUrl,
+        "Price": price,
+        "Image": image,
+      };
 }
 
 class BoardingPassPDF {
@@ -734,6 +748,7 @@ class BoardingPassPDF {
   });
 
   String buffer;
+
   // int origin;
   // int position;
   // int length;
@@ -745,32 +760,31 @@ class BoardingPassPDF {
   // dynamic identity;
 
   factory BoardingPassPDF.fromJson(Map<String, dynamic> json) => BoardingPassPDF(
-    buffer: json["_buffer"],
-    // origin: json["_origin"],
-    // position: json["_position"],
-    // length: json["_length"],
-    // capacity: json["_capacity"],
-    // expandable: json["_expandable"],
-    // writable: json["_writable"],
-    // exposable: json["_exposable"],
-    // isOpen: json["_isOpen"],
-    // identity: json["__identity"],
-  );
+        buffer: json["_buffer"],
+        // origin: json["_origin"],
+        // position: json["_position"],
+        // length: json["_length"],
+        // capacity: json["_capacity"],
+        // expandable: json["_expandable"],
+        // writable: json["_writable"],
+        // exposable: json["_exposable"],
+        // isOpen: json["_isOpen"],
+        // identity: json["__identity"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "_buffer": buffer,
-    // "_origin": origin,
-    // "_position": position,
-    // "_length": length,
-    // "_capacity": capacity,
-    // "_expandable": expandable,
-    // "_writable": writable,
-    // "_exposable": exposable,
-    // "_isOpen": isOpen,
-    // "__identity": identity,
-  };
+        "_buffer": buffer,
+        // "_origin": origin,
+        // "_position": position,
+        // "_length": length,
+        // "_capacity": capacity,
+        // "_expandable": expandable,
+        // "_writable": writable,
+        // "_exposable": exposable,
+        // "_isOpen": isOpen,
+        // "__identity": identity,
+      };
 }
-
 
 // enum CellStatusType { NONE }
 //
@@ -799,17 +813,15 @@ class Language {
   Language({
     // required this.country,
     required this.languageCode,
-
   });
 
   // Country country;
   String languageCode;
 
-  static List<Language> languageList(){
+  static List<Language> languageList() {
     return <Language>[
-      Language( languageCode: "en"),
-      Language( languageCode: "fa"),
-
+      Language(languageCode: "en"),
+      Language(languageCode: "fa"),
     ];
   }
 }
