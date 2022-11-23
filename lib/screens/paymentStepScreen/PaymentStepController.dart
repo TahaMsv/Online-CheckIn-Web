@@ -8,8 +8,8 @@ import 'package:onlinecheckin/widgets/CustomFlutterWidget.dart';
 import '../../utility/DataProvider.dart';
 import '../../global/Classes.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:flutter_stripe_web/flutter_stripe_web.dart';
+// import 'package:flutter_stripe/flutter_stripe.dart';
+// import 'package:flutter_stripe_web/flutter_stripe_web.dart';
 
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
@@ -209,7 +209,7 @@ class PaymentStepController extends MainController {
   @override
   void onInit() {
     print("PaymentStepController Init");
-    Stripe.publishableKey = "pk_test_VOOyyYjgzqdm8I3SrBqmh9qY";
+    // Stripe.publishableKey = "pk_test_VOOyyYjgzqdm8I3SrBqmh9qY";
     calculatePrices();
     super.onInit();
   }
