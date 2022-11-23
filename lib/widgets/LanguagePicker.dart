@@ -7,19 +7,23 @@ import 'CountryListPicker/utils/utils.dart';
 class LanguagePicker extends StatelessWidget {
   const LanguagePicker({
     Key? key,
-    required this.mainController, required this.width, this.initialValue = 'GB',
+    required this.mainController,
+    required this.width,
+    this.initialValue = 'GB',
+    this.textColor = Colors.black,
   }) : super(key: key);
 
   final MainController mainController;
   final double width;
   final String initialValue;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       width: width,
       child: CountryPickerDropdown(
+        textColor: textColor,
         initialValue: initialValue,
         itemBuilder: _buildDropdownItem,
         // itemFilter:  ['AR', 'DE', 'GB', 'CN'].contains(c.isoCode),
@@ -44,14 +48,17 @@ class LanguagePicker extends StatelessWidget {
   }
 }
 
-Widget _buildDropdownItem(Country country) => Container(
-  child: Row(
-    children: <Widget>[
-      CountryPickerUtils.getDefaultFlagImage(country),
-      SizedBox(
-        width: 8.0,
+Widget _buildDropdownItem(Country country, Color textColor) => Container(
+      child: Row(
+        children: <Widget>[
+          CountryPickerUtils.getDefaultFlagImage(country),
+          SizedBox(
+            width: 8.0,
+          ),
+          Text(
+            "+${country.phoneCode}(${country.isoCode})",
+            style: TextStyle(color: textColor),
+          ),
+        ],
       ),
-      Text("+${country.phoneCode}(${country.isoCode})"),
-    ],
-  ),
-);
+    );

@@ -8,7 +8,7 @@ typedef bool ItemFilter(Country country);
 ///Predicate to be satisfied in order to add country to search list
 typedef bool SearchFilter(Country country, String searchWord);
 
-typedef Widget ItemBuilder(Country country);
+typedef Widget ItemBuilder(Country country, Color textColor);
 
 /// Simple closure which always returns true.
 bool acceptAllCountries(_) => true;

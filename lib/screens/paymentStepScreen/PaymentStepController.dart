@@ -13,7 +13,7 @@ import '../../screens/stepsScreen/StepsScreenController.dart';
 
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
-import 'dart:html' as html;
+// import 'dart:html' as html;
 import 'package:zarinpal/zarinpal.dart';
 
 class PaymentStepController extends MainController {
@@ -98,7 +98,7 @@ class PaymentStepController extends MainController {
   void pay(String stripId) async {
     final stepsScreenController = Get.put(StepsScreenController(model));
     stepsScreenController.saveDataInLocalStorage();
-    html.window.open("https://sandbox.zarinpal.com/pg/StartPay/A00000000000000000000000000358274572", "_self");
+    // html.window.open("https://sandbox.zarinpal.com/pg/StartPay/A00000000000000000000000000358274572", "_self");
 
     // paymentRequest = PaymentRequest()
     //   ..setIsSandBox(true) // if your application is in developer mode, then set the sandBox as True otherwise set sandBox as false

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onlinecheckin/screens/enterScreen/EnterScreenTabletView.dart';
 import '../../screens/seatsStepScreen/SeatStepScreenView.dart';
 import 'screens/receiptStepScreen/ReceipStepView.dart';
 import 'screens/upgradesStepScreen/UpgradesStepView.dart';
@@ -33,7 +34,9 @@ class MyApp extends StatelessWidget {
       getPages: [
         // GetPage(name: RouteNames.initialRoute, page: () => SplashView(_model)),
         GetPage(name: RouteNames.home, page: () => HomeView(_model)),
-        GetPage(name: RouteNames.enter, page: () => EnterScreenView(_model)),
+        GetPage(name: RouteNames.enter, page: () =>
+            // EnterScreenView(_model)),
+            EnterScreenTabletView(_model)),
         GetPage(name: RouteNames.steps, page: () => StepsScreenView(_model)),
         GetPage(name: RouteNames.safety, page: () => SafetyStepView(_model)),
         GetPage(name: RouteNames.rules, page: () => RulesStepView(_model)),

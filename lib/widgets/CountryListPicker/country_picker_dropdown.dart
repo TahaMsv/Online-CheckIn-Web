@@ -27,6 +27,7 @@ class CountryPickerDropdown extends StatefulWidget {
     this.hint,
     this.disabledHint,
     this.isFirstDefaultIfInitialValueNotProvided = true,
+    this.textColor = Colors.black,
   });
 
   /// Filters the available country list
@@ -78,6 +79,8 @@ class CountryPickerDropdown extends StatefulWidget {
   /// See [iconDisabledColor] of [DropdownButton]
   final Color? iconDisabledColor;
 
+  final Color? textColor;
+
   /// See [iconEnabledColor] of [DropdownButton]
   final Color? iconEnabledColor;
 
@@ -104,16 +107,14 @@ class _CountryPickerDropdownState extends State<CountryPickerDropdown> {
 
   @override
   void initState() {
-    _countries =
-        countryList.where(widget.itemFilter ?? acceptAllCountries).toList();
+    _countries = countryList.where(widget.itemFilter ?? acceptAllCountries).toList();
 
     if (widget.sortComparator != null) {
       _countries.sort(widget.sortComparator);
     }
 
     if (widget.priorityList != null) {
-      widget.priorityList!.forEach((Country country) =>
-          _countries.removeWhere((Country c) => country.isoCode == c.isoCode));
+      widget.priorityList!.forEach((Country country) => _countries.removeWhere((Country c) => country.isoCode == c.isoCode));
       _countries.insertAll(0, widget.priorityList!);
     }
 
@@ -123,12 +124,10 @@ class _CountryPickerDropdownState extends State<CountryPickerDropdown> {
           (country) => country.isoCode == widget.initialValue!.toUpperCase(),
         );
       } catch (error) {
-        throw Exception(
-            "The initialValue provided is not a supported iso code!");
+        throw Exception("The initialValue provided is not a supported iso code!");
       }
     } else {
-      if (widget.isFirstDefaultIfInitialValueNotProvided &&
-          _countries.length > 0) {
+      if (widget.isFirstDefaultIfInitialValueNotProvided && _countries.length > 0) {
         _selectedCountry = _countries[0];
       }
     }
@@ -138,13 +137,14 @@ class _CountryPickerDropdownState extends State<CountryPickerDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    List<DropdownMenuItem<Country>> items = _countries
-        .map((country) => DropdownMenuItem<Country>(
-            value: country,
-            child: widget.itemBuilder != null
-                ? widget.itemBuilder!(country)
-                : _buildDefaultMenuItem(country)))
-        .toList();
+    Color tempColor;
+    if(widget.textColor == Colors.black){
+      tempColor = Colors.white;
+    }else{
+      tempColor = Colors.black;
+    }
+    List<DropdownMenuItem<Country>> items =
+        _countries.map((country) => DropdownMenuItem<Country>(value: country, child: widget.itemBuilder != null ? widget.itemBuilder!(country, widget.textColor!) : _buildDefaultMenuItem(country, tempColor))).toList();
 
     return Container(
       width: double.infinity,
@@ -174,16 +174,14 @@ class _CountryPickerDropdownState extends State<CountryPickerDropdown> {
         itemHeight: widget.itemHeight,
         selectedItemBuilder: widget.selectedItemBuilder != null
             ? (context) {
-                return _countries
-                    .map((c) => widget.selectedItemBuilder!(c))
-                    .toList();
+                return _countries.map((c) => widget.selectedItemBuilder!(c, widget.textColor!)).toList();
               }
             : null,
       ),
     );
   }
 
-  Widget _buildDefaultMenuItem(Country country) {
+  Widget _buildDefaultMenuItem(Country country, Color textColor) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,7 +190,10 @@ class _CountryPickerDropdownState extends State<CountryPickerDropdown> {
           SizedBox(
             width: 8.0,
           ),
-          Text("(${country.isoCode}) +${country.phoneCode}"),
+          Text(
+            "(${country.isoCode}) +${country.phoneCode}",
+            style: TextStyle(color: textColor),
+          ),
         ],
       ),
     );
