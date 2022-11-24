@@ -21,31 +21,29 @@ class TravellersStepView extends StatelessWidget {
     final flightInformation = myTravellersStepScreenController.welcome!.body.flight[0];
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: Container(
-          width: 700,
-          height: 350,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xffECECEC), width: 2),
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          child: Column(
-            children: [
-              DatesAndFromToCities(
-                fromCity: flightInformation.fromCity,
-                fromTime: DateFormat('yyyy-MM-dd').format(flightInformation.flightDate),
-                toCity: flightInformation.toCity,
-                toTime:  DateFormat('yyyy-MM-dd').format(flightInformation.flightDate),
-              ),
-              AirplaneImage(),
-              FLightExtraDetails(
-                boardingTime: flightInformation.boardingTime,
-                terminal: flightInformation.terminal,
-                aircraft: flightInformation.aircraft,
-                flightClass: "-",
-              ),
-            ],
-          ),
+      body: Container(
+        width: 700,
+        height: 350,
+        decoration: BoxDecoration(
+          border: Border.all(color: Color(0xffECECEC), width: 2),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Column(
+          children: [
+            DatesAndFromToCities(
+              fromCity: flightInformation.fromCity,
+              fromTime: DateFormat('yyyy-MM-dd').format(flightInformation.flightDate),
+              toCity: flightInformation.toCity,
+              toTime:  DateFormat('yyyy-MM-dd').format(flightInformation.flightDate),
+            ),
+            AirplaneImage(),
+            FLightExtraDetails(
+              boardingTime: flightInformation.boardingTime,
+              terminal: flightInformation.terminal,
+              aircraft: flightInformation.aircraft,
+              flightClass: "-",
+            ),
+          ],
         ),
       ),
     );

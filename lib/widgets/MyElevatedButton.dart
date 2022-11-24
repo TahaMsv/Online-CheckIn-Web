@@ -11,6 +11,7 @@ class MyElevatedButton extends StatelessWidget {
     required this.fgColor,
     required this.function,
     this.isDisable = false,
+    this.fontSize = 15,
   }) : super(key: key);
 
   final double height;
@@ -20,6 +21,7 @@ class MyElevatedButton extends StatelessWidget {
   final Color fgColor;
   final VoidCallback function;
   final bool isDisable;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class MyElevatedButton extends StatelessWidget {
       width: width,
       child: ElevatedButton(
         onPressed: isDisable ? null : function,
-        child: Text(buttonText.tr),
+        child: Text(buttonText.tr, style: TextStyle(fontSize: fontSize),),
         style: isDisable
             ? ButtonStyle(
                 foregroundColor: MaterialStateProperty.all(fgColor.withOpacity(0.2)),
