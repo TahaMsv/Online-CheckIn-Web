@@ -164,7 +164,7 @@ class SingleChoiceDialogState extends State<CountryPickerDialog> {
             children: _filteredCountries
                 .map((item) => SimpleDialogOption(
                       child: widget.itemBuilder != null
-                          ? widget.itemBuilder!(item)
+                          ? widget.itemBuilder!(item, )
                           : Text(item.name),
                       onPressed: () {
                         widget.onValuePicked(item);

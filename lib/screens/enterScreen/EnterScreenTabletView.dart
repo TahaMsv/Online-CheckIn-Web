@@ -87,8 +87,9 @@ class CheckInForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = 400 <= Get.height * 0.5 ? 400 : Get.height * 0.5;
     return Container(
-      height: Get.height * 0.5,
+      height: height,
       // width: 400,
       color: Colors.white,
       child: ListView(
@@ -131,7 +132,9 @@ class CheckInForm extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: 40,),
+                        SizedBox(
+                          height: 40,
+                        ),
                         Obx(
                           () => Container(
                             height: 100,
@@ -155,7 +158,9 @@ class CheckInForm extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: 40,),
+                        SizedBox(
+                          height: 40,
+                        ),
                         CheckInButton(
                           myEnterScreenController: myEnterScreenController,
                         )
