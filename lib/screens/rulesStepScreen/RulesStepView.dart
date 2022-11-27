@@ -1,11 +1,7 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/widgets.dart';
 import '../../widgets/StepsScreenTitle.dart';
 import '../../screens/rulesStepScreen/RulesStepController.dart';
-import '../../widgets/MtDottedLine.dart';
 import '../../global/MainModel.dart';
 import 'package:get/get.dart';
 

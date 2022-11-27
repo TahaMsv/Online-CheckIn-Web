@@ -1,10 +1,4 @@
-// To parse this JSON data, do
-//
-//     final welcome = welcomeFromJson(jsonString);
-
-import 'package:meta/meta.dart';
 import 'dart:convert';
-import '../widgets/CountryListPicker/countries.dart';
 
 class Traveller {
   late String token;
@@ -72,6 +66,7 @@ class Traveller {
         "welcome": welcome.toJson(),
       };
 }
+
 //
 class PassportInfo {
   late bool isPassInfoCompleted = false;
@@ -244,6 +239,7 @@ class Welcome {
   Welcome({
     required this.body,
   });
+
   Body body;
 
   factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
@@ -690,9 +686,7 @@ class EnumValues<T> {
   EnumValues(this.map);
 
   Map<T, String> get reverse {
-    if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
-    }
+    reverseMap = map.map((k, v) => new MapEntry(v, k));
     return reverseMap;
   }
 }

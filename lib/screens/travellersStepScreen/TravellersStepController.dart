@@ -2,8 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:network_manager/network_manager.dart';
-import 'package:onlinecheckin/screens/enterScreen/EnterScreenController.dart';
 import 'package:onlinecheckin/widgets/CustomFlutterWidget.dart';
 import '../../global/Classes.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';

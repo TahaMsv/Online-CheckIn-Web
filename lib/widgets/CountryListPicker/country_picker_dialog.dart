@@ -3,7 +3,6 @@ import 'utils/typedefs.dart';
 
 import 'utils/my_alert_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'countries.dart';
 
 ///Provides a customizable [Dialog] which displays all countries
@@ -164,7 +163,7 @@ class SingleChoiceDialogState extends State<CountryPickerDialog> {
             children: _filteredCountries
                 .map((item) => SimpleDialogOption(
                       child: widget.itemBuilder != null
-                          ? widget.itemBuilder!(item, )
+                          ? widget.itemBuilder!(item,Colors.black)
                           : Text(item.name),
                       onPressed: () {
                         widget.onValuePicked(item);

@@ -1,9 +1,5 @@
-import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-import 'package:onlinecheckin/screens/enterScreen/EnterScreenController.dart';
 import 'package:onlinecheckin/screens/travellersStepScreen/NewTravellersStepScreen.dart';
 import 'package:onlinecheckin/screens/travellersStepScreen/TravellersStepController.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
@@ -21,9 +17,6 @@ import '../../screens/safetyStepScreen/SafetyStepView.dart';
 import '../../widgets/MtDottedLine.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
-import '../../widgets/CountryListPicker/country.dart';
-import '../../widgets/CountryListPicker/country_picker_dropdown.dart';
-import '../../widgets/CountryListPicker/utils/utils.dart';
 import '../../global/MainModel.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';

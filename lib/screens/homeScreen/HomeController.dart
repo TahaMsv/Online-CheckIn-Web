@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
 

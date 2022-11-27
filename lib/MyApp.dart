@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onlinecheckin/screens/enterScreen/EnterScreenTabletView.dart';
+import 'package:onlinecheckin/screens/safetyStepScreen/SafetyStepTabletView.dart';
 import 'package:onlinecheckin/screens/stepsScreen/StepsScreenTabletView.dart';
 import '../../screens/seatsStepScreen/SeatStepScreenView.dart';
 import 'screens/receiptStepScreen/ReceipStepView.dart';
@@ -7,18 +8,13 @@ import 'screens/upgradesStepScreen/UpgradesStepView.dart';
 import 'screens/paymentStepScreen/PaymentStepView.dart';
 import 'screens/visaStepScreen/VisaStepView.dart';
 import 'screens/passportStepScreen/PassportStepView.dart';
-import 'screens/enterScreen/EnterScreenView.dart';
 import 'screens/rulesStepScreen/RulesStepView.dart';
-import 'screens/safetyStepScreen/SafetyStepView.dart';
-import 'screens/stepsScreen/StepsScreenView.dart';
 import 'screens/homeScreen/HomeView.dart';
 import 'utility/Constants.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'global/MainModel.dart';
-import 'screens/splashScreen/SplashView.dart';
 import 'global/AppConfig.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -43,7 +39,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: RouteNames.steps, page: () =>
             StepsScreenTabletView(_model)),
         // StepsScreenView(_model)),
-        GetPage(name: RouteNames.safety, page: () => SafetyStepView(_model)),
+        GetPage(name: RouteNames.safety, page: () =>
+            SafetyStepTabletView(_model)),
+            // SafetyStepView(_model)),
         GetPage(name: RouteNames.rules, page: () => RulesStepView(_model)),
         GetPage(name: RouteNames.passport, page: () => PassportStepView(_model)),
         GetPage(name: RouteNames.visa, page: () => VisaStepView(_model)),

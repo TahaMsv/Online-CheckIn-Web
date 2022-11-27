@@ -1,14 +1,8 @@
-import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-import 'package:onlinecheckin/screens/enterScreen/EnterScreenController.dart';
-import 'package:onlinecheckin/screens/travellersStepScreen/NewTravellersStepScreen.dart';
-import 'package:onlinecheckin/screens/travellersStepScreen/TravellersStepController.dart';
+import 'package:onlinecheckin/screens/safetyStepScreen/SafetyStepTabletView.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
 import 'package:onlinecheckin/widgets/LanguagePicker.dart';
-import 'package:onlinecheckin/widgets/UserTextInput.dart';
 import '../../screens/seatsStepScreen/SeatStepScreenView.dart';
 
 import '../../screens/paymentStepScreen/PaymentStepView.dart';
@@ -17,19 +11,14 @@ import '../../screens/upgradesStepScreen/UpgradesStepView.dart';
 import '../../screens/passportStepScreen/PassportStepView.dart';
 import '../../screens/rulesStepScreen/RulesStepView.dart';
 import '../../screens/visaStepScreen/VisaStepView.dart';
-import '../../screens/safetyStepScreen/SafetyStepView.dart';
 import '../../widgets/MtDottedLine.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
-import '../../widgets/CountryListPicker/country.dart';
-import '../../widgets/CountryListPicker/country_picker_dropdown.dart';
-import '../../widgets/CountryListPicker/utils/utils.dart';
 import '../../global/MainModel.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../travellersStepScreen/TravellerStepScreenTabletView.dart';
-import 'StepsScreenView.dart';
 
 class StepsScreenTabletView extends StatelessWidget {
   final StepsScreenController myStepsScreenController;
@@ -95,29 +84,31 @@ class StepsScreenTabletView extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Container(
-                          color: Colors.white,
-                          height: height * 0.80 - 30,
-                          padding: EdgeInsets.only(top: 50, left: 30, right: 30),
-                          child: myStepsScreenController.step == 0
-                              ? TravellersStepTabletView(model)
-                              : myStepsScreenController.step == 1
-                                  ? SafetyStepView(model)
-                                  : myStepsScreenController.step == 2
-                                      ? RulesStepView(model)
-                                      : myStepsScreenController.step == 3
-                                          ? PassportStepView(model)
-                                          : myStepsScreenController.step == 4
-                                              ? VisaStepView(model)
-                                              : myStepsScreenController.step == 5
-                                                  ? UpgradesStepView(model)
-                                                  : myStepsScreenController.step == 6
-                                                      ? SeatsStepView(model)
-                                                      : myStepsScreenController.step == 7
-                                                          ? PaymentStepView(model)
-                                                          : myStepsScreenController.step == 8
-                                                              ? ReceiptStepView(model)
-                                                              : Container(),
+                        Obx(
+                          () => Container(
+                            color: Colors.white,
+                            height: height * 0.80 - 30,
+                            padding: EdgeInsets.only(top: 50, left: 30, right: 30),
+                            child: myStepsScreenController.step == 0
+                                ? TravellersStepTabletView(model)
+                                : myStepsScreenController.step == 1
+                                    ? SafetyStepTabletView(model)
+                                    : myStepsScreenController.step == 2
+                                        ? RulesStepView(model)
+                                        : myStepsScreenController.step == 3
+                                            ? PassportStepView(model)
+                                            : myStepsScreenController.step == 4
+                                                ? VisaStepView(model)
+                                                : myStepsScreenController.step == 5
+                                                    ? UpgradesStepView(model)
+                                                    : myStepsScreenController.step == 6
+                                                        ? SeatsStepView(model)
+                                                        : myStepsScreenController.step == 7
+                                                            ? PaymentStepView(model)
+                                                            : myStepsScreenController.step == 8
+                                                                ? ReceiptStepView(model)
+                                                                : Container(),
+                          ),
                         ),
                       ],
                     ),
@@ -417,6 +408,3 @@ class PreviousButton extends StatelessWidget {
     );
   }
 }
-
-
-

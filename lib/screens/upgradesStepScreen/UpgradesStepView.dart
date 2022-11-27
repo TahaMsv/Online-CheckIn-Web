@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
 import '../../global/Classes.dart';
 import '../../widgets/MyElevatedButton.dart';

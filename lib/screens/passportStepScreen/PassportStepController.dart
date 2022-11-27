@@ -12,7 +12,6 @@ import '../../widgets/StepsScreenTitle.dart';
 import '../../widgets/UserTextInput.dart';
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
-import 'package:intl/intl.dart';
 
 class PassportStepController extends MainController {
   MainModel model;
@@ -312,7 +311,7 @@ class PassportStepController extends MainController {
                         updateDocuments();
                         updateIsCompleted(index);
                         // saveDocsDocoDoca(index);
-                        visaStepController.CheckDocoNecessity(travellers[index]);
+                        visaStepController.checkDocoNecessity(travellers[index]);
                         Get.back();
                       },
               ),

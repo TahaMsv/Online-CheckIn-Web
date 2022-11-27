@@ -2,13 +2,10 @@ import 'dart:convert';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:network_manager/network_manager.dart';
-import 'package:onlinecheckin/screens/enterScreen/EnterScreenController.dart';
 import 'package:onlinecheckin/screens/paymentStepScreen/PaymentStepController.dart';
 import 'package:onlinecheckin/screens/receiptStepScreen/ReceiptStepController.dart';
 import 'package:onlinecheckin/screens/safetyStepScreen/SafetyStepController.dart';
 import 'package:onlinecheckin/screens/seatsStepScreen/SeatsStepController.dart';
-import 'package:onlinecheckin/utility/Constants.dart';
 import 'package:onlinecheckin/widgets/CustomFlutterWidget.dart';
 import '../../global/Classes.dart';
 import '../../utility/DataProvider.dart';
@@ -195,7 +192,7 @@ class StepsScreenController extends MainController {
       setNextButton(true);
       return;
     } else if (step == 7) {
-      PaymentStepController paymentStepController = Get.put(PaymentStepController(model));
+      // PaymentStepController paymentStepController = Get.put(PaymentStepController(model));
     }
     setNextButton(true);
     // else if (step == 8) {}
@@ -359,7 +356,7 @@ class StepsScreenController extends MainController {
   }
 
   void addToTravellers(String token, String lastName, String ticketNumber) async {
-    EnterScreenController enterScreenController = Get.put(EnterScreenController(model));
+    // EnterScreenController enterScreenController = Get.put(EnterScreenController(model));
     await getInformation(token);
     for (int i = 0; i < travellers.length; i++) {
       if (travellers[i].welcome.body.passengers[0].id == welcome!.body.passengers[0].id) {

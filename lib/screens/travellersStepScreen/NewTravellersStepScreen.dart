@@ -1,12 +1,8 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
-import '../../widgets/MyElevatedButton.dart';
-import '../../widgets/UserTextInput.dart';
 import '../../global/MainModel.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'TravellersStepController.dart';
 
 class TravellersStepView extends StatelessWidget {

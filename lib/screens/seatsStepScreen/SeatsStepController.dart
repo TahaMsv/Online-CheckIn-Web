@@ -1,11 +1,8 @@
-import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:onlinecheckin/global/Classes.dart';
-import 'package:onlinecheckin/screens/enterScreen/EnterScreenController.dart';
-import 'package:onlinecheckin/utility/Constants.dart';
 import 'package:onlinecheckin/utility/DataProvider.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
 import '../../global/MainController.dart';

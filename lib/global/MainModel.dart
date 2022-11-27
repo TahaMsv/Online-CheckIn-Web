@@ -1,6 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:onlinecheckin/global/Classes.dart';
-import '../MyApp.dart';
 import '../screens/seatsStepScreen/SeatsStepModel.dart';
 import '../screens/receiptStepScreen/ReceiptStepModel.dart';
 import '../screens/upgradesStepScreen/UpgradesStepModel.dart';

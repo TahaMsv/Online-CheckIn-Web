@@ -1,12 +1,9 @@
-import 'dart:math';
+
 import 'dart:ui';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:onlinecheckin/screens/stepsScreen/StepsScreenController.dart';
 import '../../global/Classes.dart';
 import '../../screens/seatsStepScreen/SeatsStepController.dart';
-import '../../screens/visaStepScreen/VisaStepController.dart';
 import '../../global/MainModel.dart';
 import 'package:get/get.dart';
 

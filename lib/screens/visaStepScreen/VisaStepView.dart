@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-import 'package:onlinecheckin/global/Classes.dart';
 import 'package:onlinecheckin/screens/stepsScreen/StepsScreenController.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
 import '../../widgets/StepsScreenTitle.dart';

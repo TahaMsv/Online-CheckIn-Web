@@ -13,8 +13,8 @@ class SplashView extends StatelessWidget {
   Widget build(BuildContext context) {
     MainModel model = context.watch<MainModel>();
     ThemeData theme = Theme.of(context);
-    double width = Get.width;
-    double height = Get.height;
+    // double width = Get.width;
+    // double height = Get.height;
     return Scaffold(
       appBar: AppBar(
         title: Text("Splash"),
@@ -40,7 +40,7 @@ class SplashView extends StatelessWidget {
               child: Row(
                 children: [
                   Text("Global Loading"),
-                  Center(child: model.loading ? SpinKitCircle(color: theme.accentColor) : Container()),
+                  Center(child: model.loading ? SpinKitCircle(color: theme.colorScheme.secondary) : Container()),
                 ],
               )),
           TextButton(
@@ -51,7 +51,7 @@ class SplashView extends StatelessWidget {
                 children: [
                   Text("Splash Loading"),
                   Obx(() => Center(
-                      child: mySplashController.loadingSplash.value ? SpinKitCircle(color: theme.accentColor) : Container())),
+                      child: mySplashController.loadingSplash.value ? SpinKitCircle(color: theme.colorScheme.secondary) : Container())),
                 ],
               )),
         ],

@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:onlinecheckin/screens/enterScreen/EnterScreenController.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
-import '../../screens/passportStepScreen/PassportStepController.dart';
 import '../../utility/DataProvider.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
 import '../../global/Classes.dart';
@@ -33,10 +31,10 @@ class VisaStepController extends MainController {
     // model.setLoading(false);
   }
 
-  void CheckDocoNecessity(Traveller traveller) async {
+  void checkDocoNecessity(Traveller traveller) async {
     if (travellers.contains(traveller)) return;
     final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-    EnterScreenController enterScreenController = Get.put(EnterScreenController(model));
+    // EnterScreenController enterScreenController = Get.put(EnterScreenController(model));
     String docsType = traveller.passportInfo.passportType ?? "";
     String docsCountry = traveller.passportInfo.countryOfIssue ?? "";
     String docsNationality = traveller.passportInfo.nationality ?? "";
@@ -91,7 +89,7 @@ class VisaStepController extends MainController {
   }
 
   void submitBtnFunction(int index) {
-    final PassportStepController passportStepController = Get.put(PassportStepController(model));
+    // final PassportStepController passportStepController = Get.put(PassportStepController(model));
     updateDocuments();
     updateIsCompleted(index);
     travellers.refresh();
@@ -157,7 +155,7 @@ class VisaStepController extends MainController {
             ),
             Row(
               children: [
-                TypeDropDown(index, locale),
+                typeDropDown(index, locale),
                 SizedBox(
                   width: 20,
                 ),
@@ -248,7 +246,7 @@ class VisaStepController extends MainController {
     );
   }
 
-  Container TypeDropDown(int index, Locale locale) {
+  Container typeDropDown(int index, Locale locale) {
     return Container(
       height: 40,
       width: 200,

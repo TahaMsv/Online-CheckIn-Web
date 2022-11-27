@@ -7,10 +7,10 @@ extension FlavorExtension on Flavor {
     switch (this) {
       case Flavor.Flavor1:
         return "F1";
-        break;
+
       case Flavor.Flavor2:
         return "F2";
-        break;
+
       default:
         return "App";
     }

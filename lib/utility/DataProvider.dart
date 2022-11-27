@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import '../global/RequestModels.dart';
 import 'package:network_manager/network_manager.dart';

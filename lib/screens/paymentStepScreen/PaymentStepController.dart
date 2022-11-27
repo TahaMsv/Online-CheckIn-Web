@@ -1,19 +1,13 @@
-import 'package:dio/dio.dart';
+
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:onlinecheckin/screens/seatsStepScreen/SeatsStepController.dart';
-import 'package:onlinecheckin/screens/upgradesStepScreen/UpgradesStepController.dart';
 import 'package:onlinecheckin/widgets/CustomFlutterWidget.dart';
-import '../../utility/DataProvider.dart';
-import '../../global/Classes.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
-// import 'package:flutter_stripe/flutter_stripe.dart';
-// import 'package:flutter_stripe_web/flutter_stripe_web.dart';
 
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
-// import 'dart:html' as html;
 import 'package:zarinpal/zarinpal.dart';
 
 class PaymentStepController extends MainController {
@@ -50,7 +44,7 @@ class PaymentStepController extends MainController {
 
   void calculatePrices() {
     final mySeatStepScreenController = Get.put(SeatsStepController(model));
-    final myUpgradesStepController = Get.put(UpgradesStepController(model));
+    // final myUpgradesStepController = Get.put(UpgradesStepController(model));
     totalPrice.value = 0;
     seatPrices.value = mySeatStepScreenController.seatPrices;
     totalPrice.value += seatPrices.value;

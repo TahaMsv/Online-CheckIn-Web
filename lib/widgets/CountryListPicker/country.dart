@@ -25,4 +25,9 @@ class Country {
   bool operator ==(other) {
     return (other is Country) && other.name == name && other.iso3Code == iso3Code;
   }
+
+  @override
+  // TODO: implement hashCode
+  int get hashCode => super.hashCode;
+
 }

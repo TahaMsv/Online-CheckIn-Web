@@ -173,7 +173,7 @@ class _CupertinoCountryPickerState extends State<CountryPickerCupertino> {
       magnification: widget.magnification,
       children: _countries
           .map<Widget>((Country country) => widget.itemBuilder != null
-              ? widget.itemBuilder!(country)
+              ? widget.itemBuilder!(country, CupertinoColors.black)
               : _buildDefaultItem(country))
           .toList(),
       onSelectedItemChanged: (int index) {

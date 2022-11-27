@@ -1,12 +1,7 @@
-import 'dart:math' as math;
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:onlinecheckin/widgets/LanguagePicker.dart';
 import '../../widgets/UserTextInput.dart';
-import '../../widgets/CountryListPicker/country.dart';
-import '../../widgets/CountryListPicker/country_picker_dropdown.dart';
-import '../../widgets/CountryListPicker/utils/utils.dart';
 import '../../screens/enterScreen/EnterScreenController.dart';
 import '../../global/MainModel.dart';
 import '../../utility/Constants.dart';
@@ -20,7 +15,7 @@ class EnterScreenTabletView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MainModel model = context.watch<MainModel>();
+    // MainModel model = context.watch<MainModel>();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(

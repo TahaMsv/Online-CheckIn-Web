@@ -1,12 +1,10 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:onlinecheckin/screens/receiptStepScreen/ReceiptStepController.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../widgets/StepsScreenTitle.dart';
 import '../../global/MainModel.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 class ReceiptStepView extends StatelessWidget {
   final ReceiptStepController myReceiptStepController;
@@ -19,7 +17,7 @@ class ReceiptStepView extends StatelessWidget {
     // double height = Get.height;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    MainModel model = context.watch<MainModel>();
+    // MainModel model = context.watch<MainModel>();
     return Scaffold(
       backgroundColor: Colors.white,
       body: Obx(

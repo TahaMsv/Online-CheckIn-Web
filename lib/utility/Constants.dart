@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:onlinecheckin/global/Classes.dart';
 
 class RouteNames {
   RouteNames._();
@@ -49,19 +48,17 @@ class MyTheme {
 
   static ThemeData light = ThemeData.light().copyWith(
       primaryColor: Colors.deepOrange,
-      accentColor: Colors.blue,
       textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-        primary: Colors.deepPurple,
-      )));
+        foregroundColor: Colors.deepPurple,
+      )), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.blue));
 
   static ThemeData dark = ThemeData.dark().copyWith(
     primaryColor: Colors.deepPurple,
-    accentColor: Colors.grey,
     textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-      primary: Colors.deepOrange,
-    )),
+      foregroundColor: Colors.deepOrange,
+    )), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.grey),
   );
 }
 
@@ -196,7 +193,6 @@ class TranslatedWords extends Translations {
           "Magnetic Objects": "Magnetic Objects",
           "Magnets, Batteries and Magnetic Objects": "Magnets, Batteries and Magnetic Objects",
           "Type of Toxins": "Type of Toxins",
-          "Powder, Liquid and Sprays of Laboratory Products For Infectious Agents": "Powder, Liquid and Sprays of Laboratory Products For Infectious Agents",
           "Radioactive Material": "Radioactive Material",
           "Radioactive Substances Exposed To Radiation": "Radioactive Substances Exposed To Radiation",
           "Types of Spray": "Types of Spray",
