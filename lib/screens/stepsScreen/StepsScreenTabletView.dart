@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:onlinecheckin/screens/rulesStepScreen/RulesStepTabletView.dart';
 import 'package:onlinecheckin/screens/safetyStepScreen/SafetyStepTabletView.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
 import 'package:onlinecheckin/widgets/LanguagePicker.dart';
@@ -94,7 +95,7 @@ class StepsScreenTabletView extends StatelessWidget {
                                 : myStepsScreenController.step == 1
                                     ? SafetyStepTabletView(model)
                                     : myStepsScreenController.step == 2
-                                        ? RulesStepView(model)
+                                        ? RulesStepTabletView(model)
                                         : myStepsScreenController.step == 3
                                             ? PassportStepView(model)
                                             : myStepsScreenController.step == 4
