@@ -35,7 +35,8 @@ class RulesStepTabletView extends StatelessWidget {
                   (value) {
                     int index = myRulesStepScreenController.rules.indexOf(value);
                     value["imageUrl"] = "assets/images/DangerousGoods${index + 1}.png";
-                    return DangerousItem(
+                    return
+                      DangerousItem(
                       value: value,
                     );
                   },
@@ -98,17 +99,15 @@ class DangerousItem extends StatelessWidget {
               Container(
                 // height: 40,
                 width: Get.width * 0.7,
-                child: Flexible(
-                  child: Text(
-                    value["content"]!.tr,
-                    // overflow: TextOverflow.,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Color(0xff424242),
-                      fontWeight: FontWeight.w400,
-                    ),
-                    // textAlign: TextAlign.center,
+                child: Text(
+                  value["content"]!.tr,
+                  // overflow: TextOverflow.,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color(0xff424242),
+                    fontWeight: FontWeight.w400,
                   ),
+                  // textAlign: TextAlign.center,
                 ),
               ),
             ],

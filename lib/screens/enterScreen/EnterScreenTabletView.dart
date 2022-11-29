@@ -82,7 +82,7 @@ class CheckInForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height = 400 <= Get.height * 0.5 ? 400 : Get.height * 0.5;
+    double height =   400 <= Get.height * 0.5 ? 400 : Get.height * 0.5;
     return Container(
       height: height,
       // width: 400,
@@ -90,81 +90,79 @@ class CheckInForm extends StatelessWidget {
       child: ListView(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 300,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Online Check-in".tr,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xff424242),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              child: Text(
-                                "Input Requested info in order to continue".tr,
-                                style: TextStyle(
-                                  color: Color(0xff808080),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 40,
-                        ),
-                        Obx(
-                          () => Container(
-                            height: 100,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                UserTextInput(
-                                  controller: myEnterScreenController.lastNameC,
-                                  hint: "Last Name".tr,
-                                  errorText: "Last Name can't be empty".tr,
-                                  isEmpty: myEnterScreenController.isLastNameEmpty.value,
-                                ),
-                                UserTextInput(
-                                  controller: myEnterScreenController.bookingRefNameC,
-                                  hint: "Booking reference name".tr,
-                                  errorText: "Booking reference name can't be empty".tr,
-                                  isEmpty: myEnterScreenController.isBookingRefNameEmpty.value,
-                                  obscureText: true,
-                                ),
-                              ],
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    // mainAxisAlignment: MainAxisAlignment.,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Online Check-in".tr,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff424242),
                             ),
                           ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            child: Text(
+                              "Input Requested info in order to continue".tr,
+                              style: TextStyle(
+                                color: Color(0xff808080),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Obx(
+                        () => Container(
+                          height: 100,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              UserTextInput(
+                                controller: myEnterScreenController.lastNameC,
+                                hint: "Last Name".tr,
+                                errorText: "Last Name can't be empty".tr,
+                                isEmpty: myEnterScreenController.isLastNameEmpty.value,
+                              ),
+                              UserTextInput(
+                                controller: myEnterScreenController.bookingRefNameC,
+                                hint: "Booking reference name".tr,
+                                errorText: "Booking reference name can't be empty".tr,
+                                isEmpty: myEnterScreenController.isBookingRefNameEmpty.value,
+                                obscureText: true,
+                              ),
+                            ],
+                          ),
                         ),
-                        SizedBox(
-                          height: 40,
-                        ),
-                        CheckInButton(
-                          myEnterScreenController: myEnterScreenController,
-                        )
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      CheckInButton(
+                        myEnterScreenController: myEnterScreenController,
+                      )
+                    ],
                   ),
-                  CopyRightText(),
-                ],
-              ),
+                ),
+                CopyRightText(),
+              ],
             ),
           ),
         ],

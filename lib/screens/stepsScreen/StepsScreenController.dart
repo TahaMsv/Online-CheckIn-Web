@@ -274,7 +274,7 @@ class StepsScreenController extends MainController {
       setNextButton(paymentStepController.wasPayed);
       paymentStepController.calculatePrices();
     }
-    print(_step.value);
+    print("step: " + _step.value.toString());
     updateIsNextButtonDisable();
   }
 
@@ -296,22 +296,27 @@ class StepsScreenController extends MainController {
       }
       if (isSuccessful) {
         if (step == 2 && flightType == "d") {
+          print("here299");
           setStep(step + 4);
           currButtonTextIndex.value = nextButtonTextIndex;
           return;
         } else if (step == 2 && !isDocsNecessary.value) {
+          print("here303");
           setStep(step + 3);
           currButtonTextIndex.value = nextButtonTextIndex;
           return;
         }
         if (step == 3) {
+          print("here310");
           if (!isDocoNecessary.value) {
+            print("here312");
             setStep(step + 2);
             currButtonTextIndex.value = nextButtonTextIndex;
 
             return;
           }
         }
+        print("here316");
         setStep(step + 1);
         currButtonTextIndex.value = nextButtonTextIndex;
       }
@@ -377,9 +382,10 @@ class StepsScreenController extends MainController {
     Traveller traveller = new Traveller(token: token, ticketNumber: ticketNumber, seatId: "--", welcome: welcome!);
     traveller.setPassportInfo(new PassportInfo());
     traveller.setVisaInfo(new VisaInfo());
-    // setDocsNecessary(true);
+
     // welcome!.body.flight[0].checkDocs == 1 && flightType == "i" ? setDocsNecessary(true) : setDocsNecessary(false);
-    flightType == "i" ? setDocsNecessary(true) : setDocsNecessary(false);
+    // flightType == "i" ? setDocsNecessary(true) : setDocsNecessary(false); // todo
+    setDocsNecessary(true);
     travellers.add(traveller);
     // print(jsonEncode(traveller.toJson()));
     updateIsNextButtonDisable();

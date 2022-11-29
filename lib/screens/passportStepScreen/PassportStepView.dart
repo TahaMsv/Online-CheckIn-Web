@@ -20,31 +20,31 @@ class PassportStepView extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
               children: [
-                StepsScreenTitle(
-                  title: "Passport".tr,
-                  description: "Enter passport data (DOCS) for all the passengers.".tr,
-                ),
+                // StepsScreenTitle(
+                //   title: "Passport".tr,
+                //   description: "Enter passport data (DOCS) for all the passengers.".tr,
+                // ),
                 SizedBox(
                   height: 10,
                 ),
-                Obx(
-                  () => Expanded(
-                    child: GridView.count(
-                      crossAxisCount: 4,
-                      // crossAxisSpacing: 60,
-                      childAspectRatio: 315 / 193,
-                      children: myPassportStepController.travellers.asMap().entries.map(
-                        (entry) {
-                          int idx = entry.key;
-                          return InfoCard(
-                            index: idx,
-                            myPassportStepController: myPassportStepController,
-                          );
-                        },
-                      ).toList(),
-                    ),
-                  ),
-                ),
+                // Obx(
+                //   () => Expanded(
+                //     child: GridView.count(
+                //       crossAxisCount: 4,
+                //       // crossAxisSpacing: 60,
+                //       childAspectRatio: 315 / 193,
+                //       children: myPassportStepController.travellers.asMap().entries.map(
+                //         (entry) {
+                //           int idx = entry.key;
+                //           return InfoCard(
+                //             index: idx,
+                //             myPassportStepController: myPassportStepController,
+                //           );
+                //         },
+                //       ).toList(),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
     );

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:onlinecheckin/screens/rulesStepScreen/RulesStepTabletView.dart';
 import 'package:onlinecheckin/screens/safetyStepScreen/SafetyStepTabletView.dart';
@@ -56,34 +55,35 @@ class StepsScreenTabletView extends StatelessWidget {
                     // color: Colors.green,
                     child: ListView(
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: myStepsScreenController.step == 0
-                                  ? MyDottedLine(
-                                      lineLength: double.infinity,
-                                      color: Color(0xff48c0a2),
-                                    )
-                                  : Container(
-                                      height: 1,
-                                      color: Color(0xff48c0a2),
-                                    ),
-                            ),
-                            for (int i = 0; i <= 8; i++)
-
-                              // if (myStepsScreenController.isStepNeeded(i))
-                              StepWidget(
-                                step: myStepsScreenController.step,
-                                index: i,
-                                // checkDocs: myStepsScreenController.welcome!.body.flight[0].checkDocs,
+                        Obx(
+                          () => Row(
+                            children: [
+                              Expanded(
+                                child: myStepsScreenController.step == 0
+                                    ? MyDottedLine(
+                                        lineLength: double.infinity,
+                                        color: Color(0xff48c0a2),
+                                      )
+                                    : Container(
+                                        height: 1,
+                                        color: Color(0xff48c0a2),
+                                      ),
                               ),
-                            Expanded(
-                              child: Container(
-                                height: 1,
-                                color: Color(0xffdbdbdb),
+                              for (int i = 0; i <= 8; i++)
+                                if (myStepsScreenController.isStepNeeded(i))
+                                  StepWidget(
+                                    step: myStepsScreenController.step,
+                                    index: i,
+                                    // checkDocs: myStepsScreenController.welcome!.body.flight[0].checkDocs,
+                                  ),
+                              Expanded(
+                                child: Container(
+                                  height: 1,
+                                  color: Color(0xffdbdbdb),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         Obx(
                           () => Container(
