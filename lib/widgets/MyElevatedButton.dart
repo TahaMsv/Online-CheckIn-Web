@@ -28,9 +28,18 @@ class MyElevatedButton extends StatelessWidget {
     return Container(
       height: height,
       width: width,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.blue,
+          width: 2
+        ),
+      ),
       child: ElevatedButton(
         onPressed: isDisable ? null : function,
-        child: Text(buttonText.tr, style: TextStyle(fontSize: fontSize),),
+        child: Text(
+          buttonText.tr,
+          style: TextStyle(fontSize: fontSize),
+        ),
         style: isDisable
             ? ButtonStyle(
                 foregroundColor: MaterialStateProperty.all(fgColor.withOpacity(0.2)),

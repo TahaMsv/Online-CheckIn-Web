@@ -24,7 +24,7 @@ class StepsScreenController extends MainController {
     return _instance;
   }
 
-  String flightType = "d"; // d = Domestic , i = International
+  String flightType = "i"; // d = Domestic , i = International
 
   String language = Get.locale!.languageCode;
   RxBool isDocoNecessary = false.obs;
@@ -54,7 +54,7 @@ class StepsScreenController extends MainController {
     nextButtonTextIndex = (prefs.getInt('nextButtonTextIndex') == null ? 0 : prefs.getInt('nextButtonTextIndex')!);
     whoseTurnToSelect.value = (prefs.getInt('whoseTurnToSelect') == null ? 0 : prefs.getInt('nextButtonTextIndex')!);
     _whichOneToEdit.value = (prefs.getInt('_whichOneToEdit') == null ? -1 : prefs.getInt('nextButtonTextIndex')!);
-    flightType = (prefs.getString('flightType') == null ? 'd' : prefs.getString('flightType')!);
+    flightType = (prefs.getString('flightType') == null ? 'i' : prefs.getString('flightType')!);
     isDocoNecessary.value = (prefs.getBool('isDocoNecessary') == null ? false : prefs.getBool('isDocoNecessary')!);
     isDocsNecessary.value = (prefs.getBool('isDocsNecessary') == null ? false : prefs.getBool('isDocsNecessary')!);
     if (_welcome == null && prefs.getString('welcome') != null) {
@@ -281,7 +281,7 @@ class StepsScreenController extends MainController {
   void increaseStep() async {
     prepareNextButtonText();
     bool isSuccessful = true;
-
+print("here at setstep");
     if (step < 8) {
       if (step == 6) {
         SeatsStepController seatsStepController = Get.put(SeatsStepController(model));
@@ -432,7 +432,7 @@ class StepsScreenController extends MainController {
   @override
   void onInit() {
     print("StepsScreenController Init");
-    init();
+    // init();
     super.onInit();
   }
 

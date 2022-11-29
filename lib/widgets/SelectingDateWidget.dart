@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 // import 'package:date_time_picker/date_time_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
@@ -12,6 +13,9 @@ class SelectingDateWidget extends StatefulWidget {
     required this.index,
     required this.currDateTime,
     required this.isCurrDateEmpty,
+    this.height = 40,
+    this.width = 200,
+     this.fontSize = 18,
   }) : super(key: key);
 
   final String hint;
@@ -19,6 +23,9 @@ class SelectingDateWidget extends StatefulWidget {
   final int index;
   final DateTime currDateTime;
   final bool isCurrDateEmpty;
+  final double height;
+  final double width;
+  final double fontSize;
 
   @override
   State<SelectingDateWidget> createState() => _SelectingDateWidgetState();
@@ -56,8 +63,8 @@ class _SelectingDateWidgetState extends State<SelectingDateWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
-      width: 200,
+      height: widget.height,
+      width: widget.width,
       decoration: BoxDecoration(
         border: Border.all(
           color: Color(0xffeaeaea),
@@ -71,16 +78,25 @@ class _SelectingDateWidgetState extends State<SelectingDateWidget> {
           children: [
             Container(
               width: 140,
-              child: widget.isCurrDateEmpty ? Text(widget.hint) : Text(DateFormat('yyyy-MM-dd').format(currentDate)),
+              child: widget.isCurrDateEmpty
+                  ? Text(
+                      widget.hint,
+                      style: TextStyle(fontSize: widget.fontSize),
+                    )
+                  : Text(
+                      DateFormat('yyyy-MM-dd').format(currentDate),
+                      style: TextStyle(fontSize: widget.fontSize),
+                    ),
             ),
             Container(
-              width: 20,
+              width: widget.fontSize + 20,
+              height: widget.fontSize + 20,
               child: IconButton(
                 onPressed: () => _selectDate(context),
                 icon: Icon(
                   MenuIcons.iconCalendar,
                   color: Color(0xff4d6fff),
-                  size: 15,
+                  size: widget.fontSize ,
                 ),
               ),
             )

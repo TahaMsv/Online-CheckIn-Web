@@ -12,6 +12,7 @@ import '../../widgets/StepsScreenTitle.dart';
 import '../../widgets/UserTextInput.dart';
 import '../../global/MainController.dart';
 import '../../global/MainModel.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class PassportStepController extends MainController {
   MainModel model;
@@ -191,6 +192,7 @@ class PassportStepController extends MainController {
   List<Country> nationalitiesList = [
     new Country(worldAreaCode: null, currencyId: null, englishName: "Nationality", name: null, hasOnHoldBooking: null, regionId: null, code3: null, isDisabled: null, id: null)
   ];
+
 /////////////////////////////////////////////
 
   void selectDateOfBirth(int index, DateTime date) {
@@ -322,10 +324,10 @@ class PassportStepController extends MainController {
     );
   }
 
-  Container passportTypeDropDown(int index, Locale locale) {
+  Container passportTypeDropDown(int index, Locale locale, {double width = 400, double height = 40}) {
     return Container(
-      height: 40,
-      width: 200,
+      height: height,
+      width: width,
       decoration: BoxDecoration(
         border: Border.all(
           color: Color(0xffeaeaea),
@@ -344,16 +346,17 @@ class PassportStepController extends MainController {
                 travellers[index].passportInfo.passportType = getKeyFromLanguageWords(locale, newValue.toString());
                 refreshList(index);
               },
-              value: travellers[index].passportInfo.passportType == null ||
-                  travellers[index].passportInfo.passportType== "Passport Type" ? "Passport Type".tr : travellers[index].passportInfo.passportType,
+              value: travellers[index].passportInfo.passportType == null || travellers[index].passportInfo.passportType == "Passport Type"
+                  ? "Passport Type".tr
+                  : travellers[index].passportInfo.passportType,
               items: listPassportType.map(
                 (selectedType) {
                   return DropdownMenuItem(
                     child: Text(
-                      selectedType.fullName== "Passport Type" ? "Passport Type".tr : selectedType.fullName,
-
+                      selectedType.fullName == "Passport Type" ? "Passport Type".tr : selectedType.fullName,
+                      style: TextStyle(fontSize: 25),
                     ),
-                    value: selectedType.fullName== "Passport Type" ? "Passport Type".tr : selectedType.fullName,
+                    value: selectedType.fullName == "Passport Type" ? "Passport Type".tr : selectedType.fullName,
                   );
                 },
               ).toList(),
@@ -364,10 +367,10 @@ class PassportStepController extends MainController {
     );
   }
 
-  Container nationalityDropDown(int index, Locale locale) {
+  Container nationalityDropDown(int index, Locale locale, {double width = 400, double height = 40}) {
     return Container(
-      height: 40,
-      width: 200,
+      height: height,
+      width: width,
       decoration: BoxDecoration(
         border: Border.all(
           color: Color(0xffeaeaea),
@@ -381,19 +384,20 @@ class PassportStepController extends MainController {
             child: DropdownButton(
               hint: Text(
                 'Nationality',
+                style: TextStyle(fontSize: 25),
               ),
               onChanged: (newValue) {
                 travellers[index].passportInfo.nationality = getKeyFromLanguageWords(locale, newValue.toString());
                 refreshList(index);
               },
-              value: travellers[index].passportInfo.nationality == null ||
-                  travellers[index].passportInfo.nationality == "Nationality" ? "Nationality".tr : travellers[index].passportInfo.nationality,
+              value: travellers[index].passportInfo.nationality == null || travellers[index].passportInfo.nationality == "Nationality" ? "Nationality".tr : travellers[index].passportInfo.nationality,
               items: nationalitiesList.map(
                 (selectedType) {
                   travellers[index].passportInfo.nationalityID = selectedType.id;
                   return DropdownMenuItem(
                     child: new Text(
                       selectedType.englishName! == "Nationality" ? ("Nationality".tr) : selectedType.englishName!,
+                      style: TextStyle(fontSize: 25),
                     ),
                     value: selectedType.englishName! == "Nationality" ? ("Nationality".tr) : selectedType.englishName!,
                   );
@@ -406,10 +410,10 @@ class PassportStepController extends MainController {
     );
   }
 
-  Container countryOfIssueDropDown(int index, Locale locale) {
+  Container countryOfIssueDropDown(int index, Locale locale, {double width = 200, double height = 40}) {
     return Container(
-      height: 40,
-      width: 200,
+      height: height,
+      width: width,
       decoration: BoxDecoration(
         border: Border.all(
           color: Color(0xffeaeaea),
@@ -417,8 +421,7 @@ class PassportStepController extends MainController {
         ),
       ),
       child: Obx(
-        () =>
-            DropdownButtonHideUnderline(
+        () => DropdownButtonHideUnderline(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 5),
             child: DropdownButton(
@@ -426,16 +429,21 @@ class PassportStepController extends MainController {
               //   'Country of Issue'.tr,
               // ),
               onChanged: (newValue) {
-                travellers[index].passportInfo.countryOfIssue =  getKeyFromLanguageWords(locale, newValue.toString());
+                travellers[index].passportInfo.countryOfIssue = getKeyFromLanguageWords(locale, newValue.toString());
                 refreshList(index);
               },
-              value: travellers[index].passportInfo.countryOfIssue == null ||
-                  travellers[index].passportInfo.countryOfIssue == "Country of Issue" ? "Country of Issue".tr : travellers[index].passportInfo.countryOfIssue,
+              value: travellers[index].passportInfo.countryOfIssue == null || travellers[index].passportInfo.countryOfIssue == "Country of Issue"
+                  ? "Country of Issue".tr
+                  : travellers[index].passportInfo.countryOfIssue,
               items: countryOfIssueList.map(
                 (selectedType) {
                   return DropdownMenuItem(
                     child: new Text(
                       selectedType.englishName! == "Country of Issue" ? ("Country of Issue".tr) : selectedType.englishName!,
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                     value: selectedType.englishName! == "Country of Issue" ? ("Country of Issue".tr) : selectedType.englishName!,
                   );
@@ -448,10 +456,10 @@ class PassportStepController extends MainController {
     );
   }
 
-  Container genderDropDown(int index, Locale locale) {
+  Container genderDropDown(int index, Locale locale, {double width = 200, double height = 40}) {
     return Container(
-      height: 40,
-      width: 200,
+      height: height,
+      width: width,
       decoration: BoxDecoration(
         border: Border.all(
           color: Color(0xffeaeaea),
@@ -467,22 +475,159 @@ class PassportStepController extends MainController {
               //   'Gender'.tr,
               // ),
               onChanged: (newValue) {
-                travellers[index].passportInfo.gender =getKeyFromLanguageWords( locale, newValue.toString());
+                travellers[index].passportInfo.gender = getKeyFromLanguageWords(locale, newValue.toString());
                 refreshList(index);
               },
-              value: travellers[index].passportInfo.gender == null ||
-                  travellers[index].passportInfo.gender == "Gender" ? "Gender".tr : travellers[index].passportInfo.gender!.tr,
+              value: travellers[index].passportInfo.gender == null || travellers[index].passportInfo.gender == "Gender" ? "Gender".tr : travellers[index].passportInfo.gender!.tr,
               items: listGender.map(
                 (selectedType) {
                   return DropdownMenuItem(
                     child: new Text(
                       selectedType.tr == "Gender" ? "Gender".tr : selectedType.tr,
-
+                      style: TextStyle(fontSize: 20),
                     ),
-                    value:  selectedType.tr == "Gender" ? "Gender".tr : selectedType.tr,
+                    value: selectedType.tr == "Gender" ? "Gender".tr : selectedType.tr,
                   );
                 },
               ).toList(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void showBottomSheetForm(BuildContext context, int index) {
+    Locale locale = Get.locale!;
+    showMaterialModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        height: Get.height * 0.7,
+        child: Center(
+          child: SingleChildScrollView(
+            controller: ModalScrollController.of(context),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  StepsScreenTitle(
+                    title: "Passport / Visa Details".tr,
+                    description: "",
+                    fontSize: 25,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  passportTypeDropDown(index, locale, width: Get.width, height: 80),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  UserTextInput(
+                    controller: documentNoCs[index],
+                    hint: "Document No.".tr,
+                    errorText: "",
+                    isEmpty: false,
+                    height: 80,
+                    width: Get.width,
+                    fontSize: 25,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      genderDropDown(index, locale, height: 80, width: Get.width * 0.3),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      countryOfIssueDropDown(index, locale, height: 80, width: Get.width * 0.5),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Obx(
+                    () => SelectingDateWidget(
+                      height: 80,
+                      width: Get.width,
+                      fontSize: 22,
+                      hint: "Entry Date".tr,
+                      index: index,
+                      updateDate: selectEntryDate,
+                      currDateTime: travellers[index].passportInfo.entryDate == null ? DateTime.now() : travellers[index].passportInfo.entryDate!,
+                      isCurrDateEmpty: travellers[index].passportInfo.entryDate == null ? true : false,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  nationalityDropDown(index, locale, height: 80, width: Get.width),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Obx(
+                    () => SelectingDateWidget(
+                      height: 80,
+                      width: Get.width,
+                      fontSize: 22,
+                      hint: "Date of Birth".tr,
+                      index: index,
+                      updateDate: selectDateOfBirth,
+                      currDateTime: travellers[index].passportInfo.dateOfBirth == null ? DateTime.now() : travellers[index].passportInfo.dateOfBirth!,
+                      isCurrDateEmpty: travellers[index].passportInfo.dateOfBirth == null ? true : false,
+                    ),
+                  ),
+                  // Row(
+                  //   children: [
+                  //
+                  //     SizedBox(
+                  //       width: 20,
+                  //     ),
+                  //     Obx(
+                  //       () => SelectingDateWidget(
+                  //         hint: "Date of Birth".tr,
+                  //         index: index,
+                  //         updateDate: selectDateOfBirth,
+                  //         currDateTime: travellers[index].passportInfo.dateOfBirth == null ? DateTime.now() : travellers[index].passportInfo.dateOfBirth!,
+                  //         isCurrDateEmpty: travellers[index].passportInfo.dateOfBirth == null ? true : false,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: 1,
+                      ),
+                      MyElevatedButton(
+                        height: 70,
+                        width: 200,
+                        buttonText: "Submit".tr,
+                        bgColor: Colors.white,
+                        fgColor: Color(0xff4d6ff8),
+                        function: model.requesting
+                            ? () {}
+                            : () {
+                                VisaStepController visaStepController = Get.put(VisaStepController(model));
+                                travellers.refresh();
+                                updateDocuments();
+                                updateIsCompleted(index);
+                                // saveDocsDocoDoca(index);
+                                visaStepController.checkDocoNecessity(travellers[index]);
+                                Get.back();
+                              },
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

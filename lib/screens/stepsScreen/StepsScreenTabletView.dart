@@ -18,6 +18,7 @@ import '../../global/MainModel.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../passportStepScreen/PassportStepTabletView.dart';
 import '../travellersStepScreen/TravellerStepScreenTabletView.dart';
 
 class StepsScreenTabletView extends StatelessWidget {
@@ -97,7 +98,7 @@ class StepsScreenTabletView extends StatelessWidget {
                                     : myStepsScreenController.step == 2
                                         ? RulesStepTabletView(model)
                                         : myStepsScreenController.step == 3
-                                            ? PassportStepView(model)
+                                            ? PassportStepTabletView(model)
                                             : myStepsScreenController.step == 4
                                                 ? VisaStepView(model)
                                                 : myStepsScreenController.step == 5
