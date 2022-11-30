@@ -12,6 +12,7 @@ class MyElevatedButton extends StatelessWidget {
     required this.function,
     this.isDisable = false,
     this.fontSize = 15,
+    this.borderColor = Colors.transparent,
   }) : super(key: key);
 
   final double height;
@@ -19,6 +20,7 @@ class MyElevatedButton extends StatelessWidget {
   final String buttonText;
   final Color bgColor;
   final Color fgColor;
+  final Color borderColor;
   final VoidCallback function;
   final bool isDisable;
   final double fontSize;
@@ -29,10 +31,7 @@ class MyElevatedButton extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.blue,
-          width: 2
-        ),
+        border: Border.all(color: borderColor, width: 2),
       ),
       child: ElevatedButton(
         onPressed: isDisable ? null : function,
