@@ -140,6 +140,7 @@ class CheckInForm extends StatelessWidget {
                                 hint: "Last Name".tr,
                                 errorText: "Last Name can't be empty".tr,
                                 isEmpty: myEnterScreenController.isLastNameEmpty.value,
+                                width: Get.width,
                               ),
                               UserTextInput(
                                 controller: myEnterScreenController.bookingRefNameC,
@@ -147,6 +148,7 @@ class CheckInForm extends StatelessWidget {
                                 errorText: "Booking reference name can't be empty".tr,
                                 isEmpty: myEnterScreenController.isBookingRefNameEmpty.value,
                                 obscureText: true,
+                                width: Get.width,
                               ),
                             ],
                           ),

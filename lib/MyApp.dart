@@ -4,6 +4,7 @@ import 'package:onlinecheckin/screens/passportStepScreen/PassportStepTabletView.
 import 'package:onlinecheckin/screens/rulesStepScreen/RulesStepTabletView.dart';
 import 'package:onlinecheckin/screens/safetyStepScreen/SafetyStepTabletView.dart';
 import 'package:onlinecheckin/screens/stepsScreen/StepsScreenTabletView.dart';
+import 'package:onlinecheckin/screens/visaStepScreen/VisaStepScreenTabletView.dart';
 import '../../screens/seatsStepScreen/SeatStepScreenView.dart';
 import 'screens/receiptStepScreen/ReceipStepView.dart';
 import 'screens/upgradesStepScreen/UpgradesStepView.dart';
@@ -50,7 +51,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: RouteNames.passport, page: () =>
             PassportStepTabletView(_model)),
             // PassportStepView(_model)),
-        GetPage(name: RouteNames.visa, page: () => VisaStepView(_model)),
+        GetPage(name: RouteNames.visa, page: () =>
+            VisaStepTabletView(_model)),
+            // VisaStepView(_model)),
         GetPage(name: RouteNames.payment, page: () => PaymentStepView(_model)),
         GetPage(name: RouteNames.upgrades, page: () => UpgradesStepView(_model)),
         GetPage(name: RouteNames.receipt, page: () => ReceiptStepView(_model)),

@@ -142,6 +142,7 @@ class InfoCard extends StatelessWidget {
               ? EditIPassInfo(
                   index: index,
                   myPassportStepController: myPassportStepController,
+            mode: "tablet",
                 )
               : AddPassInfo(
                   index: index,
@@ -205,9 +206,11 @@ class EditIPassInfo extends StatelessWidget {
     Key? key,
     required this.myPassportStepController,
     required this.index,
+    this.mode = "web",
   }) : super(key: key);
   final PassportStepController myPassportStepController;
   final int index;
+  final String mode;
 
   @override
   Widget build(BuildContext context) {
@@ -219,10 +222,10 @@ class EditIPassInfo extends StatelessWidget {
             Icon(
               Icons.check,
               color: Color(0xffffffff),
-              size: 18,
+              size: 30,
             ),
             SizedBox(
-              width: 5,
+              width: 10,
             ),
             // Text(
             //   "Passport No: ",
@@ -236,12 +239,16 @@ class EditIPassInfo extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            myPassportStepController.showDOCSPopup(index);
-          },
+            if(mode== "web") {
+              myPassportStepController.showDOCSPopup(index);
+            }else{
+              myPassportStepController.showBottomSheetForm(context, index);
+            }
+            },
           child: Icon(
             MenuIcons.iconEdit,
             color: Colors.white,
-            size: 18,
+            size: 30,
           ),
         )
       ],

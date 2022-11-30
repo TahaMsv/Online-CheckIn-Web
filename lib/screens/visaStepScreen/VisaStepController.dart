@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:onlinecheckin/utility/Constants.dart';
 import '../../utility/DataProvider.dart';
 import '../../screens/stepsScreen/StepsScreenController.dart';
@@ -159,7 +160,12 @@ class VisaStepController extends MainController {
                 SizedBox(
                   width: 20,
                 ),
-                DocumentNoWidget(documentNoC: documentNoCs[index])
+                UserTextInput(
+                  controller: documentNoCs[index],
+                  hint: "Document No.",
+                  errorText: "",
+                  isEmpty: false,
+                ),
               ],
             ),
             SizedBox(
@@ -205,10 +211,111 @@ class VisaStepController extends MainController {
     );
   }
 
-  Container placeOfIssueDropDown(int index, Locale locale) {
+  void showBottomSheetForm(BuildContext context, int index) {
+    Locale locale = Get.locale!;
+    showMaterialModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        height: Get.height * 0.6,
+        child: Center(
+          child: SingleChildScrollView(
+            controller: ModalScrollController.of(context),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  StepsScreenTitle(
+                    title: "Passport / Visa Details".tr,
+                    description: "",
+                    fontSize: 25,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "A valid visa is required for entry. please enter here the information about your visa you want to present at your final destination".tr,
+                    overflow: TextOverflow.clip,
+                    style: TextStyle(color: Color(0xff959595), fontSize: 22),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  typeDropDown(index, locale, height: 80, width: Get.width, fontSize: 20),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  UserTextInput(
+                    controller: documentNoCs[index],
+                    hint: "Document No.",
+                    errorText: "",
+                    isEmpty: false,
+                    height: 80,
+                    width: Get.width,
+                    fontSize: 23,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  placeOfIssueDropDown(index, locale, height: 80, width: Get.width, fontSize: 20),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Obx(
+                    () => SelectingDateWidget(
+                      height: 80,
+                      width: Get.width,
+                      fontSize: 23,
+                      hint: "Issue Date".tr,
+                      index: index,
+                      updateDate: selectEntryDate,
+                      currDateTime: travellers[index].visaInfo.issueDate == null ? DateTime.now() : travellers[index].visaInfo.issueDate!,
+                      isCurrDateEmpty: travellers[index].visaInfo.issueDate == null ? true : false,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  UserTextInput(
+                    height: 80,
+                    width: Get.width,
+                    fontSize: 23,
+                    controller: destinationCs[index],
+                    hint: "Destination".tr,
+                    errorText: "",
+                    isEmpty: false,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: 1,
+                      ),
+                      SubmitButton(
+                        height: 60,
+                        width: 200,
+                        fontSize: 20,
+                        function: model.requesting ? () {} : () => submitBtnFunction(index),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container placeOfIssueDropDown(int index, Locale locale, {double width = 400, double height = 40, double fontSize = 15}) {
     return Container(
-      height: 40,
-      width: 200,
+      height: height,
+      width: width,
       decoration: BoxDecoration(
         border: Border.all(
           color: Color(0xffeaeaea),
@@ -234,6 +341,7 @@ class VisaStepController extends MainController {
                   return DropdownMenuItem(
                     child: new Text(
                       selectedType.englishName! == "Place of issue" ? ("Place of issue".tr) : selectedType.englishName!,
+                      style: TextStyle(fontSize: fontSize),
                     ),
                     value: selectedType.englishName! == "Place of issue" ? ("Place of issue".tr) : selectedType.englishName!,
                   );
@@ -246,10 +354,10 @@ class VisaStepController extends MainController {
     );
   }
 
-  Container typeDropDown(int index, Locale locale) {
+  Container typeDropDown(int index, Locale locale, {double width = 400, double height = 40, double fontSize = 15}) {
     return Container(
-      height: 40,
-      width: 200,
+      height: height,
+      width: width,
       decoration: BoxDecoration(
         border: Border.all(
           color: Color(0xffeaeaea),
@@ -274,6 +382,7 @@ class VisaStepController extends MainController {
                   return DropdownMenuItem(
                     child: Text(
                       selectedType.fullName == "Type" ? ("Type".tr) : selectedType.fullName,
+                      style: TextStyle(fontSize: fontSize),
                     ),
                     value: selectedType.fullName == "Type" ? ("Type".tr) : selectedType.fullName,
                   );
@@ -307,33 +416,18 @@ class VisaStepController extends MainController {
   }
 }
 
-class DocumentNoWidget extends StatelessWidget {
-  const DocumentNoWidget({
-    Key? key,
-    required this.documentNoC,
-  }) : super(key: key);
-
-  final TextEditingController documentNoC;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: UserTextInput(
-        controller: documentNoC,
-        hint: "Document No.",
-        errorText: "",
-        isEmpty: false,
-      ),
-    );
-  }
-}
-
 class SubmitButton extends StatelessWidget {
   const SubmitButton({
     Key? key,
     required this.function,
+    this.height = 40,
+    this.width = 130,
+    this.fontSize = 15,
   }) : super(key: key);
   final Function function;
+  final double height;
+  final double width;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -344,8 +438,8 @@ class SubmitButton extends StatelessWidget {
           width: 1,
         ),
         Container(
-          width: 130,
-          height: 40,
+          width: width,
+          height: height,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.blueAccent),
             borderRadius: BorderRadius.circular(5),
@@ -355,6 +449,7 @@ class SubmitButton extends StatelessWidget {
             height: 50,
             width: 175,
             buttonText: "Submit".tr,
+            fontSize: fontSize,
             bgColor: Colors.white,
             fgColor: Color(0xff4d6ff8),
             function: () {

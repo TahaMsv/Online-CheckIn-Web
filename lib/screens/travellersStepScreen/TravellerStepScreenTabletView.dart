@@ -67,6 +67,7 @@ class TravellersStepTabletView extends StatelessWidget {
     );
   }
 }
+
 class TravellersList extends StatelessWidget {
   const TravellersList({
     Key? key,
@@ -128,7 +129,7 @@ class TravellersList extends StatelessWidget {
           //   color: Color(0xffeaeaea),
           // ),
           Obx(
-                () => Container(
+            () => Container(
               width: width,
               height: height - 105,
               // color: Colors.yellow,
@@ -138,15 +139,15 @@ class TravellersList extends StatelessWidget {
                 itemBuilder: (ctx, index) {
                   return index < myStepsScreenController.travellers.length
                       ? TravellerItem(
-                    step: step,
-                    index: index,
-                    myStepsScreenController: myStepsScreenController,
-                  )
+                          step: step,
+                          index: index,
+                          myStepsScreenController: myStepsScreenController,
+                        )
                       : myStepsScreenController.step == 0
-                      ? AddNewTraveller(
-                    myStepsScreenController: myStepsScreenController,
-                  )
-                      : Container();
+                          ? AddNewTraveller(
+                              myStepsScreenController: myStepsScreenController,
+                            )
+                          : Container();
                 },
               ),
             ),
@@ -170,7 +171,7 @@ class AddNewTraveller extends StatelessWidget {
     MainModel model = context.watch<MainModel>();
     TravellersStepScreenController myTravellersStepScreenController = Get.put(TravellersStepScreenController(model));
     return Obx(
-          () => Container(
+      () => Container(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           children: [
@@ -184,18 +185,18 @@ class AddNewTraveller extends StatelessWidget {
                   children: [
                     myStepsScreenController.isAddingBoxOpen.value
                         ? RotationTransition(
-                      turns: AlwaysStoppedAnimation(45 / 360),
-                      child: Icon(
-                        MenuIcons.iconAdd,
-                        color: Color(0xff48c0a2),
-                        size: 30,
-                      ),
-                    )
+                            turns: AlwaysStoppedAnimation(45 / 360),
+                            child: Icon(
+                              MenuIcons.iconAdd,
+                              color: Color(0xff48c0a2),
+                              size: 30,
+                            ),
+                          )
                         : Icon(
-                      MenuIcons.iconAdd,
-                      color: Color(0xff48c0a2),
-                      size: 30,
-                    ),
+                            MenuIcons.iconAdd,
+                            color: Color(0xff48c0a2),
+                            size: 30,
+                          ),
                     SizedBox(
                       width: 15,
                     ),
@@ -228,9 +229,8 @@ class AddNewTraveller extends StatelessWidget {
                     height: 15,
                   ),
                   Obx(
-                        () => UserTextInput(
-                          height: 63,
-
+                    () => UserTextInput(
+                      height: 63,
                       controller: myTravellersStepScreenController.lastNameC,
                       hint: "Last Name".tr,
                       errorText: "Last Name can't be empty".tr,
@@ -241,8 +241,8 @@ class AddNewTraveller extends StatelessWidget {
                     height: 10,
                   ),
                   Obx(
-                        () => UserTextInput(
-                          height: 63,
+                    () => UserTextInput(
+                      height: 63,
                       controller: myTravellersStepScreenController.ticketNumberC,
                       hint: "Reservation ID / Ticket Number".tr,
                       errorText: "Reservation ID / Ticket Number can't be empty".tr,
@@ -269,10 +269,12 @@ class AddNewTraveller extends StatelessWidget {
 class AddToTravellersButton extends StatelessWidget {
   const AddToTravellersButton({
     Key? key,
-    required this.myTravellersStepScreenController,  this.height = 40,
+    required this.myTravellersStepScreenController,
+    this.height = 40,
   }) : super(key: key);
   final TravellersStepScreenController myTravellersStepScreenController;
-final double height;
+  final double height;
+
   @override
   Widget build(BuildContext context) {
     MainModel model = context.watch<MainModel>();
@@ -306,10 +308,11 @@ class TravellerItem extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
-        shape: BoxShape.rectangle,
+
         color: myStepsScreenController.whoseTurnToSelect.value == index && step == 6 ? const Color(0xffffae2c).withOpacity(0.5) : Colors.white,
       ),
       height: 70,
+      margin: EdgeInsets.only(bottom: 20),
       child: Column(
         children: [
           Expanded(
@@ -329,46 +332,46 @@ class TravellerItem extends StatelessWidget {
                 ),
                 step == 0
                     ? IconButton(
-                  onPressed: () => myStepsScreenController.removeFromTravellers(index),
-                  icon: Icon(
-                    Icons.close,
-                    color: Colors.red,
-                    size: 40,
-                  ),
-                )
+                        onPressed: () => myStepsScreenController.removeFromTravellers(index),
+                        icon: Icon(
+                          Icons.close,
+                          color: Colors.red,
+                          size: 40,
+                        ),
+                      )
                     : step == 6
-                    ? Container(
-                  width: 112,
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 2,
-                        height: 100,
-                        color: Color(0xffededed),
-                      ),
-                      Row(
-                        children: [
-                          TitleWidget(
-                            title: myStepsScreenController.travellers[index].seatId,
-                            width: 75,
-                            textColor: isTravellerSelected ? Color(0xff48c0a2) : Color(0xff424242),
-                          ),
-                          Container(
-                            width: 35,
-                            // child: IconButton(
-                            //   onPressed: () {
-                            //     myStepsScreenController.setWhichOneToEdit(index);
-                            //   },
-                            //   icon: Icon(Icons.edit),
-                            //   color: myStepsScreenController.whichOneToEdit == index ? Colors.green : Colors.blue,
-                            // ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-                    : Container(),
+                        ? Container(
+                            width: 112,
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 2,
+                                  height: 100,
+                                  color: Color(0xffededed),
+                                ),
+                                Row(
+                                  children: [
+                                    TitleWidget(
+                                      title: myStepsScreenController.travellers[index].seatId,
+                                      width: 75,
+                                      textColor: isTravellerSelected ? Color(0xff48c0a2) : Color(0xff424242),
+                                    ),
+                                    Container(
+                                      width: 35,
+                                      // child: IconButton(
+                                      //   onPressed: () {
+                                      //     myStepsScreenController.setWhichOneToEdit(index);
+                                      //   },
+                                      //   icon: Icon(Icons.edit),
+                                      //   color: myStepsScreenController.whichOneToEdit == index ? Colors.green : Colors.blue,
+                                      // ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(),
               ],
             ),
           ),
@@ -377,7 +380,6 @@ class TravellerItem extends StatelessWidget {
     );
   }
 }
-
 
 class AirplaneImage extends StatelessWidget {
   const AirplaneImage({
