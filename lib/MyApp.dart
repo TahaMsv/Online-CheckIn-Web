@@ -3,6 +3,7 @@ import 'package:onlinecheckin/screens/enterScreen/EnterScreenTabletView.dart';
 import 'package:onlinecheckin/screens/passportStepScreen/PassportStepTabletView.dart';
 import 'package:onlinecheckin/screens/rulesStepScreen/RulesStepTabletView.dart';
 import 'package:onlinecheckin/screens/safetyStepScreen/SafetyStepTabletView.dart';
+import 'package:onlinecheckin/screens/seatsStepScreen/SeatStepScreenTabletView.dart';
 import 'package:onlinecheckin/screens/stepsScreen/StepsScreenTabletView.dart';
 import 'package:onlinecheckin/screens/upgradesStepScreen/UpgradeStepTabletView.dart';
 import 'package:onlinecheckin/screens/visaStepScreen/VisaStepScreenTabletView.dart';
@@ -40,27 +41,22 @@ class MyApp extends StatelessWidget {
             page: () =>
                 // EnterScreenView(_model)),
                 EnterScreenTabletView(_model)),
-        GetPage(name: RouteNames.steps, page: () =>
-            StepsScreenTabletView(_model)),
+        GetPage(name: RouteNames.steps, page: () => StepsScreenTabletView(_model)),
         // StepsScreenView(_model)),
-        GetPage(name: RouteNames.safety, page: () =>
-            SafetyStepTabletView(_model)),
-            // SafetyStepView(_model)),
-        GetPage(name: RouteNames.rules, page: () =>
-            RulesStepTabletView(_model)),
-            // RulesStepView(_model)),
-        GetPage(name: RouteNames.passport, page: () =>
-            PassportStepTabletView(_model)),
-            // PassportStepView(_model)),
-        GetPage(name: RouteNames.visa, page: () =>
-            VisaStepTabletView(_model)),
-            // VisaStepView(_model)),
+        GetPage(name: RouteNames.safety, page: () => SafetyStepTabletView(_model)),
+        // SafetyStepView(_model)),
+        GetPage(name: RouteNames.rules, page: () => RulesStepTabletView(_model)),
+        // RulesStepView(_model)),
+        GetPage(name: RouteNames.passport, page: () => PassportStepTabletView(_model)),
+        // PassportStepView(_model)),
+        GetPage(name: RouteNames.visa, page: () => VisaStepTabletView(_model)),
+        // VisaStepView(_model)),
         GetPage(name: RouteNames.payment, page: () => PaymentStepView(_model)),
-        GetPage(name: RouteNames.upgrades, page: () =>
-            UpgradesStepTabletView(_model)),
-            // UpgradesStepView(_model)),
+        GetPage(name: RouteNames.upgrades, page: () => UpgradesStepTabletView(_model)),
+        // UpgradesStepView(_model)),
         GetPage(name: RouteNames.receipt, page: () => ReceiptStepView(_model)),
-        GetPage(name: RouteNames.seats, page: () => SeatsStepView(_model)),
+        GetPage(name: RouteNames.seats, page: () => SeatsStepTabletView(_model)),
+        // SeatsStepView(_model)),
       ],
     );
   }

@@ -19,6 +19,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../passportStepScreen/PassportStepTabletView.dart';
+import '../seatsStepScreen/SeatStepScreenTabletView.dart';
 import '../travellersStepScreen/TravellerStepScreenTabletView.dart';
 import '../upgradesStepScreen/UpgradeStepTabletView.dart';
 import '../visaStepScreen/VisaStepScreenTabletView.dart';
@@ -106,7 +107,7 @@ class StepsScreenTabletView extends StatelessWidget {
                                                 : myStepsScreenController.step == 5
                                                     ? UpgradesStepTabletView(model)
                                                     : myStepsScreenController.step == 6
-                                                        ? SeatsStepView(model)
+                                                        ? SeatsStepTabletView(model)
                                                         : myStepsScreenController.step == 7
                                                             ? PaymentStepView(model)
                                                             : myStepsScreenController.step == 8

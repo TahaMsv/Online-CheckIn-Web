@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
@@ -13,10 +12,10 @@ class SeatsStepController extends MainController {
 
   SeatsStepController(this.model);
 
-  final double eachLineWidth = 35;
-  final double seatWidth = 35;
-  final double seatHeight = 35;
-  final double linesMargin = 7;
+  double eachLineWidth = 35;
+  double seatWidth = 35;
+  double seatHeight = 35;
+  double linesMargin = 7;
   List<Cabin> cabins = [];
   double firstClassCabinsRatio = 1.5;
   double businessCabinsRatio = 1.5;
@@ -40,9 +39,9 @@ class SeatsStepController extends MainController {
       seatsStatus[key] = seat.isUsedDescription;
       seatsPrice[key] = seat.price;
     }
-    double numOfBusinessCabinCells = numberOfCabinCellsInLine("Business") as double;
-    double numOfFirstClassCabinCells = numberOfCabinCellsInLine("First Class") as double;
-    double numOfEconomyCabinCells = numberOfCabinCellsInLine("Economy") as double;
+    int numOfBusinessCabinCells = numberOfCabinCellsInLine("Business");
+    int numOfFirstClassCabinCells = numberOfCabinCellsInLine("First Class");
+    int numOfEconomyCabinCells = numberOfCabinCellsInLine("Economy");
     if (numOfFirstClassCabinCells > 0 && numOfEconomyCabinCells > 0 && 1.5 > (numOfEconomyCabinCells / numOfFirstClassCabinCells)) {
       firstClassCabinsRatio = numOfEconomyCabinCells / numOfFirstClassCabinCells;
       print("firstClassCabinsRatio => " + firstClassCabinsRatio.toString());
@@ -129,7 +128,12 @@ class SeatsStepController extends MainController {
     return false;
   }
 
-  double calculatePlaneBodyLength() {
+  double calculatePlaneBodyLength(  {String mode = "web"}) {
+    if (mode == "tablet") {
+      seatHeight  = 50;
+      seatWidth = 50;
+      eachLineWidth = 50;
+    }
     double length = 0;
     for (var i = 0; i < cabins.length; ++i) {
       length += calculateCabinLength(i);
@@ -138,15 +142,16 @@ class SeatsStepController extends MainController {
     return length;
   }
 
-  double calculateCabinLength(int index) {
-    return calculateCabinNameLength(index) + calculateCabinLinesLength(index);
+  double calculateCabinLength(int index, {String mode = "web"}) {
+
+    return calculateCabinNameLength(index, mode: mode) + calculateCabinLinesLength(index, mode: mode);
   }
 
-  double calculateCabinNameLength(int index) {
+  double calculateCabinNameLength(int index, {String mode = "web"}) {
     return 50;
   }
 
-  double calculateCabinLinesLength(int index) {
+  double calculateCabinLinesLength(int index, {String mode = "web"}) {
     String cabinTitle = cabins[index].cabinTitle;
     double ratio = (cabinTitle == "First Class"
         ? firstClassCabinsRatio
@@ -156,10 +161,15 @@ class SeatsStepController extends MainController {
     return ratio * (cabins[index].linesCount * (eachLineWidth + linesMargin * 2 + 2));
   }
 
-  double calculatePlaneBodyHeight() {
+  double calculatePlaneBodyHeight({String mode = "web"}) {
+    if (mode == "tablet") {
+      seatHeight  = 50;
+      seatWidth = 50;
+      eachLineWidth = 50;
+    }
     double maxHeight = 0;
     for (var i = 0; i < cabins.length; ++i) {
-      double height = calculateCabinHeight(i);
+      double height = calculateCabinHeight(i, mode: mode);
       if (height > maxHeight) {
         maxHeight = height;
       }
@@ -168,7 +178,7 @@ class SeatsStepController extends MainController {
     return maxHeight;
   }
 
-  double calculateCabinHeight(int index) {
+  double calculateCabinHeight(int index, {String mode = "web"}) {
     double heightSum = 0;
     String cabinTitle = cabins[index].cabinTitle;
     double ratio = (cabinTitle == "First Class"
@@ -185,7 +195,7 @@ class SeatsStepController extends MainController {
     return heightSum;
   }
 
-  double getSeatHeight(int seatType) {
+  double getSeatHeight(int seatType, {String mode = "web"}) {
     double height = seatHeight;
     switch (seatType) {
       case 8:
