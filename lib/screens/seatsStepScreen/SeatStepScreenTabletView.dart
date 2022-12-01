@@ -1,11 +1,14 @@
-
 import 'dart:ui';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../global/Classes.dart';
 import '../../screens/seatsStepScreen/SeatsStepController.dart';
 import '../../global/MainModel.dart';
 import 'package:get/get.dart';
+
+import '../stepsScreen/StepsScreenController.dart';
+import '../stepsScreen/StepsScreenView.dart';
 
 class SeatsStepTabletView extends StatelessWidget {
   final SeatsStepController mySeatsStepController;
@@ -16,42 +19,254 @@ class SeatsStepTabletView extends StatelessWidget {
   Widget build(BuildContext context) {
     // double width = Get.width;
     // double height = Get.height;
+    MainModel model = context.watch<MainModel>();
+    final myStepsScreenController = Get.put(StepsScreenController(model));
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: TravellersList(
+          width: Get.width,
+          height: Get.height,
+          myStepsScreenController: myStepsScreenController,
+          step: 6,
+        ));
+  }
+}
+
+class TravellersList extends StatelessWidget {
+  const TravellersList({
+    Key? key,
+    required this.height,
+    required this.width,
+    required this.step,
+    required this.myStepsScreenController,
+  }) : super(key: key);
+
+  final double height;
+  final double width;
+  final int step;
+  final StepsScreenController myStepsScreenController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // width: width,
+      decoration: BoxDecoration(
+        // border: Border.all(color: Colors.black.withOpacity(0.1)),
+        shape: BoxShape.rectangle,
+        // color: Colors.blue,
+      ),
+      height: height,
+
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TitleWidget(
+                title: "Travellers".tr,
+                width: width * 0.5,
+                height: 100,
+                fontSize: 40,
+              ),
+              Container(
+                width: width * 0.3,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 2,
+                      height: 60,
+                      color: Color(0xffededed),
+                    ),
+                    TitleWidget(
+                      title: "Seat".tr,
+                      width: width * 0.2,
+                      height: 100,
+                      fontSize: 40,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Obx(
+            () => Expanded(
+              child: Container(
+                width: width,
+                // height: height ,
+                // color: Colors.yellow,
+                // padding: EdgeInsets.symmetric(horizontal: 20),
+                child: ListView.builder(
+                  itemCount: myStepsScreenController.travellers.length,
+                  itemBuilder: (ctx, index) {
+                    return TravellerItem(
+                      step: step,
+                      index: index,
+                      myStepsScreenController: myStepsScreenController,
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      // color: Colors.red,
+    );
+  }
+}
+
+class TravellerItem extends StatelessWidget {
+  const TravellerItem({
+    Key? key,
+    required this.step,
+    required this.index,
+    required this.myStepsScreenController,
+  }) : super(key: key);
+  final int step;
+  final int index;
+  final StepsScreenController myStepsScreenController;
+
+  @override
+  Widget build(BuildContext context) {
+    String languageCode = Get.locale!.languageCode;
+    bool isTravellerSelected = myStepsScreenController.travellers[index].seatId == "--" ? false : true;
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        color: myStepsScreenController.whoseTurnToSelect.value == index ? const Color(0xffffae2c).withOpacity(0.4) : Colors.white,
+      ),
+      height: 150,
+      margin: EdgeInsets.only(bottom: 20),
+      child: Column(
+        children: [
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: languageCode == 'en' ? const EdgeInsets.only(left: 20.0) : const EdgeInsets.only(right: 20.0),
+                  child: Text(
+                    myStepsScreenController.travellers[index].getFullNameWithGender(),
+                    style: TextStyle(
+                      color: Color(0xff424242),
+                      fontSize: 30,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+                step == 6
+                    ? Container(
+                        width: Get.width * 0.3,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: 2,
+                              height: 150,
+                              color: Color(0xffededed),
+                            ),
+                            Expanded(
+                              child: !isTravellerSelected
+                                  ? Center(
+                                      child: Container(
+                                        // color: Colors.red,
+                                        width: 80,
+                                        height: 80,
+                                        child: IconButton(
+                                          onPressed: () {
+                                            myStepsScreenController.setWhichOneToEdit(index);
+                                          },
+                                          icon: Icon(
+                                            Icons.add_circle_outline_rounded,
+                                            size: 60,
+                                            color: const Color(0xffffae2c)
+                                          ),
+                                          color: myStepsScreenController.whichOneToEdit == index ? Colors.green : Colors.blue,
+                                        ),
+                                      ),
+                                    )
+                                  : Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        TitleWidget(
+                                          title: myStepsScreenController.travellers[index].seatId,
+                                          width: 75,
+                                          textColor: isTravellerSelected ? Color(0xff48c0a2) : Color(0xff424242),
+                                        ),
+                                        Container(
+                                          // color: Colors.red,
+                                          width: 80,
+                                          height: 80,
+                                          child: IconButton(
+                                            onPressed: () {
+                                              myStepsScreenController.setWhichOneToEdit(index);
+                                            },
+                                            icon: Icon(
+                                              Icons.edit,
+                                              size: 45,
+                                            ),
+                                            color: myStepsScreenController.whichOneToEdit == index ? Colors.green : Colors.blue,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Plane extends StatelessWidget {
+  const Plane({
+    Key? key,
+    required this.mySeatsStepController,
+  }) : super(key: key);
+
+  final SeatsStepController mySeatsStepController;
+
+  @override
+  Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    double planeBodyHeight = mySeatsStepController.calculatePlaneBodyHeight( mode: "tablet");
+    double planeBodyHeight = mySeatsStepController.calculatePlaneBodyHeight(mode: "tablet");
     double planeBodyLength = mySeatsStepController.calculatePlaneBodyLength(mode: "tablet");
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Container(
-        height: height,
-        width: width,
-        child: Center(
-          child: ScrollConfiguration(
-            behavior: MyCustomScrollBehavior(),
-            child: Transform.rotate(
-              angle: math.pi / 2,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  Stack(
-                    children: [
-                      PlaneHead(
-                        height: planeBodyHeight,
-                      ),
-                      // PlaneWings(
-                      //   planeBodyLength: planeBodyLength,
-                      // ),
-                      PlaneTail(
-                        height: planeBodyHeight + 180,
-                        margin: planeBodyLength,
-                      ),
-                      PlaneBody(
-                        mySeatsStepController: mySeatsStepController,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+    return Container(
+      height: height,
+      width: width,
+      child: Center(
+        child: ScrollConfiguration(
+          behavior: MyCustomScrollBehavior(),
+          child: Transform.rotate(
+            angle: math.pi / 2,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                Stack(
+                  children: [
+                    PlaneHead(
+                      height: planeBodyHeight,
+                    ),
+                    // PlaneWings(
+                    //   planeBodyLength: planeBodyLength,
+                    // ),
+                    PlaneTail(
+                      height: planeBodyHeight + 180,
+                      margin: planeBodyLength,
+                    ),
+                    PlaneBody(
+                      mySeatsStepController: mySeatsStepController,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
@@ -172,8 +387,8 @@ class CabinWidget extends StatelessWidget {
                     double cabinRatio = (cabinTitle == "First Class".tr
                         ? mySeatsStepController.firstClassCabinsRatio
                         : cabinTitle == "Business".tr
-                        ? mySeatsStepController.businessCabinsRatio
-                        : 1.0);
+                            ? mySeatsStepController.businessCabinsRatio
+                            : 1.0);
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -229,15 +444,15 @@ class LineWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: mySeatsStepController.linesMargin),
       child: line.type == "HorizontalCode"
           ? HorizontalCodeLine(
-        mySeatsStepController: mySeatsStepController,
-        cells: line.cells,
-        cabinRatio: cabinRatio,
-      )
+              mySeatsStepController: mySeatsStepController,
+              cells: line.cells,
+              cabinRatio: cabinRatio,
+            )
           : BodyLine(
-        cells: line.cells,
-        mySeatsStepController: mySeatsStepController,
-        cabinRatio: cabinRatio,
-      ),
+              cells: line.cells,
+              mySeatsStepController: mySeatsStepController,
+              cabinRatio: cabinRatio,
+            ),
     );
   }
 }
@@ -301,10 +516,7 @@ class CodeSeat extends StatelessWidget {
       child: Center(
         child: Text(
           cell.type == "Seat" ? cell.value! : "",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 25
-          ),
+          style: TextStyle(color: Colors.white, fontSize: 25),
         ),
       ),
     );
@@ -426,10 +638,10 @@ class _SeatWidgetState extends State<SeatWidget> {
     return GestureDetector(
       onTap: isSeatClickable
           ? () {
-        setState(() {
-          widget.mySeatsStepController.changeSeatStatus(widget.cell.code!);
-        });
-      }
+              setState(() {
+                widget.mySeatsStepController.changeSeatStatus(widget.cell.code!);
+              });
+            }
           : null,
       child: Container(
           width: width,
@@ -446,7 +658,7 @@ class _SeatWidgetState extends State<SeatWidget> {
             switch (widget.mySeatsStepController.seatViewType(widget.cell.value, widget.cell.type, widget.cell.code)) {
               case 9:
                 return Container();
-            // ExitDoor();
+              // ExitDoor();
               case 3:
                 return BlockedSeat();
               case 4:
@@ -458,7 +670,7 @@ class _SeatWidgetState extends State<SeatWidget> {
                 return Center(
                   child: Text(
                     seatText,
-                    style: TextStyle(color: textColor , fontSize: 19 , fontWeight: FontWeight.w600),
+                    style: TextStyle(color: textColor, fontSize: 19, fontWeight: FontWeight.w600),
                   ),
                 );
             }
@@ -482,19 +694,19 @@ class ExitDoor extends StatelessWidget {
   Widget build(BuildContext context) {
     return isEnable
         ? Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Colors.red,
-      ),
-      child: Center(
-        child: Text(
-          "Exit".tr,
-          style: TextStyle(color: Colors.white, fontSize: 20 , fontWeight: FontWeight.w600),
-        ),
-      ),
-    )
+            width: width,
+            height: height,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.red,
+            ),
+            child: Center(
+              child: Text(
+                "Exit".tr,
+                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+            ),
+          )
         : Container();
   }
 }
@@ -545,7 +757,7 @@ class PlaneTail extends StatelessWidget {
     String languageCode = Get.locale!.languageCode;
     return Center(
       child: Container(
-        margin: languageCode == "en" ? EdgeInsets.only(left: margin  - 50) : EdgeInsets.only(right: margin - 50),
+        margin: languageCode == "en" ? EdgeInsets.only(left: margin - 50) : EdgeInsets.only(right: margin - 50),
         // width: 2400,
         height: height,
         child: RotationTransition(
@@ -564,10 +776,10 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
   Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-    // etc.
-  };
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        // etc.
+      };
 }
 
 class BlockedSeat extends StatelessWidget {
