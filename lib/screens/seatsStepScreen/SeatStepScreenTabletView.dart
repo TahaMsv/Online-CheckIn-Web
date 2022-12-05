@@ -7,6 +7,7 @@ import '../../screens/seatsStepScreen/SeatsStepController.dart';
 import '../../global/MainModel.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/MyElevatedButton.dart';
 import '../stepsScreen/StepsScreenController.dart';
 import '../stepsScreen/StepsScreenView.dart';
 
@@ -231,6 +232,125 @@ class TravellerItem extends StatelessWidget {
   }
 }
 
+class SelectSeatFor extends StatelessWidget {
+  const SelectSeatFor({
+    Key? key,
+    required this.step,
+    required this.index,
+    required this.myStepsScreenController,
+    required this.mySeatsStepController,
+  }) : super(key: key);
+  final int step;
+  final int index;
+  final StepsScreenController myStepsScreenController;
+  final SeatsStepController mySeatsStepController;
+
+  @override
+  Widget build(BuildContext context) {
+    String languageCode = Get.locale!.languageCode;
+    bool isTravellerSelected = myStepsScreenController.travellers[index].seatId == "--" ? false : true;
+    return Obx(() => Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              bottomLeft: Radius.circular(20),
+            ),
+            color: isTravellerSelected ? Color(0xffd3f8ea) : const Color(0xffffae2c).withOpacity(0.4),
+          ),
+          height: 200,
+          width: Get.width * 0.8,
+          // margin: EdgeInsets.only(bottom: 20),
+          child: Column(
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: languageCode == 'en' ? const EdgeInsets.only(left: 20.0) : const EdgeInsets.only(right: 20.0),
+                      child: Text(
+                        myStepsScreenController.travellers[index].getFullNameWithGender(),
+                        style: TextStyle(
+                          color: Color(0xff424242),
+                          fontSize: 30,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    step == 6
+                        ? Container(
+                            width: Get.width * 0.3,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Container(
+                                //   width: 2,
+                                //   height: 150,
+                                //   color: Color(0xffededed),
+                                // ),
+                                Expanded(
+                                  child:
+                                      // !isTravellerSelected
+                                      //     ? Center(
+                                      //   child: Container(
+                                      //     // color: Colors.red,
+                                      //     width: 80,
+                                      //     height: 80,
+                                      //     child: IconButton(
+                                      //       onPressed: () {
+                                      //         myStepsScreenController.setWhichOneToEdit(index);
+                                      //         Get.to(Plane(mySeatsStepController: mySeatsStepController));
+                                      //       },
+                                      //       icon: Icon(Icons.add_circle_outline_rounded, size: 60, color: const Color(0xffffae2c)),
+                                      //       color: myStepsScreenController.whichOneToEdit == index ? Colors.green : Colors.blue,
+                                      //     ),
+                                      //   ),
+                                      // )
+                                      //     :
+                                      Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      TitleWidget(
+                                        title: myStepsScreenController.travellers[index].seatId,
+                                        width: 100,
+                                        height: 80,
+                                        fontSize: 35,
+                                        textColor: isTravellerSelected ? Color(0xff48c0a2) : Color(0xff424242),
+                                      ),
+                                      // Container(
+                                      //   // color: Colors.red,
+                                      //   width: 80,
+                                      //   height: 80,
+                                      //   child: IconButton(
+                                      //     onPressed: () {
+                                      //       myStepsScreenController.setWhichOneToEdit(index);
+                                      //       Get.to(Plane(mySeatsStepController: mySeatsStepController));
+                                      //     },
+                                      //     icon: Icon(
+                                      //       Icons.edit,
+                                      //       size: 45,
+                                      //     ),
+                                      //     color: myStepsScreenController.whichOneToEdit == index ? Colors.green : Colors.blue,
+                                      //   ),
+                                      // ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ));
+  }
+}
+
 class Plane extends StatelessWidget {
   const Plane({
     Key? key,
@@ -245,41 +365,168 @@ class Plane extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double planeBodyHeight = mySeatsStepController.calculatePlaneBodyHeight(mode: "tablet");
     double planeBodyLength = mySeatsStepController.calculatePlaneBodyLength(mode: "tablet");
+
+    MainModel model = context.watch<MainModel>();
+    StepsScreenController myStepsScreenController = Get.put(StepsScreenController(model));
     return Scaffold(
-      body: Container(
-        height: height,
-        width: width,
-        // color: Colors.red,
-        child: Center(
-          child: ScrollConfiguration(
-            behavior: MyCustomScrollBehavior(),
-            child: Container(
-              // color: Colors.blue,
-              child: ListView(
-                // scrollDirection: Axis.horizontal,
-                children: [
-                  Stack(
+      body: Stack(
+        children: [
+          Container(
+            height: height,
+            width: width,
+            // color: Colors.red,
+            child: Center(
+              child: ScrollConfiguration(
+                behavior: MyCustomScrollBehavior(),
+                child: Container(
+                  // color: Colors.blue,
+                  child: ListView(
+                    // scrollDirection: Axis.horizontal,
                     children: [
-                      PlaneHead(
-                        height: planeBodyHeight,
-                      ),
-                      // PlaneWings(
-                      //   planeBodyLength: planeBodyLength,
-                      // ),
-                      PlaneTail(
-                        height: planeBodyHeight + 200,
-                        margin: planeBodyLength,
-                      ),
-                      PlaneBody(
-                        mySeatsStepController: mySeatsStepController,
+                      Stack(
+                        children: [
+                          PlaneHead(
+                            height: planeBodyHeight,
+                          ),
+                          // PlaneWings(
+                          //   planeBodyLength: planeBodyLength,
+                          // ),
+                          PlaneTail(
+                            height: planeBodyHeight + 200,
+                            margin: planeBodyLength,
+                          ),
+                          PlaneBody(
+                            mySeatsStepController: mySeatsStepController,
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+          Container(
+            width: Get.width,
+            height: 250,
+            // color: Colors.transparent.withOpacity(0.5),
+            child: Obx(
+              () => Container(
+                margin: EdgeInsets.only(top: 20),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                        left: 20,
+                      ),
+                      height: 200,
+                      width: 90,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        color: Colors.black26,
+                      ),
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Container(
+                              height: 65,
+                              width: 65,
+                              // color: Colors.yellow,
+                              child: IconButton(
+                                  onPressed: () {},
+                                  icon: Center(
+                                    child: Icon(
+                                      Icons.keyboard_arrow_up,
+                                      size: 50,
+                                    ),
+                                  ),
+                                  color: Colors.black),
+                            ),
+                          ),
+                          Container(
+                            height: 67,
+                            // width: ,
+                            // color: Colors.green,
+                            child: Center(
+                              child: Text(
+                                "1/2",
+                                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
+                              ),
+                            ),
+                            // color: Colors.black,
+                          ),
+                          Container(
+                            height: 65,
+                            width: 65,
+                            // color: Colors.yellow,
+                            child: IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: 50,
+                                ),
+                                color: Colors.black),
+                          )
+                        ],
+                      ),
+                    ),
+                    Obx(
+                      () => SelectSeatFor(
+                        step: 6,
+                        index: myStepsScreenController.whichOneToEdit,
+                        myStepsScreenController: myStepsScreenController,
+                        mySeatsStepController: mySeatsStepController,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            child: Container(
+              width: Get.width,
+              height: 130,
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Obx(
+                () => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    MyElevatedButton(
+                      height: height * 0.06,
+                      width: 250,
+                      buttonText: "Cancel & Close",
+                      fontSize: 25,
+                      fgColor: Colors.black,
+                      bgColor: Colors.white,
+                      // borderColor: Colors.white,
+                      function: () {},
+                      isDisable: false,
+                    ),
+                    MyElevatedButton(
+                      height: height * 0.06,
+                      width: 250,
+                      buttonText: "Finish",
+                      fontSize: 30,
+                      fgColor: myStepsScreenController.isNextButtonEnable ? Colors.white : Colors.black,
+                      bgColor: myStepsScreenController.isNextButtonEnable ? Colors.greenAccent : Colors.grey,
+                      // borderColor: Colors.grey,
+                      function: () {},
+                      isDisable: !myStepsScreenController.isNextButtonEnable,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -776,7 +1023,7 @@ class PlaneTail extends StatelessWidget {
     return Center(
       child: Container(
         margin: EdgeInsets.only(top: margin + 230),
-        width: height-15,
+        width: height - 15,
         height: height,
         child: Image.asset(
           "assets/images/Edited-Tail-tablet.png",
