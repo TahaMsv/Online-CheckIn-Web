@@ -39,8 +39,8 @@ class StepsScreenController extends MainController {
   RxInt _whichOneToEdit = (-1).obs;
   RxInt _step = 6.obs;
 
-  RxInt currButtonTextIndex = 5.obs;
-  int nextButtonTextIndex = 6;
+  RxInt currButtonTextIndex = 0.obs;
+  int nextButtonTextIndex = 0;
 
   Welcome? _welcome;
 

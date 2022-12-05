@@ -128,9 +128,9 @@ class SeatsStepController extends MainController {
     return false;
   }
 
-  double calculatePlaneBodyLength(  {String mode = "web"}) {
+  double calculatePlaneBodyLength({String mode = "web"}) {
     if (mode == "tablet") {
-      seatHeight  = 50;
+      seatHeight = 50;
       seatWidth = 50;
       eachLineWidth = 50;
     }
@@ -143,7 +143,6 @@ class SeatsStepController extends MainController {
   }
 
   double calculateCabinLength(int index, {String mode = "web"}) {
-
     return calculateCabinNameLength(index, mode: mode) + calculateCabinLinesLength(index, mode: mode);
   }
 
@@ -163,7 +162,7 @@ class SeatsStepController extends MainController {
 
   double calculatePlaneBodyHeight({String mode = "web"}) {
     if (mode == "tablet") {
-      seatHeight  = 50;
+      seatHeight = 50;
       seatWidth = 50;
       eachLineWidth = 50;
     }
@@ -190,7 +189,7 @@ class SeatsStepController extends MainController {
       int seatType = seatViewType(cell.value, cell.type, cell.code);
       double height = ratio * getSeatHeight(seatType);
       heightSum += height;
-      heightSum += 4;
+      heightSum += (mode == "web" ? 4 : 7);
     });
     return heightSum;
   }
