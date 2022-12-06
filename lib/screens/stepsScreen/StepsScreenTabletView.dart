@@ -20,6 +20,7 @@ import 'package:provider/provider.dart';
 
 import '../passportStepScreen/PassportStepTabletView.dart';
 import '../paymentStepScreen/PaymentStepTabletView.dart';
+import '../receiptStepScreen/ReceiptStepTabletView.dart';
 import '../seatsStepScreen/SeatStepScreenTabletView.dart';
 import '../travellersStepScreen/TravellerStepScreenTabletView.dart';
 import '../upgradesStepScreen/UpgradeStepTabletView.dart';
@@ -112,7 +113,7 @@ class StepsScreenTabletView extends StatelessWidget {
                                                         : myStepsScreenController.step == 7
                                                             ? PaymentStepTabletView(model)
                                                             : myStepsScreenController.step == 8
-                                                                ? ReceiptStepView(model)
+                                                                ? ReceiptStepTabletView(model)
                                                                 : Container(),
                           ),
                         ),
@@ -284,7 +285,7 @@ class BottomOfPage extends StatelessWidget {
         () => Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            myStepsScreenController.step == 0
+            myStepsScreenController.step == 0 || myStepsScreenController.step == 8
                 ? Container()
                 : PreviousButton(
                     height: height * 0.06,
@@ -292,7 +293,9 @@ class BottomOfPage extends StatelessWidget {
                     isDisable: !myStepsScreenController.isPreviousButtonEnable,
                   ),
             myStepsScreenController.step == 8
-                ? ReceiptStepButtons()
+                ? ReceiptStepButtons(
+                    height: height * 0.06,
+                  )
                 : Obx(
                     () => MyElevatedButton(
                       height: height * 0.06,
@@ -315,7 +318,9 @@ class BottomOfPage extends StatelessWidget {
 class ReceiptStepButtons extends StatelessWidget {
   const ReceiptStepButtons({
     Key? key,
+    required this.height,
   }) : super(key: key);
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -323,8 +328,9 @@ class ReceiptStepButtons extends StatelessWidget {
       child: Row(
         children: [
           MyElevatedButton(
-            height: 40,
-            width: 100,
+            height: height,
+            width: 200,
+            fontSize: 20,
             buttonText: "Download".tr,
             bgColor: Color(0xff424242),
             fgColor: Colors.white,
@@ -334,21 +340,11 @@ class ReceiptStepButtons extends StatelessWidget {
             width: 15,
           ),
           MyElevatedButton(
-            height: 40,
-            width: 100,
+            height: height,
+            width: 200,
+            fontSize: 20,
             buttonText: "Print".tr,
             bgColor: Color(0xff48c0a2),
-            fgColor: Colors.white,
-            function: () {},
-          ),
-          SizedBox(
-            width: 15,
-          ),
-          MyElevatedButton(
-            height: 40,
-            width: 200,
-            buttonText: "Sent to Mobile".tr,
-            bgColor: Color(0xff4c6ef6),
             fgColor: Colors.white,
             function: () {},
           ),

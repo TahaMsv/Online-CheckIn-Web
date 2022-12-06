@@ -20,6 +20,8 @@ class SeatsStepController extends MainController {
   double firstClassCabinsRatio = 1.5;
   double businessCabinsRatio = 1.5;
 
+  RxInt travelerToSelectIndexTablet = 0.obs;
+
   int seatPrices = 0;
   final RxMap<String, String> seatsStatus = <String, String>{}.obs;
   final RxMap<String, int> seatsPrice = <String, int>{}.obs;
@@ -49,6 +51,25 @@ class SeatsStepController extends MainController {
     if (numOfBusinessCabinCells > 0 && numOfEconomyCabinCells > 0 && 1.5 > (numOfEconomyCabinCells / numOfBusinessCabinCells)) {
       businessCabinsRatio = numOfEconomyCabinCells / numOfBusinessCabinCells;
       print("businessCabinsRatio => " + businessCabinsRatio.toString());
+    }
+  }
+
+  void setTravelerToSelectIndexTablet(int index) {
+    final myStepScreenController = Get.put(StepsScreenController(model));
+    travelerToSelectIndexTablet.value = index;
+    myStepScreenController.whoseTurnToSelect.value = index;
+  }
+
+  void increaseTravelerToSelectIndexTablet() {
+    final myStepScreenController = Get.put(StepsScreenController(model));
+    if (travelerToSelectIndexTablet.value + 1 < myStepScreenController.travellers.length) {
+      setTravelerToSelectIndexTablet(travelerToSelectIndexTablet.value + 1);
+    }
+  }
+
+  void decreaseTravelerToSelectIndexTablet() {
+    if (travelerToSelectIndexTablet.value > 0) {
+      setTravelerToSelectIndexTablet(travelerToSelectIndexTablet.value - 1);
     }
   }
 

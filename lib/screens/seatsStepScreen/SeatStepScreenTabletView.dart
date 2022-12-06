@@ -181,7 +181,8 @@ class TravellerItem extends StatelessWidget {
                                         height: 80,
                                         child: IconButton(
                                           onPressed: () {
-                                            myStepsScreenController.setWhichOneToEdit(index);
+                                            // myStepsScreenController.setWhichOneToEdit(index);
+                                            mySeatsStepController.setTravelerToSelectIndexTablet(index);
                                             Get.to(Plane(mySeatsStepController: mySeatsStepController));
                                           },
                                           icon: Icon(Icons.add_circle_outline_rounded, size: 60, color: const Color(0xffffae2c)),
@@ -206,7 +207,8 @@ class TravellerItem extends StatelessWidget {
                                           height: 80,
                                           child: IconButton(
                                             onPressed: () {
-                                              myStepsScreenController.setWhichOneToEdit(index);
+                                              // myStepsScreenController.setWhichOneToEdit(index);
+                                              mySeatsStepController.setTravelerToSelectIndexTablet(index);
                                               Get.to(Plane(mySeatsStepController: mySeatsStepController));
                                             },
                                             icon: Icon(
@@ -438,7 +440,9 @@ class Plane extends StatelessWidget {
                               width: 65,
                               // color: Colors.yellow,
                               child: IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    mySeatsStepController.decreaseTravelerToSelectIndexTablet();
+                                  },
                                   icon: Center(
                                     child: Icon(
                                       Icons.keyboard_arrow_up,
@@ -454,7 +458,7 @@ class Plane extends StatelessWidget {
                             // color: Colors.green,
                             child: Center(
                               child: Text(
-                                "1/2",
+                                (mySeatsStepController.travelerToSelectIndexTablet.value + 1).toString() + "/" + myStepsScreenController.travellers.length.toString(),
                                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
                               ),
                             ),
@@ -465,7 +469,9 @@ class Plane extends StatelessWidget {
                             width: 65,
                             // color: Colors.yellow,
                             child: IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  mySeatsStepController.increaseTravelerToSelectIndexTablet();
+                                },
                                 icon: Icon(
                                   Icons.keyboard_arrow_down,
                                   size: 50,
@@ -478,7 +484,7 @@ class Plane extends StatelessWidget {
                     Obx(
                       () => SelectSeatFor(
                         step: 6,
-                        index: myStepsScreenController.whichOneToEdit,
+                        index: mySeatsStepController.travelerToSelectIndexTablet.value,
                         myStepsScreenController: myStepsScreenController,
                         mySeatsStepController: mySeatsStepController,
                       ),
@@ -502,12 +508,14 @@ class Plane extends StatelessWidget {
                     MyElevatedButton(
                       height: height * 0.06,
                       width: 250,
-                      buttonText: "Cancel & Close",
+                      buttonText: "Close",
                       fontSize: 25,
                       fgColor: Colors.black,
                       bgColor: Colors.white,
                       // borderColor: Colors.white,
-                      function: () {},
+                      function: () {
+                        Get.back();
+                      },
                       isDisable: false,
                     ),
                     MyElevatedButton(
@@ -516,9 +524,11 @@ class Plane extends StatelessWidget {
                       buttonText: "Finish",
                       fontSize: 30,
                       fgColor: myStepsScreenController.isNextButtonEnable ? Colors.white : Colors.black,
-                      bgColor: myStepsScreenController.isNextButtonEnable ? Colors.greenAccent : Colors.grey,
+                      bgColor: myStepsScreenController.isNextButtonEnable ? Colors.green : Colors.grey,
                       // borderColor: Colors.grey,
-                      function: () {},
+                      function: () {
+                        Get.back();
+                      },
                       isDisable: !myStepsScreenController.isNextButtonEnable,
                     ),
                   ],
