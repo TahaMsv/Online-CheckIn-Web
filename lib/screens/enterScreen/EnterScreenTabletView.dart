@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:onlinecheckin/widgets/LanguagePicker.dart';
 import '../../widgets/UserTextInput.dart';
@@ -19,18 +18,21 @@ class EnterScreenTabletView extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Container(
-        width: width,
-        height: height,
-        child: Stack(
-          children: [
-            BackgroundImage(width: width, height: height),
-            Foreground(
-              width: width,
-              height: height,
-              myEnterScreenController: myEnterScreenController,
-            ),
-          ],
+      body: SingleChildScrollView(
+        reverse: true,
+        child: Container(
+          width: width,
+          height: height,
+          child: Stack(
+            children: [
+              BackgroundImage(width: width, height: height),
+              Foreground(
+                width: width,
+                height: height,
+                myEnterScreenController: myEnterScreenController,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -82,7 +84,7 @@ class CheckInForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height =   400 <= Get.height * 0.5 ? 400 : Get.height * 0.5;
+    double height = 500 <= Get.height * 0.5 ? 500 : Get.height * 0.5;
     return Container(
       height: height,
       // width: 400,
@@ -97,10 +99,10 @@ class CheckInForm extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: 300,
+                  // height: 300,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    // mainAxisAlignment: MainAxisAlignment.,
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,7 +110,7 @@ class CheckInForm extends StatelessWidget {
                           Text(
                             "Online Check-in".tr,
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 30,
                               fontWeight: FontWeight.bold,
                               color: Color(0xff424242),
                             ),
@@ -120,6 +122,7 @@ class CheckInForm extends StatelessWidget {
                             child: Text(
                               "Input Requested info in order to continue".tr,
                               style: TextStyle(
+                                fontSize: 24,
                                 color: Color(0xff808080),
                               ),
                             ),
@@ -127,22 +130,30 @@ class CheckInForm extends StatelessWidget {
                         ],
                       ),
                       SizedBox(
-                        height: 40,
+                        height: 70,
                       ),
                       Obx(
                         () => Container(
-                          height: 100,
+                          // height: 100,
+                          // color: Colors.red,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               UserTextInput(
+                                height: 60,
+                                fontSize: 25,
                                 controller: myEnterScreenController.lastNameC,
                                 hint: "Last Name".tr,
                                 errorText: "Last Name can't be empty".tr,
                                 isEmpty: myEnterScreenController.isLastNameEmpty.value,
                                 width: Get.width,
                               ),
+                              SizedBox(
+                                height: 40,
+                              ),
                               UserTextInput(
+                                height: 60,
+                                fontSize: 25,
                                 controller: myEnterScreenController.bookingRefNameC,
                                 hint: "Booking reference name".tr,
                                 errorText: "Booking reference name can't be empty".tr,
@@ -162,6 +173,9 @@ class CheckInForm extends StatelessWidget {
                       )
                     ],
                   ),
+                ),
+                SizedBox(
+                  height: 30,
                 ),
                 CopyRightText(),
               ],
@@ -199,7 +213,7 @@ class CheckInButton extends StatelessWidget {
   Widget build(BuildContext context) {
     MainModel model = context.watch<MainModel>();
     return Container(
-      height: 40,
+      height: 60,
       width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(
@@ -223,6 +237,7 @@ class CheckInButton extends StatelessWidget {
               },
         child: Text(
           "Check-in".tr,
+          style: TextStyle(fontSize: 25),
         ),
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all(Colors.white),
@@ -249,7 +264,10 @@ class CopyRightText extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Container(
-          child: Text("© Copyright 2021 Abomis All rights reserved".tr),
+          child: Text(
+            "© Copyright 2021 Abomis All rights reserved".tr,
+            style: TextStyle(fontSize: 20),
+          ),
         ),
       ],
     );
