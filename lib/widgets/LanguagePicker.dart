@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:onlinecheckin/global/MainController.dart';
 import 'CountryListPicker/country.dart';
 import 'CountryListPicker/country_picker_dropdown.dart';
 import 'CountryListPicker/utils/utils.dart';
@@ -7,13 +6,13 @@ import 'CountryListPicker/utils/utils.dart';
 class LanguagePicker extends StatelessWidget {
   const LanguagePicker({
     Key? key,
-    required this.mainController,
+    // required this.mainController,
     required this.width,
     this.initialValue = 'GB',
     this.textColor = Colors.black,
   }) : super(key: key);
 
-  final MainController mainController;
+  // final MainController mainController;   //todo add controller for changing language
   final double width;
   final String initialValue;
   final Color textColor;
@@ -36,10 +35,10 @@ class LanguagePicker extends StatelessWidget {
           // print("${country.name}");
           switch (country.languageCode) {
             case "en":
-              mainController.changeLanguage(Locale(country.languageCode, "US"));
+              // mainController.changeLanguage(Locale(country.languageCode, "US"));
               break;
             case "fa":
-              mainController.changeLanguage(Locale(country.languageCode, "IR"));
+              // mainController.changeLanguage(Locale(country.languageCode, "IR"));
               break;
           }
         },

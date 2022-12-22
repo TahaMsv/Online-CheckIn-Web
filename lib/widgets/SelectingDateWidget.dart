@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 // import 'package:date_time_picker/date_time_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:onlinecheckin/utility/Constants.dart';
 import 'package:flutter_holo_date_picker/flutter_holo_date_picker.dart';
+
+import '../core/constants/ui.dart';
 
 class SelectingDateWidget extends StatefulWidget {
   const SelectingDateWidget({
@@ -49,6 +50,7 @@ class _SelectingDateWidgetState extends State<SelectingDateWidget> {
       dateFormat: "dd-M-yyyy",
       locale: DateTimePickerLocale.en_us,
       looping: true,
+
     );
     currentDate = datePicked!;
     widget.updateDate(widget.index, currentDate);
