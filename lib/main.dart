@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:online_checkin_web_refactoring/screens/addTraveler/add_traveler_state.dart';
 import 'package:online_checkin_web_refactoring/screens/steps/steps_state.dart';
 import 'package:online_checkin_web_refactoring/utils/shortcuts/app_config.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,7 @@ void main() async {
     providers: [
       ChangeNotifierProvider(create: (_) => getIt<LoginState>()),
       ChangeNotifierProvider(create: (_) => getIt<StepsState>()),
+      ChangeNotifierProvider(create: (_) => getIt<AddTravelerState>()),
     ],
     child: const MyApp(),
   ));

@@ -1,0 +1,3 @@
+import 'package:online_checkin_web_refactoring/screens/addTraveler/interfaces/add_traveler_data_source_interface.dart';
+
+class AddTravelerRemoteDataSource implements AddTravelerDataSourceInterface {}
