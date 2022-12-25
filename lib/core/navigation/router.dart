@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:online_checkin_web_refactoring/screens/addTraveler/add_traveler_view.dart';
+import 'package:online_checkin_web_refactoring/screens/rules/rules_view.dart';
 import 'package:online_checkin_web_refactoring/screens/steps/steps_view.dart';
 
 import '../../screens/login/login_state.dart';
 import '../../screens/login/login_view.dart';
+import '../../screens/safety/safety_view.dart';
 import '../constants/route_names.dart';
 import '../dependency_injection.dart';
 
@@ -41,8 +43,23 @@ class MyRouter {
               return AddTravelerView();
             },
           ),
+          GoRoute(
+            path: RouteNames.safety,
+            name: RouteNames.safety,
+            builder: (BuildContext context, GoRouterState state) {
+              return SafetyView();
+            },
+          ),
+          GoRoute(
+            path: RouteNames.rules,
+            name: RouteNames.rules,
+            builder: (BuildContext context, GoRouterState state) {
+              return RulesView();
+            },
+          ),
         ],
       ),
+
     ];
     _router = GoRouter(
       initialLocation: RouteNames.login,

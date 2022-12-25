@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:online_checkin_web_refactoring/core/classes/flight_information.dart';
+import 'package:online_checkin_web_refactoring/core/constants/route_names.dart';
 import 'package:online_checkin_web_refactoring/screens/steps/steps_repository.dart';
 import 'package:online_checkin_web_refactoring/screens/steps/steps_state.dart';
 import 'package:online_checkin_web_refactoring/screens/steps/usecases/get_flight_information_usecase.dart';
@@ -12,6 +13,7 @@ import '../../core/interfaces/controller.dart';
 import '../../utils/failure_handler.dart';
 import '../../widgets/CustomFlutterWidget.dart';
 import '../login/login_state.dart';
+import '../safety/safety_controller.dart';
 
 class StepsController extends MainController {
   final StepsState stepsState = getIt<StepsState>();
@@ -34,7 +36,7 @@ class StepsController extends MainController {
     return null;
   }
 
-  Future<void> addToTravelers(BuildContext context , String token, String lastName, String ticketNumber) async {
+  Future<void> addToTravelers(BuildContext context, String token, String lastName, String ticketNumber) async {
     stepsState.setLoading(true);
     await getFlightInformation(token);
 
@@ -71,8 +73,6 @@ class StepsController extends MainController {
     stepsState.setLoading(false);
   }
 
-
-
   void removeFromTravelers(int index) {
     if (index < stepsState.travelers.length && index >= 0) {
       stepsState.travelers.removeAt(index);
@@ -84,11 +84,10 @@ class StepsController extends MainController {
     int step = stepsState.step;
     if (step == 0) {
       stepsState.setIsNextButtonEnable(stepsState.travelers.length != 0);
-
       return;
     } else if (step == 1) {
-      // SafetyStepScreenController safetyStepScreenController = Get.put(SafetyStepScreenController(model)); //todo
-      // setNextButton(safetyStepScreenController.checkValidation());
+      final SafetyController safetyController = getIt<SafetyController>();
+      stepsState.setIsNextButtonEnable(safetyController.checkValidation());
       return;
     } else if (step == 6) {
       // for (int i = 0; i < travellers.length; i++) { //todo
@@ -116,6 +115,7 @@ class StepsController extends MainController {
 
     stepsState.setwhoseTurnToSelect(-1);
   }
+
   bool isStepNeeded(int index) {
     if (index == 3 && !stepsState.isDocsNecessary) return false;
     if (index == 4 && !stepsState.isDocsNecessary) return false;
@@ -193,23 +193,53 @@ class StepsController extends MainController {
         if (step == 2 && stepsState.flightType == "d") {
           stepsState.setStep(step + 4);
           stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
-          return;
         } else if (step == 2 && !stepsState.isDocsNecessary) {
           stepsState.setStep(step + 3);
           stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
-          return;
-        }
-        if (step == 3) {
+        } else if (step == 3) {
           if (!stepsState.isDocoNecessary) {
             stepsState.setStep(step + 2);
             stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
-
-            return;
           }
+        } else {
+          stepsState.setStep(step + 1);
         }
-        stepsState.setStep(step + 1);
+        navigateToStep(stepsState.step);
         stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
+
       }
+    }
+  }
+
+  void navigateToStep(int step) {
+    switch (step) {
+      case 0:
+        nav.goToName(RouteNames.addTraveler);
+        break;
+      case 1:
+        nav.goToName(RouteNames.safety);
+        break;
+      case 2:
+        nav.goToName(RouteNames.rules);
+        break;
+      case 3:
+        nav.goToName(RouteNames.passport);
+        break;
+      case 4:
+        nav.goToName(RouteNames.visa);
+        break;
+      case 5:
+        nav.goToName(RouteNames.upgrades);
+        break;
+      case 6:
+        nav.goToName(RouteNames.seats);
+        break;
+      case 7:
+        nav.goToName(RouteNames.payment);
+        break;
+      case 8:
+        nav.goToName(RouteNames.receipt);
+        break;
     }
   }
 
@@ -221,21 +251,18 @@ class StepsController extends MainController {
         if (!stepsState.isDocsNecessary) {
           stepsState.setStep(step - 3);
           stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
-          return;
-        }
-        if (!stepsState.isDocoNecessary) {
+        } else if (!stepsState.isDocoNecessary) {
           stepsState.setStep(step - 2);
           stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
-          return;
         }
-      }
-      if (step == 6 && stepsState.flightType == "d") {
+      } else if (step == 6 && stepsState.flightType == "d") {
         stepsState.setStep(step - 4);
         stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
-        return;
+      } else {
+        stepsState.setStep(step - 1);
+        stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
       }
-      stepsState.setStep(step - 1);
-      stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
+      navigateToStep(stepsState.step);
     }
   }
 

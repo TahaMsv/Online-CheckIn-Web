@@ -8,6 +8,14 @@ import '../screens/login/data_sources/login_remote_ds.dart';
 import '../screens/login/login_controller.dart';
 import '../screens/login/login_repository.dart';
 import '../screens/login/login_state.dart';
+import '../screens/rules/data_source/rules_remote_ds.dart';
+import '../screens/rules/rules_controller.dart';
+import '../screens/rules/rules_repository.dart';
+import '../screens/rules/rules_state.dart';
+import '../screens/safety/data_source/safety_remote_ds.dart';
+import '../screens/safety/safety_controller.dart';
+import '../screens/safety/safety_repository.dart';
+import '../screens/safety/safety_state.dart';
 import '../screens/steps/data_source/steps_remote_ds.dart';
 import '../screens/steps/steps_cotroller.dart';
 import '../screens/steps/steps_repository.dart';
@@ -106,6 +114,54 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => addTravelerController);
   navigationService.registerController(RouteNames.addTraveler, addTravelerController);
 
+
+
+    ///Rules-------------------------------------------------------------------------------------------------------------------
+
+    ///state
+    RulesState rulesState = RulesState();
+    getIt.registerLazySingleton(() => rulesState);
+
+    ///data-sources
+    // RulesLocalDataSource rulesLocalDataSource = RulesLocalDataSource(sharedPreferences: sp, objectBox: objectBox);
+    RulesRemoteDataSource rulesRemoteDataSource = RulesRemoteDataSource();
+
+    ///repository
+    RulesRepository rulesRepository = RulesRepository(
+      rulesRemoteDataSource: rulesRemoteDataSource,
+      // rulesLocalDataSource: rulesLocalDataSource,
+      // networkInfo: networkInfo,
+    );
+    getIt.registerLazySingleton(() => rulesRepository);
+
+    ///controller
+    RulesController rulesController = RulesController();
+    getIt.registerLazySingleton(() => rulesController);
+    navigationService.registerController(RouteNames.rules, rulesController);
+
+
+      ///Safety-------------------------------------------------------------------------------------------------------------------
+
+      ///state
+      SafetyState safetyState = SafetyState();
+      getIt.registerLazySingleton(() => safetyState);
+
+      ///data-sources
+      // SafetyLocalDataSource safetyLocalDataSource = SafetyLocalDataSource(sharedPreferences: sp, objectBox: objectBox);
+      SafetyRemoteDataSource safetyRemoteDataSource = SafetyRemoteDataSource();
+
+      ///repository
+      SafetyRepository safetyRepository = SafetyRepository(
+        safetyRemoteDataSource: safetyRemoteDataSource,
+        // safetyLocalDataSource: safetyLocalDataSource,
+        // networkInfo: networkInfo,
+      );
+      getIt.registerLazySingleton(() => safetyRepository);
+
+      ///controller
+      SafetyController safetyController = SafetyController();
+      getIt.registerLazySingleton(() => safetyController);
+      navigationService.registerController(RouteNames.safety, safetyController);
   //
   // ///home-------------------------------------------------------------------------------------------------------------------
   //

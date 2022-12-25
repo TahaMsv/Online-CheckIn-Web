@@ -95,8 +95,8 @@ class MyTheme {
   // );
 
   static ThemeData light = ThemeData.light().copyWith(
-      primaryColor: Colors.deepOrange,
-      accentColor: Colors.blue,
+      primaryColor: Colors.white,
+      accentColor: Colors.white,
       textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
         primary: Colors.deepPurple,
