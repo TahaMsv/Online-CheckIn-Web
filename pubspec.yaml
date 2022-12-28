@@ -63,6 +63,11 @@ dev_dependencies:
   flash: ^2.0.3+2
   flutter_holo_date_picker: ^1.0.3
   shared_preferences: ^2.0.15
+  modal_bottom_sheet:
+    git:
+      url: https://github.com/CoolDude53/modal_bottom_sheet.git
+      ref: main
+      path: modal_bottom_sheet
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:online_checkin_web_refactoring/screens/Passport/passport_state.dart';
 import 'package:online_checkin_web_refactoring/screens/addTraveler/add_traveler_state.dart';
 import 'package:online_checkin_web_refactoring/screens/rules/rules_state.dart';
 import 'package:online_checkin_web_refactoring/screens/safety/safety_state.dart';
@@ -36,6 +37,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => getIt<AddTravelerState>()),
       ChangeNotifierProvider(create: (_) => getIt<SafetyState>()),
       ChangeNotifierProvider(create: (_) => getIt<RulesState>()),
+      ChangeNotifierProvider(create: (_) => getIt<PassportState>()),
     ],
     child: const MyApp(),
   ));

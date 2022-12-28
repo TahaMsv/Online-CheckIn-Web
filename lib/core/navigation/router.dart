@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:online_checkin_web_refactoring/screens/Passport/passport_view.dart';
 import 'package:online_checkin_web_refactoring/screens/addTraveler/add_traveler_view.dart';
 import 'package:online_checkin_web_refactoring/screens/rules/rules_view.dart';
 import 'package:online_checkin_web_refactoring/screens/steps/steps_view.dart';
@@ -55,6 +56,13 @@ class MyRouter {
             name: RouteNames.rules,
             builder: (BuildContext context, GoRouterState state) {
               return RulesView();
+            },
+          ),
+          GoRoute(
+            path: RouteNames.passport,
+            name: RouteNames.passport,
+            builder: (BuildContext context, GoRouterState state) {
+              return PassportView();
             },
           ),
         ],

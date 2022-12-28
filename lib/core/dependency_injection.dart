@@ -1,5 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:network_manager/network_manager.dart';
+import '../screens/Passport/data_source/passport_remote_ds.dart';
+import '../screens/Passport/passport_controller.dart';
+import '../screens/Passport/passport_repository.dart';
+import '../screens/Passport/passport_state.dart';
 import '../screens/addTraveler/add_traveler_controller.dart';
 import '../screens/addTraveler/add_traveler_repository.dart';
 import '../screens/addTraveler/add_traveler_state.dart';
@@ -162,6 +166,31 @@ Future<void> init() async {
       SafetyController safetyController = SafetyController();
       getIt.registerLazySingleton(() => safetyController);
       navigationService.registerController(RouteNames.safety, safetyController);
+
+
+   ///Passport-------------------------------------------------------------------------------------------------------------------
+
+   ///state
+   PassportState passportState = PassportState();
+   getIt.registerLazySingleton(() => passportState);
+
+   ///data-sources
+   // PassportLocalDataSource passportLocalDataSource = PassportLocalDataSource(sharedPreferences: sp, objectBox: objectBox);
+   PassportRemoteDataSource passportRemoteDataSource = PassportRemoteDataSource();
+
+   ///repository
+   PassportRepository passportRepository = PassportRepository(
+     passportRemoteDataSource: passportRemoteDataSource,
+     // passportLocalDataSource: passportLocalDataSource,
+     // networkInfo: networkInfo,
+   );
+   getIt.registerLazySingleton(() => passportRepository);
+
+   ///controller
+   PassportController passportController = PassportController();
+   getIt.registerLazySingleton(() => passportController);
+   navigationService.registerController(RouteNames.passport, passportController);
+
   //
   // ///home-------------------------------------------------------------------------------------------------------------------
   //
