@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_checkin_web_refactoring/screens/rules/rules_controller.dart';
 import 'package:online_checkin_web_refactoring/screens/rules/rules_state.dart';
+import '../../core/constants/ui.dart';
 import '../../core/dependency_injection.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +17,7 @@ class RulesView extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     RulesState rulesState = context.watch<RulesState>();
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: MyColors.white,
       body: Container(
         height: double.infinity,
         child: Column(
@@ -26,7 +27,7 @@ class RulesView extends StatelessWidget {
               title: "Dangerous Goods".tr,
               description: "Every items can become dangerous when transported by air. Example of dangerous goods are:".tr,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Expanded(
@@ -64,11 +65,11 @@ class DangerousItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // height: 300,
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       width: 150,
-      margin: EdgeInsets.all(8),
+      margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        border: Border.all(color: Color(0xffeaeaea)),
+        border: Border.all(color: const Color(0xffeaeaea)),
       ),
       child: Column(
         children: [
@@ -80,27 +81,27 @@ class DangerousItem extends StatelessWidget {
               fit: BoxFit.fill,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Text(
             value["title"]!.tr,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 15,
-              color: Color(0xff424242),
+              color: MyColors.darkGrey,
               fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Text(
             value["content"]!.tr,
             overflow: TextOverflow.clip,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
-              color: Color(0xff424242),
+              color: MyColors.darkGrey,
               fontWeight: FontWeight.w400,
             ),
             textAlign: TextAlign.center,

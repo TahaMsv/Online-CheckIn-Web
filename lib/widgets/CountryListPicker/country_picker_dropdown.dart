@@ -1,8 +1,9 @@
+import '../../core/constants/ui.dart';
+import '../../core/utils/country_utils/country_utility.dart';
 import 'country.dart';
 import 'countries.dart';
-import 'utils/typedefs.dart';
+import '../../core/utils/country_utils/typedefs.dart';
 import 'package:flutter/material.dart';
-import 'utils/utils.dart';
 
 ///Provides a customizable [DropdownButton] for all countries
 class CountryPickerDropdown extends StatefulWidget {
@@ -139,7 +140,7 @@ class _CountryPickerDropdownState extends State<CountryPickerDropdown> {
   Widget build(BuildContext context) {
     Color tempColor;
     if(widget.textColor == Colors.black){
-      tempColor = Colors.white;
+      tempColor = MyColors.white;
     }else{
       tempColor = Colors.black;
     }

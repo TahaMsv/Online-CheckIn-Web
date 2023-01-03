@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../core/dependency_injection.dart';
 import '../../core/error/failures.dart';
 import '../../core/navigation/navigation_service.dart';
+import '../constants/ui.dart';
 
 
 class FailureHandler {
@@ -17,7 +18,7 @@ class FailureHandler {
         backgroundColor: Colors.red,
         duration: const Duration(seconds: 10),
         action: SnackBarAction(
-          textColor: Colors.white,
+          textColor: MyColors.white,
           label: "Retry",
           onPressed: () {
             log("Retry");

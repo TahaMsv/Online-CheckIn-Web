@@ -4,17 +4,17 @@ class MyColors {
   MyColors._();
 
   static const mainColor = Color(0xff48c0a2);
-  static const white = Colors.white;
-  static const red = Colors.red;
+  static const myBlue = Color(0xff4c6ef6);
   static const black = Colors.black;
-  static const black1 = Color.fromRGBO(52, 52, 52, 1);
-  static const black3 = Color.fromRGBO(59, 59, 59, 0.8);
-  static const black7 = Color.fromRGBO(0, 0, 0, 0.07);
-  static const black8 = Color.fromRGBO(0, 0, 0, 0.08);
-  static const color1 = Color(0xfff86f6f);
-  static const color2 = Color(0xff4d6fff);
-  static const color3 = Color(0xff4d6fff);
-  static const color4 = Color(0xffffae2c);
+  static const grey = Colors.grey;
+  static const white = Colors.white;
+  static const white1 = Color(0xffeaeaea);
+  static const brownGrey = Color.fromRGBO(141, 141, 141, 1);
+  static const darkGrey = Color(0xff424242);
+  static const lightGrey = Color(0xff808080);
+  static const sonicSilver = Color(0xff767676);
+  static const oceanGreen = Color(0xff48c0a2);
+  static const brightYellow = Color(0xffffae2c);
 
   static const materialColor = {
     50: Color.fromRGBO(77, 111, 255, .1),
@@ -30,77 +30,63 @@ class MyColors {
   };
 }
 
+class MyTextTheme {
+  MyTextTheme._();
+
+  static const boldWhite24 = TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: MyColors.white);
+  static const boldWhite16 = TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: MyColors.white);
+  static const white16 = TextStyle(fontSize: 16, color: MyColors.white);
+  static const white12 = TextStyle(fontSize: 12, color: MyColors.white);
+  static const boldDarkGray18 = TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: MyColors.darkGrey);
+  static const boldDarkGray30 = TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: MyColors.darkGrey);
+  static const boldDarkGray24 = TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: MyColors.darkGrey);
+  static const w800MainColor15 = TextStyle(fontSize: 15, color: MyColors.mainColor, fontWeight: FontWeight.w800);
+  static const lightGrey14 = TextStyle(fontSize: 14, color: MyColors.lightGrey);
+  static const w300DarkGrey14 = TextStyle(color: MyColors.darkGrey, fontSize: 14, fontWeight: FontWeight.w300);
+  static const w800MainColor22 = TextStyle(fontSize: 22, color: MyColors.mainColor, fontWeight: FontWeight.w800);
+  static const lightGrey20 = TextStyle(fontSize: 20, color: MyColors.lightGrey);
+}
+
 class MyTheme {
   MyTheme._();
 
-  // static ThemeData lightAbomis = ThemeData(
-  //     fontFamily: "OpenSans",
-  //     primaryColor: MyColors.mainColor,
-  //     canvasColor: Colors.transparent,
-  //     brightness: Brightness.light,
-  //     disabledColor: MyColors.brownGrey,
-  //     scaffoldBackgroundColor: Colors.white,
-  //
-  //     timePickerTheme: const TimePickerThemeData(
-  //     ),
-  //
-  //     dividerTheme: const DividerThemeData(
-  //         color: MyColors.lineColor,
-  //         indent: 1,
-  //         space: 1
-  //     ),
-  //     appBarTheme: const AppBarTheme(
-  //       titleTextStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: MyColors.white1),
-  //       systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: MyColors.mainColor, statusBarBrightness: Brightness.dark),
-  //       backgroundColor: MyColors.mainColor,
-  //       iconTheme: IconThemeData(color: MyColors.slateBlue),
-  //
-  //     ),
-  //
-  //     // fontFamily: "OpenSans",
-  //     textTheme:  const TextTheme(
-  //       headline1: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: MyColors.black),
-  //       headline2: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: MyColors.black),
-  //       headline3: TextStyle(fontSize: 20, color: MyColors.black),
-  //       headline4: TextStyle(fontSize: 18, color: MyColors.black, fontWeight: FontWeight.bold),
-  //       headline5: TextStyle(fontSize: 16, color: MyColors.black),
-  //       headline6: TextStyle(fontSize: 14, color: MyColors.black),
-  //       subtitle1: TextStyle(fontSize: 12, color: MyColors.black),
-  //       subtitle2: TextStyle(fontSize: 10, color: MyColors.black),
-  //       // bodyLarge: const TextStyle(fontSize: 14, color: MyColors.black),
-  //       // bodyMedium: const TextStyle(fontSize: 12, color: MyColors.black),
-  //       // bodySmall: const TextStyle(fontSize: 10, color: MyColors.black),
-  //     ),
+  static ThemeData lightAbomis = ThemeData(
+    fontFamily: "OpenSans",
+    primaryColor: MyColors.white,
+    canvasColor: Colors.transparent,
+    brightness: Brightness.light,
+    disabledColor: MyColors.brownGrey,
+    scaffoldBackgroundColor: MyColors.white,
+
+    timePickerTheme: const TimePickerThemeData(),
+
+    // fontFamily: "OpenSans",
+    textTheme: const TextTheme(
+      headline1: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: MyColors.darkGrey),
+      headline2: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: MyColors.darkGrey),
+      headline3: TextStyle(fontSize: 20, color: MyColors.darkGrey),
+      headline4: TextStyle(
+        fontSize: 18,
+        color: MyColors.darkGrey,
+      ),
+      headline5: TextStyle(fontSize: 16, color: MyColors.darkGrey),
+      headline6: TextStyle(fontSize: 14, color: MyColors.darkGrey),
+      subtitle1: TextStyle(fontSize: 12, color: MyColors.darkGrey),
+      subtitle2: TextStyle(fontSize: 10, color: MyColors.darkGrey),
+
+      // bodyLarge: const TextStyle(fontSize: 14, color: Colors.black),
+      // bodyMedium: const TextStyle(fontSize: 12, color: Colors.black),
+      // bodySmall: const TextStyle(fontSize: 10, color: Colors.black),
+    ),
+  );
+
+  // static ThemeData light = ThemeData.light().copyWith(
+  //     primaryColor: MyColors.white,
+  //     accentColor: MyColors.white,
   //     textButtonTheme: TextButtonThemeData(
   //         style: TextButton.styleFrom(
-  //             padding: const EdgeInsets.symmetric(horizontal: 8),
-  //             textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-  //             backgroundColor: MyColors.lightIshBlue,
-  //             primary: Colors.white
-  //         )),
-  //     outlinedButtonTheme: OutlinedButtonThemeData(
-  //         style: TextButton.styleFrom(
-  //             textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-  //             primary: MyColors.lightIshBlue,
-  //             side: const BorderSide(color: MyColors.lightIshBlue, width: 2))),
-  //     colorScheme: ColorScheme.fromSwatch(primarySwatch: const MaterialColor(0xFF4d6fff, MyColors.materialColor)).copyWith(
-  //       secondary: MyColors.darkMint,
-  //       primary: MyColors.mainColor,
-  //     ),
-  //     dataTableTheme: const DataTableThemeData(
-  //         headingRowHeight: 35,
-  //         dataRowHeight: 40,
-  //         columnSpacing:4
-  //     )
-  // );
-
-  static ThemeData light = ThemeData.light().copyWith(
-      primaryColor: Colors.white,
-      accentColor: Colors.white,
-      textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-        primary: Colors.deepPurple,
-      )));
+  //       primary: Colors.deepPurple,
+  //     )));
 
   static ThemeData dark = ThemeData.dark().copyWith(
     primaryColor: Colors.deepPurple,

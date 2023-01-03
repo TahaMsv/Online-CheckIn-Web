@@ -1,4 +1,4 @@
-import '../country.dart';
+import '../../../widgets/CountryListPicker/country.dart';
 import 'package:flutter/material.dart';
 
 /// Returns true when a country should be included in lists / dialogs

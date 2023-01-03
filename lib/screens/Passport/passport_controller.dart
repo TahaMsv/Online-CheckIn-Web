@@ -9,12 +9,13 @@ import 'package:online_checkin_web_refactoring/screens/rules/rules_repository.da
 import 'package:online_checkin_web_refactoring/screens/rules/rules_state.dart';
 import 'package:online_checkin_web_refactoring/screens/steps/steps_state.dart';
 import 'package:get/get.dart';
-import '../../core/constants/TransletedWords.dart';
+import '../../core/constants/my_json.dart';
+import '../../core/constants/ui.dart';
 import '../../core/dependency_injection.dart';
 import '../../core/interfaces/controller.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import '../../utils/failure_handler.dart';
+import '../../core/utils/failure_handler.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/SelectingDateWidget.dart';
 import '../../widgets/StepsScreenTitle.dart';
@@ -201,19 +202,12 @@ class PassportController extends MainController {
     passportState.refreshTravelers();
   }
 
-  String getKeyFromLanguageWords(String value) {
-    //todo multi language
-    // String languageKey = locale.languageCode + "_" + locale.countryCode.toString();
-    String languageKey = "en_US";
-    var map = TranslatedWords().keys[languageKey];
-    String key = map!.keys.firstWhere((k) => map[k] == value, orElse: () => "");
-    return key == "" ? value : key;
-  }
 
   void showDOCSPopup(int index) {
+    print("In get dialog. index: "+ index.toString());
     Get.defaultDialog(
       title: "",
-      backgroundColor: Colors.white,
+      backgroundColor: MyColors.white,
       buttonColor: Colors.red,
       barrierDismissible: true,
       radius: 10,
@@ -297,7 +291,7 @@ class PassportController extends MainController {
                 height: 50,
                 width: 175,
                 buttonText: "Submit".tr,
-                bgColor: Colors.white,
+                bgColor: MyColors.white,
                 fgColor: const Color(0xff4d6ff8),
                 function: passportState.requesting
                     ? () {}
@@ -430,7 +424,7 @@ class PassportController extends MainController {
                         height: 70,
                         width: 200,
                         buttonText: "Submit".tr,
-                        bgColor: Colors.white,
+                        bgColor: MyColors.white,
                         fgColor: const Color(0xff4d6ff8),
                         fontSize: 23,
                         borderColor: Colors.blue,

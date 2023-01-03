@@ -1,7 +1,7 @@
+import '../../core/utils/country_utils/my_alert_dialog.dart';
+import '../../core/utils/country_utils/typedefs.dart';
 import 'country.dart';
-import 'utils/typedefs.dart';
 
-import 'utils/my_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'countries.dart';
 

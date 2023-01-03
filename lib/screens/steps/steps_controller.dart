@@ -10,7 +10,7 @@ import '../../core/classes/Traveler.dart';
 import '../../core/classes/VisaInfo.dart';
 import '../../core/dependency_injection.dart';
 import '../../core/interfaces/controller.dart';
-import '../../utils/failure_handler.dart';
+import '../../core/utils/failure_handler.dart';
 import '../../widgets/CustomFlutterWidget.dart';
 import '../login/login_state.dart';
 import '../safety/safety_controller.dart';
@@ -22,11 +22,7 @@ class StepsController extends MainController {
   late GetFlightInformationUseCase getFlightInformationUseCase = GetFlightInformationUseCase(repository: stepsRepository);
 
   Future<FlightInformation?> getFlightInformation(String token) async {
-    GetFlightInformationRequest getFlightInformationRequest = GetFlightInformationRequest(
-      "[OnlineCheckin].[SelectFlightInformation]",
-      token,
-      {},
-    );
+    GetFlightInformationRequest getFlightInformationRequest = GetFlightInformationRequest();
     final fOrFlightInfo = await getFlightInformationUseCase(request: getFlightInformationRequest);
 
     fOrFlightInfo.fold((f) => FailureHandler.handle(f, retry: () => getFlightInformation(token)), (flightInformation) async {
@@ -65,7 +61,8 @@ class StepsController extends MainController {
 
     // stepsState.flightInformation!.flight[0].checkDocs == 1 && stepsState.flightType == "i" ? stepsState.setIsDocsnecessary(true) : stepsState.setIsDocsnecessary(false);
     // stepsState.flightType == "i" ? stepsState.setIsDocsnecessary(true) : stepsState.setIsDocsnecessary(false); //todo
-    stepsState.setIsDocsnecessary(true);
+    stepsState.setIsDocsNecessary(true);
+    stepsState.setIsDocoNecessary(true);
     stepsState.travelers.add(traveler);
     // print(jsonEncode(Traveler.toJson()));
     updateIsNextButtonDisable();
@@ -83,7 +80,7 @@ class StepsController extends MainController {
   void updateIsNextButtonDisable() {
     int step = stepsState.step;
     if (step == 0) {
-      stepsState.setIsNextButtonEnable(stepsState.travelers.length != 0);
+      stepsState.setIsNextButtonEnable(stepsState.travelers.isNotEmpty);
       return;
     } else if (step == 1) {
       final SafetyController safetyController = getIt<SafetyController>();
@@ -122,6 +119,16 @@ class StepsController extends MainController {
     if (index == 4 && !stepsState.isDocoNecessary) return false;
     if (index == 5 && stepsState.flightType == "d") return false;
     return true;
+  }
+
+  List<bool> stepsToShowList() {
+    List<bool>  list = List.filled(9, false);
+    for (int i = 0; i <= 8; i++) {
+      if (isStepNeeded(i)){
+        list[i] = true;
+      }
+    }
+    return list;
   }
 
   void preparePreviousButtonText() {
@@ -200,18 +207,20 @@ class StepsController extends MainController {
           if (!stepsState.isDocoNecessary) {
             stepsState.setStep(step + 2);
             stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
+          } else {
+            stepsState.setStep(step + 1);
           }
         } else {
           stepsState.setStep(step + 1);
         }
         navigateToStep(stepsState.step);
         stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
-
       }
     }
   }
 
   void navigateToStep(int step) {
+    print("Go to step: " + step.toString());
     switch (step) {
       case 0:
         nav.goToName(RouteNames.addTraveler);

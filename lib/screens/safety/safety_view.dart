@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_checkin_web_refactoring/screens/safety/safety_controller.dart';
 import 'package:online_checkin_web_refactoring/screens/safety/safety_state.dart';
+import '../../core/constants/ui.dart';
 import '../../core/dependency_injection.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,7 @@ class SafetyView extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     SafetyState safetyState = context.watch<SafetyState>();
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: MyColors.white,
       body:Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +53,7 @@ class CommitmentSegment extends StatelessWidget {
             children: [
               Text(
                 "Your Commitment to Safety".tr,
-                style: const TextStyle(color: Color(0xff424242), fontWeight: FontWeight.bold, fontSize: 15),
+                style: const TextStyle(color: MyColors.darkGrey, fontWeight: FontWeight.bold, fontSize: 15),
               ),
               const SizedBox(
                 width: 10,
@@ -208,7 +209,7 @@ class AdviseSegment extends StatelessWidget {
                     Text(
                       "Delta’s Commitment to You".tr,
                       style: const TextStyle(
-                        color: Color(0xff424242),
+                        color: MyColors.darkGrey,
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                       ),
@@ -221,7 +222,7 @@ class AdviseSegment extends StatelessWidget {
                         "The Delta CareStandard℠ focuses on creating a safer experience for everyone. We are complying with Federal regulations that require face masks to be worn at all times and your aircraft will be cleaned before every flight.".tr,
                         overflow: TextOverflow.clip,
                         style: const TextStyle(
-                          color: Color(0xff424242),
+                          color: MyColors.darkGrey,
                           fontSize: 15,
                           fontWeight: FontWeight.w300,
                         ),

@@ -34,29 +34,25 @@ class LoginState with ChangeNotifier {
     notifyListeners();
   }
 
+  final TextEditingController bookingRefNameC = TextEditingController();
+  final TextEditingController lastNameC = TextEditingController();
 
-  final TextEditingController _bookingRefNameC = TextEditingController();
-  final TextEditingController _lastNameC = TextEditingController();
 
-  TextEditingController get bookingRefNameC => _bookingRefNameC;
+  bool _isLastNameEmpty = false;
 
-  TextEditingController get lastNameC => _lastNameC;
-
-  RxBool _isLastNameEmpty = false.obs;
-
-  bool get isLastNameEmpty => _isLastNameEmpty.value;
+  bool get isLastNameEmpty => _isLastNameEmpty;
 
   void setIsLastNameEmpty(bool val) {
-    _isLastNameEmpty.value = val;
+    _isLastNameEmpty = val;
     notifyListeners();
   }
 
-  RxBool _isBookingRefNameEmpty = false.obs;
+  bool _isBookingRefNameEmpty = false;
 
-  bool get isBookingRefNameEmpty => _isBookingRefNameEmpty.value;
+  bool get isBookingRefNameEmpty => _isBookingRefNameEmpty;
 
   void setIsBookingRefNameEmpty(bool val) {
-    _isBookingRefNameEmpty.value = val;
+    _isBookingRefNameEmpty = val;
     notifyListeners();
   }
 }

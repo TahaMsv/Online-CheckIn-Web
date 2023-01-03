@@ -17,22 +17,24 @@ class LoginUseCase extends UseCase<String, LoginRequest> {
 }
 
 class LoginRequest extends Request {
-  LoginRequest(
-    this.execution,
-    this.token,
-    this.request,
-  );
+  LoginRequest({
+    required this.username,
+    required this.password,
+  });
 
-  final String execution;
-  final dynamic token;
-  final Map<String, dynamic> request;
+  final String username;
+  final String password;
 
   @override
   Map<String, dynamic> toJson() => {
         "Body": {
-          "Execution": execution,
+          "Execution": "[OnlineCheckin].[Authenticate]",
           "Token": null,
-          "Request": request,
+          "Request": {
+            "Code": password,
+            "Code2": username,
+            "UrlType": 1,
+          },
         },
       };
 }

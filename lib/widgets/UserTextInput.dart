@@ -26,9 +26,9 @@ class UserTextInput extends StatelessWidget {
       width: width,
       decoration: BoxDecoration(
           border: Border.all(
-            color: Color(0xffeaeaea),
+            color: const Color(0xffeaeaea),
           ),
-          borderRadius: BorderRadius.all(Radius.circular(5))),
+          borderRadius: const BorderRadius.all(Radius.circular(5))),
       child: Center(
         child: TextField(
           obscureText: obscureText,
@@ -38,7 +38,7 @@ class UserTextInput extends StatelessWidget {
             fontSize: fontSize
           ),
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(10.0),
+            contentPadding: const EdgeInsets.all(10.0),
             border: InputBorder.none,
             hintText: hint,
 

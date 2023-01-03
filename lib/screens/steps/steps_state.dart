@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:online_checkin_web_refactoring/core/classes/flight_information.dart';
 
 import '../../core/classes/Traveler.dart';
+import '../../core/constants/ui.dart';
 
 class StepsState with ChangeNotifier {
   setState() => notifyListeners();
@@ -21,10 +22,10 @@ class StepsState with ChangeNotifier {
 
   bool get requesting => _requesting;
 
-    void setrequesting(bool val) {
-      _requesting = val;
-      notifyListeners();
-    }
+  void setRequesting(bool val) {
+    _requesting = val;
+    notifyListeners();
+  }
 
   FlightInformation? _flightInformation;
 
@@ -35,12 +36,12 @@ class StepsState with ChangeNotifier {
     notifyListeners();
   }
 
-  RxInt _step = 0.obs;
+  int _step = 0;
 
-  int get step => _step.value;
+  int get step => _step;
 
   void setStep(int val) {
-    _step.value = val;
+    _step = val;
     notifyListeners();
   }
 
@@ -48,62 +49,62 @@ class StepsState with ChangeNotifier {
 
   int get whoseTurnToSelect => _whoseTurnToSelect;
 
-    void setwhoseTurnToSelect(int val) {
-      _whoseTurnToSelect = val;
-      notifyListeners();
-    }
+  void setwhoseTurnToSelect(int val) {
+    _whoseTurnToSelect = val;
+    notifyListeners();
+  }
 
-  RxBool _isDocoNecessary = false.obs;
+  bool _isDocoNecessary = false;
 
-  bool get isDocoNecessary => _isDocoNecessary.value;
+  bool get isDocoNecessary => _isDocoNecessary;
 
   void setIsDocoNecessary(bool val) {
-    _isDocoNecessary.value = val;
+    _isDocoNecessary = val;
     notifyListeners();
   }
 
-  RxBool _isDocsNecessary = false.obs;
+  bool _isDocsNecessary = false;
 
-  bool get isDocsNecessary => _isDocsNecessary.value;
+  bool get isDocsNecessary => _isDocsNecessary;
 
-  void setIsDocsnecessary(bool val) {
-    _isDocsNecessary.value = val;
+  void setIsDocsNecessary(bool val) {
+    _isDocsNecessary = val;
     notifyListeners();
   }
 
-  RxBool _isAddingBoxOpen = false.obs;
+  bool _isAddingBoxOpen = false;
 
-  bool get isAddingBoxOpen => _isAddingBoxOpen.value;
+  bool get isAddingBoxOpen => _isAddingBoxOpen;
 
   void setIsAddingBoxOpen(bool val) {
-    _isAddingBoxOpen.value = val;
+    _isAddingBoxOpen = val;
     notifyListeners();
   }
 
-  RxBool _isNextButtonEnable = false.obs;
+  bool _isNextButtonEnable = false;
 
-  bool get isNextButtonEnable => _isNextButtonEnable.value;
+  bool get isNextButtonEnable => _isNextButtonEnable;
 
   void setIsNextButtonEnable(bool val) {
-    _isNextButtonEnable.value = val;
+    _isNextButtonEnable = val;
     notifyListeners();
   }
 
-  RxBool _isPreviousButtonEnable = true.obs;
+  bool _isPreviousButtonEnable = false;
 
-  bool get isPreviousButtonEnable => _isPreviousButtonEnable.value;
+  bool get isPreviousButtonEnable => _isPreviousButtonEnable;
 
   void setIsPreviousButtonEnable(bool val) {
-    _isPreviousButtonEnable.value = val;
+    _isPreviousButtonEnable = val;
     notifyListeners();
   }
 
-  RxInt _currButtonTextIndex = 0.obs;
+  int _currButtonTextIndex = 0;
 
-  int get currButtonTextIndex => _currButtonTextIndex.value;
+  int get currButtonTextIndex => _currButtonTextIndex;
 
   void setCurrButtonTextIndex(int val) {
-    _currButtonTextIndex.value = val;
+    _currButtonTextIndex = val;
     notifyListeners();
   }
 
@@ -116,11 +117,11 @@ class StepsState with ChangeNotifier {
     notifyListeners();
   }
 
-  RxList<Traveler> _travellers = <Traveler>[].obs;
+  List<Traveler> _travellers = <Traveler>[];
 
   List<Traveler> get travelers => _travellers;
 
-  void setTraveler(RxList<Traveler> val) {
+  void setTraveler(List<Traveler> val) {
     _travellers = val;
     notifyListeners();
   }
@@ -141,4 +142,28 @@ class StepsState with ChangeNotifier {
   String buttonText(int index) {
     return _buttonsText[index];
   }
+
+  final titles = [
+    "Travellers",
+    "Safety",
+    "Rules",
+    "Passport",
+    "Visa",
+    "Upgrades",
+    "Seats",
+    "Payment",
+    "Receipt",
+  ];
+
+  final List<IconData> icons = [
+    MenuIcons.iconAccount,
+    Icons.health_and_safety,
+    MenuIcons.iconInfo,
+    MenuIcons.iconPassport,
+    MenuIcons.iconVisa,
+    MenuIcons.star,
+    MenuIcons.iconSeat,
+    MenuIcons.iconCard,
+    MenuIcons.iconTask,
+  ];
 }

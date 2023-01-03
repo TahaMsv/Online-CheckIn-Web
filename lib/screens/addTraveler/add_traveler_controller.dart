@@ -1,24 +1,23 @@
+import 'package:online_checkin_web_refactoring/screens/addTraveler/usecases/add_traveler_usecase.dart';
+
 import '../../core/dependency_injection.dart';
 import '../../core/interfaces/controller.dart';
+import '../../core/utils/failure_handler.dart';
 import 'add_traveler_repository.dart';
 import 'add_traveler_state.dart';
 import 'package:flash/flash.dart';
 import '../../widgets/CustomFlutterWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:online_checkin_web_refactoring/screens/steps/steps_cotroller.dart';
+import 'package:online_checkin_web_refactoring/screens/steps/steps_controller.dart';
 import '../login/login_state.dart';
 import '../login/login_repository.dart';
 import '../login/usecases/login_usecase.dart';
-import '../../utils/failure_handler.dart';
 
 class AddTravelerController extends MainController {
   final AddTravelerState addTravelerState = getIt<AddTravelerState>();
   final AddTravelerRepository addTravelerRepository = getIt<AddTravelerRepository>();
 
-  final LoginRepository loginRepository = getIt<LoginRepository>();
-
-  //
-  late LoginUseCase loginUseCase = LoginUseCase(repository: loginRepository);
+  late AddTravelerUseCase addTravelerUseCase = AddTravelerUseCase(repository: addTravelerRepository);
 
   void addTraveller(BuildContext context) async {
     String lastName = addTravelerState.lastNameC.text;
@@ -56,29 +55,21 @@ class AddTravelerController extends MainController {
       addTravelerState.setIsLastNameEmpty(false);
     }
     if (ticketNumber != "" && lastName != "") {
-      final LoginState loginState = getIt<LoginState>();
-      String token = loginState.token!;
-
       if (!addTravelerState.requesting) {
         addTravelerState.setRequesting(true);
 
-        LoginRequest loginRequest = LoginRequest(
-          "[OnlineCheckin].[Authenticate]",
-          token,
-          {
-            "Code": ticketNumber,
-            "Code2": lastName,
-            "UrlType": 1,
-          },
+        AddTravelerRequest addTravelerRequest = AddTravelerRequest(
+          ticketNumber: ticketNumber,
+          lastname: lastName,
         );
+
         String newToken = "";
-        final fOrToken = await loginUseCase(request: loginRequest);
+        final fOrToken = await addTravelerUseCase(request: addTravelerRequest);
         fOrToken.fold((f) => FailureHandler.handle(f, retry: () => addTraveller(context)), (token) async {
           newToken = token;
         });
 
         if (newToken != "") {
-          print("here 64");
           final StepsController stepsController = getIt<StepsController>();
           stepsController.addToTravelers(context, newToken, lastName, ticketNumber);
           addTravelerState.lastNameC.text = "";

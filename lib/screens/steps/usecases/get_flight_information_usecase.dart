@@ -17,22 +17,13 @@ class GetFlightInformationUseCase extends UseCase<FlightInformation, GetFlightIn
 }
 
 class GetFlightInformationRequest extends Request {
-  final String execution;
-  final dynamic token;
-  final Map<String, dynamic> request;
-
-  GetFlightInformationRequest(
-    this.execution,
-    this.token,
-    this.request,
-  );
-
+  GetFlightInformationRequest();
   @override
   Map<String, dynamic> toJson() => {
         "Body": {
-          "Execution": execution,
+          "Execution": "[OnlineCheckin].[SelectFlightInformation]",
           "Token": token,
-          "Request": request,
+          "Request": {},
         },
       };
 }

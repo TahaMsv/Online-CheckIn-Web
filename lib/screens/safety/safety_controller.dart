@@ -5,7 +5,7 @@ import 'package:online_checkin_web_refactoring/screens/safety/safety_state.dart'
 
 import '../../core/dependency_injection.dart';
 import '../../core/interfaces/controller.dart';
-import '../steps/steps_cotroller.dart';
+import '../steps/steps_controller.dart';
 
 class SafetyController extends MainController {
 

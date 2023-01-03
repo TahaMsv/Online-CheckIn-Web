@@ -7,6 +7,7 @@ import '../../core/dependency_injection.dart';
 import 'package:provider/provider.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import '../../core/utils/getTranslatedWord.dart';
 import '../../widgets/StepsScreenTitle.dart';
 
 class PassportView extends StatelessWidget {
@@ -18,7 +19,7 @@ class PassportView extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     PassportState passportState = context.watch<PassportState>();
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: MyColors.white,
       body: Column(
         children: [
           StepsScreenTitle(
@@ -67,9 +68,9 @@ class InfoCard extends StatelessWidget {
     Color bgColor;
     if (passportState.travelers[index].passportInfo.isPassInfoCompleted) {
       textColor = const Color(0xffffffff);
-      bgColor = const Color(0xff48c0a2);
+      bgColor =  MyColors.oceanGreen;
     } else {
-      textColor = const Color(0xff424242);
+      textColor =  MyColors.darkGrey;
       bgColor = const Color(0xffffffff);
     }
     return Container(
@@ -90,7 +91,7 @@ class InfoCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.warning_amber_sharp,
-                color: passportState.travelers[index].passportInfo.isPassInfoCompleted ? Colors.white.withOpacity(0) : const Color(0xfff86f6f),
+                color: passportState.travelers[index].passportInfo.isPassInfoCompleted ? MyColors.white.withOpacity(0) : const Color(0xfff86f6f),
                 size: 20,
               )
             ],
@@ -158,7 +159,7 @@ class AddPassInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        myPassportController.showDOCSPopup(index);
+        myPassportController.showBottomSheetForm(context, index);
       },
       child: Row(
         children: [
@@ -224,7 +225,7 @@ class EditIPassInfo extends StatelessWidget {
           },
           child: const Icon(
             MenuIcons.iconEdit,
-            color: Colors.white,
+            color: MyColors.white,
             size: 18,
           ),
         )
@@ -255,7 +256,7 @@ Container passportTypeDropDown(int index, {double width = 400, double height = 4
             //   'Type',
             // ),
             onChanged: (newValue) {
-              passportState.travelers[index].passportInfo.passportType = passportController.getKeyFromLanguageWords(newValue.toString());
+              passportState.travelers[index].passportInfo.passportType = getKeyFromLanguageWords(newValue.toString());
               passportController.refreshList(index);
             },
             value: passportState.travelers[index].passportInfo.passportType == null || passportState.travelers[index].passportInfo.passportType == "Passport Type"
@@ -302,7 +303,7 @@ Container nationalityDropDown(int index, {double width = 400, double height = 40
               style: TextStyle(fontSize: 25),
             ),
             onChanged: (newValue) {
-              passportState.travelers[index].passportInfo.nationality = passportController.getKeyFromLanguageWords(newValue.toString());
+              passportState.travelers[index].passportInfo.nationality = getKeyFromLanguageWords(newValue.toString());
               passportController.refreshList(index);
             },
             value: passportState.travelers[index].passportInfo.nationality == null || passportState.travelers[index].passportInfo.nationality == "Nationality"
@@ -349,7 +350,7 @@ Container countryOfIssueDropDown(int index, {double width = 200, double height =
             //   'Country of Issue'.tr,
             // ),
             onChanged: (newValue) {
-              passportState.travelers[index].passportInfo.countryOfIssue = passportController.getKeyFromLanguageWords(newValue.toString());
+              passportState.travelers[index].passportInfo.countryOfIssue = getKeyFromLanguageWords(newValue.toString());
               passportController.refreshList(index);
             },
             value: passportState.travelers[index].passportInfo.countryOfIssue == null || passportState.travelers[index].passportInfo.countryOfIssue == "Country of Issue"
@@ -398,7 +399,7 @@ Container genderDropDown(int index, {double width = 200, double height = 40}) {
             //   'Gender'.tr,
             // ),
             onChanged: (newValue) {
-              passportState.travelers[index].passportInfo.gender = passportController.getKeyFromLanguageWords(newValue.toString());
+              passportState.travelers[index].passportInfo.gender = getKeyFromLanguageWords(newValue.toString());
               passportController.refreshList(index);
             },
             value: passportState.travelers[index].passportInfo.gender == null || passportState.travelers[index].passportInfo.gender == "Gender"

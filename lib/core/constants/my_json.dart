@@ -1,7 +1,8 @@
 
-class TranslatedWords  {
+class MyJson  {
+  MyJson._();
 
-  Map<String, Map<String, String>> get keys => {
+  static const Map<String, Map<String, String>>  translatedWordKeys = {
     'en_US': {
       'Last Name': 'Last Name',
       "Online Check-in": "Online Check-in",

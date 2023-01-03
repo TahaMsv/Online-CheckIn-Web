@@ -1,7 +1,7 @@
+import '../../core/utils/country_utils/country_utility.dart';
+import '../../core/utils/country_utils/typedefs.dart';
 import 'countries.dart';
 import 'country.dart';
-import 'utils/typedefs.dart';
-import 'utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:core';
 

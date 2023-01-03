@@ -19,33 +19,29 @@ class AddTravelerState with ChangeNotifier {
 
   bool get requesting => _requesting;
 
-    void setRequesting(bool val) {
-      _requesting = val;
-      notifyListeners();
-    }
-
-  final TextEditingController _ticketNumberC = TextEditingController();
-  final TextEditingController _lastNameC = TextEditingController();
-
-  TextEditingController get ticketNumberC => _ticketNumberC;
-
-  TextEditingController get lastNameC => _lastNameC;
-
-  RxBool _isLastNameEmpty = false.obs;
-
-  bool get isLastNameEmpty => _isLastNameEmpty.value;
-
-  void setIsLastNameEmpty(bool val) {
-    _isLastNameEmpty.value = val;
+  void setRequesting(bool val) {
+    _requesting = val;
     notifyListeners();
   }
 
-  RxBool _isTicketNumberEmpty = false.obs;
+  final TextEditingController ticketNumberC = TextEditingController();
+  final TextEditingController lastNameC = TextEditingController();
 
-  bool get isTicketNumberEmpty => _isTicketNumberEmpty.value;
+  bool _isLastNameEmpty = false;
+
+  bool get isLastNameEmpty => _isLastNameEmpty;
+
+  void setIsLastNameEmpty(bool val) {
+    _isLastNameEmpty = val;
+    notifyListeners();
+  }
+
+  bool _isTicketNumberEmpty = false;
+
+  bool get isTicketNumberEmpty => _isTicketNumberEmpty;
 
   void setIsTicketNumberEmpty(bool val) {
-    _isTicketNumberEmpty.value = val;
+    _isTicketNumberEmpty = val;
     notifyListeners();
   }
 }

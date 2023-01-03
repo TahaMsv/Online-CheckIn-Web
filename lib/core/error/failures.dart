@@ -51,6 +51,14 @@ class NoElementFailure extends Failure {
   }
 }
 
+class ConnectionFailure extends Failure {
+  ConnectionFailure({required int code, required String msg, required String traceMsg})
+      : super(code: code, msg: msg, traceMsg: traceMsg);
+
+  factory ConnectionFailure.fromAppException(AppException e) {
+    return ConnectionFailure(code: e.code, msg: e.message, traceMsg: e.traceMsg);
+  }
+}
 // class CuppsFailure extends Failure {
 //   CuppsFailure({required int code, required String msg, required DeviceType deviceType})
 //       : super(code: code, msg: msg, traceMsg: deviceType.name.toUpperCase() + "Device");
