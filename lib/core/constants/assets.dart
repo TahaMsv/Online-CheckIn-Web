@@ -2,6 +2,7 @@ class AssetImages {
 
   AssetImages._();
   static const assetsAddress = 'assets/images/';
+  static const assetsAddressDangerousGood = '${assetsAddress}DangerousGoods';
 
   static const ABOMIS_BACKGROUND = "${assetsAddress}abomis-bg.png";
   static const COMPANY_LOGO_LIGHT = "${assetsAddress}company-logo-light.png";

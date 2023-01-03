@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_checkin_web_refactoring/core/constants/ui.dart';
 import 'package:online_checkin_web_refactoring/screens/rules/rules_controller.dart';
 import 'package:online_checkin_web_refactoring/screens/rules/rules_state.dart';
 import '../../core/constants/assets.dart';
-import '../../core/constants/ui.dart';
 import '../../core/dependency_injection.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/StepsScreenTitle.dart';
 
-class RulesView extends StatelessWidget {
-  RulesView({Key? key}) : super(key: key);
+class RulesViewTablet extends StatelessWidget {
+  RulesViewTablet({Key? key}) : super(key: key);
   final RulesController rulesController = getIt<RulesController>();
 
   @override
@@ -18,7 +18,7 @@ class RulesView extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     RulesState rulesState = context.watch<RulesState>();
     return Scaffold(
-      backgroundColor: MyColors.white,
+      backgroundColor: theme.primaryColor,
       body: SizedBox(
         height: double.infinity,
         child: Column(
@@ -26,17 +26,16 @@ class RulesView extends StatelessWidget {
           children: [
             StepsScreenTitle(
               title: "Dangerous Goods".tr,
-              description: "Every items can become dangerous when transported by air. Example of dangerous goods are:".tr,
+              fontSize: 45,
+              description: "",
             ),
             const SizedBox(
               height: 20,
             ),
             Expanded(
-              child: GridView.count(
-                crossAxisCount: 6,
-                childAspectRatio: 150/ 180,
+              child: ListView(
                 children: rulesState.rules.map(
-                      (value) {
+                  (value) {
                     int index = rulesState.rules.indexOf(value);
                     value["imageUrl"] = "${AssetImages.assetsAddressDangerousGood}${index + 1}.png";
                     return DangerousItem(
@@ -45,7 +44,7 @@ class RulesView extends StatelessWidget {
                   },
                 ).toList(),
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -69,34 +68,43 @@ class DangerousItem extends StatelessWidget {
       width: 150,
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        border: Border.all(color: MyColors.white1),
+        border: Border.all(color: const Color(0xffeaeaea)),
       ),
-      child: Column(
+      child: Row(
         children: [
           SizedBox(
-            height: 80,
-            width: 80,
+            height: 120,
+            width: 120,
             child: Image.asset(
               value["imageUrl"]!,
               fit: BoxFit.fill,
             ),
           ),
           const SizedBox(
-            height: 10,
+            width: 20,
           ),
-          Text(
-            value["title"]!.tr,
-            style: MyTextTheme.darkGreyBold15,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            value["content"]!.tr,
-            overflow: TextOverflow.clip,
-            style: MyTextTheme.darkGreyW40015,
-            textAlign: TextAlign.center,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                value["title"]!.tr,
+                style: MyTextTheme.darkGreyBold25,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                // height: 40,
+                width: Get.width * 0.7,
+                child: Text(
+                  value["content"]!.tr,
+                  // overflow: TextOverflow.,
+                  style: MyTextTheme.darkGreyW40020,
+                  // textAlign: TextAlign.center,
+                ),
+              ),
+            ],
           ),
         ],
       ),

@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 class RulesState with ChangeNotifier {
   setState() => notifyListeners();
 
-  List rules = [
+ final List rules = [
     {
       "imageUrl": "",
       "title": "Magnetic Objects",
