@@ -10,18 +10,32 @@ import '../../core/classes/VisaType.dart';
 class VisaState with ChangeNotifier {
   setState() => notifyListeners();
 
-  List<Traveler> travelers = <Traveler>[].obs;
+  List<Traveler> travelers = <Traveler>[];
   List<TextEditingController> documentNoCs = [];
   List<TextEditingController> destinationCs = [];
-  RxBool loading = false.obs;
 
-  List<VisaType> listType = [ VisaType(id: -1, shortName: "", name: "", fullName: "Type")];
+  bool _loading = false;
 
-  List<MyCountry> listIssuePlace = [
-     MyCountry(worldAreaCode: null, currencyId: null, englishName: "Place of issue", name: null, hasOnHoldBooking: null, regionId: null, code3: null, isDisabled: null, id: null)
-  ];
+  bool get loading => _loading;
 
-  void refreshTravellers(){
+  void setLoading(bool val) {
+    _loading = val;
+    notifyListeners();
+  }
+
+  bool _requesting = false;
+
+  bool get requesting => _requesting;
+
+  void setRequesting(bool val) {
+    _requesting = val;
+    notifyListeners();
+  }
+
+  List<VisaType> visaListType = [VisaType.example()];
+  List<MyCountry> listIssuePlace = [MyCountry.example("Place of issue")];
+
+  void refreshTravellers() {
     notifyListeners();
   }
 }

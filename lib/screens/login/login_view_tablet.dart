@@ -116,14 +116,14 @@ class CheckInForm extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Online Check-in".tr,
+                          "Online Check-in" ,
                           style: MyTextTheme.boldDarkGray30,
                         ),
                         const SizedBox(
                           height: 10,
                         ),
                         Text(
-                          "Input Requested info in order to continue".tr,
+                          "Input Requested info in order to continue" ,
                           style: MyTextTheme.boldDarkGray24,
 
                         ),
@@ -139,8 +139,8 @@ class CheckInForm extends StatelessWidget {
                             height: 60,
                             fontSize: 25,
                             controller: loginState.lastNameC,
-                            hint: "Last Name".tr,
-                            errorText: "Last Name can't be empty".tr,
+                            hint: "Last Name" ,
+                            errorText: "Last Name can't be empty" ,
                             isEmpty: loginState.isLastNameEmpty,
                             width: Get.width,
                           ),
@@ -151,8 +151,8 @@ class CheckInForm extends StatelessWidget {
                             height: 60,
                             fontSize: 25,
                             controller: loginState.bookingRefNameC,
-                            hint: "Booking reference name".tr,
-                            errorText: "Booking reference name can't be empty".tr,
+                            hint: "Booking reference name" ,
+                            errorText: "Booking reference name can't be empty" ,
                             isEmpty: loginState.isBookingRefNameEmpty,
                             obscureText: true,
                             width: Get.width,
@@ -165,10 +165,10 @@ class CheckInForm extends StatelessWidget {
                     MyElevatedButton(
                       height: 60,
                       width: double.infinity,
-                      buttonText: "Check-in".tr,
+                      buttonText: "Check-in" ,
                       bgColor: MyColors.myBlue,
                       fgColor: MyColors.white,
-                      function: () => loginController.login(context, username: "", password: ""),
+                      function: () => loginController.login( username: "", password: ""),
                       textColor: MyColors.white,
                       borderRadius: const BorderRadius.all(
                         Radius.circular(5),

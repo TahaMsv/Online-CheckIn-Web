@@ -1,10 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:online_checkin_web_refactoring/core/constants/my_list.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/ui.dart';
 import '../../../widgets/MtDottedLine.dart';
 import '../safety_controller.dart';
 import '../safety_state.dart';
+
 class CommitmentSegment extends StatelessWidget {
   const CommitmentSegment({
     Key? key,
@@ -41,7 +43,7 @@ class CommitmentSegment extends StatelessWidget {
             ],
           ),
           if (!isTabletMode)
-            for (int i = 0; i < safetyState.policyWidgetText.length; ++i) PolicyWidget(index: i, mySafetyController: mySafetyController, normalText: safetyState.policyWidgetText[i]),
+            for (int i = 0; i < MyList.policyWidgetText.length; ++i) PolicyWidget(index: i, mySafetyController: mySafetyController, normalText: MyList.policyWidgetText[i]), //todo change for
           Container(
             margin: const EdgeInsets.only(top: 15),
             child: RichText(
@@ -50,16 +52,16 @@ class CommitmentSegment extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: "Please read our",
-                    style:isTabletMode? MyTextTheme.darkGreyW40023:MyTextTheme.darkGreyW40015,
+                    style: isTabletMode ? MyTextTheme.darkGreyW40023 : MyTextTheme.darkGreyW40015,
                   ),
                   TextSpan(
                     text: "travel policy",
-                    style: isTabletMode? const TextStyle(color: MyColors.myBlue, fontSize: 23):const TextStyle(color: MyColors.myBlue),
+                    style: isTabletMode ? const TextStyle(color: MyColors.myBlue, fontSize: 23) : const TextStyle(color: MyColors.myBlue),
                     recognizer: TapGestureRecognizer()..onTap = () {},
                   ),
                   TextSpan(
                     text: "to delay or cancel your trip if you are unable to accept the above commitments.",
-                    style:isTabletMode? MyTextTheme.darkGreyW40023:MyTextTheme.darkGreyW40015,
+                    style: isTabletMode ? MyTextTheme.darkGreyW40023 : MyTextTheme.darkGreyW40015,
                   ),
                 ],
               ),
@@ -92,7 +94,7 @@ class PolicyWidget extends StatelessWidget {
         children: [
           Checkbox(
             onChanged: (bool? value) {
-              mySafetyController.changeValue(index, value!);
+              safetyState.toggleCheckBoxesValue(index);
             },
             value: safetyState.checkBoxesValue[index],
           ),
@@ -122,4 +124,3 @@ class PolicyWidget extends StatelessWidget {
     );
   }
 }
-

@@ -22,47 +22,41 @@ class VisaView extends StatelessWidget {
     StepsState stepsState = context.watch<StepsState>();
     return Scaffold(
       backgroundColor: MyColors.white,
-      body:  Obx(
-            () => visaState.loading.value
-            ? const Center(
-          child: CircularProgressIndicator(),
-        )
-            : !stepsState.isDocoNecessary
-            ? Center(
-          child: Text("No need to add visa".tr),
-        )
-            : Column(
-          children: [
-            StepsScreenTitle(
-              title: "Visa".tr,
-              description: "Enter visa data (DOCO) for all the passengers.".tr,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Obx(
-                  () => Expanded(
-                child: GridView.count(
-                  crossAxisCount: 4,
-                  // crossAxisSpacing: 60,
-                  childAspectRatio: 315 / 193,
-                  children: stepsState.travelers.asMap().entries.map(
-                        (entry) {
-                      int idx = entry.key;
-                      // Traveller traveller = entry.value;
-                      return InfoCard(
-                        index: idx,
-                        // traveller: traveller,
-                        myVisaController: visaController,
-                      );
-                    },
-                  ).toList(),
+      body: visaState.loading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : !stepsState.isDocoNecessary
+              ? const Center(
+                  child: Text("No need to add visa"),
+                )
+              : Column(
+                  children: [
+                    const StepsScreenTitle(
+                      title: "Visa",
+                      description: "Enter visa data (DOCO) for all the passengers.",
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Expanded(
+                      child: GridView.count(
+                        crossAxisCount: 4,
+                        // crossAxisSpacing: 60,
+                        childAspectRatio: 315 / 193,
+                        children: stepsState.travelers.asMap().entries.map(
+                          (entry) {
+                            int idx = entry.key;
+                            // Traveller traveller = entry.value;
+                            return InfoCard(
+                              index: idx,
+                            );
+                          },
+                        ).toList(),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -70,14 +64,9 @@ class VisaView extends StatelessWidget {
 class InfoCard extends StatelessWidget {
   const InfoCard({
     Key? key,
-    // required this.traveller,
-    required this.myVisaController,
     required this.index,
   }) : super(key: key);
   final int index;
-
-  // final Traveller traveller;
-  final VisaController myVisaController;
 
   @override
   Widget build(BuildContext context) {
@@ -85,98 +74,40 @@ class InfoCard extends StatelessWidget {
     Color textColor;
     Color bgColor;
     if (stepsState.travelers[index].visaInfo.isVisaInfoCompleted) {
-      textColor = const Color(0xffffffff);
-      bgColor =  MyColors.oceanGreen;
+      textColor = MyColors.white;
+      bgColor = MyColors.oceanGreen;
     } else {
-      textColor =  MyColors.darkGrey;
-      bgColor = const Color(0xffffffff);
+      textColor = MyColors.darkGrey;
+      bgColor = MyColors.white;
     }
     return Container(
       // height: 300,
       padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
       width: 315,
       margin: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: bgColor,
-        border: Border.all(
-          color: const Color(0xffeaeaea),
-        ),
-      ),
+      decoration: BoxDecoration(color: bgColor, border: Border.all(color: MyColors.white1)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Icon(
-                Icons.warning_amber_sharp,
-                color: stepsState.travelers[index].visaInfo.isVisaInfoCompleted ? MyColors.white.withOpacity(0) : const Color(0xfff86f6f),
-                size: 20,
-              )
-            ],
+            children: [Icon(Icons.warning_amber_sharp, color: stepsState.travelers[index].visaInfo.isVisaInfoCompleted ? MyColors.transparent : MyColors.begonia, size: 20)],
           ),
           Text(
             stepsState.travelers[index].getFullNameWithGender(),
-            style: TextStyle(
-              color: textColor,
-              fontSize: 15,
-              fontWeight: FontWeight.w800,
-            ),
+            style: TextStyle(color: textColor, fontSize: 15, fontWeight: FontWeight.w800),
           ),
-          const SizedBox(
-            height: 45,
-          ),
+          const SizedBox(height: 45),
           Row(
             children: [
-              Text(
-                "ID: ",
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              Text(
-                "${stepsState.travelers[index].flightInformation.passengers[0].id}",
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Text(
-                "Passport No: ".tr,
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              // Text(
-              //   "45678",
-              //   style: TextStyle(
-              //     color: textColor,
-              //     fontSize: 15,
-              //     fontWeight: FontWeight.w800,
-              //   ),
-              // ),
+              Text("ID: ", style: TextStyle(color: textColor, fontSize: 13, fontWeight: FontWeight.w400)),
+              Text("${stepsState.travelers[index].flightInformation.passengers[0].id}", style: TextStyle(color: textColor, fontSize: 15, fontWeight: FontWeight.w800)),
+              const SizedBox(width: 5),
+              Text("Passport No: ", style: TextStyle(color: textColor, fontSize: 13, fontWeight: FontWeight.w400)),
             ],
           ),
-          const SizedBox(
-            height: 20,
-          ),
-          stepsState.travelers[index].visaInfo.isVisaInfoCompleted
-              ? EditVisaInfo(
-            myVisaController: myVisaController,
-            index: index,
-          )
-              : AddVisaInfo(
-            myVisaController: myVisaController,
-            index: index,
-          ),
+          const SizedBox(height: 20),
+          stepsState.travelers[index].visaInfo.isVisaInfoCompleted ? EditVisaInfo(index: index) : AddVisaInfo(index: index),
         ],
       ),
     );
@@ -186,35 +117,24 @@ class InfoCard extends StatelessWidget {
 class AddVisaInfo extends StatelessWidget {
   const AddVisaInfo({
     Key? key,
-    required this.myVisaController,
     required this.index,
   }) : super(key: key);
-  final VisaController myVisaController;
   final int index;
 
   @override
   Widget build(BuildContext context) {
+    VisaController visaController = getIt<VisaController>();
     return GestureDetector(
       onTap: () {
-        myVisaController.showDOCOPopup(index);
+        visaController.showVisaDialog(index);
       },
       child: Row(
-        children: [
-          const Icon(
-            Icons.add_circle_outline_rounded,
-            color: Color(0xff4d6fff),
-            size: 18,
-          ),
-          const SizedBox(
-            width: 5,
-          ),
+        children: const [
+          Icon(Icons.add_circle_outline_rounded, color: MyColors.myBlue, size: 18),
+          SizedBox(width: 5),
           Text(
-            "Add Visa Info".tr,
-            style: const TextStyle(
-              color: Color(0xff4d6fff),
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
+            "Add Visa Info",
+            style: TextStyle(color: Color(0xff4d6fff), fontSize: 12, fontWeight: FontWeight.w500),
           ),
         ],
       ),
@@ -225,138 +145,35 @@ class AddVisaInfo extends StatelessWidget {
 class EditVisaInfo extends StatelessWidget {
   const EditVisaInfo({
     Key? key,
-    required this.myVisaController,
     required this.index,
   }) : super(key: key);
-  final VisaController myVisaController;
   final int index;
 
   @override
   Widget build(BuildContext context) {
+    VisaController visaController = getIt<VisaController>();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
-          children: [
-            const Icon(
-              Icons.check,
-              color: Color(0xffffffff),
-              size: 18,
-            ),
-            const SizedBox(
-              width: 5,
-            ),
+          children: const [
+            Icon(Icons.check, color: MyColors.white, size: 18),
+            SizedBox(width: 5),
             Text(
-              "Visa No: 45687".tr,
-              style: const TextStyle(
-                color: Color(0xffffffff),
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
+              "Visa No: 45687",
+              style: TextStyle(color: MyColors.white, fontSize: 12, fontWeight: FontWeight.w700),
             ),
           ],
         ),
         GestureDetector(
           onTap: () {
-            myVisaController.showDOCOPopup(index);
+            visaController.showVisaDialog(index);
           },
-          child: const Icon(
-            MenuIcons.iconEdit,
-            color: MyColors.white,
-            size: 18,
-          ),
+          child: const Icon(MenuIcons.iconEdit, color: MyColors.white, size: 18),
         )
       ],
     );
   }
-}
-
-
-Container placeOfIssueDropDown(int index, {double width = 400, double height = 40, double fontSize = 15}) {
-  final VisaController visaController = getIt<VisaController>();
-  final VisaState visaState = getIt<VisaState>();
-  return Container(
-    height: height,
-    width: width,
-    decoration: BoxDecoration(
-      border: Border.all(
-        color: const Color(0xffeaeaea),
-        width: 2,
-      ),
-    ),
-    child: Obx(
-          () => DropdownButtonHideUnderline(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          child: DropdownButton(
-            // hint: Text(
-            //   'Place of Issue',
-            // ),
-            onChanged: (newValue) {
-              visaState.travelers[index].visaInfo.placeOfIssue = getKeyFromLanguageWords( newValue.toString());
-              visaController.refreshList(index);
-            },
-            value: visaState.travelers[index].visaInfo.placeOfIssue == null || visaState.travelers[index].visaInfo.placeOfIssue == "Place of issue" ? "Place of issue".tr : visaState.travelers[index].visaInfo.placeOfIssue,
-            items: visaState.listIssuePlace.map(
-                  (selectedType) {
-                visaState.travelers[index].visaInfo.placeOfIssueID = selectedType.id;
-                return DropdownMenuItem(
-                  value: selectedType.englishName! == "Place of issue" ? ("Place of issue".tr) : selectedType.englishName!,
-                  child: Text(
-                    selectedType.englishName! == "Place of issue" ? ("Place of issue".tr) : selectedType.englishName!,
-                    style: TextStyle(fontSize: fontSize),
-                  ),
-                );
-              },
-            ).toList(),
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
-Container typeDropDown(int index, {double width = 400, double height = 40, double fontSize = 15}) {
-  final VisaController visaController = getIt<VisaController>();
-  final VisaState visaState = getIt<VisaState>();
-  return Container(
-    height: height,
-    width: width,
-    decoration: BoxDecoration(
-      border: Border.all(
-        color: const Color(0xffeaeaea),
-        width: 2,
-      ),
-    ),
-    child: Obx(
-          () => DropdownButtonHideUnderline(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          child: DropdownButton(
-            // hint: Text(
-            //   'Type',
-            // ),
-            onChanged: (newValue) {
-              visaState.travelers[index].visaInfo.type = getKeyFromLanguageWords( newValue.toString());
-              visaController.refreshList(index);
-            },
-            value: visaState.travelers[index].visaInfo.type == null || visaState.travelers[index].visaInfo.type == "Type" ? "Type".tr : visaState.travelers[index].visaInfo.type,
-            items: visaState.listType.map(
-                  (selectedType) {
-                return DropdownMenuItem(
-                  value: selectedType.fullName == "Type" ? ("Type".tr) : selectedType.fullName,
-                  child: Text(
-                    selectedType.fullName == "Type" ? ("Type".tr) : selectedType.fullName,
-                    style: TextStyle(fontSize: fontSize),
-                  ),
-                );
-              },
-            ).toList(),
-          ),
-        ),
-      ),
-    ),
-  );
 }
 
 class SubmitButton extends StatelessWidget {
@@ -377,24 +194,18 @@ class SubmitButton extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const SizedBox(
-          width: 1,
-        ),
+        const SizedBox(width: 1),
         Container(
           width: width,
           height: height,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.blueAccent),
-            borderRadius: BorderRadius.circular(5),
-            color: const Color(0xff4d6ff8),
-          ),
+          decoration: BoxDecoration(border: Border.all(color: MyColors.blueAccent), borderRadius: BorderRadius.circular(5), color: MyColors.myBlue),
           child: MyElevatedButton(
             height: 50,
             width: 175,
             buttonText: "Submit".tr,
             fontSize: fontSize,
             bgColor: MyColors.white,
-            fgColor: const Color(0xff4d6ff8),
+            fgColor: MyColors.myBlue,
             function: () {
               function();
             },

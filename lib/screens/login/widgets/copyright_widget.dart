@@ -13,7 +13,7 @@ class CopyrightText extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.only(bottom: 20),
-          child: Text("© Copyright 2021 Abomis All rights reserved".tr),
+          child: Text("© Copyright 2021 Abomis All rights reserved" ),
         ),
       ],
     );

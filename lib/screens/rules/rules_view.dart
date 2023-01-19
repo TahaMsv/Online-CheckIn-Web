@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_checkin_web_refactoring/core/constants/my_list.dart';
 import 'package:online_checkin_web_refactoring/screens/rules/rules_controller.dart';
 import 'package:online_checkin_web_refactoring/screens/rules/rules_state.dart';
 import '../../core/constants/assets.dart';
@@ -25,8 +26,8 @@ class RulesView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             StepsScreenTitle(
-              title: "Dangerous Goods".tr,
-              description: "Every items can become dangerous when transported by air. Example of dangerous goods are:".tr,
+              title: "Dangerous Goods" ,
+              description: "Every items can become dangerous when transported by air. Example of dangerous goods are:" ,
             ),
             const SizedBox(
               height: 20,
@@ -34,9 +35,9 @@ class RulesView extends StatelessWidget {
             Expanded(
               child: GridView.count(
                 crossAxisCount: 6,
-                childAspectRatio: 150/ 180,
+                childAspectRatio: 150 / 180,
                 children: rulesState.rules.map(
-                      (value) {
+                  (value) {
                     int index = rulesState.rules.indexOf(value);
                     value["imageUrl"] = "${AssetImages.assetsAddressDangerousGood}${index + 1}.png";
                     return DangerousItem(
@@ -85,7 +86,7 @@ class DangerousItem extends StatelessWidget {
             height: 10,
           ),
           Text(
-            value["title"]!.tr,
+            value["title"]! ,
             style: MyTextTheme.darkGreyBold15,
             textAlign: TextAlign.center,
           ),
@@ -93,7 +94,7 @@ class DangerousItem extends StatelessWidget {
             height: 10,
           ),
           Text(
-            value["content"]!.tr,
+            value["content"]! ,
             overflow: TextOverflow.clip,
             style: MyTextTheme.darkGreyW40015,
             textAlign: TextAlign.center,

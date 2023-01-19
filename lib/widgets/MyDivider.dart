@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:online_checkin_web_refactoring/core/constants/ui.dart';
 class MyDivider extends StatelessWidget {
   const MyDivider({
-    Key? key, required this.width, required this.height, required this.color,
+    Key? key,  this.width = double.infinity,  this.height = 1, this.color = MyColors.white1,
   }) : super(key: key);
   final double width;
   final double height;
@@ -10,9 +11,9 @@ class MyDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: 1,
-      color: const Color(0xffebebeb),
+      width: width,
+      height: height,
+      color: color,
     );
   }
 }

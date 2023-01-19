@@ -85,13 +85,12 @@ class UpgradesController extends MainController {
 
   @override
   void onCreate() {
-    init();
+
   }
 
   @override
   void onInit() {
-    // TODO: implement onInit
-
+    init();
     super.onInit();
   }
 }

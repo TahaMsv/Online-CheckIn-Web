@@ -138,7 +138,7 @@ class CheckInForm extends StatelessWidget {
             // mainController: myEnterScreenController, // todo
             width: double.infinity,
           ),
-          const MyDivider(color: MyColors.white1, width: double.infinity, height: 1),
+          const MyDivider(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -157,13 +157,13 @@ class CheckInForm extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Online Check-in".tr,
+                              "Online Check-in" ,
                               style: MyTextTheme.boldDarkGray18,
                             ),
                             Container(
                               margin: const EdgeInsets.only(top: 15),
                               child: Text(
-                                "Input Requested info in order to continue".tr,
+                                "Input Requested info in order to continue" ,
                                 style: const TextStyle(
                                   color: MyColors.lightGrey,
                                 ),
@@ -178,14 +178,14 @@ class CheckInForm extends StatelessWidget {
                             children: [
                               UserTextInput(
                                 controller: loginState.lastNameC,
-                                hint: "Last Name".tr,
-                                errorText: "Last Name can't be empty".tr,
+                                hint: "Last Name" ,
+                                errorText: "Last Name can't be empty" ,
                                 isEmpty: loginState.isLastNameEmpty,
                               ),
                               UserTextInput(
                                 controller: loginState.bookingRefNameC,
-                                hint: "Booking reference name".tr,
-                                errorText: "Booking reference name can't be empty".tr,
+                                hint: "Booking reference name" ,
+                                errorText: "Booking reference name can't be empty" ,
                                 isEmpty: loginState.isBookingRefNameEmpty,
                                 obscureText: true,
                               ),
@@ -195,10 +195,10 @@ class CheckInForm extends StatelessWidget {
                         MyElevatedButton(
                           height: 40,
                           width: double.infinity,
-                          buttonText: "Check-in".tr,
+                          buttonText: "Check-in" ,
                           bgColor: MyColors.myBlue,
                           fgColor: MyColors.white,
-                          function: () => loginController.login(context, username: "", password: ""),
+                          function: () => loginController.login( username: "", password: ""),
                           textColor: MyColors.white,
                           borderRadius: const BorderRadius.all(
                             Radius.circular(5),
@@ -238,11 +238,11 @@ class _Texts extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Ready to go?".tr,
+                  "Ready to go?" ,
                   style: MyTextTheme.boldWhite24,
                 ),
                 Text(
-                  "There are a few things to know before boarding.".tr,
+                  "There are a few things to know before boarding." ,
                   style: MyTextTheme.boldWhite16,
                 ),
               ],
@@ -260,7 +260,7 @@ class _Texts extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "When can I check in?".tr,
+                  "When can I check in?" ,
                   style: MyTextTheme.white16,
                 ),
               ],
@@ -325,7 +325,7 @@ class _NextPrevButton extends StatelessWidget {
             Container(
               margin: languageCode == "en" ? const EdgeInsets.only(left: 18) : const EdgeInsets.only(right: 18),
               child: Text(
-                text.tr,
+                text ,
                 style: MyTextTheme.white12,
               ),
             ),

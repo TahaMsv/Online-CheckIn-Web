@@ -18,22 +18,14 @@ class SelectCountriesUseCase extends UseCase<List<MyCountry>, SelectCountriesReq
 }
 
 class SelectCountriesRequest extends Request {
-  SelectCountriesRequest(
-    this.execution,
-    this.token,
-    this.request,
-  );
-
-  final String execution;
-  final dynamic token;
-  final Map<String, dynamic> request;
+  SelectCountriesRequest();
 
   @override
   Map<String, dynamic> toJson() => {
         "Body": {
-          "Execution": execution,
-          "Token": null,
-          "Request": request,
+          "Execution": "[OnlineCheckin].[SelectCountries]",
+          "Token": token,
+          "Request": {},
         },
       };
 }

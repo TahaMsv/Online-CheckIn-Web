@@ -4,6 +4,7 @@ import 'package:online_checkin_web_refactoring/core/constants/ui.dart';
 import 'package:online_checkin_web_refactoring/screens/rules/rules_controller.dart';
 import 'package:online_checkin_web_refactoring/screens/rules/rules_state.dart';
 import '../../core/constants/assets.dart';
+import '../../core/constants/my_list.dart';
 import '../../core/dependency_injection.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +26,7 @@ class RulesViewTablet extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             StepsScreenTitle(
-              title: "Dangerous Goods".tr,
+              title: "Dangerous Goods" ,
               fontSize: 45,
               description: "",
             ),
@@ -87,7 +88,7 @@ class DangerousItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                value["title"]!.tr,
+                value["title"]! ,
                 style: MyTextTheme.darkGreyBold25,
                 textAlign: TextAlign.center,
               ),
@@ -98,7 +99,7 @@ class DangerousItem extends StatelessWidget {
                 // height: 40,
                 width: Get.width * 0.7,
                 child: Text(
-                  value["content"]!.tr,
+                  value["content"]! ,
                   // overflow: TextOverflow.,
                   style: MyTextTheme.darkGreyW40020,
                   // textAlign: TextAlign.center,

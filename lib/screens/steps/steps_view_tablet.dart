@@ -26,65 +26,59 @@ class StepsViewTablet extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: theme.primaryColor,
       body: stepsState.stepLoading
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Container(
-              width: width,
-              height: height,
-              color: Colors.white,
-              child: ListView(
-                children: [
-                  TopOfPage(
-                    height: height,
-                    width: width,
-                    stepsController: stepsController,
-                    isTabletMode: true,
-                  ),
-                  SizedBox(
-                    width: width,
-                    height: height * 0.81,
-                    // color: Colors.green,
-                    child: ListView(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: stepsState.step == 0
-                                  ? const MyDottedLine(
-                                      lineLength: double.infinity,
-                                      color: MyColors.oceanGreen,
-                                    )
-                                  : Container(
-                                      height: 1,
-                                      color: MyColors.oceanGreen,
-                                    ),
-                            ),
-                            for (int i = 0; i <= 8; i++)
-                              if (stepsController.isStepNeeded(i))
-                                StepWidget(
-                                  step: stepsState.step,
-                                  index: i,
-                                  isTabletMode: true,
-                                  // checkDocs: myStepsScreenController.welcome!.body.flight[0].checkDocs,
-                                ),
-                            const Expanded(
-                              child: MyDivider(
-                                width: 0,
-                                height: 1,
-                                color: MyColors.white1,
+          : ListView(
+              shrinkWrap: true,
+              children: [
+                TopOfPage(
+                  height: height,
+                  width: width,
+                  stepsController: stepsController,
+                  isTabletMode: true,
+                ),
+                SizedBox(
+                  width: width,
+                  height: height * 0.81,
+                  // color: Colors.green,
+                  child: ListView(
+                    children: [
+                      Row(
+                        children: <Widget>[
+                              Expanded(
+                                child: stepsState.step == 0
+                                    ? const MyDottedLine(
+                                        lineLength: double.infinity,
+                                        color: MyColors.oceanGreen,
+                                      )
+                                    : Container(
+                                        height: 1,
+                                        color: MyColors.oceanGreen,
+                                      ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Container(color: Colors.white, height: height * 0.80 - 30, padding: const EdgeInsets.only(top: 50, left: 30, right: 30), child: childWidget),
-                      ],
-                    ),
+                            ] +
+                            stepsController
+                                .stepsToShowList()
+                                .map((i) => StepWidget(
+                                      index: i,
+                                      isTabletMode: true,
+                                    ))
+                                .toList() +
+                            [
+                              const Expanded(
+                                child: MyDivider(),
+                              ),
+                            ],
+                      ),
+                      Container(color: Colors.white, height: height * 0.80 - 30, padding: const EdgeInsets.only(top: 50, left: 30, right: 30), child: childWidget),
+                    ],
                   ),
-                  BottomOfPage(height: height, stepsController: stepsController, isTabletMode: true),
-                ],
-              ),
+                ),
+                BottomOfPage(height: height, stepsController: stepsController, isTabletMode: true),
+              ],
             ),
     );
   }

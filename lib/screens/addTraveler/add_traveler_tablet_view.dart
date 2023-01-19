@@ -50,9 +50,9 @@ class AddTravelerViewTablet extends StatelessWidget {
                     children: [
                       DatesAndFromToCities(
                         fromCity: flightInformation.fromCity,
-                        fromTime: DateFormat('yyyy-MM-dd').format(flightInformation.flightDate),
+                        fromTime: flightInformation.fromTime,
                         toCity: flightInformation.toCity,
-                        toTime: DateFormat('yyyy-MM-dd').format(flightInformation.flightDate),
+                        toTime: flightInformation.toTime,
                         isTabletMode: true,
                       ),
                       const AirplaneImage(),
@@ -69,16 +69,15 @@ class AddTravelerViewTablet extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-             TravellersList(
-                    height: height * 0.4,
-                    width: width,
-                    step: stepsState.step,
-                    stepsController: stepsController,
-                    stepsState: stepsState,
-                    addTravelerState: addTravelerState,
-                    addTravelerController: addTravelerController,
-                  ),
-
+                TravellersList(
+                  height: height * 0.4,
+                  width: width,
+                  step: stepsState.step,
+                  stepsController: stepsController,
+                  stepsState: stepsState,
+                  addTravelerState: addTravelerState,
+                  addTravelerController: addTravelerController,
+                ),
               ],
             ),
     );
@@ -119,7 +118,7 @@ class TravellersList extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TitleWidget(
-                title: "Travellers".tr,
+                title: "Travellers" ,
                 width: width * 0.5,
                 height: 100,
                 fontSize: 40,
@@ -132,10 +131,9 @@ class TravellersList extends StatelessWidget {
                       const MyDivider(
                         width: 2,
                         height: 60,
-                        color: Color(0xffededed),
                       ),
                       TitleWidget(
-                        title: "Seat".tr,
+                        title: "Seat" ,
                         width: 100,
                       ),
                     ],
@@ -143,31 +141,30 @@ class TravellersList extends StatelessWidget {
                 ),
             ],
           ),
-      Container(
-              width: width,
-              height: height - 105,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ListView.builder(
-                itemCount: stepsState.travelers.length + 1,
-                itemBuilder: (ctx, index) {
-                  return index < stepsState.travelers.length
-                      ? TravellerItem(
-                          step: step,
-                          index: index,
-                          stepsController: stepsController,
-                          stepsState: stepsState,
-                        )
-                      : stepsState.step == 0
-                          ? AddNewTraveller(
-                              stepsController: stepsController,
-                              addTravelerController: addTravelerController,
-                              addTravelerState: addTravelerState,
-                            )
-                          : Container();
-                },
-              ),
+          Container(
+            width: width,
+            height: height - 105,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: ListView.builder(
+              itemCount: stepsState.travelers.length + 1,
+              itemBuilder: (ctx, index) {
+                return index < stepsState.travelers.length
+                    ? TravellerItem(
+                        step: step,
+                        index: index,
+                        stepsController: stepsController,
+                        stepsState: stepsState,
+                      )
+                    : stepsState.step == 0
+                        ? AddNewTraveller(
+                            stepsController: stepsController,
+                            addTravelerController: addTravelerController,
+                            addTravelerState: addTravelerState,
+                          )
+                        : Container();
+              },
             ),
-
+          ),
         ],
       ),
       // color: Colors.red,
@@ -219,7 +216,7 @@ class AddNewTraveller extends StatelessWidget {
                     width: 15,
                   ),
                   Text(
-                    "Add Travellers".tr,
+                    "Add Travellers" ,
                     style: MyTextTheme.w800MainColor22,
                   ),
                 ],
@@ -243,8 +240,8 @@ class AddNewTraveller extends StatelessWidget {
                   height: 63,
                   fontSize: 22,
                   controller: addTravelerState.lastNameC,
-                  hint: "Last Name".tr,
-                  errorText: "Last Name can't be empty".tr,
+                  hint: "Last Name" ,
+                  errorText: "Last Name can't be empty" ,
                   isEmpty: addTravelerState.isLastNameEmpty,
                 ),
                 const SizedBox(
@@ -254,8 +251,8 @@ class AddNewTraveller extends StatelessWidget {
                   height: 63,
                   fontSize: 22,
                   controller: addTravelerState.ticketNumberC,
-                  hint: "Reservation ID / Ticket Number".tr,
-                  errorText: "Reservation ID / Ticket Number can't be empty".tr,
+                  hint: "Reservation ID / Ticket Number" ,
+                  errorText: "Reservation ID / Ticket Number can't be empty" ,
                   isEmpty: addTravelerState.isTicketNumberEmpty,
                   obscureText: true,
                 ),
@@ -291,7 +288,7 @@ class AddToTravellersButton extends StatelessWidget {
     return MyElevatedButton(
       height: height,
       width: double.infinity,
-      buttonText: "Add to Travellers".tr,
+      buttonText: "Add to Travellers" ,
       bgColor: const Color(0xff00bfa2),
       fgColor: Colors.white,
       fontSize: 22,
@@ -335,7 +332,7 @@ class TravellerItem extends StatelessWidget {
                   child: Text(
                     stepsState.travelers[index].getFullNameWithGender(),
                     style: const TextStyle(
-                      color: Color(0xff424242),
+                      color: MyColors.lightGrey,
                       fontSize: 20,
                       fontWeight: FontWeight.w400,
                     ),
@@ -346,7 +343,7 @@ class TravellerItem extends StatelessWidget {
                         onPressed: () => stepsController.removeFromTravelers(index),
                         icon: const Icon(
                           Icons.close,
-                          color: Colors.red,
+                          color: MyColors.red,
                           size: 40,
                         ),
                       )
@@ -358,14 +355,13 @@ class TravellerItem extends StatelessWidget {
                                 const MyDivider(
                                   width: 2,
                                   height: 100,
-                                  color: Color(0xffededed),
                                 ),
                                 Row(
                                   children: [
                                     TitleWidget(
                                       title: stepsState.travelers[index].seatId,
                                       width: 75,
-                                      textColor: isTravellerSelected ? const Color(0xff48c0a2) : const Color(0xff424242),
+                                      textColor: isTravellerSelected ? MyColors.mainColor :MyColors.darkGrey,
                                     ),
                                     Container(
                                       width: 35,

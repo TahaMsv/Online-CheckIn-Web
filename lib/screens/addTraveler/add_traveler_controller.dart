@@ -71,7 +71,7 @@ class AddTravelerController extends MainController {
 
         if (newToken != "") {
           final StepsController stepsController = getIt<StepsController>();
-          stepsController.addToTravelers(context, newToken, lastName, ticketNumber);
+          stepsController.addToTravelers(newToken, lastName, ticketNumber);
           addTravelerState.lastNameC.text = "";
           addTravelerState.ticketNumberC.text = "";
           addTravelerState.setIsTicketNumberEmpty(false);

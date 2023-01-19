@@ -5,10 +5,11 @@ import '../../../core/error/exception.dart';
 import '../../../screens/login/interfaces/login_data_source_interface.dart';
 import 'package:network_manager/network_manager.dart';
 import '../usecases/login_usecase.dart';
+import 'login_local_ds.dart';
 
 class LoginRemoteDataSource implements LoginDataSourceInterface {
-  // final LoginLocalDataSource localDataSource;
-  // LoginRemoteDataSource(this.localDataSource);
+  final LoginLocalDataSource localDataSource;
+  LoginRemoteDataSource(this.localDataSource);
 
   @override
   Future<String> login(LoginRequest request) async {

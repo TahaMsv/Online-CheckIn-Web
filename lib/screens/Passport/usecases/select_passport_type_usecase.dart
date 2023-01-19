@@ -19,22 +19,13 @@ class SelectPassportTypesUseCase extends UseCase<List<PassPortType>, SelectPassp
 }
 
 class SelectPassportTypesRequest extends Request {
-  SelectPassportTypesRequest(
-    this.execution,
-    this.token,
-    this.request,
-  );
-
-  final String execution;
-  final dynamic token;
-  final Map<String, dynamic> request;
-
+  SelectPassportTypesRequest();
   @override
   Map<String, dynamic> toJson() => {
         "Body": {
-          "Execution": execution,
-          "Token": null,
-          "Request": request,
+          "Execution": "[OnlineCheckin].[SelectDocumentTypes]",
+          "Token": token,
+          "Request": {},
         },
       };
 }

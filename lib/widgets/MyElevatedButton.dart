@@ -57,7 +57,7 @@ class MyElevatedButton extends StatelessWidget {
               ),
         child: child ??
             Text(
-              buttonText.tr,
+              buttonText ,
               style: TextStyle(fontSize: fontSize),
             ),
       ),

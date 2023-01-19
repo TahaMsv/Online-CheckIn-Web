@@ -8,7 +8,10 @@ import 'package:provider/provider.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../core/utils/getTranslatedWord.dart';
+import '../../widgets/MyElevatedButton.dart';
+import '../../widgets/SelectingDateWidget.dart';
 import '../../widgets/StepsScreenTitle.dart';
+import '../../widgets/UserTextInput.dart';
 
 class PassportView extends StatelessWidget {
   PassportView({Key? key}) : super(key: key);
@@ -19,12 +22,12 @@ class PassportView extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     PassportState passportState = context.watch<PassportState>();
     return Scaffold(
-      backgroundColor: MyColors.white,
+      backgroundColor: theme.primaryColor,
       body: Column(
         children: [
-          StepsScreenTitle(
-            title: "Passport".tr,
-            description: "Enter passport data (DOCS) for all the passengers.".tr,
+          const StepsScreenTitle(
+            title: "Passport" ,
+            description: "Enter passport data (DOCS) for all the passengers." ,
           ),
           const SizedBox(
             height: 10,
@@ -67,11 +70,11 @@ class InfoCard extends StatelessWidget {
     Color textColor;
     Color bgColor;
     if (passportState.travelers[index].passportInfo.isPassInfoCompleted) {
-      textColor = const Color(0xffffffff);
-      bgColor =  MyColors.oceanGreen;
+      textColor = MyColors.white;
+      bgColor = MyColors.oceanGreen;
     } else {
-      textColor =  MyColors.darkGrey;
-      bgColor = const Color(0xffffffff);
+      textColor = MyColors.darkGrey;
+      bgColor = MyColors.white;
     }
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
@@ -80,7 +83,7 @@ class InfoCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor,
         border: Border.all(
-          color: const Color(0xffeaeaea),
+          color: MyColors.white,
         ),
       ),
       child: Column(
@@ -91,7 +94,7 @@ class InfoCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.warning_amber_sharp,
-                color: passportState.travelers[index].passportInfo.isPassInfoCompleted ? MyColors.white.withOpacity(0) : const Color(0xfff86f6f),
+                color: passportState.travelers[index].passportInfo.isPassInfoCompleted ? MyColors.transparent : MyColors.begonia,
                 size: 20,
               )
             ],
@@ -110,7 +113,7 @@ class InfoCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                "ID".tr + ": ",
+                "${"ID" }: ",
                 style: TextStyle(
                   color: textColor,
                   fontSize: 13,
@@ -159,22 +162,23 @@ class AddPassInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        myPassportController.showBottomSheetForm(context, index);
+        // myPassportController.showBottomSheetForm(context, index);
+        myPassportController.showPassportDialog(index);
       },
       child: Row(
-        children: [
-          const Icon(
+        children: const [
+          Icon(
             Icons.add_circle_outline_rounded,
-            color: Color(0xff4d6fff),
+            color: MyColors.myBlue,
             size: 18,
           ),
-          const SizedBox(
+          SizedBox(
             width: 5,
           ),
           Text(
-            "Add Passport Info".tr,
-            style: const TextStyle(
-              color: Color(0xff4d6fff),
+            "Add Passport Info" ,
+            style: TextStyle(
+              color: MyColors.myBlue,
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
@@ -203,25 +207,18 @@ class EditIPassInfo extends StatelessWidget {
           children: const [
             Icon(
               Icons.check,
-              color: Color(0xffffffff),
+              color: MyColors.white,
               size: 18,
             ),
             SizedBox(
               width: 5,
             ),
-            // Text(
-            //   "Passport No: ",
-            //   style: TextStyle(
-            //     color: Color(0xffffffff),
-            //     fontSize: 12,
-            //     fontWeight: FontWeight.w700,
-            //   ),
-            // ),
           ],
         ),
         GestureDetector(
           onTap: () {
-            myPassportController.showDOCSPopup(index);
+            // myPassportController.showDOCSPopup(context,index);
+            myPassportController.showPassportDialog(index);
           },
           child: const Icon(
             MenuIcons.iconEdit,
@@ -234,191 +231,3 @@ class EditIPassInfo extends StatelessWidget {
   }
 }
 
-Container passportTypeDropDown(int index, {double width = 400, double height = 40}) {
-  final PassportController passportController = getIt<PassportController>();
-  final PassportState passportState = getIt<PassportState>();
-
-  return Container(
-    height: height,
-    width: width,
-    decoration: BoxDecoration(
-      border: Border.all(
-        color: const Color(0xffeaeaea),
-        width: 2,
-      ),
-    ),
-    child: Obx(
-      () => DropdownButtonHideUnderline(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          child: DropdownButton(
-            // hint: Text(
-            //   'Type',
-            // ),
-            onChanged: (newValue) {
-              passportState.travelers[index].passportInfo.passportType = getKeyFromLanguageWords(newValue.toString());
-              passportController.refreshList(index);
-            },
-            value: passportState.travelers[index].passportInfo.passportType == null || passportState.travelers[index].passportInfo.passportType == "Passport Type"
-                ? "Passport Type".tr
-                : passportState.travelers[index].passportInfo.passportType,
-            items: passportState.listPassportType.map(
-              (selectedType) {
-                return DropdownMenuItem(
-                  value: selectedType.fullName == "Passport Type" ? "Passport Type".tr : selectedType.fullName,
-                  child: Text(
-                    selectedType.fullName == "Passport Type" ? "Passport Type".tr : selectedType.fullName,
-                    style: const TextStyle(fontSize: 25),
-                  ),
-                );
-              },
-            ).toList(),
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
-Container nationalityDropDown(int index, {double width = 400, double height = 40}) {
-  final PassportController passportController = getIt<PassportController>();
-  final PassportState passportState = getIt<PassportState>();
-
-  return Container(
-    height: height,
-    width: width,
-    decoration: BoxDecoration(
-      border: Border.all(
-        color: const Color(0xffeaeaea),
-        width: 2,
-      ),
-    ),
-    child: Obx(
-      () => DropdownButtonHideUnderline(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          child: DropdownButton(
-            hint: const Text(
-              'Nationality',
-              style: TextStyle(fontSize: 25),
-            ),
-            onChanged: (newValue) {
-              passportState.travelers[index].passportInfo.nationality = getKeyFromLanguageWords(newValue.toString());
-              passportController.refreshList(index);
-            },
-            value: passportState.travelers[index].passportInfo.nationality == null || passportState.travelers[index].passportInfo.nationality == "Nationality"
-                ? "Nationality".tr
-                : passportState.travelers[index].passportInfo.nationality,
-            items: passportState.nationalitiesList.map(
-              (selectedType) {
-                passportState.travelers[index].passportInfo.nationalityID = selectedType.id;
-                return DropdownMenuItem(
-                  value: selectedType.englishName! == "Nationality" ? ("Nationality".tr) : selectedType.englishName!,
-                  child: Text(
-                    selectedType.englishName! == "Nationality" ? ("Nationality".tr) : selectedType.englishName!,
-                    style: const TextStyle(fontSize: 25),
-                  ),
-                );
-              },
-            ).toList(),
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
-Container countryOfIssueDropDown(int index, {double width = 200, double height = 40}) {
-  final PassportController passportController = getIt<PassportController>();
-  final PassportState passportState = getIt<PassportState>();
-
-  return Container(
-    height: height,
-    width: width,
-    decoration: BoxDecoration(
-      border: Border.all(
-        color: const Color(0xffeaeaea),
-        width: 2,
-      ),
-    ),
-    child: Obx(
-      () => DropdownButtonHideUnderline(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          child: DropdownButton(
-            // hint: Text(
-            //   'Country of Issue'.tr,
-            // ),
-            onChanged: (newValue) {
-              passportState.travelers[index].passportInfo.countryOfIssue = getKeyFromLanguageWords(newValue.toString());
-              passportController.refreshList(index);
-            },
-            value: passportState.travelers[index].passportInfo.countryOfIssue == null || passportState.travelers[index].passportInfo.countryOfIssue == "Country of Issue"
-                ? "Country of Issue".tr
-                : passportState.travelers[index].passportInfo.countryOfIssue,
-            items: passportState.countryOfIssueList.map(
-              (selectedType) {
-                return DropdownMenuItem(
-                  value: selectedType.englishName! == "Country of Issue" ? ("Country of Issue".tr) : selectedType.englishName!,
-                  child: Text(
-                    selectedType.englishName! == "Country of Issue" ? ("Country of Issue".tr) : selectedType.englishName!,
-                    style: const TextStyle(
-                      fontSize: 20,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                );
-              },
-            ).toList(),
-          ),
-        ),
-      ),
-    ),
-  );
-}
-
-Container genderDropDown(int index, {double width = 200, double height = 40}) {
-  final PassportController passportController = getIt<PassportController>();
-  final PassportState passportState = getIt<PassportState>();
-
-  return Container(
-    height: height,
-    width: width,
-    decoration: BoxDecoration(
-      border: Border.all(
-        color: const Color(0xffeaeaea),
-        width: 2,
-      ),
-    ),
-    child: Obx(
-      () => DropdownButtonHideUnderline(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          child: DropdownButton(
-            // hint: Text(
-            //   'Gender'.tr,
-            // ),
-            onChanged: (newValue) {
-              passportState.travelers[index].passportInfo.gender = getKeyFromLanguageWords(newValue.toString());
-              passportController.refreshList(index);
-            },
-            value: passportState.travelers[index].passportInfo.gender == null || passportState.travelers[index].passportInfo.gender == "Gender"
-                ? "Gender".tr
-                : passportState.travelers[index].passportInfo.gender!.tr,
-            items: passportState.listGender.map(
-              (selectedType) {
-                return DropdownMenuItem(
-                  value: selectedType.tr == "Gender" ? "Gender".tr : selectedType.tr,
-                  child: Text(
-                    selectedType.tr == "Gender" ? "Gender".tr : selectedType.tr,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                );
-              },
-            ).toList(),
-          ),
-        ),
-      ),
-    ),
-  );
-}

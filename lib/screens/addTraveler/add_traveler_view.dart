@@ -45,11 +45,10 @@ class AddTravelerView extends StatelessWidget {
                   children: [
                     DatesAndFromToCities(
                       fromCity: flightInformation.fromCity,
-                      fromTime: DateFormat('yyyy-MM-dd').format(flightInformation.flightDate),
+                      fromTime: flightInformation.fromTime,
                       toCity: flightInformation.toCity,
-                      toTime: DateFormat('yyyy-MM-dd').format(flightInformation.flightDate), isTabletMode: false,
-
-
+                      toTime: flightInformation.toTime,
+                      isTabletMode: false,
                     ),
                     const AirplaneImage(),
                     FLightExtraDetails(
@@ -66,5 +65,3 @@ class AddTravelerView extends StatelessWidget {
     );
   }
 }
-
-

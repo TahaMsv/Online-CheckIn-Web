@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import '../../../core/constants/my_list.dart';
 import '../../../core/constants/ui.dart';
 import '../../../widgets/MtDottedLine.dart';
 import '../steps_state.dart';
 class StepWidget extends StatelessWidget {
   const StepWidget({
     Key? key,
-    required this.step,
     required this.index, required this.isTabletMode,
   }) : super(key: key);
 
-  final int step;
   final int index;
   final bool isTabletMode;
 
   @override
   Widget build(BuildContext context) {
     StepsState stepsState = context.watch<StepsState>();
+    int step = stepsState.step;
     Color bgColor;
     Color frColor;
     Color borderColor;
@@ -59,13 +59,13 @@ class StepWidget extends StatelessWidget {
           ),
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           child:isTabletMode? Icon(
-            stepsState.icons[index],
+            MyList.iconsList[index],
             size: 30,
             color: frColor,
           ):Row(
             children: [
               Icon(
-                stepsState.icons[index],
+                MyList.iconsList[index],
                 size:  15,
                 color: frColor,
               ),
@@ -73,7 +73,7 @@ class StepWidget extends StatelessWidget {
                 width: 3,
               ),
               Text(
-                stepsState.titles[index].tr,
+                MyList.titlesList[index] ,
                 style: TextStyle(color: frColor),
               ),
             ],

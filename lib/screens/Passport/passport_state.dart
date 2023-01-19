@@ -11,9 +11,10 @@ import '../../widgets/CountryListPicker/country.dart';
 class PassportState with ChangeNotifier {
   setState() => notifyListeners();
 
-bool _requesting = false;
 
-bool get requesting => _requesting;
+  bool _requesting = false;
+
+  bool get requesting => _requesting;
 
   void setRequesting(bool val) {
     _requesting = val;
@@ -24,17 +25,12 @@ bool get requesting => _requesting;
   List<int> travelersIndexInMainList = [];
   List<TextEditingController> documentNoCs = [];
   List<MyCountry> countriesList = [];
-  List<PassPortType> listPassportType = [ PassPortType(id: -1, shortName: "", name: "", fullName: "Passport Type")];
-  List<MyCountry> countryOfIssueList = [
-    MyCountry(worldAreaCode: null, currencyId: null, englishName: "Country of Issue", name: null, hasOnHoldBooking: null, regionId: null, code3: null, isDisabled: null, id: null)
-  ];
+  List<PassPortType> listPassportType = [PassPortType.example()];
+  List<MyCountry> countryOfIssueList = [MyCountry.example("Country of Issue")];
   List<String> listGender = ["Gender", "Male", "Female"];
-  List<MyCountry> nationalitiesList = [
-     MyCountry(worldAreaCode: null, currencyId: null, englishName: "Nationality", name: null, hasOnHoldBooking: null, regionId: null, code3: null, isDisabled: null, id: null)
-  ];
+  List<MyCountry> nationalitiesList = [MyCountry.example("Nationality")];
 
-  void refreshTravelers(){
+  void refreshTravelers() {
     notifyListeners();
   }
 }
-

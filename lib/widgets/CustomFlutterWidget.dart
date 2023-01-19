@@ -6,7 +6,7 @@ class CustomFlashBar extends StatelessWidget {
     required this.controller, required this.contentMessage, required this.titleMessage, this.colors =const [Colors.redAccent, Colors.red],
   }) : super(key: key);
 
-  final controller;
+  final FlashController controller;
   final String contentMessage;
   final String titleMessage;
   final List<Color> colors;

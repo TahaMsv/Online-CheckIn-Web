@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class MyColors {
   MyColors._();
 
+  static const transparent = Colors.transparent;
   static const mainColor = Color(0xff48c0a2);
   static const myBlue = Color(0xff4c6ef6);
   static const black = Colors.black;
   static const grey = Colors.grey;
+  static const red = Colors.red;
   static const white = Colors.white;
   static const white1 = Color(0xffeaeaea);
   static const brownGrey = Color.fromRGBO(141, 141, 141, 1);
@@ -15,6 +17,8 @@ class MyColors {
   static const sonicSilver = Color(0xff767676);
   static const oceanGreen = Color(0xff48c0a2);
   static const brightYellow = Color(0xffffae2c);
+  static const begonia = Color(0xfff86f6f);
+  static const blueAccent = Colors.blueAccent;
 
   static const materialColor = {
     50: Color.fromRGBO(77, 111, 255, .1),
@@ -42,6 +46,7 @@ class MyTextTheme {
   static const boldDarkGray24 = TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: MyColors.darkGrey);
   static const w800MainColor15 = TextStyle(fontSize: 15, color: MyColors.mainColor, fontWeight: FontWeight.w800);
   static const lightGrey14 = TextStyle(fontSize: 14, color: MyColors.lightGrey);
+  static const lightGrey12 = TextStyle(fontSize: 12, color: MyColors.lightGrey);
   static const w300DarkGrey14 = TextStyle(color: MyColors.darkGrey, fontSize: 14, fontWeight: FontWeight.w300);
   static const w800MainColor22 = TextStyle(fontSize: 22, color: MyColors.mainColor, fontWeight: FontWeight.w800);
   static const lightGrey20 = TextStyle(fontSize: 20, color: MyColors.lightGrey);

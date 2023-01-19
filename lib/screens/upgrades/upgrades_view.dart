@@ -29,8 +29,8 @@ class UpgradesView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             StepsScreenTitle(
-              title: "Upgrades".tr,
-              description: "All upgrades are non-refundable".tr,
+              title: "Upgrades" ,
+              description: "All upgrades are non-refundable" ,
             ),
             const SizedBox(
               height: 10,
@@ -88,7 +88,7 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Wines & Drinks".tr,
+            "Wines & Drinks" ,
             style: const TextStyle(
               fontWeight: FontWeight.w800,
               fontSize: 13,
@@ -231,7 +231,7 @@ class UpgradeItemWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "${"Starts from".tr} \$ ${value.price}",
+                      "${"Starts from" } \$ ${value.price}",
                       style: const TextStyle(
                         fontSize: 12,
                         color: MyColors.darkGrey,
@@ -257,7 +257,7 @@ class UpgradeItemWidget extends StatelessWidget {
                       height: 30,
                       fgColor: MyColors.white,
                       bgColor: color,
-                      buttonText: "Add".tr,
+                      buttonText: "Add" ,
                       function: () {
                         upgradesController.addEntertainment(index);
                       },
@@ -277,7 +277,7 @@ class UpgradeItemWidget extends StatelessWidget {
                       height: 30,
                       fgColor: MyColors.white,
                       bgColor: color,
-                      buttonText: "Add".tr,
+                      buttonText: "Add" ,
                       function: () {
                         upgradesController.addWine(index);
                       },
@@ -428,7 +428,7 @@ class Entertainment extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Entertainment".tr,
+            "Entertainment" ,
             style: const TextStyle(
               fontWeight: FontWeight.w800,
               fontSize: 13,

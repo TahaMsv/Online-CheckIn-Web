@@ -1,10 +1,12 @@
 import 'package:get_it/get_it.dart';
 import 'package:network_manager/network_manager.dart';
 import 'package:online_checkin_web_refactoring/core/platform/network_info.dart';
+import '../screens/Passport/data_source/passport_local_ds.dart';
 import '../screens/Passport/data_source/passport_remote_ds.dart';
 import '../screens/Passport/passport_controller.dart';
 import '../screens/Passport/passport_repository.dart';
 import '../screens/Passport/passport_state.dart';
+import '../screens/Visa/data_source/visa_local_ds.dart';
 import '../screens/Visa/data_source/visa_remote_ds.dart';
 import '../screens/Visa/visa_controller.dart';
 import '../screens/Visa/visa_repository.dart';
@@ -72,8 +74,10 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => loginState);
 
   ///data-sources
-  LoginLocalDataSource loginLocalDataSource = LoginLocalDataSource(sharedPreferences: sp,);
-  LoginRemoteDataSource loginRemoteDataSource = LoginRemoteDataSource();
+  LoginLocalDataSource loginLocalDataSource = LoginLocalDataSource(
+    sharedPreferences: sp,
+  );
+  LoginRemoteDataSource loginRemoteDataSource = LoginRemoteDataSource(loginLocalDataSource);
 
   ///repository
   LoginRepository loginRepository = LoginRepository(
@@ -118,7 +122,9 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => addTravelerState);
 
   ///data-sources
-  AddTravelerLocalDataSource addTravelerLocalDataSource = AddTravelerLocalDataSource(sharedPreferences: sp, );
+  AddTravelerLocalDataSource addTravelerLocalDataSource = AddTravelerLocalDataSource(
+    sharedPreferences: sp,
+  );
   AddTravelerRemoteDataSource addTravelerRemoteDataSource = AddTravelerRemoteDataSource();
 
   ///repository
@@ -134,197 +140,120 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => addTravelerController);
   navigationService.registerController(RouteNames.addTraveler, addTravelerController);
 
+  ///Rules-------------------------------------------------------------------------------------------------------------------
 
+  ///state
+  RulesState rulesState = RulesState();
+  getIt.registerLazySingleton(() => rulesState);
 
-    ///Rules-------------------------------------------------------------------------------------------------------------------
+  ///data-sources
+  // RulesLocalDataSource rulesLocalDataSource = RulesLocalDataSource(sharedPreferences: sp, objectBox: objectBox);
+  RulesRemoteDataSource rulesRemoteDataSource = RulesRemoteDataSource();
 
-    ///state
-    RulesState rulesState = RulesState();
-    getIt.registerLazySingleton(() => rulesState);
+  ///repository
+  RulesRepository rulesRepository = RulesRepository(
+    rulesRemoteDataSource: rulesRemoteDataSource,
+    // rulesLocalDataSource: rulesLocalDataSource,
+    // networkInfo: networkInfo,
+  );
+  getIt.registerLazySingleton(() => rulesRepository);
 
-    ///data-sources
-    // RulesLocalDataSource rulesLocalDataSource = RulesLocalDataSource(sharedPreferences: sp, objectBox: objectBox);
-    RulesRemoteDataSource rulesRemoteDataSource = RulesRemoteDataSource();
+  ///controller
+  RulesController rulesController = RulesController();
+  getIt.registerLazySingleton(() => rulesController);
+  navigationService.registerController(RouteNames.rules, rulesController);
 
-    ///repository
-    RulesRepository rulesRepository = RulesRepository(
-      rulesRemoteDataSource: rulesRemoteDataSource,
-      // rulesLocalDataSource: rulesLocalDataSource,
-      // networkInfo: networkInfo,
-    );
-    getIt.registerLazySingleton(() => rulesRepository);
+  ///Safety-------------------------------------------------------------------------------------------------------------------
 
-    ///controller
-    RulesController rulesController = RulesController();
-    getIt.registerLazySingleton(() => rulesController);
-    navigationService.registerController(RouteNames.rules, rulesController);
+  ///state
+  SafetyState safetyState = SafetyState();
+  getIt.registerLazySingleton(() => safetyState);
 
+  ///data-sources
+  // SafetyLocalDataSource safetyLocalDataSource = SafetyLocalDataSource(sharedPreferences: sp, objectBox: objectBox);
+  SafetyRemoteDataSource safetyRemoteDataSource = SafetyRemoteDataSource();
 
-      ///Safety-------------------------------------------------------------------------------------------------------------------
+  ///repository
+  SafetyRepository safetyRepository = SafetyRepository(
+    safetyRemoteDataSource: safetyRemoteDataSource,
+    // safetyLocalDataSource: safetyLocalDataSource,
+    // networkInfo: networkInfo,
+  );
+  getIt.registerLazySingleton(() => safetyRepository);
 
-      ///state
-      SafetyState safetyState = SafetyState();
-      getIt.registerLazySingleton(() => safetyState);
+  ///controller
+  SafetyController safetyController = SafetyController();
+  getIt.registerLazySingleton(() => safetyController);
+  navigationService.registerController(RouteNames.safety, safetyController);
 
-      ///data-sources
-      // SafetyLocalDataSource safetyLocalDataSource = SafetyLocalDataSource(sharedPreferences: sp, objectBox: objectBox);
-      SafetyRemoteDataSource safetyRemoteDataSource = SafetyRemoteDataSource();
+  ///Passport-------------------------------------------------------------------------------------------------------------------
 
-      ///repository
-      SafetyRepository safetyRepository = SafetyRepository(
-        safetyRemoteDataSource: safetyRemoteDataSource,
-        // safetyLocalDataSource: safetyLocalDataSource,
-        // networkInfo: networkInfo,
-      );
-      getIt.registerLazySingleton(() => safetyRepository);
+  ///state
+  PassportState passportState = PassportState();
+  getIt.registerLazySingleton(() => passportState);
 
-      ///controller
-      SafetyController safetyController = SafetyController();
-      getIt.registerLazySingleton(() => safetyController);
-      navigationService.registerController(RouteNames.safety, safetyController);
+  ///data-sources
+  PassportLocalDataSource passportLocalDataSource = PassportLocalDataSource(sharedPreferences: sp);
+  PassportRemoteDataSource passportRemoteDataSource = PassportRemoteDataSource();
 
+  ///repository
+  PassportRepository passportRepository = PassportRepository(
+    passportRemoteDataSource: passportRemoteDataSource,
+    passportLocalDataSource: passportLocalDataSource,
+    networkInfo: networkInfo,
+  );
+  getIt.registerLazySingleton(() => passportRepository);
 
-   ///Passport-------------------------------------------------------------------------------------------------------------------
+  ///controller
+  PassportController passportController = PassportController();
+  getIt.registerLazySingleton(() => passportController);
+  navigationService.registerController(RouteNames.passport, passportController);
 
-   ///state
-   PassportState passportState = PassportState();
-   getIt.registerLazySingleton(() => passportState);
+  ///Visa-------------------------------------------------------------------------------------------------------------------
 
-   ///data-sources
-   // PassportLocalDataSource passportLocalDataSource = PassportLocalDataSource(sharedPreferences: sp, objectBox: objectBox);
-   PassportRemoteDataSource passportRemoteDataSource = PassportRemoteDataSource();
+  ///state
+  VisaState visaState = VisaState();
+  getIt.registerLazySingleton(() => visaState);
 
-   ///repository
-   PassportRepository passportRepository = PassportRepository(
-     passportRemoteDataSource: passportRemoteDataSource,
-     // passportLocalDataSource: passportLocalDataSource,
-     // networkInfo: networkInfo,
-   );
-   getIt.registerLazySingleton(() => passportRepository);
+  ///data-sources
+  VisaLocalDataSource visaLocalDataSource = VisaLocalDataSource(sharedPreferences: sp);
+  VisaRemoteDataSource visaRemoteDataSource = VisaRemoteDataSource();
 
-   ///controller
-   PassportController passportController = PassportController();
-   getIt.registerLazySingleton(() => passportController);
-   navigationService.registerController(RouteNames.passport, passportController);
+  ///repository
+  VisaRepository visaRepository = VisaRepository(
+    visaRemoteDataSource: visaRemoteDataSource,
+    visaLocalDataSource: visaLocalDataSource,
+    networkInfo: networkInfo,
+  );
+  getIt.registerLazySingleton(() => visaRepository);
 
+  ///controller
+  VisaController visaController = VisaController();
+  getIt.registerLazySingleton(() => visaController);
+  navigationService.registerController(RouteNames.visa, visaController);
 
+  ///Upgrades-------------------------------------------------------------------------------------------------------------------
 
-     ///Visa-------------------------------------------------------------------------------------------------------------------
+  ///state
+  UpgradesState upgradesState = UpgradesState();
+  getIt.registerLazySingleton(() => upgradesState);
 
-     ///state
-     VisaState visaState = VisaState();
-     getIt.registerLazySingleton(() => visaState);
+  ///data-sources
+  // UpgradesLocalDataSource upgradesLocalDataSource = UpgradesLocalDataSource(sharedPreferences: sp, objectBox: objectBox);
+  UpgradesRemoteDataSource upgradesRemoteDataSource = UpgradesRemoteDataSource();
 
-     ///data-sources
-     // VisaLocalDataSource visaLocalDataSource = VisaLocalDataSource(sharedPreferences: sp, objectBox: objectBox);
-     VisaRemoteDataSource visaRemoteDataSource = VisaRemoteDataSource();
+  ///repository
+  UpgradesRepository upgradesRepository = UpgradesRepository(
+    upgradesRemoteDataSource: upgradesRemoteDataSource,
+    // upgradesLocalDataSource: upgradesLocalDataSource,
+    // networkInfo: networkInfo,
+  );
+  getIt.registerLazySingleton(() => upgradesRepository);
 
-     ///repository
-     VisaRepository visaRepository = VisaRepository(
-       visaRemoteDataSource: visaRemoteDataSource,
-       // visaLocalDataSource: visaLocalDataSource,
-       // networkInfo: networkInfo,
-     );
-     getIt.registerLazySingleton(() => visaRepository);
-
-     ///controller
-     VisaController visaController = VisaController();
-     getIt.registerLazySingleton(() => visaController);
-     navigationService.registerController(RouteNames.visa, visaController);
-
-
-
-       ///Upgrades-------------------------------------------------------------------------------------------------------------------
-
-       ///state
-       UpgradesState upgradesState = UpgradesState();
-       getIt.registerLazySingleton(() => upgradesState);
-
-       ///data-sources
-       // UpgradesLocalDataSource upgradesLocalDataSource = UpgradesLocalDataSource(sharedPreferences: sp, objectBox: objectBox);
-       UpgradesRemoteDataSource upgradesRemoteDataSource = UpgradesRemoteDataSource();
-
-       ///repository
-       UpgradesRepository upgradesRepository = UpgradesRepository(
-         upgradesRemoteDataSource: upgradesRemoteDataSource,
-         // upgradesLocalDataSource: upgradesLocalDataSource,
-         // networkInfo: networkInfo,
-       );
-       getIt.registerLazySingleton(() => upgradesRepository);
-
-       ///controller
-       UpgradesController upgradesController = UpgradesController();
-       getIt.registerLazySingleton(() => upgradesController);
-       navigationService.registerController(RouteNames.upgrades, upgradesController);
-     //
-  // ///home-------------------------------------------------------------------------------------------------------------------
-  //
-  // ///state
-  // HomeState homeState = HomeState();
-  // getIt.registerLazySingleton(() => homeState);
-  //
-  // ///data-sources
-  // HomeLocalDataSource homeLocalDataSource = HomeLocalDataSource(sharedPreferences: sp, objectBox: objectBox);
-  // HomeRemoteDataSource homeRemoteDataSource = HomeRemoteDataSource(homeLocalDataSource);
-  //
-  // ///repository
-  // HomeRepository homeRepository = HomeRepository(
-  //   homeRemoteDataSource: homeRemoteDataSource,
-  //   homeLocalDataSource: homeLocalDataSource,
-  //   networkInfo: networkInfo,
-  // );
-  // getIt.registerLazySingleton(() => homeRepository);
-  //
-  // ///controller
-  // HomeController homeController = HomeController();
-  // getIt.registerLazySingleton(() => homeController);
-  // navigationService.registerController(RouteNames.home, homeController);
-  //
-  // ///checkin-------------------------------------------------------------------------------------------------------------------
-  //
-  // ///state
-  // CheckinState checkinState = CheckinState();
-  // getIt.registerLazySingleton(() => checkinState);
-  //
-  // ///data-sources
-  // CheckinLocalDataSource checkinLocalDataSource = CheckinLocalDataSource(sharedPreferences: sp, objectBox: objectBox);
-  // CheckinRemoteDataSource checkinRemoteDataSource = CheckinRemoteDataSource(checkinLocalDataSource);
-  //
-  // ///repository
-  // CheckinRepository checkinRepository = CheckinRepository(
-  //   checkinRemoteDataSource: checkinRemoteDataSource,
-  //   checkinLocalDataSource: checkinLocalDataSource,
-  //   networkInfo: networkInfo,
-  // );
-  // getIt.registerLazySingleton(() => checkinRepository);
-  //
-  // ///controller
-  // CheckinController checkinController = CheckinController();
-  // getIt.registerLazySingleton(() => checkinController);
-  // navigationService.registerController(RouteNames.checkin, checkinController);
-
-  // ///addFlight
-  //
-  // ///state
-  // AddFlightState addFlightState = AddFlightState();
-  // getIt.registerLazySingleton(() => addFlightState);
-  //
-  // ///data-sources
-  // AddFlightLocalDataSource addFlightLocalDataSource = AddFlightLocalDataSource(sharedPreferences: sp, objectBox: objectBox);
-  // AddFlightRemoteDataSource addFlightRemoteDataSource = AddFlightRemoteDataSource(addFlightLocalDataSource);
-  //
-  // ///repository
-  // AddFlightRepository addFlightRepository = AddFlightRepository(
-  //   addFlightRemoteDataSource: addFlightRemoteDataSource,
-  //   addFlightLocalDataSource: addFlightLocalDataSource,
-  //   networkInfo: networkInfo,
-  // );
-  // getIt.registerLazySingleton(() => addFlightRepository);
-  //
-  // ///controller
-  // AddFlightController addFlightController = AddFlightController();
-  // getIt.registerLazySingleton(() => addFlightController);
-  // navigationService.registerController(RouteNames.addFlight, addFlightController);
+  ///controller
+  UpgradesController upgradesController = UpgradesController();
+  getIt.registerLazySingleton(() => upgradesController);
+  navigationService.registerController(RouteNames.upgrades, upgradesController);
 
   MyRouter.initialize();
 }

@@ -1,5 +1,4 @@
-import 'package:dartz/dartz.dart';
-import 'package:online_checkin_web_refactoring/core/error/failures.dart';
+
 import 'package:online_checkin_web_refactoring/screens/addTraveler/interfaces/add_traveler_data_source_interface.dart';
 import 'package:network_manager/network_manager.dart';
 import '../../../core/constants/apis.dart';

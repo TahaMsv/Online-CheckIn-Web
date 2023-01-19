@@ -29,7 +29,7 @@ class StepsRemoteDataSource implements StepsDataSourceInterface {
       throw ServerException(
         code: getFlightInfoResponse.responseCode,
         message: getFlightInfoResponse.extractedMessage!,
-        trace: StackTrace.fromString("RemoteDataSource.getSalt"),
+        trace: StackTrace.fromString("StepsRemoteDataSource.getFlightInformation"),
       );
     }
   }

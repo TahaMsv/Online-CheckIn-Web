@@ -30,98 +30,75 @@ class StepsView extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: MyColors.white,
+      backgroundColor: theme.primaryColor,
       body: stepsState.stepLoading
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Container(
-              width: width,
-              height: height,
-              color: MyColors.white,
-              child: ListView(
+          : ListView(
+            shrinkWrap: true,
+            children: [
+              TopOfPage(
+                height: height,
+                width: width,
+                stepsController: stepsController,
+                isTabletMode: false,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TopOfPage(
+                  LeftSideOFPage(
                     height: height,
-                    width: width,
+                    width: width * 0.20,
+                    step: stepsState.step,
                     stepsController: stepsController,
-                    isTabletMode: false,
                   ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      LeftSideOFPage(
-                        height: height,
-                        width: width * 0.20,
-                        step: stepsState.step,
-                        stepsController: stepsController,
-                      ),
-                      SizedBox(
-                        width: width * 0.80,
-                        height: height * 0.9,
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
+                  SizedBox(
+                    width: width * 0.80,
+                    height: height * 0.9,
+                    child: Column(
+                      children: [
+                        Row(
+                          children: <Widget>[
                                 Expanded(
                                   child: stepsState.step == 0
                                       ? const MyDottedLine(
                                           lineLength: double.infinity,
                                           color: MyColors.oceanGreen,
                                         )
-                                      : const MyDivider(width: 0, height: 1, color: MyColors.oceanGreen),
-                                ),
-                                // ListView(
-                                //   children: stepsController
-                                //       .stepsToShowList()
-                                //       .asMap()
-                                //       .map((i, e) => MapEntry(i, {
-                                //             e
-                                //                 ? StepWidget(
-                                //                     step: stepsState.step,
-                                //                     index: i,
-                                //                     isTabletMode: false,
-                                //                   )
-                                //                 : Container()
-                                //           }))
-                                //       .values
-                                //       .toList() as List<Widget>,
-                                // ),
-                                for (int i = 0; i <= 8; i++)
-                                  if (stepsController.isStepNeeded(i))
-                                    StepWidget(
-                                      step: stepsState.step,
-                                      index: i,
-                                      isTabletMode: false,
-                                    ),
+                                      : const MyDivider(color: MyColors.oceanGreen),
+                                )
+                              ] +
+                              stepsController
+                                  .stepsToShowList()
+                                  .map((i) => StepWidget(
+                                        index: i,
+                                        isTabletMode: false,
+                                      ))
+                                  .toList() +
+                              [
                                 const Expanded(
-                                  child: MyDivider(
-                                    width: 0,
-                                    height: 1,
-                                    color: MyColors.white1,
-                                  ),
+                                  child: MyDivider(),
                                 ),
                               ],
-                            ),
-                            Container(
-                              color: MyColors.white,
-                              height: height * 0.77,
-                              padding: const EdgeInsets.only(top: 50, left: 30, right: 30),
-                              child: childWidget,
-                            ),
-                            BottomOfPage(height: height, stepsController: stepsController, isTabletMode: false),
-                          ],
                         ),
-                      ),
-                    ],
+                        Container(
+                          color: MyColors.white,
+                          height: height * 0.77,
+                          padding: const EdgeInsets.only(top: 50, left: 30, right: 30),
+                          child: childWidget,
+                        ),
+                        BottomOfPage(height: height, stepsController: stepsController, isTabletMode: false),
+                      ],
+                    ),
                   ),
                 ],
               ),
-            ),
+            ],
+          ),
     );
   }
 }
-
 
 class LeftSideOFPage extends StatelessWidget {
   const LeftSideOFPage({
@@ -155,7 +132,7 @@ class LeftSideOFPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TitleWidget(
-                  title: "Travellers".tr,
+                  title: "Travellers" ,
                   width: 190,
                 ),
                 if (step == 6)
@@ -166,10 +143,9 @@ class LeftSideOFPage extends StatelessWidget {
                         const MyDivider(
                           width: 2,
                           height: 60,
-                          color: MyColors.white1,
                         ),
                         TitleWidget(
-                          title: "Seat".tr,
+                          title: "Seat" ,
                           width: 100,
                         ),
                       ],
@@ -177,11 +153,9 @@ class LeftSideOFPage extends StatelessWidget {
                   ),
               ],
             ),
-            const MyDivider(
-              width: 0,
-              height: 1,
-              color: MyColors.white1,
-            ),
+            // const MyDivider(
+            //   width: 0
+            // ),
             SizedBox(
               width: width,
               height: height * 0.9 - 65 - 13.5,
@@ -222,7 +196,6 @@ class AddNewTraveller extends StatelessWidget {
   Widget build(BuildContext context) {
     StepsState stepsState = context.watch<StepsState>();
     AddTravelerState addTravelerState = context.watch<AddTravelerState>();
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
@@ -253,7 +226,7 @@ class AddNewTraveller extends StatelessWidget {
                     width: 15,
                   ),
                   Text(
-                    "Add Travellers".tr,
+                    "Add Travellers" ,
                     style: MyTextTheme.w800MainColor15,
                   ),
                 ],
@@ -267,7 +240,7 @@ class AddNewTraveller extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  "Add all passengers to the list on the left here".tr,
+                  "Add all passengers to the list on the left here" ,
                   style: MyTextTheme.lightGrey14,
                 ),
                 const SizedBox(
@@ -275,8 +248,8 @@ class AddNewTraveller extends StatelessWidget {
                 ),
                 UserTextInput(
                   controller: addTravelerState.lastNameC,
-                  hint: "Last Name".tr,
-                  errorText: "Last Name can't be empty".tr,
+                  hint: "Last Name" ,
+                  errorText: "Last Name can't be empty" ,
                   isEmpty: addTravelerState.isLastNameEmpty,
                 ),
                 const SizedBox(
@@ -284,8 +257,8 @@ class AddNewTraveller extends StatelessWidget {
                 ),
                 UserTextInput(
                   controller: addTravelerState.ticketNumberC,
-                  hint: "Reservation ID / Ticket Number".tr,
-                  errorText: "Reservation ID / Ticket Number can't be empty".tr,
+                  hint: "Reservation ID / Ticket Number" ,
+                  errorText: "Reservation ID / Ticket Number can't be empty" ,
                   isEmpty: addTravelerState.isTicketNumberEmpty,
                   obscureText: true,
                 ),
@@ -295,7 +268,7 @@ class AddNewTraveller extends StatelessWidget {
                 MyElevatedButton(
                   height: 40,
                   width: double.infinity,
-                  buttonText: "Add to Travellers".tr,
+                  buttonText: "Add to Travellers" ,
                   bgColor: const Color(0xff00bfa2),
                   fgColor: MyColors.white,
                   function: () {
@@ -380,11 +353,7 @@ class TravellerItem extends StatelessWidget {
               ],
             ),
           ),
-          const MyDivider(
-            width: double.infinity,
-            height: 1,
-            color: MyColors.white1,
-          ),
+          const MyDivider(),
         ],
       ),
     );

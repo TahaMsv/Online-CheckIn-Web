@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:online_checkin_web_refactoring/core/classes/flight_information.dart';
 
 import '../../core/classes/Traveler.dart';
+import '../../core/constants/my_list.dart';
 import '../../core/constants/ui.dart';
 
 class StepsState with ChangeNotifier {
@@ -49,7 +50,7 @@ class StepsState with ChangeNotifier {
 
   int get whoseTurnToSelect => _whoseTurnToSelect;
 
-  void setwhoseTurnToSelect(int val) {
+  void setWhoseTurnToSelect(int val) {
     _whoseTurnToSelect = val;
     notifyListeners();
   }
@@ -128,42 +129,11 @@ class StepsState with ChangeNotifier {
 
   String flightType = "i"; // d = Domestic , i = International
 
-  final List _buttonsText = [
-    "Check Pandemic Safety",
-    "Check Rules",
-    "Add Passports",
-    "Add Visa",
-    "Select Upgrades",
-    "Select Seats",
-    "Payment",
-    "Get Boarding Pass",
-  ];
+
 
   String buttonText(int index) {
-    return _buttonsText[index];
+    return MyList.buttonsText[index];
   }
 
-  final titles = [
-    "Travellers",
-    "Safety",
-    "Rules",
-    "Passport",
-    "Visa",
-    "Upgrades",
-    "Seats",
-    "Payment",
-    "Receipt",
-  ];
 
-  final List<IconData> icons = [
-    MenuIcons.iconAccount,
-    Icons.health_and_safety,
-    MenuIcons.iconInfo,
-    MenuIcons.iconPassport,
-    MenuIcons.iconVisa,
-    MenuIcons.star,
-    MenuIcons.iconSeat,
-    MenuIcons.iconCard,
-    MenuIcons.iconTask,
-  ];
 }

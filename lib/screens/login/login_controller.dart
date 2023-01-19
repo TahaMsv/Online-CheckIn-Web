@@ -21,7 +21,7 @@ class LoginController extends MainController {
     // loadPreferences();
   }
 
-  void login(BuildContext context, {required String username, required String password}) async {
+  void login( {required String username, required String password}) async {
     final StepsState stepsState = getIt<StepsState>();
     username = "test"; //lastNameC.text.trim();
     password = "9999999999"; // bookingRefNameC.text.trim();
@@ -32,11 +32,11 @@ class LoginController extends MainController {
     );
     final fOrToken = await loginUseCase(request: loginRequest);
 
-    fOrToken.fold((f) => FailureHandler.handle(f, retry: () => login(context, username: username, password: password)), (token) async {
+    fOrToken.fold((f) => FailureHandler.handle(f, retry: () => login( username: username, password: password)), (token) async {
       loginState.setToken(token);
       print("Token: " + token);
       final StepsController stepsController = getIt<StepsController>();
-      stepsController.addToTravelers(context, token, username, password);
+      stepsController.addToTravelers( token, username, password);
       nav.goToName(RouteNames.addTraveler);
     });
   }

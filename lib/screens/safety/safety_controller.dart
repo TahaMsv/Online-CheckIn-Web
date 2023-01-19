@@ -1,5 +1,3 @@
-
-
 import 'package:online_checkin_web_refactoring/screens/safety/safety_repository.dart';
 import 'package:online_checkin_web_refactoring/screens/safety/safety_state.dart';
 
@@ -8,14 +6,12 @@ import '../../core/interfaces/controller.dart';
 import '../steps/steps_controller.dart';
 
 class SafetyController extends MainController {
-
   final SafetyState safetyState = getIt<SafetyState>();
   final SafetyRepository safetyRepository = getIt<SafetyRepository>();
 
-
   changeValue(int index, bool value) {
     final StepsController stepsController = getIt<StepsController>();
-   safetyState. checkBoxesValue[index] = value;
+    safetyState.checkBoxesValue[index] = value;
     stepsController.updateIsNextButtonDisable();
   }
 

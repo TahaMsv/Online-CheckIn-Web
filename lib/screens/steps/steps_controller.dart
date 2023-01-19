@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:online_checkin_web_refactoring/core/classes/flight_information.dart';
 import 'package:online_checkin_web_refactoring/core/constants/route_names.dart';
 import 'package:online_checkin_web_refactoring/screens/steps/steps_repository.dart';
@@ -21,25 +22,24 @@ class StepsController extends MainController {
 
   late GetFlightInformationUseCase getFlightInformationUseCase = GetFlightInformationUseCase(repository: stepsRepository);
 
-  Future<FlightInformation?> getFlightInformation(String token) async {
+  Future<void> getFlightInformation(String token) async {
     GetFlightInformationRequest getFlightInformationRequest = GetFlightInformationRequest();
     final fOrFlightInfo = await getFlightInformationUseCase(request: getFlightInformationRequest);
 
     fOrFlightInfo.fold((f) => FailureHandler.handle(f, retry: () => getFlightInformation(token)), (flightInformation) async {
       stepsState.setFlightInformation(flightInformation);
-      return flightInformation;
     });
-    return null;
   }
 
-  Future<void> addToTravelers(BuildContext context, String token, String lastName, String ticketNumber) async {
+  Future<void> addToTravelers( String token, String lastName, String ticketNumber) async {
+
     stepsState.setLoading(true);
     await getFlightInformation(token);
 
     for (int i = 0; i < stepsState.travelers.length; i++) {
       if (stepsState.travelers[i].flightInformation.passengers[0].id == stepsState.flightInformation!.passengers[0].id) {
         showFlash(
-          context: context,
+          context:  nav.context!,
           duration: const Duration(seconds: 4),
           builder: (context, controller) {
             return CustomFlashBar(
@@ -105,12 +105,12 @@ class StepsController extends MainController {
   void changeTurnToSelect() {
     for (int i = 0; i < stepsState.travelers.length; i++) {
       if (stepsState.travelers[i].seatId == "--") {
-        stepsState.setwhoseTurnToSelect(i);
+        stepsState.setWhoseTurnToSelect(i);
         return;
       }
     }
 
-    stepsState.setwhoseTurnToSelect(-1);
+    stepsState.setWhoseTurnToSelect(-1);
   }
 
   bool isStepNeeded(int index) {
@@ -121,11 +121,11 @@ class StepsController extends MainController {
     return true;
   }
 
-  List<bool> stepsToShowList() {
-    List<bool>  list = List.filled(9, false);
+  List<int> stepsToShowList() {
+    List<int>  list = [];
     for (int i = 0; i <= 8; i++) {
       if (isStepNeeded(i)){
-        list[i] = true;
+        list.add(i);
       }
     }
     return list;
@@ -182,7 +182,9 @@ class StepsController extends MainController {
   void increaseStep() async {
     prepareNextButtonText();
     bool isSuccessful = true;
-    print("here at setstep");
+    if (kDebugMode) {
+      print("here at setstep");
+    }
     int step = stepsState.step;
     if (step < 8) {
       if (step == 6) {
@@ -220,7 +222,9 @@ class StepsController extends MainController {
   }
 
   void navigateToStep(int step) {
-    print("Go to step: " + step.toString());
+    if (kDebugMode) {
+      print("Go to step: $step");
+    }
     switch (step) {
       case 0:
         nav.goToName(RouteNames.addTraveler);

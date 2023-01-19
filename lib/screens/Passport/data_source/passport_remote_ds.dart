@@ -4,7 +4,7 @@ import 'package:online_checkin_web_refactoring/core/classes/MyCountry.dart';
 
 import 'package:online_checkin_web_refactoring/core/classes/PassportType.dart';
 import 'package:online_checkin_web_refactoring/screens/Passport/usecases/select_countries_usecase.dart';
-import 'package:online_checkin_web_refactoring/screens/Passport/usecases/select_document_type_usecase.dart';
+import 'package:online_checkin_web_refactoring/screens/Passport/usecases/select_passport_type_usecase.dart';
 
 import '../../../core/constants/apis.dart';
 import '../../../core/error/exception.dart';
@@ -25,15 +25,14 @@ class PassportRemoteDataSource implements PassportDataSourceInterface {
       throw ServerException(
         code: selectCLResponse.responseCode,
         message: selectCLResponse.extractedMessage!,
-        trace: StackTrace.fromString("PassportRemoteDataSource.login"),
+        trace: StackTrace.fromString("PassportRemoteDataSource.selectCountries"),
       );
     }
-    throw UnimplementedError();
   }
 
   @override
   Future<List<PassPortType>> selectPassportTypes( SelectPassportTypesRequest request) async{
-    NetworkRequest selectPTNR = NetworkRequest(api: Apis.baseUrl + Apis.getSelectCountries, data: request.toJson(), timeOut: const Duration(days: 1));
+    NetworkRequest selectPTNR = NetworkRequest(api: Apis.baseUrl + Apis.getDocumentType, data: request.toJson(), timeOut: const Duration(days: 1));
     NetworkResponse selectPTResponse = await selectPTNR.post();
     if (selectPTResponse.responseStatus) {
       try {
@@ -45,7 +44,7 @@ class PassportRemoteDataSource implements PassportDataSourceInterface {
       throw ServerException(
         code: selectPTResponse.responseCode,
         message: selectPTResponse.extractedMessage!,
-        trace: StackTrace.fromString("PassportRemoteDataSource.login"),
+        trace: StackTrace.fromString("PassportRemoteDataSource.selectPassportTypes"),
       );
     }
   }
