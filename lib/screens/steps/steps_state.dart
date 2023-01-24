@@ -135,5 +135,9 @@ class StepsState with ChangeNotifier {
     return MyList.buttonsText[index];
   }
 
+  void refreshStepState(){
+    notifyListeners();
+  }
+
 
 }

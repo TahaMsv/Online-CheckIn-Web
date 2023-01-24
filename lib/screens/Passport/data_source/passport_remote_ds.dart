@@ -13,7 +13,7 @@ import '../interfaces/passport_data_source_interface.dart';
 class PassportRemoteDataSource implements PassportDataSourceInterface {
   @override
   Future<List<MyCountry>> selectCountries(SelectCountriesRequest request)async {
-    NetworkRequest selectCLNR = NetworkRequest(api: Apis.baseUrl + Apis.getSelectCountries, data: request.toJson(), timeOut: const Duration(days: 1));
+    NetworkRequest selectCLNR = NetworkRequest(api: Apis.baseUrl + Apis.getSelectCountries, data: request.toJson(), timeOut: const Duration(seconds: 10));
     NetworkResponse selectCLResponse = await selectCLNR.post();
     if (selectCLResponse.responseStatus) {
       try {
@@ -32,7 +32,7 @@ class PassportRemoteDataSource implements PassportDataSourceInterface {
 
   @override
   Future<List<PassPortType>> selectPassportTypes( SelectPassportTypesRequest request) async{
-    NetworkRequest selectPTNR = NetworkRequest(api: Apis.baseUrl + Apis.getDocumentType, data: request.toJson(), timeOut: const Duration(days: 1));
+    NetworkRequest selectPTNR = NetworkRequest(api: Apis.baseUrl + Apis.getDocumentType, data: request.toJson(), timeOut: const Duration(seconds: 10));
     NetworkResponse selectPTResponse = await selectPTNR.post();
     if (selectPTResponse.responseStatus) {
       try {

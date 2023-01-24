@@ -31,15 +31,14 @@ class StepsController extends MainController {
     });
   }
 
-  Future<void> addToTravelers( String token, String lastName, String ticketNumber) async {
-
+  Future<void> addToTravelers(String token, String lastName, String ticketNumber) async {
     stepsState.setLoading(true);
     await getFlightInformation(token);
 
     for (int i = 0; i < stepsState.travelers.length; i++) {
       if (stepsState.travelers[i].flightInformation.passengers[0].id == stepsState.flightInformation!.passengers[0].id) {
         showFlash(
-          context:  nav.context!,
+          context: nav.context!,
           duration: const Duration(seconds: 4),
           builder: (context, controller) {
             return CustomFlashBar(
@@ -75,6 +74,15 @@ class StepsController extends MainController {
       stepsState.travelers.removeAt(index);
     }
     updateIsNextButtonDisable();
+  }
+
+  int findTravellerIndexBySeatId(String seatId) {
+    for (int i = 0; i < stepsState.travelers.length; i++) {
+      if (stepsState.travelers[i].seatId == seatId) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   void updateIsNextButtonDisable() {
@@ -122,9 +130,9 @@ class StepsController extends MainController {
   }
 
   List<int> stepsToShowList() {
-    List<int>  list = [];
+    List<int> list = [];
     for (int i = 0; i <= 8; i++) {
-      if (isStepNeeded(i)){
+      if (isStepNeeded(i)) {
         list.add(i);
       }
     }

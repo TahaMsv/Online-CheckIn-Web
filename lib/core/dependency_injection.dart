@@ -21,6 +21,11 @@ import '../screens/login/data_sources/login_remote_ds.dart';
 import '../screens/login/login_controller.dart';
 import '../screens/login/login_repository.dart';
 import '../screens/login/login_state.dart';
+import '../screens/receipt/data_source/receipt_local_ds.dart';
+import '../screens/receipt/data_source/receipt_remote_ds.dart';
+import '../screens/receipt/receipt_controller.dart';
+import '../screens/receipt/receipt_repository.dart';
+import '../screens/receipt/receipt_state.dart';
 import '../screens/rules/data_source/rules_remote_ds.dart';
 import '../screens/rules/rules_controller.dart';
 import '../screens/rules/rules_repository.dart';
@@ -34,6 +39,7 @@ import '../screens/steps/data_source/steps_remote_ds.dart';
 import '../screens/steps/steps_controller.dart';
 import '../screens/steps/steps_repository.dart';
 import '../screens/steps/steps_state.dart';
+import '../screens/upgrades/data_source/upgrades_local_ds.dart';
 import '../screens/upgrades/data_source/upgrades_remote_ds.dart';
 import '../screens/upgrades/upgrades_controller.dart';
 import '../screens/upgrades/upgrades_repository.dart';
@@ -239,14 +245,14 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => upgradesState);
 
   ///data-sources
-  // UpgradesLocalDataSource upgradesLocalDataSource = UpgradesLocalDataSource(sharedPreferences: sp, objectBox: objectBox);
+  UpgradesLocalDataSource upgradesLocalDataSource = UpgradesLocalDataSource(sharedPreferences: sp);
   UpgradesRemoteDataSource upgradesRemoteDataSource = UpgradesRemoteDataSource();
 
   ///repository
   UpgradesRepository upgradesRepository = UpgradesRepository(
     upgradesRemoteDataSource: upgradesRemoteDataSource,
-    // upgradesLocalDataSource: upgradesLocalDataSource,
-    // networkInfo: networkInfo,
+    upgradesLocalDataSource: upgradesLocalDataSource,
+    networkInfo: networkInfo,
   );
   getIt.registerLazySingleton(() => upgradesRepository);
 
@@ -255,12 +261,35 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => upgradesController);
   navigationService.registerController(RouteNames.upgrades, upgradesController);
 
+  ///Receipt-------------------------------------------------------------------------------------------------------------------
+
+  ///state
+  ReceiptState receptState = ReceiptState();
+  getIt.registerLazySingleton(() => receptState);
+
+  ///data-sources
+  ReceiptLocalDataSource receptLocalDataSource = ReceiptLocalDataSource(sharedPreferences: sp);
+  ReceiptRemoteDataSource receptRemoteDataSource = ReceiptRemoteDataSource();
+
+  ///repository
+  ReceiptRepository receptRepository = ReceiptRepository(
+    receiptRemoteDataSource: receptRemoteDataSource,
+    receiptLocalDataSource: receptLocalDataSource,
+    networkInfo: networkInfo,
+  );
+  getIt.registerLazySingleton(() => receptRepository);
+
+  ///controller
+  ReceiptController receptController = ReceiptController();
+  getIt.registerLazySingleton(() => receptController);
+  navigationService.registerController(RouteNames.receipt, receptController);
+
   MyRouter.initialize();
 }
 
 initNetworkManager() {
   NetworkOption.initialize(
-    timeout: 100000000000,
+    timeout: 3000,
     extraSuccessRule: (NetworkResponse nr) {
       int statusCode = int.parse((nr.responseBody["Status"]?.toString() ?? nr.responseBody["ResultCode"]?.toString() ?? "0"));
       return nr.responseCode == 200 && statusCode > 0;

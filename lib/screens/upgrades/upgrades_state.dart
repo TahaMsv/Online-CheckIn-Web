@@ -1,34 +1,37 @@
-import 'dart:developer';
-import 'dart:typed_data';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
+import 'package:flutter/material.dart';
 import '../../core/classes/extra.dart';
 import '../../core/constants/ui.dart';
 
 class UpgradesState with ChangeNotifier {
   setState() => notifyListeners();
-bool _requesting = false;
+  bool _requesting = false;
 
-bool get requesting => _requesting;
+  bool get requesting => _requesting;
 
   void setRequesting(bool val) {
     _requesting = val;
     notifyListeners();
   }
 
+  bool _loading = false;
 
-  RxBool loading = false.obs;
+  bool get loading => _loading;
 
-  List<Color> colors = [const Color(0xff5f6bff), const Color(0xffffc365), const Color(0xfffa4b4b), const Color(0xffffc365),  MyColors.darkGrey];
+  void setLoading(bool val) {
+    _loading = val;
+    notifyListeners();
+  }
+
+  List<Color> colors = [MyColors.myBlue, MyColors.brightYellow, MyColors.red, MyColors.brightYellow, MyColors.darkGrey];
   List<String> imagesPath = [];
   List<Extra> extras = [];
-  RxList<int> winesNumberOfSelected = <int>[].obs;
-  RxList<int> entertainmentsNumberOfSelected = <int>[].obs;
-  RxList<Extra> winesList = <Extra>[].obs;
-  RxList<Extra> entertainmentsList = <Extra>[].obs;
+  List<int> winesNumberOfSelected = [];
+  List<int> entertainmentsNumberOfSelected = [];
+  List<Extra> winesList = [];
+  List<Extra> entertainmentsList = [];
 
-  void refresh(){
+  void refresh() {
     notifyListeners();
   }
 }

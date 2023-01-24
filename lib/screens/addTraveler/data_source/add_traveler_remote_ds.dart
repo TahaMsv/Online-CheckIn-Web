@@ -8,7 +8,7 @@ import '../usecases/add_traveler_usecase.dart';
 class AddTravelerRemoteDataSource implements AddTravelerDataSourceInterface {
   @override
   Future< String> addTraveler(AddTravelerRequest request)async {
-    NetworkRequest loginNR = NetworkRequest(api: Apis.baseUrl + Apis.login, data: request.toJson(), timeOut: const Duration(days: 1));
+    NetworkRequest loginNR = NetworkRequest(api: Apis.baseUrl + Apis.login, data: request.toJson(), timeOut: const Duration(seconds: 10));
     NetworkResponse addTResponse = await loginNR.post();
     if (addTResponse.responseStatus) {
       try {

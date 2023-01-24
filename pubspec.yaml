@@ -45,7 +45,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  network_manager: ^0.0.98
+  network_manager: ^0.1.5
   flutter_spinkit: ^5.0.0
   get: ^4.6.3
   get_it: ^7.2.0

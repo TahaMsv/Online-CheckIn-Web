@@ -41,6 +41,7 @@ class MyTextTheme {
   static const boldWhite16 = TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: MyColors.white);
   static const white16 = TextStyle(fontSize: 16, color: MyColors.white);
   static const white12 = TextStyle(fontSize: 12, color: MyColors.white);
+  static const boldDarkGray12 = TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: MyColors.darkGrey);
   static const boldDarkGray18 = TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: MyColors.darkGrey);
   static const boldDarkGray30 = TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: MyColors.darkGrey);
   static const boldDarkGray24 = TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: MyColors.darkGrey);
@@ -52,11 +53,13 @@ class MyTextTheme {
   static const lightGrey20 = TextStyle(fontSize: 20, color: MyColors.lightGrey);
   static const darkGreyBold15 = TextStyle(color: MyColors.darkGrey, fontWeight: FontWeight.bold, fontSize: 15);
   static const darkGreyBold25 = TextStyle(color: MyColors.darkGrey, fontWeight: FontWeight.bold, fontSize: 25);
+  static const darkGreyW30012 = TextStyle(fontSize: 12, color: MyColors.darkGrey, fontWeight: FontWeight.w300);
   static const darkGreyW40015 = TextStyle(fontSize: 15, color: MyColors.darkGrey, fontWeight: FontWeight.w400);
   static const darkGreyW40020 = TextStyle(fontSize: 20, color: MyColors.darkGrey, fontWeight: FontWeight.w400);
   static const darkGreyW40023 = TextStyle(fontSize: 23, color: MyColors.darkGrey, fontWeight: FontWeight.w400);
   static const darkGreyW70015 = TextStyle(fontSize: 15, color: MyColors.darkGrey, fontWeight: FontWeight.w700);
   static const darkGreyW70025 = TextStyle(fontSize: 25, color: MyColors.darkGrey, fontWeight: FontWeight.w700);
+  static const darkGreyW80013 = TextStyle(fontSize: 13, color: MyColors.darkGrey, fontWeight: FontWeight.w800);
 }
 
 class MyTheme {

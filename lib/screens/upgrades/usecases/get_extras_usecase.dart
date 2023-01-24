@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:online_checkin_web_refactoring/screens/Passport/passport_repository.dart';
 import '../../../core/classes/extra.dart';
 import '../../../core/error/failures.dart';
 
@@ -19,22 +18,14 @@ class GetExtrasUseCase extends UseCase<List<Extra>, GetExtrasRequest> {
 }
 
 class GetExtrasRequest extends Request {
-  GetExtrasRequest(
-      this.execution,
-      this.token,
-      this.request,
-      );
-
-  final String execution;
-  final dynamic token;
-  final Map<String, dynamic> request;
+  GetExtrasRequest();
 
   @override
   Map<String, dynamic> toJson() => {
-    "Body": {
-      "Execution": execution,
-      "Token": null,
-      "Request": request,
-    },
-  };
+        "Body": {
+          "Execution": "[OnlineCheckin].[SelectSeatExtras]",
+          "Token": token,
+          "Request": {},
+        },
+      };
 }

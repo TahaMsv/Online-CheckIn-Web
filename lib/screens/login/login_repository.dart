@@ -24,10 +24,6 @@ class LoginRepository implements LoginRepositoryInterface {
         return Left(ServerFailure.fromAppException(e));
       }
     } else {
-      // try {
-      //   User user = await loginLocalDataSource.login(loginRequest: loginRequest);
-      //   return Right(user);
-      // } on AppException catch (e) {
       return Left(
         ConnectionFailure.fromAppException(
           ConnectionException(

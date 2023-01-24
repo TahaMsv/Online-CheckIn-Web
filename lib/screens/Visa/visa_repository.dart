@@ -13,9 +13,10 @@ import 'interfaces/visa_repository_interface.dart';
 
 class VisaRepository implements VisaRepositoryInterface {
   final VisaRemoteDataSource visaRemoteDataSource;
+  final VisaLocalDataSource visaLocalDataSource;
   final NetworkInfo networkInfo;
 
-  VisaRepository({required this.visaRemoteDataSource, required this.networkInfo, required VisaLocalDataSource visaLocalDataSource});
+  VisaRepository({required this.visaRemoteDataSource, required this.networkInfo, required this.visaLocalDataSource});
 
   @override
   Future<Either<Failure, List<VisaType>>> selectVisaTypes(SelectVisaTypesRequest request) async {

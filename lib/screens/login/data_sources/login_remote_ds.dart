@@ -13,7 +13,7 @@ class LoginRemoteDataSource implements LoginDataSourceInterface {
 
   @override
   Future<String> login(LoginRequest request) async {
-    NetworkRequest loginNR = NetworkRequest(api: Apis.baseUrl + Apis.login, data: request.toJson(), timeOut: const Duration(days: 1));
+    NetworkRequest loginNR = NetworkRequest(api: Apis.baseUrl + Apis.login, data: request.toJson(), timeOut: const Duration(seconds: 10));
     NetworkResponse loginResponse = await loginNR.post();
     if (loginResponse.responseStatus) {
       try {
