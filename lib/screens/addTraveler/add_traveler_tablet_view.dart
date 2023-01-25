@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/UserTextInput.dart';
+import '../../widgets/title_widget.dart';
 import '../steps/steps_state.dart';
 import '../steps/steps_view.dart';
 import 'add_traveler_controller.dart';
@@ -118,7 +119,7 @@ class TravellersList extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TitleWidget(
-                title: "Travellers" ,
+                title: "Travellers",
                 width: width * 0.5,
                 height: 100,
                 fontSize: 40,
@@ -127,15 +128,9 @@ class TravellersList extends StatelessWidget {
                 SizedBox(
                   width: 112,
                   child: Row(
-                    children: [
-                      const MyDivider(
-                        width: 2,
-                        height: 60,
-                      ),
-                      TitleWidget(
-                        title: "Seat" ,
-                        width: 100,
-                      ),
+                    children: const [
+                      MyDivider(width: 2, height: 60),
+                      TitleWidget(title: "Seat", width: 100),
                     ],
                   ),
                 ),
@@ -216,7 +211,7 @@ class AddNewTraveller extends StatelessWidget {
                     width: 15,
                   ),
                   Text(
-                    "Add Travellers" ,
+                    "Add Travellers",
                     style: MyTextTheme.w800MainColor22,
                   ),
                 ],
@@ -240,8 +235,8 @@ class AddNewTraveller extends StatelessWidget {
                   height: 63,
                   fontSize: 22,
                   controller: addTravelerState.lastNameC,
-                  hint: "Last Name" ,
-                  errorText: "Last Name can't be empty" ,
+                  hint: "Last Name",
+                  errorText: "Last Name can't be empty",
                   isEmpty: addTravelerState.isLastNameEmpty,
                 ),
                 const SizedBox(
@@ -251,8 +246,8 @@ class AddNewTraveller extends StatelessWidget {
                   height: 63,
                   fontSize: 22,
                   controller: addTravelerState.ticketNumberC,
-                  hint: "Reservation ID / Ticket Number" ,
-                  errorText: "Reservation ID / Ticket Number can't be empty" ,
+                  hint: "Reservation ID / Ticket Number",
+                  errorText: "Reservation ID / Ticket Number can't be empty",
                   isEmpty: addTravelerState.isTicketNumberEmpty,
                   obscureText: true,
                 ),
@@ -288,7 +283,7 @@ class AddToTravellersButton extends StatelessWidget {
     return MyElevatedButton(
       height: height,
       width: double.infinity,
-      buttonText: "Add to Travellers" ,
+      buttonText: "Add to Travellers",
       bgColor: const Color(0xff00bfa2),
       fgColor: Colors.white,
       fontSize: 22,
@@ -316,7 +311,7 @@ class TravellerItem extends StatelessWidget {
     bool isTravellerSelected = stepsState.travelers[index].seatId == "--" ? false : true;
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: MyColors.grey),
+        border: Border.all(color: MyColors.lightGrey),
         color: stepsState.whoseTurnToSelect == index && step == 6 ? MyColors.brightYellow.withOpacity(0.5) : MyColors.white,
       ),
       height: 70,
@@ -332,7 +327,7 @@ class TravellerItem extends StatelessWidget {
                   child: Text(
                     stepsState.travelers[index].getFullNameWithGender(),
                     style: const TextStyle(
-                      color: MyColors.lightGrey,
+                      color: MyColors.grey,
                       fontSize: 20,
                       fontWeight: FontWeight.w400,
                     ),
@@ -361,7 +356,7 @@ class TravellerItem extends StatelessWidget {
                                     TitleWidget(
                                       title: stepsState.travelers[index].seatId,
                                       width: 75,
-                                      textColor: isTravellerSelected ? MyColors.mainColor :MyColors.darkGrey,
+                                      textColor: isTravellerSelected ? MyColors.mainColor : MyColors.darkGrey,
                                     ),
                                     Container(
                                       width: 35,

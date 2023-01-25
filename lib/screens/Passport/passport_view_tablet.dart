@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:online_checkin_web_refactoring/core/constants/ui.dart';
 import 'package:online_checkin_web_refactoring/screens/Passport/passport_controller.dart';
 import 'package:online_checkin_web_refactoring/screens/Passport/passport_state.dart';
 import 'package:online_checkin_web_refactoring/widgets/info_card.dart';
-import '../../core/constants/ui.dart';
 import '../../core/dependency_injection.dart';
 import 'package:provider/provider.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import '../../core/utils/getTranslatedWord.dart';
-import '../../widgets/MyElevatedButton.dart';
-import '../../widgets/SelectingDateWidget.dart';
 import '../../widgets/StepsScreenTitle.dart';
-import '../../widgets/UserTextInput.dart';
 
-class PassportView extends StatelessWidget {
-  PassportView({Key? key}) : super(key: key);
+class PassportViewTablet extends StatelessWidget {
+  PassportViewTablet({Key? key}) : super(key: key);
   final PassportController passportController = getIt<PassportController>();
 
   @override
@@ -25,18 +19,23 @@ class PassportView extends StatelessWidget {
     return Scaffold(
       backgroundColor: theme.primaryColor,
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const StepsScreenTitle(title: "Passport", description: "Enter passport data (DOCS) for all the passengers."),
+          const StepsScreenTitle(title: "Passport", description: "", fontSize: 45),
           const SizedBox(height: 10),
+          const Text("Enter passport data (DOCS) for all the passengers.", style: MyTextTheme.black25W300),
+          const SizedBox(height: 30),
           Expanded(
-            child: GridView.count(
-              crossAxisCount: 4,
-              // crossAxisSpacing: 60,
-              childAspectRatio: 315 / 193,
+            child: ListView(
               children: passportState.travelers.asMap().entries.map(
                 (entry) {
                   int idx = entry.key;
-                  return InfoCard(index: idx, isTabletMode: false, isPassportStep: true,);
+                  return InfoCard(
+                    index: idx,
+                    fontSize: 25,
+                    isTabletMode: true,
+                    isPassportStep: true,
+                  );
                 },
               ).toList(),
             ),
@@ -46,4 +45,3 @@ class PassportView extends StatelessWidget {
     );
   }
 }
-

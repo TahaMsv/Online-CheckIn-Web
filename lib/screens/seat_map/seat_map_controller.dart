@@ -10,6 +10,7 @@ import 'package:online_checkin_web_refactoring/screens/steps/steps_state.dart';
 
 import '../../core/classes/Traveler.dart';
 import '../../core/classes/cabin.dart';
+import '../../core/classes/cell.dart';
 import '../../core/classes/seat.dart';
 import '../../core/dependency_injection.dart';
 import '../../core/interfaces/controller.dart';
@@ -325,7 +326,7 @@ class SeatMapController extends MainController {
   }
 
   Color getColor(String seatId) {
-    if (!seatMapState.seatsStatus.containsKey(seatId)) return MyColors.grey;
+    if (!seatMapState.seatsStatus.containsKey(seatId)) return MyColors.lightGrey;
 
     switch (seatMapState.seatsStatus[seatId]) {
       case "TemporaryBlock":
@@ -337,10 +338,73 @@ class SeatMapController extends MainController {
       case "Checked-in":
       case "Click":
       case "Check in other Flight":
-        return MyColors.grey;
+        return MyColors.lightGrey;
       default:
         return MyColors.brightYellow;
     }
+  }
+
+  List<dynamic> seatView(Cell cell, double cabinRatio, bool isTabletMode) {
+    int seatType = seatViewType(cell.value, cell.type, cell.code);
+    double width = cabinRatio * (isTabletMode ? getSeatHeight(seatType) : getSeatWidth(seatType));
+    double height = cabinRatio * (!isTabletMode ? getSeatHeight(seatType) : getSeatWidth(seatType));
+    bool isSeatClickable = false;
+    bool hasShadow = false;
+    Color color = MyColors.grey;
+    String seatText = "";
+    Color textColor = MyColors.white;
+
+    switch (seatType) {
+      case 1:
+        color = MyColors.grey;
+        break;
+      case 2:
+        seatText = cell.code!;
+        break;
+      case 3:
+        color = MyColors.black;
+        break;
+      case 4:
+        color = MyColors.lightGrey;
+        hasShadow = true;
+        break;
+      case 5:
+        color = Colors.grey.withOpacity(0.5);
+        hasShadow = true;
+        break;
+      case 6:
+        color = MyColors.white;
+        isSeatClickable = true;
+        seatText = cell.code!;
+        textColor = MyColors.darkGrey;
+        hasShadow = true;
+        break;
+      case 7:
+        isSeatClickable = true;
+        color = MyColors.brightYellow;
+        seatText = seatMapState.seatsStatus[cell.code]!;
+        hasShadow = true;
+        break;
+      case 11:
+        seatText = cell.value!;
+        break;
+      case 13:
+        isSeatClickable = false;
+        color = MyColors.oceanGreen;
+        hasShadow = true;
+        seatText = seatMapState.seatsStatus[cell.code]!;
+        break;
+      case 14:
+        isSeatClickable = false;
+        seatText = "";
+        break;
+      case 15:
+        isSeatClickable = false;
+        seatText = "";
+        hasShadow = true;
+        break;
+    }
+    return [width, height, isSeatClickable, hasShadow, seatText, color, textColor];
   }
 
   @override

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_checkin_web_refactoring/screens/upgrades/upgrades_controller.dart';
 import 'package:online_checkin_web_refactoring/screens/upgrades/upgrades_state.dart';
+import 'package:online_checkin_web_refactoring/screens/upgrades/widgets/entertainments.dart';
+import 'package:online_checkin_web_refactoring/screens/upgrades/widgets/upgrade_items_widget.dart';
 import '../../core/classes/extra.dart';
 import '../../core/constants/ui.dart';
 import '../../core/dependency_injection.dart';
@@ -27,12 +29,12 @@ class UpgradesView extends StatelessWidget {
               )
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const StepsScreenTitle(title: "Upgrades", description: "All upgrades are non-refundable"),
-                  const SizedBox(height: 10),
-                  const WinesAndDrinksList(),
-                  const SizedBox(height: 10),
-                  Entertainment(upgradesController: upgradesController),
+                children: const [
+                  StepsScreenTitle(title: "Upgrades", description: "All upgrades are non-refundable"),
+                  SizedBox(height: 10),
+                  WinesAndDrinksList(),
+                  SizedBox(height: 10),
+                  Entertainment(isTabletMode: false),
                 ],
               ));
   }
@@ -105,6 +107,7 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                             index: index,
                             value: upgradesState.winesList[index],
                             isPrinter: false,
+                            isTabletMode: false,
                           ),
                         );
                       }),
@@ -126,198 +129,6 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
               ],
             ),
           )
-        ],
-      ),
-    );
-  }
-}
-
-class UpgradeItemWidget extends StatelessWidget {
-  const UpgradeItemWidget({
-    Key? key,
-    required this.value,
-    required this.isPrinter,
-    required this.index,
-  }) : super(key: key);
-
-  final Extra value;
-  final bool isPrinter;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    final UpgradesController upgradesController = getIt<UpgradesController>();
-    UpgradesState upgradesState = context.watch<UpgradesState>();
-    Color color;
-    if (isPrinter) {
-      color = upgradesState.colors[4];
-    } else {
-      color = upgradesState.colors[index % 4];
-    }
-    return Container(
-      width: 330,
-      margin: const EdgeInsets.only(left: 10, right: 10),
-      child: Stack(
-        children: [
-          Container(
-            height: 180,
-            color: (color).withOpacity(0.1),
-            padding: const EdgeInsets.only(right: 20, top: 20, bottom: 20, left: 50),
-            margin: const EdgeInsets.only(left: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(value.title, style: MyTextTheme.boldDarkGray12),
-                        Text("${"Starts from"} \$ ${value.price}", style: MyTextTheme.darkGreyW30012),
-                      ],
-                    ),
-                    Text(value.description, overflow: TextOverflow.clip, style: MyTextTheme.boldDarkGray12),
-                  ] +
-                  [
-                    upgradesState.entertainmentsNumberOfSelected[index] == 0
-                        ? MyElevatedButton(
-                            width: 80,
-                            height: 30,
-                            fgColor: MyColors.white,
-                            bgColor: color,
-                            buttonText: "Add",
-                            function: () {
-                              isPrinter ? upgradesController.addEntertainment(index) : upgradesController.addWine(index);
-                            },
-                          )
-                        : ChangeNumOfSelected(
-                            value: value,
-                            index: index,
-                            isPrinter: isPrinter,
-                            color: color,
-                            numberOfSelected: isPrinter ? upgradesState.entertainmentsNumberOfSelected[index] : upgradesState.winesNumberOfSelected[index],
-                          )
-                  ],
-            ),
-          ),
-          Positioned(
-            left: isPrinter ? -5 : -30,
-            child: SizedBox(
-              height: 180,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: isPrinter ? 100 : 130,
-                    child: Image.asset(
-                      value.imageUrl.substring(1), // To remove "/" from beginning of the url.
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ChangeNumOfSelected extends StatelessWidget {
-  const ChangeNumOfSelected({
-    Key? key,
-    required this.value,
-    required this.index,
-    required this.isPrinter,
-    required this.color,
-    required this.numberOfSelected,
-  }) : super(key: key);
-
-  final Extra value;
-  final int index;
-  final int numberOfSelected;
-  final bool isPrinter;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    final UpgradesController upgradesController = getIt<UpgradesController>();
-    return Container(
-      width: 80,
-      height: 30,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 25,
-            child: Material(
-              color: (color).withOpacity(0.5),
-              child: InkWell(
-                onTap: () {
-                  isPrinter ? upgradesController.removeEntertainment(index) : upgradesController.removeWine(index);
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const <Widget>[
-                    Icon(Icons.remove, color: MyColors.white, size: 18), // icon// text
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Container(
-            width: 30,
-            color: (color).withOpacity(0.7),
-            child: Center(
-              child: Text("$numberOfSelected", style: const TextStyle(color: MyColors.white)),
-            ),
-          ),
-          SizedBox(
-            width: 25,
-            child: Material(
-              color: color,
-              child: InkWell(
-                onTap: () {
-                  isPrinter ? upgradesController.addEntertainment(index) : upgradesController.addWine(index);
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const <Widget>[
-                    Icon(Icons.add, color: MyColors.white, size: 18), // icon// text
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Entertainment extends StatelessWidget {
-  const Entertainment({
-    Key? key,
-    required this.upgradesController,
-  }) : super(key: key);
-
-  final UpgradesController upgradesController;
-
-  @override
-  Widget build(BuildContext context) {
-    UpgradesState upgradesState = context.watch<UpgradesState>();
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text("Entertainment", style: MyTextTheme.darkGreyW80013),
-          const SizedBox(height: 15),
-          Expanded(child: UpgradeItemWidget(value: upgradesState.entertainmentsList[0], index: 0, isPrinter: true)),
         ],
       ),
     );

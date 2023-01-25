@@ -9,7 +9,7 @@ packages:
     source: hosted
     version: "2.3.1"
   artemis_utils:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: artemis_utils
       url: "https://pub.dartlang.org"
@@ -58,7 +58,7 @@ packages:
     source: hosted
     version: "1.16.0"
   connectivity_plus:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: connectivity_plus
       url: "https://pub.dartlang.org"
@@ -121,7 +121,7 @@ packages:
     source: hosted
     version: "1.0.5"
   dartz:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: dartz
       url: "https://pub.dartlang.org"
@@ -177,21 +177,21 @@ packages:
     source: hosted
     version: "2.1.1"
   dio:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: dio
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.6"
   dotted_line:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: dotted_line
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.0"
   equatable:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: equatable
       url: "https://pub.dartlang.org"
@@ -219,7 +219,7 @@ packages:
     source: hosted
     version: "6.1.4"
   flash:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flash
       url: "https://pub.dartlang.org"
@@ -238,7 +238,7 @@ packages:
     source: hosted
     version: "1.5.1"
   flutter_holo_date_picker:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_holo_date_picker
       url: "https://pub.dartlang.org"
@@ -259,21 +259,21 @@ packages:
     source: hosted
     version: "2.0.5"
   flutter_spinkit:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_spinkit
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.1.0"
   flutter_stripe:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_stripe
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.5.0"
   flutter_stripe_web:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_stripe_web
       url: "https://pub.dartlang.org"
@@ -297,21 +297,21 @@ packages:
     source: hosted
     version: "2.2.0"
   get:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: get
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.6.5"
   get_it:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: get_it
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.2.0"
   go_router:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: go_router
       url: "https://pub.dartlang.org"
@@ -388,7 +388,7 @@ packages:
     source: hosted
     version: "1.8.0"
   modal_bottom_sheet:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       path: modal_bottom_sheet
       ref: main
@@ -404,7 +404,7 @@ packages:
     source: hosted
     version: "1.0.0"
   network_manager:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: network_manager
       url: "https://pub.dartlang.org"
@@ -516,21 +516,21 @@ packages:
     source: hosted
     version: "4.2.4"
   provider:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.5"
   scroll_to_index:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: scroll_to_index
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
   shared_preferences:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: shared_preferences
       url: "https://pub.dartlang.org"
@@ -654,7 +654,7 @@ packages:
     source: hosted
     version: "19.4.56-beta"
   syncfusion_flutter_pdfviewer:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: syncfusion_flutter_pdfviewer
       url: "https://pub.dartlang.org"

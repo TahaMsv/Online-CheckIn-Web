@@ -7,13 +7,15 @@ class MyColors {
   static const mainColor = Color(0xff48c0a2);
   static const myBlue = Color(0xff4c6ef6);
   static const black = Colors.black;
-  static const grey = Colors.grey;
+  static const green = Colors.green;
   static const red = Colors.red;
+
   static const white = Colors.white;
   static const white1 = Color(0xffeaeaea);
   static const brownGrey = Color.fromRGBO(141, 141, 141, 1);
   static const darkGrey = Color(0xff424242);
-  static const lightGrey = Color(0xff808080);
+  static const grey = Color(0xff808080);
+  static const lightGrey = Colors.grey;
   static const sonicSilver = Color(0xff767676);
   static const oceanGreen = Color(0xff48c0a2);
   static const brightYellow = Color(0xffffae2c);
@@ -39,6 +41,10 @@ class MyTextTheme {
 
   static const boldWhite24 = TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: MyColors.white);
   static const boldWhite16 = TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: MyColors.white);
+  static const black25W700 = TextStyle(color: MyColors.black, fontWeight: FontWeight.w700, fontSize: 25);
+  static const black25W300 = TextStyle(color: MyColors.black, fontWeight: FontWeight.w300, fontSize: 25);
+  static const white25 = TextStyle(fontSize: 25, color: MyColors.white);
+  static const white20 = TextStyle(fontSize: 20, color: MyColors.white);
   static const white16 = TextStyle(fontSize: 16, color: MyColors.white);
   static const white12 = TextStyle(fontSize: 12, color: MyColors.white);
   static const boldDarkGray12 = TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: MyColors.darkGrey);
@@ -46,20 +52,24 @@ class MyTextTheme {
   static const boldDarkGray30 = TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: MyColors.darkGrey);
   static const boldDarkGray24 = TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: MyColors.darkGrey);
   static const w800MainColor15 = TextStyle(fontSize: 15, color: MyColors.mainColor, fontWeight: FontWeight.w800);
-  static const lightGrey14 = TextStyle(fontSize: 14, color: MyColors.lightGrey);
-  static const lightGrey12 = TextStyle(fontSize: 12, color: MyColors.lightGrey);
+  static const lightGrey14 = TextStyle(fontSize: 14, color: MyColors.grey);
+  static const lightGrey12 = TextStyle(fontSize: 12, color: MyColors.grey);
   static const w300DarkGrey14 = TextStyle(color: MyColors.darkGrey, fontSize: 14, fontWeight: FontWeight.w300);
   static const w800MainColor22 = TextStyle(fontSize: 22, color: MyColors.mainColor, fontWeight: FontWeight.w800);
-  static const lightGrey20 = TextStyle(fontSize: 20, color: MyColors.lightGrey);
+  static const lightGrey20 = TextStyle(fontSize: 20, color: MyColors.grey);
   static const darkGreyBold15 = TextStyle(color: MyColors.darkGrey, fontWeight: FontWeight.bold, fontSize: 15);
   static const darkGreyBold25 = TextStyle(color: MyColors.darkGrey, fontWeight: FontWeight.bold, fontSize: 25);
+  static const darkGrey25W300 = TextStyle(color: MyColors.darkGrey, fontWeight: FontWeight.w300, fontSize: 25);
   static const darkGreyW30012 = TextStyle(fontSize: 12, color: MyColors.darkGrey, fontWeight: FontWeight.w300);
   static const darkGreyW40015 = TextStyle(fontSize: 15, color: MyColors.darkGrey, fontWeight: FontWeight.w400);
   static const darkGreyW40020 = TextStyle(fontSize: 20, color: MyColors.darkGrey, fontWeight: FontWeight.w400);
   static const darkGreyW40023 = TextStyle(fontSize: 23, color: MyColors.darkGrey, fontWeight: FontWeight.w400);
+  static const darkGreyW40030 = TextStyle(fontSize: 30, color: MyColors.darkGrey, fontWeight: FontWeight.w400);
   static const darkGreyW70015 = TextStyle(fontSize: 15, color: MyColors.darkGrey, fontWeight: FontWeight.w700);
   static const darkGreyW70025 = TextStyle(fontSize: 25, color: MyColors.darkGrey, fontWeight: FontWeight.w700);
   static const darkGreyW80013 = TextStyle(fontSize: 13, color: MyColors.darkGrey, fontWeight: FontWeight.w800);
+  static const myBlue12W500 = TextStyle(color: MyColors.myBlue, fontSize: 12, fontWeight: FontWeight.w500);
+  static const myBlue22W500 = TextStyle(color: MyColors.myBlue, fontSize: 22, fontWeight: FontWeight.w500);
 }
 
 class MyTheme {

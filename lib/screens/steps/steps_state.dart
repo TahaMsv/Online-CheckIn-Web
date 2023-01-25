@@ -55,6 +55,15 @@ class StepsState with ChangeNotifier {
     notifyListeners();
   }
 
+  int _whichOneToEdit = 0;
+
+  int get whichOneToEdit => _whichOneToEdit;
+
+    void setWhichOneToEdit(int val) {
+      _whichOneToEdit = val;
+      notifyListeners();
+    }
+
   bool _isDocoNecessary = false;
 
   bool get isDocoNecessary => _isDocoNecessary;

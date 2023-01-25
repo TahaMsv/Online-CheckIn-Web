@@ -165,7 +165,7 @@ class CheckInForm extends StatelessWidget {
                               child: Text(
                                 "Input Requested info in order to continue",
                                 style: const TextStyle(
-                                  color: MyColors.lightGrey,
+                                  color: MyColors.grey,
                                 ),
                               ),
                             ),

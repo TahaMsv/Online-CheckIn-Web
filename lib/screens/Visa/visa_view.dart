@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../core/utils/getTranslatedWord.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/StepsScreenTitle.dart';
+import '../../widgets/info_card.dart';
 
 class VisaView extends StatelessWidget {
   VisaView({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class VisaView extends StatelessWidget {
     VisaState visaState = context.watch<VisaState>();
     StepsState stepsState = context.watch<StepsState>();
     return Scaffold(
-      backgroundColor: MyColors.white,
+      backgroundColor: theme.primaryColor,
       body: visaState.loading
           ? const Center(
               child: CircularProgressIndicator(),
@@ -48,130 +49,13 @@ class VisaView extends StatelessWidget {
                           (entry) {
                             int idx = entry.key;
                             // Traveller traveller = entry.value;
-                            return InfoCard(
-                              index: idx,
-                            );
+                            return InfoCard(index: idx,isTabletMode: false,isPassportStep: false,);
                           },
                         ).toList(),
                       ),
                     ),
                   ],
                 ),
-    );
-  }
-}
-
-class InfoCard extends StatelessWidget {
-  const InfoCard({
-    Key? key,
-    required this.index,
-  }) : super(key: key);
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    StepsState stepsState = context.watch<StepsState>();
-    Color textColor;
-    Color bgColor;
-    if (stepsState.travelers[index].visaInfo.isVisaInfoCompleted) {
-      textColor = MyColors.white;
-      bgColor = MyColors.oceanGreen;
-    } else {
-      textColor = MyColors.darkGrey;
-      bgColor = MyColors.white;
-    }
-    return Container(
-      // height: 300,
-      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
-      width: 315,
-      margin: const EdgeInsets.all(10),
-      decoration: BoxDecoration(color: bgColor, border: Border.all(color: MyColors.white1)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [Icon(Icons.warning_amber_sharp, color: stepsState.travelers[index].visaInfo.isVisaInfoCompleted ? MyColors.transparent : MyColors.begonia, size: 20)],
-          ),
-          Text(
-            stepsState.travelers[index].getFullNameWithGender(),
-            style: TextStyle(color: textColor, fontSize: 15, fontWeight: FontWeight.w800),
-          ),
-          const SizedBox(height: 45),
-          Row(
-            children: [
-              Text("ID: ", style: TextStyle(color: textColor, fontSize: 13, fontWeight: FontWeight.w400)),
-              Text("${stepsState.travelers[index].flightInformation.passengers[0].id}", style: TextStyle(color: textColor, fontSize: 15, fontWeight: FontWeight.w800)),
-              const SizedBox(width: 5),
-              Text("Passport No: ", style: TextStyle(color: textColor, fontSize: 13, fontWeight: FontWeight.w400)),
-            ],
-          ),
-          const SizedBox(height: 20),
-          stepsState.travelers[index].visaInfo.isVisaInfoCompleted ? EditVisaInfo(index: index) : AddVisaInfo(index: index),
-        ],
-      ),
-    );
-  }
-}
-
-class AddVisaInfo extends StatelessWidget {
-  const AddVisaInfo({
-    Key? key,
-    required this.index,
-  }) : super(key: key);
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    VisaController visaController = getIt<VisaController>();
-    return GestureDetector(
-      onTap: () {
-        visaController.showVisaDialog(index);
-      },
-      child: Row(
-        children: const [
-          Icon(Icons.add_circle_outline_rounded, color: MyColors.myBlue, size: 18),
-          SizedBox(width: 5),
-          Text(
-            "Add Visa Info",
-            style: TextStyle(color: Color(0xff4d6fff), fontSize: 12, fontWeight: FontWeight.w500),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class EditVisaInfo extends StatelessWidget {
-  const EditVisaInfo({
-    Key? key,
-    required this.index,
-  }) : super(key: key);
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    VisaController visaController = getIt<VisaController>();
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: const [
-            Icon(Icons.check, color: MyColors.white, size: 18),
-            SizedBox(width: 5),
-            Text(
-              "Visa No: 45687",
-              style: TextStyle(color: MyColors.white, fontSize: 12, fontWeight: FontWeight.w700),
-            ),
-          ],
-        ),
-        GestureDetector(
-          onTap: () {
-            visaController.showVisaDialog(index);
-          },
-          child: const Icon(MenuIcons.iconEdit, color: MyColors.white, size: 18),
-        )
-      ],
     );
   }
 }

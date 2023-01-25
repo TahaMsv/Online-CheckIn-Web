@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 import '../../widgets/MtDottedLine.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/UserTextInput.dart';
+import '../../widgets/title_widget.dart';
 import '../addTraveler/add_traveler_controller.dart';
 
 class StepsView extends StatelessWidget {
@@ -131,7 +132,7 @@ class LeftSideOFPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TitleWidget(
+                const TitleWidget(
                   title: "Travellers" ,
                   width: 190,
                 ),
@@ -139,8 +140,8 @@ class LeftSideOFPage extends StatelessWidget {
                   SizedBox(
                     width: 112,
                     child: Row(
-                      children: [
-                        const MyDivider(
+                      children: const [
+                        MyDivider(
                           width: 2,
                           height: 60,
                         ),
@@ -225,7 +226,7 @@ class AddNewTraveller extends StatelessWidget {
                   const SizedBox(
                     width: 15,
                   ),
-                  Text(
+                  const Text(
                     "Add Travellers" ,
                     style: MyTextTheme.w800MainColor15,
                   ),
@@ -239,7 +240,7 @@ class AddNewTraveller extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                Text(
+                const Text(
                   "Add all passengers to the list on the left here" ,
                   style: MyTextTheme.lightGrey14,
                 ),
@@ -360,39 +361,6 @@ class TravellerItem extends StatelessWidget {
   }
 }
 
-class TitleWidget extends StatelessWidget {
-  const TitleWidget({
-    Key? key,
-    required this.title,
-    required this.width,
-    this.textColor = MyColors.darkGrey,
-    this.fontSize = 17,
-    this.height = 60,
-  }) : super(key: key);
-
-  final String title;
-  final double height;
-  final double width;
-  final Color textColor;
-  final double fontSize;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      child: Text(
-        title,
-        style: TextStyle(
-          color: textColor,
-          fontSize: fontSize,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-}
 
 class AbomisLogo extends StatelessWidget {
   const AbomisLogo({
