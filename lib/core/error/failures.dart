@@ -11,7 +11,7 @@ abstract class Failure {
 
   @override
   String toString() {
-    return "$runtimeType Code:$code\n$msg\n$traceMsg";
+    return "$runtimeType Code:$code\n$msg";
   }
 }
 

@@ -37,66 +37,66 @@ class StepsView extends StatelessWidget {
               child: CircularProgressIndicator(),
             )
           : ListView(
-            shrinkWrap: true,
-            children: [
-              TopOfPage(
-                height: height,
-                width: width,
-                stepsController: stepsController,
-                isTabletMode: false,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  LeftSideOFPage(
-                    height: height,
-                    width: width * 0.20,
-                    step: stepsState.step,
-                    stepsController: stepsController,
-                  ),
-                  SizedBox(
-                    width: width * 0.80,
-                    height: height * 0.9,
-                    child: Column(
-                      children: [
-                        Row(
-                          children: <Widget>[
-                                Expanded(
-                                  child: stepsState.step == 0
-                                      ? const MyDottedLine(
-                                          lineLength: double.infinity,
-                                          color: MyColors.oceanGreen,
-                                        )
-                                      : const MyDivider(color: MyColors.oceanGreen),
-                                )
-                              ] +
-                              stepsController
-                                  .stepsToShowList()
-                                  .map((i) => StepWidget(
-                                        index: i,
-                                        isTabletMode: false,
-                                      ))
-                                  .toList() +
-                              [
-                                const Expanded(
-                                  child: MyDivider(),
-                                ),
-                              ],
-                        ),
-                        Container(
-                          color: MyColors.white,
-                          height: height * 0.77,
-                          padding: const EdgeInsets.only(top: 50, left: 30, right: 30),
-                          child: childWidget,
-                        ),
-                        BottomOfPage(height: height, stepsController: stepsController, isTabletMode: false),
-                      ],
+              shrinkWrap: true,
+              children: [
+                TopOfPage(
+                  height: height,
+                  width: width,
+                  stepsController: stepsController,
+                  isTabletMode: false,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    LeftSideOFPage(
+                      height: height,
+                      width: width * 0.20,
+                      step: stepsState.step,
+                      stepsController: stepsController,
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                    SizedBox(
+                      width: width * 0.80,
+                      height: height * 0.9,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: <Widget>[
+                                  Expanded(
+                                    child: stepsState.step == 0
+                                        ? const MyDottedLine(
+                                            lineLength: double.infinity,
+                                            color: MyColors.oceanGreen,
+                                          )
+                                        : const MyDivider(color: MyColors.oceanGreen),
+                                  )
+                                ] +
+                                stepsController
+                                    .stepsToShowList()
+                                    .map((i) => StepWidget(
+                                          index: i,
+                                          isTabletMode: false,
+                                        ))
+                                    .toList() +
+                                [
+                                  const Expanded(
+                                    child: MyDivider(),
+                                  ),
+                                ],
+                          ),
+                          Container(
+                            color: MyColors.white,
+                            height: height * 0.77,
+                            padding: const EdgeInsets.only(top: 50, left: 30, right: 30),
+                            child: childWidget,
+                          ),
+                          BottomOfPage(height: height, stepsController: stepsController, isTabletMode: false),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
     );
   }
 }
@@ -133,7 +133,7 @@ class LeftSideOFPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const TitleWidget(
-                  title: "Travellers" ,
+                  title: "Travellers",
                   width: 190,
                 ),
                 if (step == 6)
@@ -146,7 +146,7 @@ class LeftSideOFPage extends StatelessWidget {
                           height: 60,
                         ),
                         TitleWidget(
-                          title: "Seat" ,
+                          title: "Seat",
                           width: 100,
                         ),
                       ],
@@ -227,7 +227,7 @@ class AddNewTraveller extends StatelessWidget {
                     width: 15,
                   ),
                   const Text(
-                    "Add Travellers" ,
+                    "Add Travellers",
                     style: MyTextTheme.w800MainColor15,
                   ),
                 ],
@@ -241,7 +241,7 @@ class AddNewTraveller extends StatelessWidget {
                   height: 20,
                 ),
                 const Text(
-                  "Add all passengers to the list on the left here" ,
+                  "Add all passengers to the list on the left here",
                   style: MyTextTheme.lightGrey14,
                 ),
                 const SizedBox(
@@ -249,8 +249,8 @@ class AddNewTraveller extends StatelessWidget {
                 ),
                 UserTextInput(
                   controller: addTravelerState.lastNameC,
-                  hint: "Last Name" ,
-                  errorText: "Last Name can't be empty" ,
+                  hint: "Last Name",
+                  errorText: "Last Name can't be empty",
                   isEmpty: addTravelerState.isLastNameEmpty,
                 ),
                 const SizedBox(
@@ -258,8 +258,8 @@ class AddNewTraveller extends StatelessWidget {
                 ),
                 UserTextInput(
                   controller: addTravelerState.ticketNumberC,
-                  hint: "Reservation ID / Ticket Number" ,
-                  errorText: "Reservation ID / Ticket Number can't be empty" ,
+                  hint: "Reservation ID / Ticket Number",
+                  errorText: "Reservation ID / Ticket Number can't be empty",
                   isEmpty: addTravelerState.isTicketNumberEmpty,
                   obscureText: true,
                 ),
@@ -269,7 +269,7 @@ class AddNewTraveller extends StatelessWidget {
                 MyElevatedButton(
                   height: 40,
                   width: double.infinity,
-                  buttonText: "Add to Travellers" ,
+                  buttonText: "Add to Travellers",
                   bgColor: const Color(0xff00bfa2),
                   fgColor: MyColors.white,
                   function: () {
@@ -301,8 +301,7 @@ class TravellerItem extends StatelessWidget {
     StepsState stepsState = context.watch<StepsState>();
     bool isTravellerSelected = stepsState.travelers[index].seatId == "--" ? false : true;
     return Container(
-      color: MyColors.white,
-      // color: stepsController.whoseTurnToSelect.value == index && step == 6 ? const Color(0xffffae2c).withOpacity(0.5) : MyColors.white,//todo
+      color: stepsState.whoseTurnToSelect == index && step == 6 ? MyColors.brightYellow.withOpacity(0.5) : MyColors.white,
       height: 60,
       child: Column(
         children: [
@@ -361,7 +360,6 @@ class TravellerItem extends StatelessWidget {
   }
 }
 
-
 class AbomisLogo extends StatelessWidget {
   const AbomisLogo({
     Key? key,
@@ -373,7 +371,7 @@ class AbomisLogo extends StatelessWidget {
       height: 60,
       width: 160,
       child: Image.asset(
-        AssetImages.ABOMIS_LOGO,
+        AssetImages.abomisLogo,
         fit: BoxFit.fill,
       ),
     );

@@ -32,11 +32,7 @@ class ReceiptRemoteDataSource implements ReceiptDataSourceInterface {
     NetworkRequest reserveSeatNR = NetworkRequest(api: Apis.baseUrl + Apis.reserveSeat, data: request.toJson(), timeOut: const Duration(seconds: 10));
     NetworkResponse reserveSeatResponse = await reserveSeatNR.post();
     if (reserveSeatResponse.responseStatus) {
-      try {
-        return true;
-      } catch (e, trace) {
-        throw ParseException(message: e.toString(), trace: trace);
-      }
+      return true;
     } else {
       throw ServerException(
         code: reserveSeatResponse.responseCode,

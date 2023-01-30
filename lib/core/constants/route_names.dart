@@ -15,5 +15,5 @@ class RouteNames {
   static const payment = '/payment';
   static const upgrades = '/upgrades';
   static const receipt = '/receipt';
-  static const seats = '/seats';
+  static const seatMap = '/seatMap';
 }

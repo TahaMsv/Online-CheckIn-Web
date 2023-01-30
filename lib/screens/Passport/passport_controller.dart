@@ -1,28 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:online_checkin_web_refactoring/screens/Passport/passport_repository.dart';
 import 'package:online_checkin_web_refactoring/screens/Passport/passport_state.dart';
-import 'package:online_checkin_web_refactoring/screens/Passport/passport_view.dart';
 import 'package:online_checkin_web_refactoring/screens/Passport/usecases/select_countries_usecase.dart';
 import 'package:online_checkin_web_refactoring/screens/Passport/usecases/select_passport_type_usecase.dart';
 import 'package:online_checkin_web_refactoring/screens/Visa/visa_state.dart';
-import 'package:online_checkin_web_refactoring/screens/login/login_state.dart';
 import 'package:online_checkin_web_refactoring/screens/steps/steps_state.dart';
-import 'package:get/get.dart';
-import '../../core/classes/MyCountry.dart';
-import '../../core/constants/my_json.dart';
-import '../../core/constants/ui.dart';
+
 import '../../core/dependency_injection.dart';
 import '../../core/interfaces/controller.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-
-import '../../core/utils/drop_down_utils.dart';
 import '../../core/utils/failure_handler.dart';
-import '../../core/utils/getTranslatedWord.dart';
-import '../../widgets/MyDropDown.dart';
-import '../../widgets/MyElevatedButton.dart';
-import '../../widgets/SelectingDateWidget.dart';
-import '../../widgets/StepsScreenTitle.dart';
-import '../../widgets/UserTextInput.dart';
 import 'dialogs/passport_details_dialog.dart';
 
 class PassportController extends MainController {
@@ -38,11 +24,10 @@ class PassportController extends MainController {
     passportState.travelers = stepsState.travelers;
   }
 
-  void init() async {
+  void init()  {
     travellersList();
-    await getPassportTypes();
-    await getSelectCountries();
-    print("here 43 at init");
+     getPassportTypes();
+     getSelectCountries();
     for (var i = 0; i < passportState.travelers.length; ++i) {
       passportState.documentNoCs.add(TextEditingController());
     }
@@ -136,15 +121,9 @@ class PassportController extends MainController {
 
     fOrList.fold((f) => FailureHandler.handle(f, retry: () => getSelectCountries()), (passportTypesList) async {
       passportState.listPassportType.addAll(passportTypesList);
-      // visaStepController.listType.addAll(List<VisaType>.from(response.data["Body"]["VisaTypes"].map((x) => VisaType.fromJson(x)))); //todo
     });
   }
 
-  /////////////////////////////////////////////
-
-  void updateIsCompleted(int index) {
-    passportState.travelers[index].passportInfo.updateIsCompleted();
-  }
 
   void updateDocuments() {
     for (var i = 0; i < passportState.travelers.length; ++i) {
@@ -154,30 +133,17 @@ class PassportController extends MainController {
 
   void setSelected(int index, String value) {
     passportState.travelers[index].passportInfo.passportType = value;
-    updateIsCompleted(index);
-    passportState.refreshTravelers();
+    passportState.setState();
   }
-
-  /////////////////////////////////////////////
-
-  void refreshList(int index) {
-    updateIsCompleted(index);
-    passportState.refreshTravelers();
-  }
-
-  /////////////////////////////////////////////
 
   void selectDateOfBirth(int index, DateTime date) {
     passportState.travelers[index].passportInfo.dateOfBirth = date;
-    updateIsCompleted(index);
-    passportState.refreshTravelers();
+    passportState.setState();
   }
 
-  ////////////////////////////////////////////
   void selectEntryDate(int index, DateTime date) {
     passportState.travelers[index].passportInfo.entryDate = date;
-    updateIsCompleted(index);
-    passportState.refreshTravelers();
+    passportState.setState();
   }
 
   // void showDOCSPopup(BuildContext context, int index) {
@@ -246,7 +212,7 @@ class PassportController extends MainController {
   //                               // VisaStepController visaStepController = Get.put(VisaStepController(model));
   //                               passportState.refreshTravelers();
   //                               updateDocuments();
-  //                               updateIsCompleted(index);
+  //                               
   //                               // saveDocsDocoDoca(index);
   //                               // visaStepController.checkDocoNecessity(passportState.travelers[index]); //todo
   //                               Get.back();
@@ -325,7 +291,7 @@ class PassportController extends MainController {
   //   //                     // VisaStepController visaStepController = Get.put(VisaStepController(model));
   //   //                     passportState.refreshTravelers();
   //   //                     updateDocuments();
-  //   //                     updateIsCompleted(index);
+  //   //                     
   //   //                     // saveDocsDocoDoca(index);
   //   //                     // visaStepController.checkDocoNecessity(passportState.travelers[index]); //todo
   //   //                     Get.back();
@@ -414,7 +380,7 @@ class PassportController extends MainController {
     //                         : () {
     //                             passportState.refreshTravelers();
     //                             updateDocuments();
-    //                             updateIsCompleted(index);
+    //                             
     //                             // saveDocsDocoDoca(index);
     //                             // visaStepController.checkDocoNecessity(passportState.travelers[index]); //todo
     //                             Get.back();

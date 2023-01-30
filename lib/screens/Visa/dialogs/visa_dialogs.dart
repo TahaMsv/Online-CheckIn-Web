@@ -76,7 +76,7 @@ class _VisaDetailsDialogState extends State<VisaDetailsDialog> {
                       index: index,
                       updateDate: visaController.selectEntryDate,
                       currDateTime: visaState.travelers[index].visaInfo.issueDate == null ? DateTime.now() : visaState.travelers[index].visaInfo.issueDate!,
-                      isCurrDateEmpty: visaState.travelers[index].visaInfo.issueDate == null ? true : false,
+                      isCurrDateEmpty: visaState.travelers[index].visaInfo.issueDate == null ,
                     ),
                     const SizedBox(width: 20),
                     Expanded(
@@ -90,9 +90,11 @@ class _VisaDetailsDialogState extends State<VisaDetailsDialog> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                SubmitButton(
-                  function: visaState.requesting ? () {} : () => visaController.submitBtnFunction(index),
-                )
+                SubmitButton(function: () {
+                  if (!visaState.requesting) {
+                    visaController.submitBtnFunction(index);
+                  }
+                })
               ],
             ),
           ),

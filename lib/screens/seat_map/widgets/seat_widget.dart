@@ -57,8 +57,8 @@ class _SeatWidgetState extends State<SeatWidget> {
                 return const BlockedSeat();
               case 4:
                 return CheckedInSeat(
-                  width: widget.cabinRatio *(widget.isTabletMode ?seatMapState.seatHeight : seatMapState.seatWidth),
-                  height: widget.cabinRatio *(!widget.isTabletMode ?seatMapState.seatHeight : seatMapState.seatWidth),
+                  width: widget.cabinRatio *(widget.isTabletMode ?seatMapState.airCraftBodySize.seatHeight : seatMapState.airCraftBodySize.seatWidth),
+                  height: widget.cabinRatio *(!widget.isTabletMode ?seatMapState.airCraftBodySize.seatHeight : seatMapState.airCraftBodySize.seatWidth),
                 );
               default:
                 return Center(child: Text(seatText, style: TextStyle(color: textColor)));

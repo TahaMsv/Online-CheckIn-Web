@@ -29,21 +29,14 @@ class ReceiptViewTablet extends StatelessWidget {
                   width: width,
                   child: Column(
                     children: [
-                      const StepsScreenTitle(
-                        title: "Finished!",
-                        fontSize: 45,
-                        description: "",
-                      ),
+                      const StepsScreenTitle(title: "Finished!", fontSize: 45, description: ""),
                       const SizedBox(height: 20),
                       const Text(
                         "You can see your check-in below, print it or download it or send it to your mobile",
                         style: TextStyle(fontSize: 30),
                       ),
                       const SizedBox(height: 20),
-                      Expanded(
-                          child: SfPdfViewer.memory(
-                        receiptState.bytes,
-                      ))
+                      Expanded(child: SfPdfViewer.memory(receiptState.bytes))
                     ],
                   ),
                 ),

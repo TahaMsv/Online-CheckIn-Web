@@ -36,7 +36,7 @@ class PassportView extends StatelessWidget {
               children: passportState.travelers.asMap().entries.map(
                 (entry) {
                   int idx = entry.key;
-                  return InfoCard(index: idx, isTabletMode: false, isPassportStep: true,);
+                  return InfoCard(index: idx, isTabletMode: false, isPassportStep: true, isCompleted: passportState.travelers[idx].passportInfo.isPassInfoCompleted,);
                 },
               ).toList(),
             ),

@@ -17,6 +17,8 @@ import '../../core/classes/line.dart';
 import '../../core/constants/ui.dart';
 import '../../core/dependency_injection.dart';
 import 'package:provider/provider.dart';
+import 'dart:ui';
+import 'package:flutter/material.dart';
 
 class SeatMapView extends StatelessWidget {
   SeatMapView({Key? key}) : super(key: key);
@@ -44,7 +46,7 @@ class SeatMapView extends StatelessWidget {
                 Stack(
                   children: [
                     PlaneHead(height: planeBodyHeight, isTabletMode: false),
-                    PlaneWings(planeBodyLength: planeBodyLength, isTabletMode: false),
+                    // PlaneWings(planeBodyLength: planeBodyLength, isTabletMode: false),
                     PlaneTail(height: planeBodyHeight + 85, margin: planeBodyLength, isTabletMode: false),
                     const PlaneBody(),
                   ],
@@ -149,28 +151,28 @@ class CabinWidget extends StatelessWidget {
                     bool downDoorEnable = (i != 0 && downExitDoors != -1 && downExitDoors != upExitDoors);
                     String cabinTitle = cabin.cabinTitle;
                     double cabinRatio = (cabinTitle == "First Class".tr
-                        ? seatMapState.firstClassCabinsRatio
+                        ? seatMapState.airCraftBodySize.firstClassCabinsRatio
                         : cabinTitle == "Business".tr
-                            ? seatMapState.businessCabinsRatio
+                            ? seatMapState.airCraftBodySize.businessCabinsRatio
                             : 1.0);
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ExitDoor(
-                          width: seatMapState.seatWidth,
+                          width: seatMapState.airCraftBodySize.seatWidth,
                           height: 20,
                           isEnable: upDoorEnable,
                           isTabletMode: false,
                         ),
                         LineWidget(
                           line: cabin.lines[i],
-                          width: cabinRatio * seatMapState.seatWidth,
+                          width: cabinRatio * seatMapState.airCraftBodySize.seatWidth,
                           height: seatMapController.calculateCabinHeight(index),
                           cabinRatio: cabinRatio,
                           isTabletMode: false,
                         ),
                         ExitDoor(
-                          width: seatMapState.seatWidth,
+                          width: seatMapState.airCraftBodySize.seatWidth,
                           height: 20,
                           isEnable: downDoorEnable,
                           isTabletMode: false,
@@ -186,4 +188,15 @@ class CabinWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    // etc.
+  };
 }

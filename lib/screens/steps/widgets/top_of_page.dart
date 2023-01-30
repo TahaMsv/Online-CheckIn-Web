@@ -30,7 +30,6 @@ class TopOfPage extends StatelessWidget {
           children: [
             if (!isTabletMode) AbomisLogo(),
             LanguagePicker(
-              // mainController: stepsController,  // todo
               width: 200,
               initialValue: languageCode == 'en' ? "GB" : "IR",
             ),

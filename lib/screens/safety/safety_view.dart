@@ -22,7 +22,6 @@ class SafetyView extends StatelessWidget {
         children: [
           const AdviseSegment(isTabletMode: false),
           CommitmentSegment(
-            mySafetyController: safetyController,
             safetyState: safetyState,
             isTabletMode: false,
           ),

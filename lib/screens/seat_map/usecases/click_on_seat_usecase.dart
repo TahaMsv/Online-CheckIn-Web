@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:online_checkin_web_refactoring/core/classes/seat_data.dart';
 import 'package:online_checkin_web_refactoring/screens/Passport/passport_repository.dart';
 import '../../../core/classes/MyCountry.dart';
 import '../../../core/error/failures.dart';
@@ -19,17 +20,16 @@ class ClickOnSeatUseCase extends UseCase<bool, ClickOnSeatRequest> {
 }
 
 class ClickOnSeatRequest extends Request {
-  ClickOnSeatRequest({required this.travelerToken, required this.seatsData});
+  ClickOnSeatRequest({required this.seatsData});
 
-  final String travelerToken;
-  final List<Map<String, dynamic>> seatsData;
+  final List<SeatData> seatsData;
 
   @override
   Map<String, dynamic> toJson() => {
         "Body": {
           "Execution": "OnlineCheckin.ClickOnSeat",
-          "Token": travelerToken,
-          "Request": {"SeatsData": seatsData},
+          "Token": token,
+          "Request": {"SeatsData": seatsData.map((e) => e.toJson()).toList()},
         },
       };
 }

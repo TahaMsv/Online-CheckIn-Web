@@ -7,6 +7,7 @@ import '../../../core/error/exception.dart';
 import '../interfaces/visa_data_source_interface.dart';
 
 class VisaRemoteDataSource implements VisaDataSourceInterface {
+
   @override
   Future<List<VisaType>> selectVisaTypes(SelectVisaTypesRequest request)async {
     NetworkRequest selectVTNR = NetworkRequest(api: Apis.baseUrl + Apis.getDocumentType, data: request.toJson(), timeOut: const Duration(seconds: 10));

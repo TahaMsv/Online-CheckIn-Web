@@ -21,11 +21,11 @@ class PlaneTail extends StatelessWidget {
         height: height,
         width: isTabletMode? height - 15 : null,
         child: isTabletMode?  Image.asset(
-          "assets/images/Edited-Tail-tablet.png",
+         AssetImages.airplaneTailTablet,
           fit: BoxFit.fill,
         ):RotationTransition(
           turns: languageCode == "en" ? const AlwaysStoppedAnimation(0 / 360) : const AlwaysStoppedAnimation(180 / 360),
-          child: Image.asset(AssetImages.AIRPLANE_TAIL, fit: BoxFit.fill),
+          child: Image.asset(AssetImages.airPlaneTail, fit: BoxFit.fill),
         ),
       ),
     );

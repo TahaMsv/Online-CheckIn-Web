@@ -307,7 +307,7 @@ class TravellerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String languageCode = "en"; //todo
+    String languageCode = "en";
     bool isTravellerSelected = stepsState.travelers[index].seatId == "--" ? false : true;
     return Container(
       decoration: BoxDecoration(

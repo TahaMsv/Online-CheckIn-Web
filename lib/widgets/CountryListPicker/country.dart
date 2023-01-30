@@ -27,7 +27,6 @@ class Country {
   }
 
   @override
-  // TODO: implement hashCode
   int get hashCode => super.hashCode;
 
 }

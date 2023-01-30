@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:online_checkin_web_refactoring/core/constants/my_list.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/ui.dart';
+import '../../../core/dependency_injection.dart';
 import '../../../widgets/MtDottedLine.dart';
+import '../../steps/steps_controller.dart';
 import '../safety_controller.dart';
 import '../safety_state.dart';
 
 class CommitmentSegment extends StatelessWidget {
   const CommitmentSegment({
     Key? key,
-    required this.mySafetyController,
     required this.safetyState,
     required this.isTabletMode,
   }) : super(key: key);
-  final SafetyController mySafetyController;
   final SafetyState safetyState;
   final bool isTabletMode;
 
@@ -24,50 +24,59 @@ class CommitmentSegment extends StatelessWidget {
       margin: const EdgeInsets.only(top: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: const [
-              Text(
-                "Your Commitment to Safety",
-                style: MyTextTheme.darkGreyBold15,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: MyDottedLine(
-                  lineLength: double.infinity,
-                  color: MyColors.white1,
-                ),
-              )
-            ],
-          ),
-          if (!isTabletMode)
-            for (int i = 0; i < MyList.policyWidgetText.length; ++i) PolicyWidget(index: i, mySafetyController: mySafetyController, normalText: MyList.policyWidgetText[i]), //todo change for
-          Container(
-            margin: const EdgeInsets.only(top: 15),
-            child: RichText(
-              overflow: TextOverflow.clip,
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: "Please read our",
-                    style: isTabletMode ? MyTextTheme.darkGreyW40023 : MyTextTheme.darkGreyW40015,
+        children: <Widget>[
+              Row(
+                children: const [
+                  Text(
+                    "Your Commitment to Safety",
+                    style: MyTextTheme.darkGreyBold15,
                   ),
-                  TextSpan(
-                    text: "travel policy",
-                    style: isTabletMode ? const TextStyle(color: MyColors.myBlue, fontSize: 23) : const TextStyle(color: MyColors.myBlue),
-                    recognizer: TapGestureRecognizer()..onTap = () {},
+                  SizedBox(
+                    width: 10,
                   ),
-                  TextSpan(
-                    text: "to delay or cancel your trip if you are unable to accept the above commitments.",
-                    style: isTabletMode ? MyTextTheme.darkGreyW40023 : MyTextTheme.darkGreyW40015,
-                  ),
+                  Expanded(
+                    child: MyDottedLine(
+                      lineLength: double.infinity,
+                      color: MyColors.white1,
+                    ),
+                  )
                 ],
               ),
-            ),
-          ),
-        ],
+            ] +
+            (!isTabletMode
+                ? MyList.policyWidgetText.asMap().entries.map(
+                    (entry) {
+                      int i = entry.key;
+                      // Traveller traveller = entry.value;
+                      return PolicyWidget(index: i, normalText: MyList.policyWidgetText[i]);
+                    },
+                  ).toList()
+                : []) +
+            [
+              Container(
+                margin: const EdgeInsets.only(top: 15),
+                child: RichText(
+                  overflow: TextOverflow.clip,
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "Please read our",
+                        style: isTabletMode ? MyTextTheme.darkGreyW40023 : MyTextTheme.darkGreyW40015,
+                      ),
+                      TextSpan(
+                        text: "travel policy",
+                        style: isTabletMode ? const TextStyle(color: MyColors.myBlue, fontSize: 23) : const TextStyle(color: MyColors.myBlue),
+                        recognizer: TapGestureRecognizer()..onTap = () {},
+                      ),
+                      TextSpan(
+                        text: "to delay or cancel your trip if you are unable to accept the above commitments.",
+                        style: isTabletMode ? MyTextTheme.darkGreyW40023 : MyTextTheme.darkGreyW40015,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
       ),
     );
   }
@@ -78,15 +87,14 @@ class PolicyWidget extends StatelessWidget {
     Key? key,
     required this.index,
     required this.normalText,
-    required this.mySafetyController,
   }) : super(key: key);
   final int index;
   final String normalText;
-  final SafetyController mySafetyController;
 
   @override
   Widget build(BuildContext context) {
     SafetyState safetyState = context.watch<SafetyState>();
+    final SafetyController safetyController = getIt<SafetyController>();
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
@@ -95,6 +103,8 @@ class PolicyWidget extends StatelessWidget {
           Checkbox(
             onChanged: (bool? value) {
               safetyState.toggleCheckBoxesValue(index);
+              final StepsController stepsController = getIt<StepsController>();
+              stepsController.updateIsNextButtonDisable();
             },
             value: safetyState.checkBoxesValue[index],
           ),

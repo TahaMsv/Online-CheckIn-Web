@@ -23,7 +23,7 @@ class PlaneWings extends StatelessWidget {
             child: Transform(
               alignment: Alignment.center,
               transform: Matrix4.rotationY(math.pi),
-              child: Image.asset(AssetImages.AIRPLANE_UP_WING, fit: BoxFit.fill),
+              child: Image.asset(AssetImages.airplaneWing, fit: BoxFit.fill),
             ),
           ),
           SizedBox(
@@ -31,7 +31,7 @@ class PlaneWings extends StatelessWidget {
             child: Transform(
               alignment: Alignment.center,
               transform: Matrix4.rotationY(math.pi),
-              child: Image.asset(AssetImages.AIRPLANE_DOWN_WING, fit: BoxFit.fill),
+              child: Image.asset(AssetImages.airplaneDownWing, fit: BoxFit.fill),
             ),
           ),
         ],

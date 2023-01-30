@@ -78,7 +78,7 @@ class Foreground extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Image.asset(
-                        AssetImages.COMPANY_LOGO_LIGHT,
+                        AssetImages.lightCompanyLogo,
                         fit: BoxFit.fill,
                         height: 60,
                         width: 180,
@@ -86,7 +86,7 @@ class Foreground extends StatelessWidget {
                       Row(
                         children: [
                           Image.asset(
-                            AssetImages.APP_STORE,
+                            AssetImages.appStore,
                             fit: BoxFit.fill,
                             height: 40,
                             width: 140,
@@ -95,7 +95,7 @@ class Foreground extends StatelessWidget {
                             width: 30,
                           ),
                           Image.asset(
-                            AssetImages.GOOGLE_PLAY_STORE,
+                            AssetImages.googlePlayStore,
                             fit: BoxFit.fill,
                             height: 40,
                             width: 140,

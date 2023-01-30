@@ -35,7 +35,5 @@ class VisaState with ChangeNotifier {
   List<VisaType> visaListType = [VisaType.example()];
   List<MyCountry> listIssuePlace = [MyCountry.example("Place of issue")];
 
-  void refreshTravellers() {
-    notifyListeners();
-  }
+
 }

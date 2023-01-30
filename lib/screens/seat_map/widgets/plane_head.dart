@@ -20,12 +20,12 @@ class PlaneHead extends StatelessWidget {
         width:isTabletMode?height: 390,
         margin:isTabletMode?null: languageCode == "en" ? const EdgeInsets.only(left: 20) : const EdgeInsets.only(right: 20),
         child:isTabletMode?Image.asset(
-          "assets/images/Airplane Head-tablet.png",
+          AssetImages.airplaneHeadTablet,
           fit: BoxFit.fill,
           // height: 350,
         ): RotationTransition(
           turns: languageCode == "en" ? const AlwaysStoppedAnimation(0 / 360) : const AlwaysStoppedAnimation(180 / 360),
-          child: Image.asset(AssetImages.AIRPLANE_HEAD, fit: BoxFit.fill),
+          child: Image.asset(AssetImages.airPlaneHead, fit: BoxFit.fill),
         ),
         // width: 400,
       ),

@@ -50,17 +50,13 @@ class WinesAndDrinksList extends StatefulWidget {
 }
 
 class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
-  final scrollDirection = Axis.horizontal;
-
-  late AutoScrollController controller;
-  var leftIndex = 0;
-  var rightIndex = 2;
   final UpgradesController upgradesController = getIt<UpgradesController>();
+  late AutoScrollController controller;
 
   @override
   void initState() {
     super.initState();
-    controller = AutoScrollController(viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom), axis: scrollDirection);
+    controller = AutoScrollController(viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom), axis: Axis.horizontal);
   }
 
   @override
@@ -79,10 +75,10 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
               children: [
                 IconButton(
                   onPressed: () async {
-                    if (leftIndex >= 1) {
-                      await controller.scrollToIndex(leftIndex - 1, preferPosition: AutoScrollPosition.begin);
-                      leftIndex--;
-                      rightIndex--;
+                    if (upgradesState.leftIndex >= 1) {
+                      await controller.scrollToIndex(upgradesState.leftIndex - 1, preferPosition: AutoScrollPosition.begin);
+                      upgradesState.setleftIndex(upgradesState.leftIndex - 1);
+                      upgradesState.setrightIndex(upgradesState.rightIndex - 1);
                     }
                   },
                   icon: RotationTransition(
@@ -94,7 +90,7 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                 Expanded(
                   child: ListView.builder(
                       shrinkWrap: true,
-                      scrollDirection: scrollDirection,
+                      scrollDirection: Axis.horizontal,
                       controller: controller,
                       itemCount: upgradesState.winesList.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -115,10 +111,10 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                 const SizedBox(width: 10),
                 IconButton(
                   onPressed: () async {
-                    if (rightIndex < upgradesState.winesList.length - 1) {
-                      await controller.scrollToIndex(rightIndex, preferPosition: AutoScrollPosition.begin);
-                      leftIndex++;
-                      rightIndex++;
+                    if (upgradesState.rightIndex < upgradesState.winesList.length - 1) {
+                      await controller.scrollToIndex(upgradesState.rightIndex, preferPosition: AutoScrollPosition.begin);
+                      upgradesState.setleftIndex(upgradesState.leftIndex + 1);
+                      upgradesState.setrightIndex(upgradesState.rightIndex + 1);
                     }
                   },
                   icon: RotationTransition(
@@ -134,3 +130,89 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
     );
   }
 }
+
+// class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
+//   final scrollDirection = Axis.horizontal;
+//
+//   late AutoScrollController controller;
+//   var leftIndex = 0;
+//   var rightIndex = 2;
+//   final UpgradesController upgradesController = getIt<UpgradesController>();
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     controller = AutoScrollController(viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom), axis: scrollDirection);
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     UpgradesState upgradesState = context.watch<UpgradesState>();
+//     String languageCode = "en";
+//     return Expanded(
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           const Text("Wines & Drinks", style: MyTextTheme.darkGreyW80013),
+//           const SizedBox(height: 15),
+//           Expanded(
+//             child: Row(
+//               crossAxisAlignment: CrossAxisAlignment.center,
+//               children: [
+//                 IconButton(
+//                   onPressed: () async {
+//                     if (leftIndex >= 1) {
+//                       await controller.scrollToIndex(leftIndex - 1, preferPosition: AutoScrollPosition.begin);
+//                       leftIndex--;
+//                       rightIndex--;
+//                     }
+//                   },
+//                   icon: RotationTransition(
+//                     turns: languageCode == "en" ? const AlwaysStoppedAnimation(0 / 360) : const AlwaysStoppedAnimation(180 / 360),
+//                     child: const Icon(MenuIcons.iconLeftArrow, size: 35),
+//                   ),
+//                 ),
+//                 const SizedBox(width: 10),
+//                 Expanded(
+//                   child: ListView.builder(
+//                       shrinkWrap: true,
+//                       scrollDirection: scrollDirection,
+//                       controller: controller,
+//                       itemCount: upgradesState.winesList.length,
+//                       itemBuilder: (BuildContext context, int index) {
+//                         return AutoScrollTag(
+//                           key: ValueKey(index),
+//                           controller: controller,
+//                           index: index,
+//                           highlightColor: Colors.black.withOpacity(0.1),
+//                           child: UpgradeItemWidget(
+//                             index: index,
+//                             value: upgradesState.winesList[index],
+//                             isPrinter: false,
+//                             isTabletMode: false,
+//                           ),
+//                         );
+//                       }),
+//                 ),
+//                 const SizedBox(width: 10),
+//                 IconButton(
+//                   onPressed: () async {
+//                     if (rightIndex < upgradesState.winesList.length - 1) {
+//                       await controller.scrollToIndex(rightIndex, preferPosition: AutoScrollPosition.begin);
+//                       leftIndex++;
+//                       rightIndex++;
+//                     }
+//                   },
+//                   icon: RotationTransition(
+//                     turns: languageCode == "en" ? const AlwaysStoppedAnimation(0 / 360) : const AlwaysStoppedAnimation(180 / 360),
+//                     child: const Icon(MenuIcons.iconRightArrow, size: 35),
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }

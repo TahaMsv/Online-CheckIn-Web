@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:online_checkin_web_refactoring/core/classes/seat_data.dart';
 import 'package:online_checkin_web_refactoring/core/constants/ui.dart';
 import 'package:online_checkin_web_refactoring/screens/seat_map/seat_map_repository.dart';
 import 'package:online_checkin_web_refactoring/screens/seat_map/seat_map_state.dart';
@@ -22,8 +23,6 @@ class SeatMapController extends MainController {
 
   late ClickOnSeatUseCase clickOnSeatUseCase = ClickOnSeatUseCase(repository: seatMapRepository);
 
-  ///////////// new /////////////////
-
   void init() {
     final StepsState stepsState = getIt<StepsState>();
     seatMapState.cabins = stepsState.flightInformation!.seatmap.cabins;
@@ -34,16 +33,17 @@ class SeatMapController extends MainController {
       seatMapState.seatsStatus[key] = seat.isUsedDescription;
       seatMapState.seatsPrice[key] = seat.price;
     }
-    int numOfBusinessCabinCells = numberOfCabinCellsInLine("Business");
-    int numOfFirstClassCabinCells = numberOfCabinCellsInLine("First Class");
-    int numOfEconomyCabinCells = numberOfCabinCellsInLine("Economy");
+    int numOfBusinessCabinCells = numberOfCabinCellsInLine(CabinClass.business);
+    int numOfFirstClassCabinCells = numberOfCabinCellsInLine(CabinClass.firstClass);
+    int numOfEconomyCabinCells = numberOfCabinCellsInLine(CabinClass.economy);
+
     if (numOfFirstClassCabinCells > 0 && numOfEconomyCabinCells > 0 && 1.5 > (numOfEconomyCabinCells / numOfFirstClassCabinCells)) {
-      seatMapState.firstClassCabinsRatio = numOfEconomyCabinCells / numOfFirstClassCabinCells;
+      seatMapState.airCraftBodySize.firstClassCabinsRatio = numOfEconomyCabinCells / numOfFirstClassCabinCells;
     }
     if (numOfBusinessCabinCells > 0 && numOfEconomyCabinCells > 0 && 1.5 > (numOfEconomyCabinCells / numOfBusinessCabinCells)) {
-      seatMapState.businessCabinsRatio = numOfEconomyCabinCells / numOfBusinessCabinCells;
+      seatMapState.airCraftBodySize.businessCabinsRatio = numOfEconomyCabinCells / numOfBusinessCabinCells;
     }
-    seatMapState.refreshSeatMap();
+    seatMapState.setState();
   }
 
   void setTravelerToSelectIndexTablet(int index) {
@@ -67,7 +67,7 @@ class SeatMapController extends MainController {
 
   String convertMapToFormattedString(Map<String, String> map) {
     List<String> keyValues = [];
-    map.forEach((k, v) => keyValues.add(k + "=>" + v));
+    map.forEach((k, v) => keyValues.add("$k=>$v"));
     String result = keyValues.join(",");
     return result;
   }
@@ -80,12 +80,12 @@ class SeatMapController extends MainController {
         String value = keyValues[i].split("=>")[1];
         map[key] = value;
       }
-      seatMapState.refreshSeatMap();
+      seatMapState.setState();
     }
   }
 
-  int numberOfCabinCellsInLine(String cabinTitle) {
-    Iterable<Cabin> targetCabins = seatMapState.cabins.where((element) => element.cabinTitle == cabinTitle);
+  int numberOfCabinCellsInLine(CabinClass cabinClass) {
+    Iterable<Cabin> targetCabins = seatMapState.cabins.where((element) => element.cabinTitle == cabinClass.name);
     if (targetCabins.isNotEmpty) {
       return targetCabins.first.lines.where((line) => line.type == "HorizontalCode").first.cells.length;
     }
@@ -100,44 +100,46 @@ class SeatMapController extends MainController {
       seatMapState.seatsStatus[key] = seat.isUsedDescription;
     }
     seatMapState.selectedSeats.forEach((k, v) => seatMapState.seatsStatus[k] = v);
-    seatMapState.refreshSeatMap();
+    seatMapState.setState();
   }
 
   Future<bool> clickOnSeat() async {
     final StepsState stepsState = getIt<StepsState>();
     List<Traveler> travellers = stepsState.travelers;
-    List<Map<String, dynamic>> seatsData = [];
-    String token = "";
+    List<SeatData> seatsData = [];
     travellers.where((t) => !seatMapState.reservedSeats.containsKey(t.seatId)).toList().forEach((traveller) {
-      token = traveller.token;
-      String letter = traveller.seatId.substring(0, 1);
-      int line = int.parse(traveller.seatId.substring(1));
-      seatsData.add({
-        "PassengerID": stepsState.flightInformation!.passengers[0].id,
-        "Letter": letter,
-        "Line": line,
-      });
+      seatsData.add(SeatData(
+        passengerId: stepsState.flightInformation!.passengers[0].id,
+        letter: traveller.seatId.substring(0, 1),
+        line: int.parse(traveller.seatId.substring(1)),
+      ));
     });
+    print("seat data: $seatsData");
 
-    ClickOnSeatRequest clickOnSeatRequest = ClickOnSeatRequest(travelerToken: token, seatsData: seatsData);
+    ClickOnSeatRequest clickOnSeatRequest = ClickOnSeatRequest(seatsData: seatsData);
     final fOrS = await clickOnSeatUseCase(request: clickOnSeatRequest);
 
     fOrS.fold((f) => FailureHandler.handle(f, retry: () => clickOnSeat()), (successful) async {
+      print("123 at click on seat");
+      print(travellers);
       for (var traveller in travellers) {
         seatMapState.clickedOnSeats[traveller.seatId] = traveller.getNickName();
       }
-      return true;
+      print("123 at click on seat");
     });
-
-    if (seatMapState.reservedSeats.length == travellers.length) return true;
+    print("129 at click on seat");
+    print(seatMapState.clickedOnSeats.length);
+    print(seatMapState.reservedSeats.length);
+    if (seatMapState.clickedOnSeats.length == seatMapState.reservedSeats.length) return true;
+    print("131 at click on seat");
     return false;
   }
 
-  double calculatePlaneBodyLength({String mode = "web"}) {
-    if (mode == "tablet") {
-      seatMapState.seatHeight = 50;
-      seatMapState.seatWidth = 50;
-      seatMapState.eachLineWidth = 50;
+  double calculatePlaneBodyLength({RunningMode mode = RunningMode.web}) {
+    if (mode == RunningMode.tablet) {
+      seatMapState.airCraftBodySize.setSeatHeight(50);
+      seatMapState.airCraftBodySize.setSeatWidth(50);
+      seatMapState.airCraftBodySize.setEachLineWidth(50);
     }
     double length = 0;
     for (var i = 0; i < seatMapState.cabins.length; ++i) {
@@ -147,29 +149,29 @@ class SeatMapController extends MainController {
     return length;
   }
 
-  double calculateCabinLength(int index, {String mode = "web"}) {
+  double calculateCabinLength(int index, {RunningMode mode = RunningMode.web}) {
     return calculateCabinNameLength(index, mode: mode) + calculateCabinLinesLength(index, mode: mode);
   }
 
-  double calculateCabinNameLength(int index, {String mode = "web"}) {
+  double calculateCabinNameLength(int index, {RunningMode mode = RunningMode.web}) {
     return 50;
   }
 
-  double calculateCabinLinesLength(int index, {String mode = "web"}) {
+  double calculateCabinLinesLength(int index, {RunningMode mode = RunningMode.web}) {
     String cabinTitle = seatMapState.cabins[index].cabinTitle;
-    double ratio = (cabinTitle == "First Class"
-        ? seatMapState.firstClassCabinsRatio
-        : cabinTitle == "Business"
-            ? seatMapState.businessCabinsRatio
+    double ratio = (cabinTitle == CabinClass.firstClass.name
+        ? seatMapState.airCraftBodySize.firstClassCabinsRatio
+        : cabinTitle == CabinClass.business.name
+            ? seatMapState.airCraftBodySize.businessCabinsRatio
             : 1.0);
-    return ratio * (seatMapState.cabins[index].linesCount * (seatMapState.eachLineWidth + seatMapState.linesMargin * 2 + 2));
+    return ratio * (seatMapState.cabins[index].linesCount * (seatMapState.airCraftBodySize.eachLineWidth + seatMapState.airCraftBodySize.linesMargin * 2 + 2));
   }
 
-  double calculatePlaneBodyHeight({String mode = "web"}) {
-    if (mode == "tablet") {
-      seatMapState.seatHeight = 50;
-      seatMapState.seatWidth = 50;
-      seatMapState.eachLineWidth = 50;
+  double calculatePlaneBodyHeight({RunningMode mode = RunningMode.web}) {
+    if (mode == RunningMode.tablet) {
+      seatMapState.airCraftBodySize.setSeatHeight(50);
+      seatMapState.airCraftBodySize.setSeatWidth(50);
+      seatMapState.airCraftBodySize.setEachLineWidth(50);
     }
     double maxHeight = 0;
     for (var i = 0; i < seatMapState.cabins.length; ++i) {
@@ -182,25 +184,25 @@ class SeatMapController extends MainController {
     return maxHeight;
   }
 
-  double calculateCabinHeight(int index, {String mode = "web"}) {
+  double calculateCabinHeight(int index, {RunningMode mode = RunningMode.web}) {
     double heightSum = 0;
     String cabinTitle = seatMapState.cabins[index].cabinTitle;
-    double ratio = (cabinTitle == "First Class"
-        ? seatMapState.firstClassCabinsRatio
-        : cabinTitle == "Business"
-            ? seatMapState.businessCabinsRatio
+    double ratio = (cabinTitle == CabinClass.firstClass.name
+        ? seatMapState.airCraftBodySize.firstClassCabinsRatio
+        : cabinTitle == CabinClass.business.name
+            ? seatMapState.airCraftBodySize.businessCabinsRatio
             : 1.0);
     for (var cell in seatMapState.cabins[index].lines[1].cells) {
       int seatType = seatViewType(cell.value, cell.type, cell.code);
       double height = ratio * getSeatHeight(seatType);
       heightSum += height;
-      heightSum += (mode == "web" ? 4 : 7);
+      heightSum += (mode == RunningMode.web ? 4 : 7);
     }
     return heightSum;
   }
 
-  double getSeatHeight(int seatType, {String mode = "web"}) {
-    double height = seatMapState.seatHeight;
+  double getSeatHeight(int seatType, {RunningMode mode = RunningMode.web}) {
+    double height = seatMapState.airCraftBodySize.seatHeight;
     switch (seatType) {
       case 8:
       case 9:
@@ -216,7 +218,7 @@ class SeatMapController extends MainController {
   }
 
   double getSeatWidth(int seatType) {
-    double width = seatMapState.seatWidth;
+    double width = seatMapState.airCraftBodySize.seatWidth;
     switch (seatType) {
       case 2:
       case 8:
@@ -224,7 +226,7 @@ class SeatMapController extends MainController {
       case 11:
         return width - 15;
       case 10:
-        return -0;
+        return 0;
       case 12:
         return width - 25;
       default:
@@ -240,11 +242,11 @@ class SeatMapController extends MainController {
     bool unSelectedTravellerExist = whoseTurn == -1 ? false : true;
     if (unSelectedTravellerExist) {
       String currStatus = seatMapState.seatsStatus[seatId]!;
-      if (currStatus == "Click" && seatMapState.clickedOnSeats.containsKey(seatId)) {
-        currStatus = "Open";
+      if (currStatus == SeatType.click.name && seatMapState.clickedOnSeats.containsKey(seatId)) {
+        currStatus = SeatType.open.name;
         seatMapState.seatPrices -= price;
       }
-      if (currStatus == "Open") {
+      if (currStatus == SeatType.open.name) {
         String newSeatId = stepsState.travelers[whoseTurn].getNickName();
         seatMapState.seatsStatus[seatId] = newSeatId;
         seatMapState.seatPrices += price;
@@ -254,94 +256,71 @@ class SeatMapController extends MainController {
         int travellerIndex = stepsController.findTravellerIndexBySeatId(seatId);
         if (travellerIndex != -1) {
           stepsState.travelers[travellerIndex].seatId = "--";
-          seatMapState.seatsStatus[seatId] = "Open";
+          seatMapState.seatsStatus[seatId] = SeatType.open.name;
           seatMapState.seatPrices -= price;
           seatMapState.selectedSeats.remove(seatId);
-          // clickedOnSeats.remove(seatId);
         }
       }
     } else {
       int travellerIndex = stepsController.findTravellerIndexBySeatId(seatId);
       if (travellerIndex != -1) {
         stepsState.travelers[travellerIndex].seatId = "--";
-        seatMapState.seatsStatus[seatId] = "Open";
+        seatMapState.seatsStatus[seatId] = SeatType.open.name;
         seatMapState.seatPrices -= price;
         seatMapState.selectedSeats.remove(seatId);
-        // clickedOnSeats.remove(seatId);
       }
     }
     stepsController.changeTurnToSelect();
-    stepsState.refreshStepState();
-    seatMapState.refreshSeatMap();
+    stepsState.setState();
+    seatMapState.setState();
     stepsController.updateIsNextButtonDisable();
   }
 
-  bool isSeatDisable(String type, String? status) {
-    return (type != "Seat" || (status == "Block" || status == "Checked-in" || status == "Click"));
-  }
-
   int seatViewType(String? cellValue, String cellType, String? code) {
-    if (cellType == "Seat") {
+    if (cellType == CellType.seat.name) {
       if (cellValue == null) {
         return 1; // empty area
       } else if (cellValue.length == 1) {
         return 2;
       } else {
-        if (seatMapState.seatsStatus[code] == "Block" || seatMapState.seatsStatus[code] == "TemporaryBlock" || seatMapState.seatsStatus[code] == "WBTemporaryBlock") {
+        if (seatMapState.seatsStatus[code] == SeatType.block.name ||
+            seatMapState.seatsStatus[code] == SeatType.temporaryBlock.name ||
+            seatMapState.seatsStatus[code] == SeatType.wBTemporaryBlock.name) {
           return 3;
-        } else if (seatMapState.seatsStatus[code] == "TemporaryBlock") {
+        } else if (seatMapState.seatsStatus[code] == SeatType.temporaryBlock.name) {
           return 14;
         } else if (seatMapState.reservedSeats.containsKey(code)) {
           return 13;
-        } else if (seatMapState.seatsStatus[code] == "Checked-in") {
+        } else if (seatMapState.seatsStatus[code] == SeatType.checkedIn.name) {
           return 4;
-        } else if (seatMapState.seatsStatus[code] == "Click") {
+        } else if (seatMapState.seatsStatus[code] == SeatType.click.name) {
           if (seatMapState.clickedOnSeats.containsKey(code)) {
             return 6;
           } else {
             return 5;
           }
-        } else if (seatMapState.seatsStatus[code] == "Open") {
+        } else if (seatMapState.seatsStatus[code] == SeatType.open.name) {
           return 6;
-        } else if (seatMapState.seatsStatus[code] == "Check in other Flight") {
+        } else if (seatMapState.seatsStatus[code] == SeatType.checkInOtherFlight.name) {
           return 15;
         } else {
           return 7;
         } // selected seat
       }
-    } else if (cellType == "OutEquipmentExit") {
+    } else if (cellType == CellType.outEquipmentExit.name) {
       if (cellValue == null) {
         return 8;
       } else if (cellValue == "ExitDoor") {
         return 9;
       }
-    } else if (cellType == "OutEquipmentWing") {
+    } else if (cellType == CellType.outEquipmentWing.name) {
       return 10;
-    } else if (cellType == "VerticalCode") {
+    } else if (cellType == CellType.verticalCode.name) {
       return 11;
-    } else if (cellType == "Aile") {
+    } else if (cellType == CellType.aile.name) {
       return 12;
     }
     return 0;
-  }
-
-  Color getColor(String seatId) {
-    if (!seatMapState.seatsStatus.containsKey(seatId)) return MyColors.lightGrey;
-
-    switch (seatMapState.seatsStatus[seatId]) {
-      case "TemporaryBlock":
-      case "Block":
-      case "WBTemporaryBlock":
-        return MyColors.black;
-      case "Open":
-        return MyColors.white;
-      case "Checked-in":
-      case "Click":
-      case "Check in other Flight":
-        return MyColors.lightGrey;
-      default:
-        return MyColors.brightYellow;
-    }
   }
 
   List<dynamic> seatView(Cell cell, double cabinRatio, bool isTabletMode) {
@@ -408,5 +387,87 @@ class SeatMapController extends MainController {
   }
 
   @override
-  void onCreate() {}
+  void onInit() {
+    init();
+    super.onInit();
+  }
+}
+
+enum RunningMode { web, tablet }
+
+extension FlavorExtension on RunningMode {
+  String get name {
+    switch (this) {
+      case RunningMode.web:
+        return "web";
+      case RunningMode.tablet:
+        return "tablet";
+      default:
+        return "web";
+    }
+  }
+}
+
+enum CabinClass { business, firstClass, economy }
+
+extension CabinClassExtension on CabinClass {
+  String get name {
+    switch (this) {
+      case CabinClass.business:
+        return "Business";
+      case CabinClass.firstClass:
+        return "First Class";
+      case CabinClass.economy:
+        return "Economy";
+      default:
+        return "Economy";
+    }
+  }
+}
+
+enum SeatType { block, temporaryBlock, checkedIn, wBTemporaryBlock, click, open, checkInOtherFlight }
+
+extension SeatTypeExtension on SeatType {
+  String get name {
+    switch (this) {
+      case SeatType.block:
+        return "Block";
+      case SeatType.temporaryBlock:
+        return "TemporaryBlock";
+      case SeatType.checkedIn:
+        return "Checked-in";
+      case SeatType.wBTemporaryBlock:
+        return "WBTemporaryBlock";
+      case SeatType.click:
+        return "Click";
+      case SeatType.open:
+        return "Open";
+      case SeatType.open:
+        return "Check in other Flight";
+      default:
+        return "Checked-in";
+    }
+  }
+}
+
+enum CellType { seat, outEquipmentExit, outEquipmentWing, verticalCode, aile, checkInOtherFlight }
+
+extension CellTypeExtension on CellType {
+  String get name {
+    switch (this) {
+      case CellType.seat:
+        return "Seat";
+      case CellType.outEquipmentExit:
+        return "OutEquipmentExit";
+      case CellType.outEquipmentWing:
+        return "OutEquipmentWing";
+      case CellType.verticalCode:
+        return "VerticalCode";
+      case CellType.aile:
+        return "Aile";
+
+      default:
+        return "Seat";
+    }
+  }
 }

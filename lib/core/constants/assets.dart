@@ -4,15 +4,21 @@ class AssetImages {
   static const assetsAddress = 'assets/images/';
   static const assetsAddressDangerousGood = '${assetsAddress}DangerousGoods';
 
-  static const ABOMIS_BACKGROUND = "${assetsAddress}abomis-bg.png";
-  static const COMPANY_LOGO_LIGHT = "${assetsAddress}company-logo-light.png";
-  static const APP_STORE = "${assetsAddress}AppStore.png";
-  static const GOOGLE_PLAY_STORE = "${assetsAddress}GooglePlayStore.png";
-  static const ABOMIS_LOGO = "${assetsAddress}company-logo-blue.png";
-  static const AIRPLANE_IMAGE = "${assetsAddress}airplane.png";
-  static const AIRPLANE_HEAD = "${assetsAddress}Airplane Head.png";
-  static const AIRPLANE_TAIL = "${assetsAddress}Edited-Tail.png";
-  static const AIRPLANE_UP_WING = "${assetsAddress}Up Wing.png";
-  static const AIRPLANE_DOWN_WING = "${assetsAddress}Down Wing.png";
-  static const MASK = "${assetsAddress}mask.png";
+  static const abomisBackGround = "${assetsAddress}abomis-bg.png";
+  static const lightCompanyLogo = "${assetsAddress}company-logo-light.png";
+  static const appStore = "${assetsAddress}AppStore.png";
+  static const googlePlayStore = "${assetsAddress}GooglePlayStore.png";
+  static const abomisLogo = "${assetsAddress}company-logo-blue.png";
+  static const airplaneImage = "${assetsAddress}airplane.png";
+  static const airPlaneHead = "${assetsAddress}Airplane Head.png";
+  static const airplaneHeadTablet = "${assetsAddress}Airplane Head-tablet.png";
+  static const airplaneTailTablet = "${assetsAddress}Edited-Tail-tablet.png";
+  static const airPlaneTail = "${assetsAddress}Edited-Tail.png";
+  static const airplaneWing = "${assetsAddress}Up Wing.png";
+  static const airplaneDownWing = "${assetsAddress}Down Wing.png";
+  static const mask = "${assetsAddress}mask.png";
+  static const amexCard = "${assetsAddress}Amex-card.png";
+  static const discoverCard = "${assetsAddress}Discover-card.png";
+  static const visaCard = "${assetsAddress}Visa-card.png";
+  static const card4 = "${assetsAddress}card4.png";
 }

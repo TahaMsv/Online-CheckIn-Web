@@ -25,7 +25,7 @@ class AirplaneImage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
             child: Image.asset(
-              AssetImages.AIRPLANE_IMAGE,
+              AssetImages.airplaneImage,
               fit: BoxFit.fill,
               // height: 350,
             ),

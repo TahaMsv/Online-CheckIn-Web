@@ -4,6 +4,7 @@ import '../../../core/error/failures.dart';
 import '../../../core/interfaces/request.dart';
 import '../../../core/interfaces/usecase.dart';
 import '../receipt_repository.dart';
+import '../receipt_repository.dart';
 
 class GetBoardingPassPdfUseCase extends UseCase<BoardingPassPDF, GetBoardingPassPdfRequest> {
   final ReceiptRepository repository;

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+
 import 'package:online_checkin_web_refactoring/screens/receipt/receipt_repository.dart';
 import 'package:online_checkin_web_refactoring/screens/receipt/receipt_state.dart';
 import 'package:online_checkin_web_refactoring/screens/receipt/usecases/get_boadingpass_pdf_usecase.dart';
@@ -8,6 +9,7 @@ import 'package:online_checkin_web_refactoring/screens/seat_map/seat_map_state.d
 import 'package:online_checkin_web_refactoring/screens/steps/steps_controller.dart';
 
 import '../../core/classes/Traveler.dart';
+import '../../core/classes/seat_data.dart';
 import '../../core/dependency_injection.dart';
 import '../../core/interfaces/controller.dart';
 import '../../core/utils/failure_handler.dart';
@@ -35,10 +37,6 @@ class ReceiptController extends MainController {
     fOrBP.fold((f) => FailureHandler.handle(f, retry: () => init()), (boardingPass) async {
       receiptState.boardingPassPDF = boardingPass;
       convertToPDF();
-      receiptState.setLoading(false);
-      receiptState.setSuccessfulResponse(false);
-
-      return;
     });
     receiptState.setLoading(false);
     receiptState.setSuccessfulResponse(false);
@@ -47,43 +45,33 @@ class ReceiptController extends MainController {
   void convertToPDF() async {
     String base64String = receiptState.boardingPassPDF.buffer;
     receiptState.bytes = base64Decode(base64String);
+    receiptState.setState();
   }
 
   Future<bool> finalReserve() async {
     final StepsState stepsState = getIt<StepsState>();
     final SeatMapState seatMapState = getIt<SeatMapState>();
     List<Traveler> travellers = stepsState.travelers;
-    List<Map<String, dynamic>> seatsData = [];
-    String token = "";
+    List<SeatData> seatsData = [];
     travellers.where((t) => !seatMapState.reservedSeats.containsKey(t.seatId)).toList().forEach((traveler) {
-      token = traveler.token;
-      String letter = traveler.seatId.substring(0, 1);
-      int line = int.parse(traveler.seatId.substring(1));
-      seatsData.add({
-        "PassengerID": traveler.flightInformation.passengers[0].id,
-        "Letter": letter,
-        "Line": line,
-      });
+      seatsData.add(SeatData(passengerId: traveler.flightInformation.passengers[0].id, letter: traveler.seatId.substring(0, 1), line: int.parse(traveler.seatId.substring(1))));
     });
 
-    ReserveSeatRequest reserveSeatRequest = ReserveSeatRequest(passengerToken: token, seatsData: seatsData);
+    ReserveSeatRequest reserveSeatRequest = ReserveSeatRequest(seatsData: seatsData);
     final fOrRS = await reserveSeatUseCase(request: reserveSeatRequest);
 
     fOrRS.fold((f) => FailureHandler.handle(f, retry: () => init()), (successful) async {
-      if(successful){
+      if (successful) {
         final SeatMapState seatMapState = getIt<SeatMapState>();
-        travellers.forEach((traveller) {
+        for (Traveler traveller in travellers) {
           seatMapState.reservedSeats[traveller.seatId] = traveller.getNickName();
           seatMapState.clickedOnSeats.remove(traveller.seatId);
-        });
-        return Future<bool>.value(true);
+        }
       }
     });
-
     if (seatMapState.reservedSeats.length == travellers.length) return true;
-    return Future<bool>.value(false);
+    return false;
   }
-
 
   @override
   void onCreate() {}

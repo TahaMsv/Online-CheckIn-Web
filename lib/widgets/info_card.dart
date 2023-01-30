@@ -16,11 +16,13 @@ class InfoCard extends StatelessWidget {
     required this.isTabletMode,
     this.fontSize = 15,
     required this.isPassportStep,
+    required this.isCompleted,
   }) : super(key: key);
   final int index;
 
   final bool isTabletMode;
   final bool isPassportStep;
+  final bool isCompleted;
   final double fontSize;
 
   @override
@@ -29,20 +31,13 @@ class InfoCard extends StatelessWidget {
     VisaState visaState = context.watch<VisaState>();
     StepsState stepsState = context.watch<StepsState>();
 
-    Color textColor;
-    Color bgColor;
-    if (passportState.travelers[index].passportInfo.isPassInfoCompleted) {
-      textColor = MyColors.white;
-      bgColor = MyColors.oceanGreen;
-    } else {
-      textColor = MyColors.darkGrey;
-      bgColor = MyColors.white;
-    }
+    Color textColor = isCompleted ? MyColors.white : MyColors.darkGrey;
+
     return Container(
       padding: isTabletMode ? const EdgeInsets.symmetric(vertical: 10, horizontal: 45) : const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
       width: isTabletMode ? null : 315,
       margin: const EdgeInsets.all(10),
-      decoration: BoxDecoration(color: bgColor, border: Border.all(color: MyColors.white)),
+      decoration: BoxDecoration(color: isCompleted ? MyColors.oceanGreen : MyColors.white, border: Border.all(color: MyColors.white)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -51,9 +46,7 @@ class InfoCard extends StatelessWidget {
             children: [
               Icon(
                 Icons.warning_amber_sharp,
-                color: isPassportStep
-                    ? (passportState.travelers[index].passportInfo.isPassInfoCompleted ? MyColors.transparent : MyColors.begonia)
-                    : (visaState.travelers[index].visaInfo.isVisaInfoCompleted ? MyColors.transparent : MyColors.begonia),
+                color: isCompleted ? MyColors.transparent : MyColors.begonia,
                 size: isTabletMode ? fontSize + 10 : 20,
               )
             ],
@@ -76,16 +69,16 @@ class InfoCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          (isPassportStep && passportState.travelers[index].passportInfo.isPassInfoCompleted) || (!isPassportStep && visaState.travelers[index].visaInfo.isVisaInfoCompleted)
+          isCompleted
               ? EditIPassInfo(
                   index: index,
                   isTabletMode: isTabletMode,
-                  isPassportStep: isPassportStep,
+                  isPassportStep: isPassportStep
                 )
               : AddPassInfo(
                   index: index,
                   isTabletMode: isTabletMode,
-                  isPassportStep: isPassportStep,
+                  isPassportStep: isPassportStep
                 ),
         ],
       ),

@@ -45,11 +45,16 @@ class VisaView extends StatelessWidget {
                         crossAxisCount: 4,
                         // crossAxisSpacing: 60,
                         childAspectRatio: 315 / 193,
-                        children: stepsState.travelers.asMap().entries.map(
+                        children: visaState.travelers.asMap().entries.map(
                           (entry) {
                             int idx = entry.key;
                             // Traveller traveller = entry.value;
-                            return InfoCard(index: idx,isTabletMode: false,isPassportStep: false,);
+                            return InfoCard(
+                              index: idx,
+                              isTabletMode: false,
+                              isPassportStep: false,
+                              isCompleted: visaState.travelers[idx].visaInfo.isVisaInfoCompleted,
+                            );
                           },
                         ).toList(),
                       ),
@@ -90,9 +95,7 @@ class SubmitButton extends StatelessWidget {
             fontSize: fontSize,
             bgColor: MyColors.white,
             fgColor: MyColors.myBlue,
-            function: () {
-              function();
-            },
+            function: () => function(),
           ),
         ),
       ],

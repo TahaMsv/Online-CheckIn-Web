@@ -45,14 +45,12 @@ class DropDownUtils {
         returnValue =
             passportState.travelers[index].passportInfo.gender == null || passportState.travelers[index].passportInfo.gender == gender ? gender : passportState.travelers[index].passportInfo.gender!;
       }
-      passportController.refreshList(index);
     } else {
       if (type == placeOfIssue) {
         visaState.travelers[index].visaInfo.placeOfIssue == null || visaState.travelers[index].visaInfo.placeOfIssue == placeOfIssue ? placeOfIssue : visaState.travelers[index].visaInfo.placeOfIssue;
       } else if (type == visaType) {
         returnValue = visaState.travelers[index].visaInfo.type == null || visaState.travelers[index].visaInfo.type == visaType ? visaType : visaState.travelers[index].visaInfo.type;
       }
-      visaController.refreshList(index);
     }
     return returnValue;
   }
@@ -69,14 +67,14 @@ class DropDownUtils {
       } else if (type == gender) {
         passportState.travelers[index].passportInfo.gender = translatedWord;
       }
-      passportController.refreshList(index);
+      passportState.setState();
     } else {
       if (type == placeOfIssue) {
         visaState.travelers[index].visaInfo.placeOfIssue = translatedWord;
       } else if (type == visaType) {
         visaState.travelers[index].visaInfo.type = translatedWord;
       }
-      visaController.refreshList(index);
+      visaState.setState();
     }
   }
 

@@ -15,9 +15,8 @@ class StepsRemoteDataSource implements StepsDataSourceInterface {
 
   @override
   Future<FlightInformation> getFlightInformation(GetFlightInformationRequest request) async {
-    NetworkRequest getFlightInfoNR = NetworkRequest(api: Apis.baseUrl + Apis.getInformation, data: request.toJson());
+    NetworkRequest getFlightInfoNR = NetworkRequest(api: Apis.baseUrl + Apis.getInformation, data: request.toJson(), timeOut: const Duration(seconds: 30));
     NetworkResponse getFlightInfoResponse = await getFlightInfoNR.post();
-
     if (getFlightInfoResponse.responseStatus) {
       try {
         FlightInformation flightInformation = flightInformationFromJson(jsonEncode(getFlightInfoResponse.responseBody["Body"]));

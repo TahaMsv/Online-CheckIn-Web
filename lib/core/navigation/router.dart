@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:online_checkin_web_refactoring/screens/Passport/passport_view.dart';
 import 'package:online_checkin_web_refactoring/screens/addTraveler/add_traveler_view.dart';
+import 'package:online_checkin_web_refactoring/screens/payment/payment_view.dart';
 import 'package:online_checkin_web_refactoring/screens/rules/rules_view.dart';
+import 'package:online_checkin_web_refactoring/screens/seat_map/seat_map_view.dart';
 import 'package:online_checkin_web_refactoring/screens/steps/steps_view.dart';
 import 'package:online_checkin_web_refactoring/screens/upgrades/upgrades_view.dart';
 
 import '../../screens/Visa/visa_view.dart';
 import '../../screens/login/login_state.dart';
 import '../../screens/login/login_view.dart';
+import '../../screens/receipt/receipt_view.dart';
 import '../../screens/safety/safety_view.dart';
 import '../constants/route_names.dart';
 import '../dependency_injection.dart';
@@ -81,9 +84,29 @@ class MyRouter {
               return UpgradesView();
             },
           ),
+          GoRoute(
+            path: RouteNames.seatMap,
+            name: RouteNames.seatMap,
+            builder: (BuildContext context, GoRouterState state) {
+              return SeatMapView();
+            },
+          ),
+          GoRoute(
+            path: RouteNames.payment,
+            name: RouteNames.payment,
+            builder: (BuildContext context, GoRouterState state) {
+              return PaymentView();
+            },
+          ),
+          GoRoute(
+            path: RouteNames.receipt,
+            name: RouteNames.receipt,
+            builder: (BuildContext context, GoRouterState state) {
+              return ReceiptView();
+            },
+          ),
         ],
       ),
-
     ];
     _router = GoRouter(
       initialLocation: RouteNames.login,

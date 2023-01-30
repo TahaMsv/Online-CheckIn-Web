@@ -7,6 +7,7 @@ import 'package:online_checkin_web_refactoring/screens/addTraveler/add_traveler_
 import 'package:online_checkin_web_refactoring/screens/receipt/receipt_state.dart';
 import 'package:online_checkin_web_refactoring/screens/rules/rules_state.dart';
 import 'package:online_checkin_web_refactoring/screens/safety/safety_state.dart';
+import 'package:online_checkin_web_refactoring/screens/seat_map/seat_map_state.dart';
 import 'package:online_checkin_web_refactoring/screens/steps/steps_state.dart';
 import 'package:online_checkin_web_refactoring/screens/upgrades/upgrades_state.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +44,7 @@ void main() async {
       ChangeNotifierProvider(create: (_) => getIt<PassportState>()),
       ChangeNotifierProvider(create: (_) => getIt<VisaState>()),
       ChangeNotifierProvider(create: (_) => getIt<UpgradesState>()),
+      ChangeNotifierProvider(create: (_) => getIt<SeatMapState>()),
       ChangeNotifierProvider(create: (_) => getIt<ReceiptState>()),
     ],
     child: const MyApp(),

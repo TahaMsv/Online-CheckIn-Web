@@ -32,7 +32,7 @@ class AdviseSegment extends StatelessWidget {
                 height: 150,
                 margin: const EdgeInsets.only(right: 20),
                 child: Image.asset(
-                  AssetImages.MASK,
+                  AssetImages.mask,
                   fit: BoxFit.fill,
                 ),
               ),

@@ -29,7 +29,7 @@ class LineWidget extends StatelessWidget {
       // color: Colors.green,
       height: height,
       width: width,
-      margin: isTabletMode ? EdgeInsets.symmetric(vertical: seatMapState.linesMargin) : EdgeInsets.symmetric(horizontal: seatMapState.linesMargin),
+      margin: isTabletMode ? EdgeInsets.symmetric(vertical: seatMapState.airCraftBodySize.linesMargin) : EdgeInsets.symmetric(horizontal: seatMapState.airCraftBodySize.linesMargin),
       child: Center(
         child: line.type == "HorizontalCode"
             ? HorizontalCodeLine(cells: line.cells, cabinRatio: cabinRatio, isTabletMode: isTabletMode)

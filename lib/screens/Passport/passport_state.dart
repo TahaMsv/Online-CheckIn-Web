@@ -11,7 +11,6 @@ import '../../widgets/CountryListPicker/country.dart';
 class PassportState with ChangeNotifier {
   setState() => notifyListeners();
 
-
   bool _requesting = false;
 
   bool get requesting => _requesting;
@@ -29,8 +28,4 @@ class PassportState with ChangeNotifier {
   List<MyCountry> countryOfIssueList = [MyCountry.example("Country of Issue")];
   List<String> listGender = ["Gender", "Male", "Female"];
   List<MyCountry> nationalitiesList = [MyCountry.example("Nationality")];
-
-  void refreshTravelers() {
-    notifyListeners();
-  }
 }

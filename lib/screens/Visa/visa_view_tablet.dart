@@ -36,7 +36,13 @@ class VisaViewTablet extends StatelessWidget {
                         children: visaState.travelers.asMap().entries.map(
                           (entry) {
                             int idx = entry.key;
-                            return InfoCard(index: idx, fontSize: 25, isTabletMode: true, isPassportStep: false);
+                            return InfoCard(
+                              index: idx,
+                              fontSize: 25,
+                              isTabletMode: true,
+                              isPassportStep: false,
+                              isCompleted: visaState.travelers[idx].visaInfo.isVisaInfoCompleted,
+                            );
                           },
                         ).toList(),
                       ),

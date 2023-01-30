@@ -13,6 +13,7 @@ class UpgradesController extends MainController {
   late GetExtrasUseCase getExtrasUseCase = GetExtrasUseCase(repository: upgradesRepository);
 
   void init() async {
+    upgradesState.setLoading(true);
     GetExtrasRequest getExtrasRequest = GetExtrasRequest();
     final fOrList = await getExtrasUseCase(request: getExtrasRequest);
 
@@ -29,29 +30,31 @@ class UpgradesController extends MainController {
         }
       }
     });
+    print("WInes list: ${upgradesState.winesList.length}");
+    upgradesState.setLoading(false);
   }
 
   void addWine(int index) {
     upgradesState.winesNumberOfSelected[index]++;
-    upgradesState.refresh();
+    upgradesState.setState();
   }
 
   void removeWine(int index) {
     if (upgradesState.winesNumberOfSelected[index] > 0) {
       upgradesState.winesNumberOfSelected[index]--;
-      upgradesState.refresh();
+      upgradesState.setState();
     }
   }
 
   void addEntertainment(int index) {
     upgradesState.entertainmentsNumberOfSelected[index]++;
-    upgradesState.refresh();
+    upgradesState.setState();
   }
 
   void removeEntertainment(int index) {
     if (upgradesState.entertainmentsNumberOfSelected[index] > 0) {
       upgradesState.entertainmentsNumberOfSelected[index]--;
-      upgradesState.refresh();
+      upgradesState.setState();
     }
   }
 

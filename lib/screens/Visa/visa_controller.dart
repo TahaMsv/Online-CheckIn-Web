@@ -35,15 +35,6 @@ class VisaController extends MainController {
     });
   }
 
-  void travellersList() {
-    final StepsState stepsState = getIt<StepsState>();
-    visaState.travelers = stepsState.travelers;
-  }
-
-  void updateIsCompleted(int index) {
-    visaState.travelers[index].visaInfo.updateIsCompleted();
-  }
-
   void updateDocuments() {
     for (var i = 0; i < visaState.travelers.length; ++i) {
       visaState.travelers[i].visaInfo.documentNo = visaState.documentNoCs[i].text == "" ? null : visaState.documentNoCs[i].text;
@@ -52,23 +43,13 @@ class VisaController extends MainController {
   }
 
   void submitBtnFunction(int index) {
-    // final PassportStepController passportStepController = Get.put(PassportStepController(model));
     updateDocuments();
-    updateIsCompleted(index);
-    visaState.refreshTravellers();
-    // passportStepController.saveDocsDocoDoca(index);
-    // Get.back();
+    visaState.setState();
   }
 
   void selectEntryDate(int index, DateTime date) {
     visaState.travelers[index].visaInfo.issueDate = date;
-    updateIsCompleted(index);
-    visaState.refreshTravellers();
-  }
-
-  void refreshList(int index) {
-    updateIsCompleted(index);
-    visaState.refreshTravellers();
+    visaState.setState();
   }
 
   // void showDOCOPopup(int index) {
@@ -256,13 +237,7 @@ class VisaController extends MainController {
   // }
 
   void showVisaDialog(int index) {
-
     nav.dialog(VisaDetailsDialog(index: index));
-  }
-
-  @override
-  void onCreate() {
-    init();
   }
 
   @override

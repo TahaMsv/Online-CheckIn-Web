@@ -21,6 +21,11 @@ import '../screens/login/data_sources/login_remote_ds.dart';
 import '../screens/login/login_controller.dart';
 import '../screens/login/login_repository.dart';
 import '../screens/login/login_state.dart';
+import '../screens/payment/data_source/payment_local_ds.dart';
+import '../screens/payment/data_source/payment_remote_ds.dart';
+import '../screens/payment/payment_controller.dart';
+import '../screens/payment/payment_repository.dart';
+import '../screens/payment/payment_state.dart';
 import '../screens/receipt/data_source/receipt_local_ds.dart';
 import '../screens/receipt/data_source/receipt_remote_ds.dart';
 import '../screens/receipt/receipt_controller.dart';
@@ -34,6 +39,11 @@ import '../screens/safety/data_source/safety_remote_ds.dart';
 import '../screens/safety/safety_controller.dart';
 import '../screens/safety/safety_repository.dart';
 import '../screens/safety/safety_state.dart';
+import '../screens/seat_map/data_source/seat_map_local_ds.dart';
+import '../screens/seat_map/data_source/seat_map_remote_ds.dart';
+import '../screens/seat_map/seat_map_controller.dart';
+import '../screens/seat_map/seat_map_repository.dart';
+import '../screens/seat_map/seat_map_state.dart';
 import '../screens/steps/data_source/steps_local_ds.dart';
 import '../screens/steps/data_source/steps_remote_ds.dart';
 import '../screens/steps/steps_controller.dart';
@@ -261,6 +271,53 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => upgradesController);
   navigationService.registerController(RouteNames.upgrades, upgradesController);
 
+  ///SeatMap-------------------------------------------------------------------------------------------------------------------
+
+  ///state
+  SeatMapState seatMapState = SeatMapState();
+  getIt.registerLazySingleton(() => seatMapState);
+
+  ///data-sources
+  SeatMapLocalDataSource seatMapLocalDataSource = SeatMapLocalDataSource(sharedPreferences: sp);
+  SeatMapRemoteDataSource seatMapRemoteDataSource = SeatMapRemoteDataSource();
+
+  ///repository
+  SeatMapRepository seatMapRepository = SeatMapRepository(
+    seatMapRemoteDataSource: seatMapRemoteDataSource,
+    seatMapLocalDataSource: seatMapLocalDataSource,
+    networkInfo: networkInfo,
+  );
+  getIt.registerLazySingleton(() => seatMapRepository);
+
+  ///controller
+  SeatMapController seatMapController = SeatMapController();
+  getIt.registerLazySingleton(() => seatMapController);
+  navigationService.registerController(RouteNames.seatMap, seatMapController);
+
+
+    ///Payment-------------------------------------------------------------------------------------------------------------------
+
+    ///state
+    PaymentState paymentState = PaymentState();
+    getIt.registerLazySingleton(() => paymentState);
+
+    ///data-sources
+    PaymentLocalDataSource paymentLocalDataSource = PaymentLocalDataSource(sharedPreferences: sp);
+    PaymentRemoteDataSource paymentRemoteDataSource = PaymentRemoteDataSource();
+
+    ///repository
+    PaymentRepository paymentRepository = PaymentRepository(
+      paymentRemoteDataSource: paymentRemoteDataSource,
+      paymentLocalDataSource: paymentLocalDataSource,
+      networkInfo: networkInfo,
+    );
+    getIt.registerLazySingleton(() => paymentRepository);
+
+    ///controller
+    PaymentController paymentController = PaymentController();
+    getIt.registerLazySingleton(() => paymentController);
+    navigationService.registerController(RouteNames.payment, paymentController);
+
   ///Receipt-------------------------------------------------------------------------------------------------------------------
 
   ///state
@@ -289,10 +346,11 @@ Future<void> init() async {
 
 initNetworkManager() {
   NetworkOption.initialize(
-    timeout: 3000,
+    timeout: 60000,
     extraSuccessRule: (NetworkResponse nr) {
-      int statusCode = int.parse((nr.responseBody["Status"]?.toString() ?? nr.responseBody["ResultCode"]?.toString() ?? "0"));
-      return nr.responseCode == 200 && statusCode > 0;
+      if (nr.responseCode != 200) return false;
+      int statusCode = int.tryParse((nr.responseBody["Status"]?.toString() ?? nr.responseBody["ResultCode"]?.toString() ?? "0")) ?? 0;
+      return statusCode > 0;
     },
     successMsgExtractor: (data) {
       return (data["Message"] ?? data["ResultText"] ?? "Done").toString();

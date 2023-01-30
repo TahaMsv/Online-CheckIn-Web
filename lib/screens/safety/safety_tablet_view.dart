@@ -20,11 +20,12 @@ class SafetyViewTablet extends StatelessWidget {
       body: ListView(
         children: [
           const AdviseSegment(isTabletMode: true),
-          CommitmentSegment(mySafetyController: safetyController, safetyState: safetyState, isTabletMode: true,
+          CommitmentSegment(
+            safetyState: safetyState,
+            isTabletMode: true,
           ),
         ],
       ),
     );
   }
 }
-

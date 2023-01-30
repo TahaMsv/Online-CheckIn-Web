@@ -6,14 +6,13 @@ import '../../core/error/failures.dart';
 import '../../core/navigation/navigation_service.dart';
 import '../constants/ui.dart';
 
-
 class FailureHandler {
   static final NavigationService navigationService = getIt<NavigationService>();
 
   FailureHandler._();
 
-  static void handle(Failure failure,{Function? retry}) {
-    navigationService.snackbar(Text("$failure"),
+  static void handle(Failure failure, {Function? retry}) {
+    navigationService.snackbar(Text("Error ${failure.code}: ${failure.msg}"),
         icon: Icons.error,
         backgroundColor: Colors.red,
         duration: const Duration(seconds: 10),
@@ -28,10 +27,11 @@ class FailureHandler {
   }
 
   static void handleNoElement(String name) {
-    navigationService.snackbar(Text("Could not Find $name"),
-        icon: Icons.error,
-        backgroundColor: Colors.orange,
-        duration: const Duration(seconds: 5),
-        );
+    navigationService.snackbar(
+      Text("Could not Find $name"),
+      icon: Icons.error,
+      backgroundColor: Colors.orange,
+      duration: const Duration(seconds: 5),
+    );
   }
 }

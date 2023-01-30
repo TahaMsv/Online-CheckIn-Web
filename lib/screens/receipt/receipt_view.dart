@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:online_checkin_web_refactoring/screens/receipt/receipt_controller.dart';
 import 'package:online_checkin_web_refactoring/screens/receipt/receipt_state.dart';
 import '../../core/dependency_injection.dart';
@@ -29,15 +28,9 @@ class ReceiptView extends StatelessWidget {
                   width: width,
                   child: Column(
                     children: [
-                      const StepsScreenTitle(
-                        title: "Finished!",
-                        description: "You can see your check-in below, print it or download it or send it to your mobile",
-                      ),
+                      const StepsScreenTitle(title: "Finished!", description: "You can see your check-in below, print it or download it or send it to your mobile"),
                       const SizedBox(height: 20),
-                      Expanded(
-                          child: SfPdfViewer.memory(
-                        receiptState.bytes,
-                      ))
+                      Expanded(child: SfPdfViewer.memory(receiptState.bytes))
                     ],
                   ),
                 ),

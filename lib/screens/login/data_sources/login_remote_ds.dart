@@ -9,6 +9,7 @@ import 'login_local_ds.dart';
 
 class LoginRemoteDataSource implements LoginDataSourceInterface {
   final LoginLocalDataSource localDataSource;
+
   LoginRemoteDataSource(this.localDataSource);
 
   @override

@@ -26,7 +26,6 @@ class _PassportDialogState extends State<PassportDialog> {
 
   @override
   void initState() {
-    // TODO: implement initState
     index = widget.index;
     super.initState();
   }
@@ -35,10 +34,8 @@ class _PassportDialogState extends State<PassportDialog> {
   Widget build(BuildContext context) {
     final PassportState passportState = getIt<PassportState>();
     final PassportController passportController = getIt<PassportController>();
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 150, horizontal: 200),
+      padding: const EdgeInsets.symmetric(vertical: 150, horizontal: 200),
       child: Dialog(
         backgroundColor: MyColors.white,
         child: Padding(
@@ -47,15 +44,11 @@ class _PassportDialogState extends State<PassportDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              StepsScreenTitle(title: "Passport / Visa Details", description: ""),
+              const StepsScreenTitle(title: "Passport / Visa Details", description: ""),
               const SizedBox(height: 20),
               Row(
                 children: [
-                  MyDropDown(
-                    index: index,
-                    hintText: DropDownUtils.passportType,
-                    passOrVisa: DropDownUtils.passport,
-                  ),
+                  MyDropDown(index: index, hintText: DropDownUtils.passportType, passOrVisa: DropDownUtils.passport),
                   const SizedBox(width: 20),
                   Expanded(
                     child: UserTextInput(controller: passportState.documentNoCs[index], hint: "Document No.", errorText: "", isEmpty: false),
@@ -65,17 +58,9 @@ class _PassportDialogState extends State<PassportDialog> {
               const SizedBox(height: 20),
               Row(
                 children: [
-                  MyDropDown(
-                    index: index,
-                    hintText: DropDownUtils.gender,
-                    passOrVisa: DropDownUtils.passport,
-                  ),
+                  MyDropDown(index: index, hintText: DropDownUtils.gender, passOrVisa: DropDownUtils.passport),
                   const SizedBox(width: 20),
-                  MyDropDown(
-                    index: index,
-                    hintText: DropDownUtils.countryOfIssueType,
-                    passOrVisa: DropDownUtils.passport,
-                  ),
+                  MyDropDown(index: index, hintText: DropDownUtils.countryOfIssueType, passOrVisa: DropDownUtils.passport),
                   const SizedBox(width: 20),
                   SelectingDateWidget(
                     hint: "Entry Date",
@@ -89,11 +74,7 @@ class _PassportDialogState extends State<PassportDialog> {
               const SizedBox(height: 20),
               Row(
                 children: [
-                  MyDropDown(
-                    index: index,
-                    hintText: DropDownUtils.nationalityType,
-                    passOrVisa: DropDownUtils.passport,
-                  ),
+                  MyDropDown(index: index, hintText: DropDownUtils.nationalityType, passOrVisa: DropDownUtils.passport),
                   const SizedBox(width: 20),
                   SelectingDateWidget(
                     hint: "Date of Birth",
@@ -115,16 +96,11 @@ class _PassportDialogState extends State<PassportDialog> {
                     buttonText: "Submit",
                     bgColor: MyColors.white,
                     fgColor: MyColors.myBlue,
-                    function: passportState.requesting
-                        ? () {}
-                        : () {
-                            // VisaStepController visaStepController = Get.put(VisaStepController(model));
-                            passportState.refreshTravelers();
-                            passportController.updateDocuments();
-                            passportController.updateIsCompleted(index);
-                            // saveDocsDocoDoca(index);
-                            // visaStepController.checkDocoNecessity(passportState.travelers[index]); //todo
-                          },
+                    function: () {
+                      if (!passportState.requesting) {
+                        passportController.updateDocuments();
+                      }
+                    },
                   ),
                 ],
               )

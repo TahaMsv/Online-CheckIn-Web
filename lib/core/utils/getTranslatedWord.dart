@@ -2,7 +2,7 @@
 import '../constants/my_json.dart';
 
 String getKeyFromLanguageWords(String value) {
-  //todo multi language
+
   // String languageKey = locale.languageCode + "_" + locale.countryCode.toString();
   String languageKey = "en_US";
   var map = MyJson.translatedWordKeys[languageKey];
