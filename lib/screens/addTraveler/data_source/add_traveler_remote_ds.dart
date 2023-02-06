@@ -1,0 +1,27 @@
+
+import 'package:online_check_in/screens/addTraveler/interfaces/add_traveler_data_source_interface.dart';
+import 'package:network_manager/network_manager.dart';
+import '../../../core/constants/apis.dart';
+import '../../../core/error/exception.dart';
+import '../usecases/add_traveler_usecase.dart';
+
+class AddTravelerRemoteDataSource implements AddTravelerDataSourceInterface {
+  @override
+  Future< String> addTraveler(AddTravelerRequest request)async {
+    NetworkRequest loginNR = NetworkRequest(api: Apis.baseUrl + Apis.login, data: request.toJson(), timeOut: const Duration(seconds: 30));
+    NetworkResponse addTResponse = await loginNR.post();
+    if (addTResponse.responseStatus) {
+      try {
+        return addTResponse.responseBody["Body"]["Token"];
+      } catch (e, trace) {
+        throw ParseException(message: e.toString(), trace: trace);
+      }
+    } else {
+      throw ServerException(
+        code: addTResponse.responseCode,
+        message: addTResponse.extractedMessage!,
+        trace: StackTrace.fromString("AddTravelerRemoteDataSource.addTraveller"),
+      );
+    }
+  }
+}
