@@ -10,7 +10,7 @@ import '../../../widgets/StepsScreenTitle.dart';
 import '../../../widgets/UserTextInput.dart';
 import '../passport_controller.dart';
 import '../passport_state.dart';
-import '../passport_view.dart';
+import '../passport_view_web.dart';
 
 class PassportDialog extends StatefulWidget {
   const PassportDialog({Key? key, required this.index}) : super(key: key);

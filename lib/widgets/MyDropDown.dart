@@ -4,6 +4,7 @@ import 'package:online_check_in/screens/Visa/visa_state.dart';
 import 'package:provider/provider.dart';
 import '../core/constants/ui.dart';
 import '../core/dependency_injection.dart';
+import '../core/platform/device_info.dart';
 import '../core/utils/drop_down_utils.dart';
 import '../screens/Passport/passport_controller.dart';
 import '../screens/Passport/passport_state.dart';
@@ -24,7 +25,7 @@ class MyDropDown extends StatelessWidget {
     VisaState visaState = context.watch<VisaState>();
     PassportController passportController = getIt<PassportController>();
     VisaController visaController = getIt<VisaController>();
-
+    DeviceType deviceType = DeviceInfo.deviceType(context);
     return Container(
       height: height,
       width: width,
@@ -41,7 +42,7 @@ class MyDropDown extends StatelessWidget {
             dropdownColor: Colors.white,
             hint: Text(
               hintText,
-              style: const TextStyle(fontSize: 25),
+              style:  TextStyle(fontSize:deviceType.isPhone?17: 23),
             ),
             onChanged: (newValue) => passOrVisa == DropDownUtils.passport
                 ? passportController.getOnChangedValueByType(type: hintText, newValue: newValue, index: index)
@@ -69,7 +70,7 @@ class MyDropDown extends StatelessWidget {
                     passOrVisa == DropDownUtils.passport
                         ? passportController.getDropdownMenuItemText(type: hintText, selectedType: selectedType, index: index,)!
                         : visaController.getDropdownMenuItemText(type: hintText, selectedType: selectedType, index: index,)!,
-                    style: const TextStyle(fontSize: 17),
+                    style:  TextStyle(fontSize:deviceType.isPhone?17: 23),
                     overflow: TextOverflow.ellipsis,
                   ),
                 );

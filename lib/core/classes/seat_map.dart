@@ -1,5 +1,3 @@
-
-
 class SeatMap {
   SeatMap({
     required this.cabins,
@@ -8,12 +6,12 @@ class SeatMap {
   List<Cabin> cabins;
 
   factory SeatMap.fromJson(Map<String, dynamic> json) => SeatMap(
-    cabins: List<Cabin>.from(json["Cabins"].map((x) => Cabin.fromJson(x))),
-  );
+        cabins: List<Cabin>.from(json["Cabins"].map((x) => Cabin.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Cabins": List<dynamic>.from(cabins.map((x) => x.toJson())),
-  };
+        "Cabins": List<dynamic>.from(cabins.map((x) => x.toJson())),
+      };
 }
 
 class Cabin {
@@ -35,24 +33,23 @@ class Cabin {
   // int sumZones;
 
   factory Cabin.fromJson(Map<String, dynamic> json) => Cabin(
-    cabinClass: json["CabinClass"],
-    linesCount: json["LinesCount"],
-    cabinTitle: json["CabinTitle"],
-    lines: List<Line>.from(json["Lines"].map((x) => Line.fromJson(x))),
-    // zones: List<dynamic>.from(json["Zones"].map((x) => x)),
-    // sumZones: json["SumZones"],
-  );
+        cabinClass: json["CabinClass"],
+        linesCount: json["LinesCount"],
+        cabinTitle: json["CabinTitle"],
+        lines: List<Line>.from(json["Lines"].map((x) => Line.fromJson(x))),
+        // zones: List<dynamic>.from(json["Zones"].map((x) => x)),
+        // sumZones: json["SumZones"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "CabinClass": cabinClass,
-    "LinesCount": linesCount,
-    "CabinTitle": cabinTitle,
-    "Lines": List<dynamic>.from(lines.map((x) => x.toJson())),
-    // "Zones": List<dynamic>.from(zones.map((x) => x)),
-    // "SumZones": sumZones,
-  };
+        "CabinClass": cabinClass,
+        "LinesCount": linesCount,
+        "CabinTitle": cabinTitle,
+        "Lines": List<dynamic>.from(lines.map((x) => x.toJson())),
+        // "Zones": List<dynamic>.from(zones.map((x) => x)),
+        // "SumZones": sumZones,
+      };
 }
-
 
 class Line {
   Line({
@@ -77,28 +74,27 @@ class Line {
   List<Cell> cells;
 
   factory Line.fromJson(Map<String, dynamic> json) => Line(
-    type: json["Type"],
-    // arm: json["Arm"],
-    // index: json["Index"],
-    // isIndex: json["IsIndex"],
-    // zone: json["Zone"],
-    // seatsCount: json["SeatsCount"],
-    // line: json["Line"],
-    cells: List<Cell>.from(json["Cells"].map((x) => Cell.fromJson(x))),
-  );
+        type: json["Type"],
+        // arm: json["Arm"],
+        // index: json["Index"],
+        // isIndex: json["IsIndex"],
+        // zone: json["Zone"],
+        // seatsCount: json["SeatsCount"],
+        // line: json["Line"],
+        cells: List<Cell>.from(json["Cells"].map((x) => Cell.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Type": type,
-    // "Arm": arm,
-    // "Index": index,
-    // "IsIndex": isIndex,
-    // "Zone": zone,
-    // "SeatsCount": seatsCount,
-    // "Line": line,
-    "Cells": List<dynamic>.from(cells.map((x) => x.toJson())),
-  };
+        "Type": type,
+        // "Arm": arm,
+        // "Index": index,
+        // "IsIndex": isIndex,
+        // "Zone": zone,
+        // "SeatsCount": seatsCount,
+        // "Line": line,
+        "Cells": List<dynamic>.from(cells.map((x) => x.toJson())),
+      };
 }
-
 
 class Cell {
   Cell({
@@ -131,39 +127,37 @@ class Cell {
   // dynamic classType;
 
   factory Cell.fromJson(Map<String, dynamic> json) => Cell(
-    type: json["Type"],
-    value: json["Value"] == null ? null : json["Value"],
-    letter: json["Letter"] == null ? null : json["Letter"],
-    line: json["Line"] == null ? null : json["Line"],
-    code: json["Code"] == null ? null : json["Code"],
-    // attribiutes: json["Attribiutes"],
-    // cellStatusType: json["CellStatusType"],
-    // cellStatusTypeText: json["CellStatusTypeText"],
-    // flightPassengerId: json["FlightPassengerId"],
-    // genderType: json["GenderType"],
-    // hasInfant: json["HasInfant"],
-    // classType: json["ClassType"],
-  );
+        type: json["Type"],
+        value: json["Value"] == null ? null : json["Value"],
+        letter: json["Letter"] == null ? null : json["Letter"],
+        line: json["Line"] == null ? null : json["Line"],
+        code: json["Code"] == null ? null : json["Code"],
+        // attribiutes: json["Attribiutes"],
+        // cellStatusType: json["CellStatusType"],
+        // cellStatusTypeText: json["CellStatusTypeText"],
+        // flightPassengerId: json["FlightPassengerId"],
+        // genderType: json["GenderType"],
+        // hasInfant: json["HasInfant"],
+        // classType: json["ClassType"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "Type": type,
-    "Value": value == null ? null : value,
-    "Letter": letter == null ? null : letter,
-    "Line": line == null ? null : line,
-    "Code": code,
-    // "Attribiutes": attribiutes,
-    // "CellStatusType":  cellStatusType,
-    // "CellStatusTypeText":  cellStatusTypeText,
-    // "FlightPassengerId": flightPassengerId,
-    // "GenderType": genderType,
-    // "HasInfant": hasInfant,
-    // "ClassType": classType,
-  };
+        "Type": type,
+        "Value": value == null ? null : value,
+        "Letter": letter == null ? null : letter,
+        "Line": line == null ? null : line,
+        "Code": code,
+        // "Attribiutes": attribiutes,
+        // "CellStatusType":  cellStatusType,
+        // "CellStatusTypeText":  cellStatusTypeText,
+        // "FlightPassengerId": flightPassengerId,
+        // "GenderType": genderType,
+        // "HasInfant": hasInfant,
+        // "ClassType": classType,
+      };
 }
 
-
-
-enum RunningMode { web, tablet }
+enum RunningMode { web, tablet, phone }
 
 extension FlavorExtension on RunningMode {
   String get name {
@@ -172,6 +166,8 @@ extension FlavorExtension on RunningMode {
         return "web";
       case RunningMode.tablet:
         return "tablet";
+      case RunningMode.phone:
+        return "phone";
       default:
         return "web";
     }
@@ -241,4 +237,3 @@ extension CellTypeExtension on CellType {
     }
   }
 }
-

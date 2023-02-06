@@ -1,30 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:online_check_in/core/platform/device_info.dart';
-import 'package:online_check_in/screens/Passport/passport_view.dart';
+import 'package:online_check_in/screens/Passport/passport_view_web.dart';
 import 'package:online_check_in/screens/Passport/passport_view_tablet.dart';
 import 'package:online_check_in/screens/Visa/visa_view_tablet.dart';
 import 'package:online_check_in/screens/addTraveler/add_traveler_tablet_view.dart';
-import 'package:online_check_in/screens/addTraveler/add_traveler_view.dart';
+import 'package:online_check_in/screens/addTraveler/add_traveler_view_web.dart';
 import 'package:online_check_in/screens/payment/payment_tablet_view.dart';
-import 'package:online_check_in/screens/payment/payment_view.dart';
+import 'package:online_check_in/screens/payment/payment_view_web.dart';
 import 'package:online_check_in/screens/receipt/receipt_tablet_view.dart';
 import 'package:online_check_in/screens/rules/rules_tablet_view.dart';
-import 'package:online_check_in/screens/rules/rules_view.dart';
+import 'package:online_check_in/screens/rules/rules_view_web.dart';
 import 'package:online_check_in/screens/safety/safety_tablet_view.dart';
 import 'package:online_check_in/screens/seat_map/seat_map_tablet_view.dart';
-import 'package:online_check_in/screens/seat_map/seat_map_view.dart';
-import 'package:online_check_in/screens/steps/steps_view.dart';
+import 'package:online_check_in/screens/seat_map/seat_map_view_web.dart';
+import 'package:online_check_in/screens/steps/steps_view_web.dart';
 import 'package:online_check_in/screens/steps/steps_view_tablet.dart';
-import 'package:online_check_in/screens/upgrades/upgrades_view.dart';
+import 'package:online_check_in/screens/upgrades/upgrades_view_web.dart';
 import 'package:online_check_in/screens/upgrades/upgrades_view_tablet.dart';
 
-import '../../screens/Visa/visa_view.dart';
+import '../../screens/Passport/passport_view_mobile.dart';
+import '../../screens/Visa/visa_view_mobile.dart';
+import '../../screens/Visa/visa_view_web.dart';
+import '../../screens/addTraveler/add_traveler_view_mobile.dart';
 import '../../screens/login/login_state.dart';
-import '../../screens/login/login_view.dart';
+import '../../screens/login/login_view_mobile.dart';
+import '../../screens/login/login_view_web.dart';
 import '../../screens/login/login_view_tablet.dart';
-import '../../screens/receipt/receipt_view.dart';
-import '../../screens/safety/safety_view.dart';
+import '../../screens/payment/payment_view_mobile.dart';
+import '../../screens/receipt/receipt_view_mobile.dart';
+import '../../screens/receipt/receipt_view_web.dart';
+import '../../screens/rules/rules_view_mobile.dart';
+import '../../screens/safety/safety_view_web.dart';
+import '../../screens/safety/sefety_view_mobile.dart';
+import '../../screens/seat_map/seat_map_view_mobile.dart';
+import '../../screens/seat_map/widgets/plane.dart';
+import '../../screens/steps/steps_view_mobile.dart';
+import '../../screens/upgrades/upgrades_view_mobile.dart';
 import '../constants/route_names.dart';
 import '../dependency_injection.dart';
 
@@ -51,27 +63,15 @@ class MyRouter {
               case DeviceType.tablet:
                 return LoginViewTablet();
               case DeviceType.desktop:
+                return LoginViewWeb();
+              case DeviceType.web:
+                return LoginViewWeb();
+              case DeviceType.phone:
                 return LoginView();
               default:
                 return LoginView();
             }
-          }
-
-          // builder: (BuildContext context, GoRouterState state) => LoginViewTablet(),
-          ),
-      // MyRoute(
-      //     showInMainRoute: false,
-      //     name: RouteNames.seatMapPlane,
-      //     path: RouteNames.seatMapPlane,
-      //     title: RouteNames.seatMapPlane,
-      //     builder: (BuildContext context, GoRouterState state) => Plane(),
-      //
-      //   // builder: (BuildContext context, GoRouterState state) => LoginViewTablet(),
-      // ),
-      // ShellRoute(
-      //   navigatorKey: _shellNavigatorKey,
-      //   builder: (BuildContext context, GoRouterState state, Widget child) => Plane(),
-      // ),
+          }),
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
         builder: (BuildContext context, GoRouterState state, Widget child) {
@@ -79,6 +79,10 @@ class MyRouter {
             case DeviceType.tablet:
               return StepsViewTablet(childWidget: Center(child: child));
             case DeviceType.desktop:
+              return StepsViewWeb(childWidget: Center(child: child));
+            case DeviceType.web:
+              return StepsViewWeb(childWidget: Center(child: child));
+            case DeviceType.phone:
               return StepsView(childWidget: Center(child: child));
             default:
               return StepsView(childWidget: Center(child: child));
@@ -93,6 +97,10 @@ class MyRouter {
                 case DeviceType.tablet:
                   return AddTravelerViewTablet();
                 case DeviceType.desktop:
+                  return AddTravelerViewWeb();
+                case DeviceType.web:
+                  return AddTravelerViewWeb();
+                case DeviceType.phone:
                   return AddTravelerView();
                 default:
                   return AddTravelerView();
@@ -106,7 +114,11 @@ class MyRouter {
               switch (DeviceInfo.deviceType(context)) {
                 case DeviceType.tablet:
                   return SafetyViewTablet();
+                case DeviceType.web:
+                  return SafetyViewWeb();
                 case DeviceType.desktop:
+                  return SafetyViewWeb();
+                case DeviceType.phone:
                   return SafetyView();
                 default:
                   return SafetyView();
@@ -120,7 +132,11 @@ class MyRouter {
               switch (DeviceInfo.deviceType(context)) {
                 case DeviceType.tablet:
                   return RulesViewTablet();
+                case DeviceType.web:
+                  return RulesViewWeb();
                 case DeviceType.desktop:
+                  return RulesViewWeb();
+                case DeviceType.phone:
                   return RulesView();
                 default:
                   return RulesView();
@@ -134,7 +150,11 @@ class MyRouter {
               switch (DeviceInfo.deviceType(context)) {
                 case DeviceType.tablet:
                   return PassportViewTablet();
+                case DeviceType.web:
+                  return PassportViewWeb();
                 case DeviceType.desktop:
+                  return PassportViewWeb();
+                case DeviceType.phone:
                   return PassportView();
                 default:
                   return PassportView();
@@ -148,7 +168,11 @@ class MyRouter {
               switch (DeviceInfo.deviceType(context)) {
                 case DeviceType.tablet:
                   return VisaViewTablet();
+                case DeviceType.web:
+                  return VisaViewWeb();
                 case DeviceType.desktop:
+                  return VisaViewWeb();
+                case DeviceType.phone:
                   return VisaView();
                 default:
                   return VisaView();
@@ -162,7 +186,11 @@ class MyRouter {
               switch (DeviceInfo.deviceType(context)) {
                 case DeviceType.tablet:
                   return UpgradesViewTablet();
+                case DeviceType.web:
+                  return UpgradesViewWeb();
                 case DeviceType.desktop:
+                  return UpgradesViewWeb();
+                case DeviceType.phone:
                   return UpgradesView();
                 default:
                   return UpgradesView();
@@ -176,7 +204,11 @@ class MyRouter {
               switch (DeviceInfo.deviceType(context)) {
                 case DeviceType.tablet:
                   return SeatMapViewTablet();
+                case DeviceType.web:
+                  return SeatMapViewWeb();
                 case DeviceType.desktop:
+                  return SeatMapViewWeb();
+                case DeviceType.phone:
                   return SeatMapView();
                 default:
                   return SeatMapView();
@@ -186,7 +218,7 @@ class MyRouter {
           GoRoute(
             path: RouteNames.seatMapPlane,
             name: RouteNames.seatMapPlane,
-            builder: (BuildContext context, GoRouterState state) => Plane(),
+            builder: (BuildContext context, GoRouterState state) => const Plane(),
           ),
           GoRoute(
             path: RouteNames.payment,
@@ -195,7 +227,11 @@ class MyRouter {
               switch (DeviceInfo.deviceType(context)) {
                 case DeviceType.tablet:
                   return PaymentViewTablet();
-                case DeviceType.desktop:
+                case DeviceType.web:
+                  return PaymentViewWeb();
+                  case DeviceType.desktop:
+                  return PaymentViewWeb();
+                  case DeviceType.phone:
                   return PaymentView();
                 default:
                   return PaymentView();
@@ -209,7 +245,11 @@ class MyRouter {
               switch (DeviceInfo.deviceType(context)) {
                 case DeviceType.tablet:
                   return ReceiptViewTablet();
-                case DeviceType.desktop:
+                case DeviceType.web:
+                  return ReceiptViewWeb();
+                  case DeviceType.desktop:
+                  return ReceiptViewWeb();
+                  case DeviceType.phone:
                   return ReceiptView();
                 default:
                   return ReceiptView();

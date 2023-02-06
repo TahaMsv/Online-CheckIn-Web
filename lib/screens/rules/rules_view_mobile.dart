@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:online_check_in/core/constants/my_list.dart';
 import 'package:online_check_in/screens/rules/rules_controller.dart';
 import 'package:online_check_in/screens/rules/rules_state.dart';
 import '../../core/constants/assets.dart';
@@ -19,23 +18,16 @@ class RulesView extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     RulesState rulesState = context.watch<RulesState>();
     return Scaffold(
-      backgroundColor: MyColors.white,
+      backgroundColor: theme.primaryColor,
       body: SizedBox(
         height: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            StepsScreenTitle(
-              title: "Dangerous Goods" ,
-              description: "Every items can become dangerous when transported by air. Example of dangerous goods are:" ,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
+            const StepsScreenTitle(title: "Dangerous Goods", fontSize: 25, description: ""),
+            const SizedBox(height: 10),
             Expanded(
-              child: GridView.count(
-                crossAxisCount: 6,
-                childAspectRatio: 150 / 180,
+              child: ListView(
                 children: rulesState.rules.map(
                   (value) {
                     int index = rulesState.rules.indexOf(value);
@@ -46,13 +38,15 @@ class RulesView extends StatelessWidget {
                   },
                 ).toList(),
               ),
-            ),
+            )
           ],
         ),
       ),
     );
   }
 }
+
+
 
 class DangerousItem extends StatelessWidget {
   const DangerousItem({
@@ -64,40 +58,50 @@ class DangerousItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Container(
-      // height: 300,
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-      width: 150,
-      margin: const EdgeInsets.all(8),
+      // width: width * 0.5,
+      margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        border: Border.all(color: MyColors.white1),
+        border: Border.all(color: const Color(0xffeaeaea)),
       ),
-      child: Column(
+      child: Row(
         children: [
           SizedBox(
-            height: 80,
-            width: 80,
+            height: 50,
+            width: 50,
             child: Image.asset(
               value["imageUrl"]!,
               fit: BoxFit.fill,
             ),
           ),
           const SizedBox(
-            height: 10,
+              width: 10
           ),
-          Text(
-            value["title"]! ,
-            style: MyTextTheme.darkGreyBold15,
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            value["content"]! ,
-            overflow: TextOverflow.clip,
-            style: MyTextTheme.darkGreyW40015,
-            textAlign: TextAlign.center,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                value["title"]! ,
+                style: MyTextTheme.darkGreyBold17,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                  height: 5
+              ),
+              SizedBox(
+                // height: 40,
+                width: Get.width * 0.7,
+                child: Text(
+                  value["content"]! ,
+                  // overflow: TextOverflow.,
+                  style: MyTextTheme.darkGreyW40015,
+                  // textAlign: TextAlign.center,
+                ),
+              ),
+            ],
           ),
         ],
       ),

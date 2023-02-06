@@ -5,21 +5,22 @@ import 'package:online_check_in/screens/payment/payment_state.dart';
 import 'package:online_check_in/screens/payment/widgets/billing_address.dart';
 import 'package:online_check_in/screens/payment/widgets/card_info.dart';
 import 'package:online_check_in/screens/payment/widgets/taxes_and_fees.dart';
+import '../../core/constants/ui.dart';
 import '../../core/dependency_injection.dart';
 import 'package:provider/provider.dart';
 
-import '../../widgets/MtDottedLine.dart';
 import '../../widgets/StepsScreenTitle.dart';
-import '../../widgets/UserTextInput.dart';
 
-class PaymentViewTablet extends StatelessWidget {
-  PaymentViewTablet({Key? key}) : super(key: key);
+class PaymentView extends StatelessWidget {
+  PaymentView({Key? key}) : super(key: key);
   final PaymentController paymentController = getIt<PaymentController>();
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     PaymentState paymentState = context.watch<PaymentState>();
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
         backgroundColor: Colors.white,
         body: Column(
@@ -28,29 +29,19 @@ class PaymentViewTablet extends StatelessWidget {
             Expanded(
               child: ListView(
                 children: [
-                  StepsScreenTitle(
-                    title: "Payment".tr,
-                    fontSize: 45,
-                    description: "",
+                  StepsScreenTitle(title: "Payment".tr, fontSize: 25, description: ""),
+                  const SizedBox(height: 15),
+                  const Text(
+                    "Pay with credit card, Visa or debit or Mastercard debit",
+                    style: TextStyle(fontSize: 15),
                   ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Text(
-                    "Pay with credit card, Visa or debit or Mastercard debit".tr,
-                    style: const TextStyle(fontSize: 30),
-                  ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 15),
                   const TaxesAndFees(),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 15),
                   const CardInfo(),
-                  const SizedBox(height: 20),
-                  Container(
-                    width: Get.width,
-                    height: 5,
-                    color: const Color(0xffefefef),
-                  ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
+                  Container(width: width, height: 5, color: MyColors.white1),
+                  const SizedBox(height: 10),
                   const BillingAddress(),
                 ],
               ),

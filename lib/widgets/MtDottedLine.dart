@@ -17,10 +17,10 @@ class MyDottedLine extends StatelessWidget {
       direction: Axis.horizontal,
       lineLength: lineLength,
       lineThickness: 1.0,
-      dashLength: 1.0,
+      dashLength: 5,
       dashColor: color,
       dashRadius: 0.0,
-      dashGapLength: 4.0,
+      dashGapLength: 2.0,
       dashGapColor: Colors.transparent,
       dashGapRadius: 0.0,
     );

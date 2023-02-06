@@ -11,8 +11,8 @@ import '../../widgets/MtDottedLine.dart';
 import '../../widgets/StepsScreenTitle.dart';
 import '../../widgets/UserTextInput.dart';
 
-class PaymentView extends StatelessWidget {
-  PaymentView({Key? key}) : super(key: key);
+class PaymentViewWeb extends StatelessWidget {
+  PaymentViewWeb({Key? key}) : super(key: key);
   final PaymentController paymentController = getIt<PaymentController>();
 
   @override

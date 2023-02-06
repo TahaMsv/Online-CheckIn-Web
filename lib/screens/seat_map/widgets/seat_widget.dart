@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../core/classes/seat_map.dart';
 import '../../../core/constants/ui.dart';
 import '../../../core/dependency_injection.dart';
+import '../../../core/platform/device_info.dart';
 import '../seat_map_controller.dart';
 import '../seat_map_state.dart';
 
@@ -12,12 +13,10 @@ class SeatWidget extends StatefulWidget {
     required this.cell,
     required this.inExitDoorLIne,
     required this.cabinRatio,
-    required this.isTabletMode,
   }) : super(key: key);
   final Cell cell;
   final bool inExitDoorLIne;
   final double cabinRatio;
-  final bool isTabletMode;
 
   @override
   State<SeatWidget> createState() => _SeatWidgetState();
@@ -28,7 +27,8 @@ class _SeatWidgetState extends State<SeatWidget> {
   Widget build(BuildContext context) {
     final SeatMapController seatMapController = getIt<SeatMapController>();
     SeatMapState seatMapState = context.watch<SeatMapState>();
-    List<dynamic> seatView = seatMapController.seatView(widget.cell, widget.cabinRatio, widget.isTabletMode);
+    DeviceType deviceType = DeviceInfo.deviceType(context);
+    List<dynamic> seatView = seatMapController.seatView(widget.cell, widget.cabinRatio, deviceType.isTablet || deviceType.isPhone);
     double width = seatView[0];
     double height = seatView[1];
     bool isSeatClickable = seatView[2];
@@ -40,14 +40,14 @@ class _SeatWidgetState extends State<SeatWidget> {
       onTap: isSeatClickable
           ? () {
               setState(() {
-                widget.isTabletMode ? seatMapController.changeSeatStatusTablet(widget.cell.code!) : seatMapController.changeSeatStatus(widget.cell.code!);
+                deviceType.isTablet || deviceType.isPhone ? seatMapController.changeSeatStatusTablet(widget.cell.code!) : seatMapController.changeSeatStatus(widget.cell.code!);
               });
             }
           : null,
       child: Container(
           width: width,
           height: height,
-          margin: widget.isTabletMode ? const EdgeInsets.symmetric(horizontal: 2) : const EdgeInsets.symmetric(vertical: 2),
+          margin: deviceType.isTablet || deviceType.isPhone ? const EdgeInsets.symmetric(horizontal: 2) : const EdgeInsets.symmetric(vertical: 2),
           decoration:
               BoxDecoration(color: color, border: widget.inExitDoorLIne && hasShadow ? Border.all(color: MyColors.red, width: 2) : null, borderRadius: const BorderRadius.all(Radius.circular(10))),
           child: (() {
@@ -58,11 +58,11 @@ class _SeatWidgetState extends State<SeatWidget> {
                 return const BlockedSeat();
               case 4:
                 return CheckedInSeat(
-                  width: widget.cabinRatio * (widget.isTabletMode ? seatMapState.airCraftBodySize.seatHeight : seatMapState.airCraftBodySize.seatWidth),
-                  height: widget.cabinRatio * (!widget.isTabletMode ? seatMapState.airCraftBodySize.seatHeight : seatMapState.airCraftBodySize.seatWidth),
+                  width: widget.cabinRatio * (deviceType.isTablet || deviceType.isPhone ? seatMapState.airCraftBodySize.seatHeight : seatMapState.airCraftBodySize.seatWidth),
+                  height: widget.cabinRatio * (!(deviceType.isTablet || deviceType.isPhone) ? seatMapState.airCraftBodySize.seatHeight : seatMapState.airCraftBodySize.seatWidth),
                 );
               default:
-                return Center(child: Text(seatText, style: TextStyle(color: textColor)));
+                return Center(child: Text(seatText, style: TextStyle(color: textColor, fontSize: deviceType.isTablet || deviceType.isPhone ? 11 : null)));
             }
           }())),
     );
@@ -76,9 +76,10 @@ class BlockedSeat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DeviceType deviceType = DeviceInfo.deviceType(context);
     return Container(
       decoration: const BoxDecoration(color: MyColors.black, borderRadius: BorderRadius.all(Radius.circular(10))),
-      child: const Icon(Icons.close, color: MyColors.white, size: 15),
+      child:  Icon(Icons.close, color: MyColors.white, size:deviceType.isTablet || deviceType.isPhone?7: 15),
     );
   }
 }
@@ -112,21 +113,26 @@ class ExitDoor extends StatelessWidget {
     required this.width,
     required this.height,
     required this.isEnable,
-    required this.isTabletMode,
   }) : super(key: key);
   final double width;
   final double height;
   final bool isEnable;
-  final bool isTabletMode;
 
   @override
   Widget build(BuildContext context) {
+    DeviceType deviceType = DeviceInfo.deviceType(context);
     return isEnable
         ? Container(
             width: width,
             height: height,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: MyColors.red),
-            child: Center(child: Text("Exit", style: isTabletMode ? MyTextTheme.white20 : MyTextTheme.white12)),
+            child: Center(
+                child: Text("Exit",
+                    style: deviceType.isTablet
+                        ? MyTextTheme.white16
+                        : deviceType.isTablet
+                            ? MyTextTheme.white20
+                            : MyTextTheme.white12)),
           )
         : Container();
   }

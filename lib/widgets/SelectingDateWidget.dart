@@ -47,7 +47,7 @@ class _SelectingDateWidgetState extends State<SelectingDateWidget> {
       context,
       initialDate: currentDate,
       firstDate: DateTime(1960),
-      lastDate: DateTime(2023),
+      lastDate: DateTime(2025),
       dateFormat: "dd-M-yyyy",
       locale: DateTimePickerLocale.en_us,
       looping: true,

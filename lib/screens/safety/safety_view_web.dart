@@ -9,8 +9,8 @@ import 'package:provider/provider.dart';
 
 import '../../widgets/StepsScreenTitle.dart';
 
-class SafetyView extends StatelessWidget {
-  SafetyView({Key? key}) : super(key: key);
+class SafetyViewWeb extends StatelessWidget {
+  SafetyViewWeb({Key? key}) : super(key: key);
   final SafetyController safetyController = getIt<SafetyController>();
 
   @override
@@ -23,7 +23,6 @@ class SafetyView extends StatelessWidget {
         children: [
            const AdviseSegment(),
           CommitmentSegment(
-            isTabletMode: false,
             safetyState: safetyState,
           ),
         ],

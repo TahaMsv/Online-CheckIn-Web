@@ -18,8 +18,8 @@ import 'package:provider/provider.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-class SeatMapView extends StatelessWidget {
-  SeatMapView({Key? key}) : super(key: key);
+class SeatMapViewWeb extends StatelessWidget {
+  SeatMapViewWeb({Key? key}) : super(key: key);
   final SeatMapController seatMapController = getIt<SeatMapController>();
 
   @override
@@ -43,9 +43,9 @@ class SeatMapView extends StatelessWidget {
               children: [
                 Stack(
                   children: [
-                    PlaneHead(height: planeBodyHeight, isTabletMode: false),
+                    PlaneHead(height: planeBodyHeight),
                     // PlaneWings(planeBodyLength: planeBodyLength, isTabletMode: false),
-                    PlaneTail(height: planeBodyHeight + 85, margin: planeBodyLength, isTabletMode: false),
+                    PlaneTail(height: planeBodyHeight + 85, margin: planeBodyLength),
                     const PlaneBody(),
                   ],
                 ),
@@ -159,21 +159,18 @@ class CabinWidget extends StatelessWidget {
                         ExitDoor(
                           width: seatMapState.airCraftBodySize.seatWidth,
                           height: 20,
-                          isEnable: upDoorEnable,
-                          isTabletMode: false,
+                          isEnable: upDoorEnable
                         ),
                         LineWidget(
                           line: cabin.lines[i],
                           width: cabinRatio * seatMapState.airCraftBodySize.seatWidth,
                           height: seatMapController.calculateCabinHeight(index),
                           cabinRatio: cabinRatio,
-                          isTabletMode: false,
                         ),
                         ExitDoor(
                           width: seatMapState.airCraftBodySize.seatWidth,
                           height: 20,
-                          isEnable: downDoorEnable,
-                          isTabletMode: false,
+                          isEnable: downDoorEnable
                         ),
                       ],
                     );

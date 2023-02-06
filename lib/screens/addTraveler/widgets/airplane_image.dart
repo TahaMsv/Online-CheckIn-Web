@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/assets.dart';
 import '../../../core/constants/ui.dart';
+import '../../../core/platform/device_info.dart';
 
 class AirplaneImage extends StatelessWidget {
   const AirplaneImage({
@@ -10,11 +11,13 @@ class AirplaneImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DeviceType deviceType = DeviceInfo.deviceType(context);
+    double width = MediaQuery.of(context).size.width;
     return Container(
-      decoration:  const BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color:MyColors.white1,
+            color: MyColors.white1,
             width: 1.0,
           ),
         ),
@@ -22,11 +25,14 @@ class AirplaneImage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          Container(
+            width: deviceType.isPhone ? width * 0.8 : null,
+            height: deviceType.isPhone ? 100 : null,
+            padding: EdgeInsets.symmetric(horizontal: deviceType.isPhone ? 0 : 30.0),
             child: Image.asset(
               AssetImages.airplaneImage,
               fit: BoxFit.fill,
+
               // height: 350,
             ),
           ),

@@ -14,8 +14,8 @@ import '../../widgets/UserTextInput.dart';
 import 'login_controller.dart';
 import 'login_state.dart';
 
-class LoginView extends StatelessWidget {
-  LoginView({Key? key}) : super(key: key);
+class LoginViewWeb extends StatelessWidget {
+  LoginViewWeb({Key? key}) : super(key: key);
   final LoginController loginController = getIt<LoginController>();
 
   @override

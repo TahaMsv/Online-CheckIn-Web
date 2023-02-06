@@ -13,8 +13,8 @@ import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/StepsScreenTitle.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
-class UpgradesView extends StatelessWidget {
-  UpgradesView({Key? key}) : super(key: key);
+class UpgradesViewWeb extends StatelessWidget {
+  UpgradesViewWeb({Key? key}) : super(key: key);
   final UpgradesController upgradesController = getIt<UpgradesController>();
 
   @override
@@ -34,7 +34,7 @@ class UpgradesView extends StatelessWidget {
                   SizedBox(height: 10),
                   WinesAndDrinksList(),
                   SizedBox(height: 10),
-                  Entertainment(isTabletMode: false),
+                  Entertainment(),
                 ],
               ));
   }
@@ -102,8 +102,7 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
                           child: UpgradeItemWidget(
                             index: index,
                             value: upgradesState.winesList[index],
-                            isPrinter: false,
-                            isTabletMode: false,
+                            isPrinter: false
                           ),
                         );
                       }),

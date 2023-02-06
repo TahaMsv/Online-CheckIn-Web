@@ -3,19 +3,21 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/my_list.dart';
 import '../../../core/constants/ui.dart';
+import '../../../core/platform/device_info.dart';
 import '../../../widgets/MtDottedLine.dart';
 import '../steps_state.dart';
+
 class StepWidget extends StatelessWidget {
   const StepWidget({
     Key? key,
-    required this.index, required this.isTabletMode,
+    required this.index,
   }) : super(key: key);
 
   final int index;
-  final bool isTabletMode;
 
   @override
   Widget build(BuildContext context) {
+    DeviceType deviceType = DeviceInfo.deviceType(context);
     StepsState stepsState = context.watch<StepsState>();
     int step = stepsState.step;
     Color bgColor;
@@ -38,15 +40,15 @@ class StepWidget extends StatelessWidget {
     return Row(
       children: [
         step == index
-            ? const MyDottedLine(
-          lineLength: 25,
-          color: MyColors.oceanGreen,
-        )
+            ? MyDottedLine(
+                lineLength: deviceType.isPhone ? 10 : 25,
+                color: MyColors.oceanGreen,
+              )
             : Container(
-          height: 1,
-          width: 25,
-          color: step <= index ? MyColors.white1 : MyColors.oceanGreen,
-        ),
+                height: 1,
+                width: deviceType.isPhone ? 10 : 25,
+                color: step <= index ? MyColors.white1 : MyColors.oceanGreen,
+              ),
         Container(
           decoration: BoxDecoration(
             color: bgColor,
@@ -58,26 +60,28 @@ class StepWidget extends StatelessWidget {
             ),
           ),
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          child:isTabletMode? Icon(
-            MyList.iconsList[index],
-            size: 30,
-            color: frColor,
-          ):Row(
-            children: [
-              Icon(
-                MyList.iconsList[index],
-                size:  15,
-                color: frColor,
-              ),
-              const SizedBox(
-                width: 3,
-              ),
-              Text(
-                MyList.titlesList[index] ,
-                style: TextStyle(color: frColor),
-              ),
-            ],
-          ),
+          child: deviceType.isTablet || deviceType.isPhone
+              ? Icon(
+                  MyList.iconsList[index],
+                  size: deviceType.isTablet ? 30 : 12,
+                  color: frColor,
+                )
+              : Row(
+                  children: [
+                    Icon(
+                      MyList.iconsList[index],
+                      size: 15,
+                      color: frColor,
+                    ),
+                    const SizedBox(
+                      width: 3,
+                    ),
+                    Text(
+                      MyList.titlesList[index],
+                      style: TextStyle(color: frColor),
+                    ),
+                  ],
+                ),
         ),
       ],
     );

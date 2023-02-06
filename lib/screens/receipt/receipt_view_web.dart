@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../widgets/StepsScreenTitle.dart';
 
-class ReceiptView extends StatelessWidget {
-  ReceiptView({Key? key}) : super(key: key);
+class ReceiptViewWeb extends StatelessWidget {
+  ReceiptViewWeb({Key? key}) : super(key: key);
   final ReceiptController receiptController = getIt<ReceiptController>();
 
   @override

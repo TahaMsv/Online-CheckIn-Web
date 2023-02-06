@@ -8,7 +8,7 @@ import '../../../widgets/SelectingDateWidget.dart';
 import '../../../widgets/StepsScreenTitle.dart';
 import '../../../widgets/UserTextInput.dart';
 import '../visa_controller.dart';
-import '../visa_view.dart';
+import '../visa_view_web.dart';
 
 class VisaDetailsDialog extends StatefulWidget {
   const VisaDetailsDialog({Key? key, required this.index}) : super(key: key);

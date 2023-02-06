@@ -16,8 +16,8 @@ import 'package:provider/provider.dart';
 import 'add_traveler_controller.dart';
 import 'add_traveler_state.dart';
 
-class AddTravelerView extends StatelessWidget {
-  AddTravelerView({Key? key}) : super(key: key);
+class AddTravelerViewWeb extends StatelessWidget {
+  AddTravelerViewWeb({Key? key}) : super(key: key);
   final AddTravelerController addTravelerController = getIt<AddTravelerController>();
   final StepsController stepsController = getIt<StepsController>();
 
@@ -44,7 +44,6 @@ class AddTravelerView extends StatelessWidget {
                       fromTime: flightInformation.fromTime,
                       toCity: flightInformation.toCity,
                       toTime: flightInformation.toTime,
-                      isTabletMode: false,
                     ),
                     const AirplaneImage(),
                     FLightExtraDetails(
@@ -52,7 +51,6 @@ class AddTravelerView extends StatelessWidget {
                       terminal: flightInformation.terminal,
                       aircraft: flightInformation.aircraft,
                       flightClass: "-",
-                      isTabletMode: false,
                     ),
                   ],
                 ),

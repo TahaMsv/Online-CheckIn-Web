@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:online_check_in/screens/login/login_view_web.dart';
 import 'package:online_check_in/screens/login/widgets/background_image.dart';
 import 'package:online_check_in/screens/login/widgets/copyright_widget.dart';
-import '../../core/constants/route_names.dart';
 import '../../core/constants/ui.dart';
+import '../../core/dependency_injection.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/dependency_injection.dart';
 import '../../widgets/LanguagePicker.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/UserTextInput.dart';
 import 'login_controller.dart';
 import 'login_state.dart';
 
-class LoginViewTablet extends StatelessWidget {
-  LoginViewTablet({Key? key}) : super(key: key);
+class LoginView extends StatelessWidget {
+  LoginView({Key? key}) : super(key: key);
   final LoginController loginController = getIt<LoginController>();
 
   @override
@@ -66,7 +64,9 @@ class Foreground extends StatelessWidget {
               textColor: MyColors.white,
               // mainController: loginController, // rodo
               width: double.infinity),
-          SizedBox(height: 40,),
+          SizedBox(
+            height: 40,
+          ),
           CheckInForm(),
         ],
       ),
@@ -79,22 +79,27 @@ class CheckInForm extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     final LoginController loginController = getIt<LoginController>();
 
     LoginState loginState = context.watch<LoginState>();
-    double height = 500 <= Get.height * 0.5 ? 500 : Get.height * 0.5;
+    double height = 320 <= Get.height * 0.5 ? 320 : Get.height * 0.5;
     return Container(
       height: height,
       // width: 400,
-      color: MyColors.white,
+      decoration: BoxDecoration(
+          border: Border.all(width: 2),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(15),
+          ),
+          color: Colors.white),
+
       child: ListView(
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,40 +111,28 @@ class CheckInForm extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
-                        Text(
-                          "Online Check-in",
-                          style: MyTextTheme.boldDarkGray30,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "Input Requested info in order to continue",
-                          style: MyTextTheme.boldDarkGray24,
-                        ),
+                        Text("Online Check-in", style: MyTextTheme.boldDarkGray18),
+                        SizedBox(height: 10),
+                        Text("Input Requested info in order to continue", style: MyTextTheme.boldDarkGray12),
                       ],
                     ),
-                    const SizedBox(
-                      height: 70,
-                    ),
+                    const SizedBox(height: 25),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         UserTextInput(
-                          height: 60,
-                          fontSize: 25,
+                          height: 40,
+                          fontSize: 17,
                           controller: loginState.lastNameC,
                           hint: "Last Name",
                           errorText: "Last Name can't be empty",
                           isEmpty: loginState.isLastNameEmpty,
                           width: Get.width,
                         ),
-                        const SizedBox(
-                          height: 40,
-                        ),
+                        const SizedBox(height: 20),
                         UserTextInput(
-                          height: 60,
-                          fontSize: 25,
+                          height: 40,
+                          fontSize: 17,
                           controller: loginState.bookingRefNameC,
                           hint: "Booking reference name",
                           errorText: "Booking reference name can't be empty",
@@ -149,16 +142,14 @@ class CheckInForm extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 40,
-                    ),
+                    const SizedBox(height: 20),
                     MyElevatedButton(
-                      height: 60,
+                      height: 45,
                       width: double.infinity,
                       buttonText: "Check-in",
                       bgColor: MyColors.myBlue,
                       fgColor: MyColors.white,
-                      fontSize: 20,
+                      fontSize: 17,
                       isLoading: loginState.requesting,
                       function: () => loginController.login(username: "", password: ""),
                       textColor: MyColors.white,
@@ -170,7 +161,7 @@ class CheckInForm extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 15,
                 ),
                 const CopyrightText(),
               ],

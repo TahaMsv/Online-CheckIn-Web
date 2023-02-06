@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../core/constants/ui.dart';
+import '../core/platform/device_info.dart';
 
 class TitleWidget extends StatelessWidget {
   const TitleWidget({
@@ -20,10 +21,11 @@ class TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DeviceType deviceType = DeviceInfo.deviceType(context);
     return Container(
       height: height,
       width: width,
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      padding:  EdgeInsets.symmetric(vertical:deviceType.isPhone?10: 20, horizontal: deviceType.isPhone?10: 20),
       child: Text(
         title,
         style: TextStyle(

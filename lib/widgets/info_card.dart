@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../core/constants/ui.dart';
 import '../core/dependency_injection.dart';
+import '../core/platform/device_info.dart';
 import '../screens/Visa/visa_controller.dart';
 import '../screens/Passport/passport_controller.dart';
 import '../screens/Passport/passport_state.dart';
@@ -37,7 +38,7 @@ class InfoCard extends StatelessWidget {
       padding: isTabletMode ? const EdgeInsets.symmetric(vertical: 10, horizontal: 45) : const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
       width: isTabletMode ? null : 315,
       margin: const EdgeInsets.all(10),
-      decoration: BoxDecoration(color: isCompleted ? MyColors.oceanGreen : MyColors.white, border: Border.all(color: MyColors.white)),
+      decoration: BoxDecoration(color: isCompleted ? MyColors.oceanGreen : MyColors.white, border: Border.all(color: MyColors.lightGrey)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -69,7 +70,7 @@ class InfoCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          isCompleted ? EditIPassInfo(index: index, isTabletMode: isTabletMode, isPassportStep: isPassportStep) : AddPassInfo(index: index, isTabletMode: isTabletMode, isPassportStep: isPassportStep),
+          isCompleted ? EditIPassInfo(index: index, isPassportStep: isPassportStep) : AddPassInfo(index: index, isPassportStep: isPassportStep),
         ],
       ),
     );
@@ -79,12 +80,10 @@ class InfoCard extends StatelessWidget {
 class AddPassInfo extends StatelessWidget {
   const AddPassInfo({
     Key? key,
-    required this.isTabletMode,
     required this.index,
     required this.isPassportStep,
   }) : super(key: key);
 
-  final bool isTabletMode;
   final bool isPassportStep;
   final int index;
 
@@ -94,10 +93,12 @@ class AddPassInfo extends StatelessWidget {
     final VisaController visaController = getIt<VisaController>();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return GestureDetector(
+    DeviceType deviceType = DeviceInfo.deviceType(context);
+
+    return InkWell(
       onTap: () {
         if (isPassportStep) {
-          isTabletMode
+          deviceType.isTablet || deviceType.isPhone
               ? passportController.showBottomSheetForm(
                   context,
                   height,
@@ -106,14 +107,25 @@ class AddPassInfo extends StatelessWidget {
                 )
               : passportController.showPassportDialog(index);
         } else {
-          isTabletMode ? visaController.showBottomSheetForm(context, height, width, index) : visaController.showVisaDialog(index);
+          deviceType.isTablet || deviceType.isPhone ? visaController.showBottomSheetForm(context, height, width, index) : visaController.showVisaDialog(index);
         }
       },
       child: Row(
         children: [
-          Icon(Icons.add_circle_outline_rounded, color: MyColors.myBlue, size: isTabletMode ? 30 : 18),
-          SizedBox(width: isTabletMode ? 10 : 5),
-          Text(isPassportStep ? "Add Passport Info" : "Add Visa Info", style: isTabletMode ? MyTextTheme.myBlue22W500 : MyTextTheme.myBlue12W500),
+          Icon(Icons.add_circle_outline_rounded,
+              color: MyColors.myBlue,
+              size: deviceType.isPhone
+                  ? 20
+                  : deviceType.isTablet
+                      ? 30
+                      : 18),
+          SizedBox(width: deviceType.isTablet ? 10 : 5),
+          Text(isPassportStep ? "Add Passport Info" : "Add Visa Info",
+              style: deviceType.isPhone
+                  ? MyTextTheme.myBlue15W500
+                  : deviceType.isTablet
+                      ? MyTextTheme.myBlue22W500
+                      : MyTextTheme.myBlue12W500),
         ],
       ),
     );
@@ -123,11 +135,9 @@ class AddPassInfo extends StatelessWidget {
 class EditIPassInfo extends StatelessWidget {
   const EditIPassInfo({
     Key? key,
-    required this.isTabletMode,
     required this.index,
     required this.isPassportStep,
   }) : super(key: key);
-  final bool isTabletMode;
   final bool isPassportStep;
   final int index;
 
@@ -137,24 +147,38 @@ class EditIPassInfo extends StatelessWidget {
     final VisaController visaController = getIt<VisaController>();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    DeviceType deviceType = DeviceInfo.deviceType(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
-            Icon(Icons.check, color: MyColors.white, size: isTabletMode ? 30 : 18),
-            SizedBox(width: isTabletMode ? 10 : 5),
+            Icon(Icons.check,
+                color: MyColors.white,
+                size: deviceType.isPhone
+                    ? 20
+                    : deviceType.isTablet
+                        ? 30
+                        : 18),
+            SizedBox(width: deviceType.isTablet ? 10 : 5),
           ],
         ),
-        GestureDetector(
+        InkWell(
           onTap: () {
             if (isPassportStep) {
-              isTabletMode ? passportController.showBottomSheetForm(context, height, width, index) : passportController.showPassportDialog(index);
+              deviceType.isTablet || deviceType.isPhone ? passportController.showBottomSheetForm(context, height, width, index) : passportController.showPassportDialog(index);
             } else {
-              isTabletMode ? visaController.showBottomSheetForm(context, height, width, index) : visaController.showVisaDialog(index);
+              deviceType.isTablet || deviceType.isPhone ? visaController.showBottomSheetForm(context, height, width, index) : visaController.showVisaDialog(index);
             }
           },
-          child: Icon(MenuIcons.iconEdit, color: MyColors.white, size: isTabletMode ? 30 : 18),
+          child: Icon(MenuIcons.iconEdit,
+              color: MyColors.white,
+              size: deviceType.isPhone
+                  ? 20
+                  : deviceType.isTablet
+                      ? 30
+                      : 18),
         )
       ],
     );

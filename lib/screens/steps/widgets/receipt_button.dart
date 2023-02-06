@@ -1,48 +1,50 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/ui.dart';
+import '../../../core/platform/device_info.dart';
 import '../../../widgets/MyElevatedButton.dart';
 
 class ReceiptStepButtons extends StatelessWidget {
   const ReceiptStepButtons({
     Key? key,
-    required this.isTabletMode,
   }) : super(key: key);
-  final bool isTabletMode;
+  
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    DeviceType deviceType = DeviceInfo.deviceType(context);
     return Row(
       children: [
         MyElevatedButton(
-          height: isTabletMode ? height * 0.06 : 40,
-          width: isTabletMode ? 200 : 110,
-          fontSize: isTabletMode ? 20 : 15,
+          height: deviceType.isTablet ? height * 0.06 : 40,
+          width: deviceType.isTablet ? 200 : 110,
+          fontSize: deviceType.isTablet ? 20 : 15,
           buttonText: "Download",
           bgColor: MyColors.darkGrey,
           fgColor: MyColors.white,
           function: () {},
         ),
-        const SizedBox(
-          width: 15,
+         SizedBox(
+          width:deviceType.isTablet ? 15:5,
         ),
         MyElevatedButton(
-          height: isTabletMode ? height * 0.06 : 40,
-          width: isTabletMode ? 200 : 110,
-          fontSize: isTabletMode ? 20 : 15,
+          height: deviceType.isTablet ? height * 0.06 : 40,
+          width: deviceType.isTablet ? 200 : 80,
+          fontSize: deviceType.isTablet ? 20 : 15,
           buttonText: "Print",
           bgColor: MyColors.oceanGreen,
           fgColor: MyColors.white,
           function: () {},
         ),
-        const SizedBox(
-          width: 15,
+         SizedBox(
+          width: deviceType.isTablet ?15:5,
         ),
-        if (!isTabletMode)
+        if (!deviceType.isTablet)
           MyElevatedButton(
-            height: isTabletMode ? height * 0.06 : 40,
-            width: 200,
+            height: deviceType.isTablet ? height * 0.06 : 40,
+            width: deviceType.isTablet ?200:140,
+            fontSize: deviceType.isTablet ? 20 : 15,
             buttonText: "Sent to Mobile",
             bgColor: const Color(0xff4c6ef6),
             fgColor: MyColors.white,

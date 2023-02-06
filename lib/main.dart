@@ -20,7 +20,7 @@ import 'core/navigation/navigation_service.dart';
 import 'core/utils/app_config.dart';
 import 'my_app.dart';
 import 'screens/login/login_state.dart';
-import 'screens/login/login_view.dart';
+import 'screens/login/login_view_web.dart';
 
 void main() async {
   initializeDateFormatting();

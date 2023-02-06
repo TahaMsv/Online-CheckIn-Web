@@ -139,6 +139,10 @@ class SeatMapController extends MainController {
       seatMapState.airCraftBodySize.setSeatHeight(50);
       seatMapState.airCraftBodySize.setSeatWidth(50);
       seatMapState.airCraftBodySize.setEachLineWidth(50);
+    } else if (mode == RunningMode.phone) {
+      seatMapState.airCraftBodySize.setSeatHeight(25);
+      seatMapState.airCraftBodySize.setSeatWidth(25);
+      seatMapState.airCraftBodySize.setEachLineWidth(25);
     }
     double length = 0;
     for (var i = 0; i < seatMapState.cabins.length; ++i) {
@@ -171,6 +175,10 @@ class SeatMapController extends MainController {
       seatMapState.airCraftBodySize.setSeatHeight(50);
       seatMapState.airCraftBodySize.setSeatWidth(50);
       seatMapState.airCraftBodySize.setEachLineWidth(50);
+    } else if (mode == RunningMode.phone) {
+      seatMapState.airCraftBodySize.setSeatHeight(25);
+      seatMapState.airCraftBodySize.setSeatWidth(25);
+      seatMapState.airCraftBodySize.setEachLineWidth(25);
     }
     double maxHeight = 0;
     for (var i = 0; i < seatMapState.cabins.length; ++i) {
@@ -420,6 +428,8 @@ class SeatMapController extends MainController {
         break;
       case 11:
         seatText = cell.value!;
+        width +=5;
+        height +=5;
         break;
       case 13:
         isSeatClickable = false;

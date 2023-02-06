@@ -8,13 +8,12 @@ class FLightExtraDetails extends StatelessWidget {
     required this.boardingTime,
     required this.terminal,
     required this.aircraft,
-    required this.flightClass, required this.isTabletMode,
+    required this.flightClass,
   }) : super(key: key);
   final String boardingTime;
   final int terminal;
   final String aircraft;
   final String flightClass;
-  final bool isTabletMode;
 
   @override
   Widget build(BuildContext context) {
@@ -33,22 +32,18 @@ class FLightExtraDetails extends StatelessWidget {
               DetailPart(
                 title: "Boarding",
                 description: boardingTime,
-                isTabletMode: isTabletMode,
               ),
               DetailPart(
                 title: "Terminal",
                 description: terminal.toString(),
-                isTabletMode: isTabletMode,
               ),
               DetailPart(
                 title: "Flight",
                 description: aircraft,
-                isTabletMode: isTabletMode,
               ),
               DetailPart(
                 title: "Class",
                 description: flightClass,
-                isTabletMode: isTabletMode,
               ),
             ],
           ),

@@ -23,9 +23,7 @@ class StepsScreenTitle extends StatelessWidget {
           title,
           style: TextStyle(color: MyColors.darkGrey, fontWeight: FontWeight.bold, fontSize: fontSize),
         ),
-        SizedBox(
-          width: 15,
-        ),
+        const SizedBox(width: 15),
         Text(
           description,
           style: TextStyle(color: MyColors.darkGrey, fontWeight: FontWeight.w400, fontSize: fontSize - 2),

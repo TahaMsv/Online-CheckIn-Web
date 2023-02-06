@@ -9,6 +9,7 @@ import 'package:online_check_in/screens/steps/steps_state.dart';
 import '../../core/constants/ui.dart';
 import '../../core/dependency_injection.dart';
 import '../../core/interfaces/controller.dart';
+import '../../core/platform/device_info.dart';
 import '../../core/utils/drop_down_utils.dart';
 import '../../core/utils/failure_handler.dart';
 import '../../core/utils/getTranslatedWord.dart';
@@ -329,6 +330,7 @@ class PassportController extends MainController {
   }
 
   void showBottomSheetForm(BuildContext context, double height, double width, int index) {
+    DeviceType deviceType = DeviceInfo.deviceType(context);
     showMaterialModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -338,85 +340,87 @@ class PassportController extends MainController {
           child: SingleChildScrollView(
             controller: ModalScrollController.of(context),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+              padding:  EdgeInsets.symmetric(horizontal:deviceType.isPhone?10: 50, vertical:deviceType.isPhone?5: 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const StepsScreenTitle(title: "Passport / Visa Details", description: "", fontSize: 25),
-                  const SizedBox(height: 20),
+                   StepsScreenTitle(title: "Passport / Visa Details", description: "", fontSize: deviceType.isPhone?17:25),
+                   SizedBox(height: deviceType.isPhone?10:20),
                   MyDropDown(
                     index: index,
                     hintText: DropDownUtils.passportType,
                     width: width,
-                    height: 80,
+                    height:deviceType.isPhone?40: 80,
                     passOrVisa: DropDownUtils.passport,
                   ),
-                  const SizedBox(height: 20),
-                  UserTextInput(controller: passportState.documentNoCs[index], hint: "Document No.", errorText: "", isEmpty: false, height: 80, width: width, fontSize: 25),
-                  const SizedBox(height: 20),
+                   SizedBox(height:deviceType.isPhone?10: 20),
+                  UserTextInput(controller: passportState.documentNoCs[index], hint: "Document No.", errorText: "", isEmpty: false, height:deviceType.isPhone?40: 80, width: width, fontSize:deviceType.isPhone?17: 25),
+                   SizedBox(height: deviceType.isPhone?10:20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       MyDropDown(
                         index: index,
                         hintText: DropDownUtils.gender,
-                        width: width * 0.2,
-                        height: 80,
+                        width:deviceType.isPhone?120: width * 0.2,
+                        height:deviceType.isPhone?40: 80,
                         passOrVisa: DropDownUtils.passport,
                       ),
-                      const SizedBox(width: 20),
-                      MyDropDown(
-                        index: index,
-                        hintText: DropDownUtils.countryOfIssueType,
-                        width: width * 0.5,
-                        height: 80,
-                        passOrVisa: DropDownUtils.passport,
+                       SizedBox(width: deviceType.isPhone?5:20),
+                      Expanded(
+                        child: MyDropDown(
+                          index: index,
+                          hintText: DropDownUtils.countryOfIssueType,
+                          // width: width * 0.5,
+                          height: deviceType.isPhone?40:80,
+                          passOrVisa: DropDownUtils.passport,
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                   SizedBox(height:deviceType.isPhone?10: 20),
                   SelectingDateWidget(
-                    height: 80,
+                    height: deviceType.isPhone?40:80,
                     width: width,
-                    fontSize: 22,
+                    fontSize: deviceType.isPhone?17:22,
                     hint: "Entry Date",
                     index: index,
                     updateDate: selectEntryDate,
                     currDateTime: passportState.travelers[index].passportInfo.entryDate == null ? DateTime.now() : passportState.travelers[index].passportInfo.entryDate!,
                     isCurrDateEmpty: passportState.travelers[index].passportInfo.entryDate == null ? true : false,
                   ),
-                  const SizedBox(height: 20),
+                   SizedBox(height:deviceType.isPhone?10: 20),
                   MyDropDown(
                     index: index,
                     hintText: DropDownUtils.nationalityType,
                     width: width,
-                    height: 80,
+                    height:deviceType.isPhone?40: 80,
                     passOrVisa: DropDownUtils.passport,
                   ),
-                  const SizedBox(height: 20),
+                   SizedBox(height:deviceType.isPhone?10: 20),
                   SelectingDateWidget(
-                    height: 80,
+                    height:deviceType.isPhone?40: 80,
                     width: width,
-                    fontSize: 22,
+                    fontSize:deviceType.isPhone?15: 22,
                     hint: "Date of Birth",
                     index: index,
                     updateDate: selectDateOfBirth,
                     currDateTime: passportState.travelers[index].passportInfo.dateOfBirth == null ? DateTime.now() : passportState.travelers[index].passportInfo.dateOfBirth!,
                     isCurrDateEmpty: passportState.travelers[index].passportInfo.dateOfBirth == null ? true : false,
                   ),
-                  const SizedBox(height: 20),
+                   SizedBox(height:deviceType.isPhone?10: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const SizedBox(width: 1),
                       MyElevatedButton(
-                        height: 70,
-                        width: 200,
+                        height:deviceType.isPhone?40: 70,
+                        width:deviceType.isPhone?100: 200,
                         buttonText: "Submit",
                         bgColor: MyColors.white,
                         fgColor: MyColors.myBlue,
-                        fontSize: 23,
+                        fontSize:deviceType.isPhone?17: 23,
                         borderColor: Colors.blue,
                         function: passportState.loading
                             ? () {}

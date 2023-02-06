@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:online_check_in/core/constants/ui.dart';
+import 'package:get/get.dart';
 import 'package:online_check_in/screens/upgrades/upgrades_controller.dart';
 import 'package:online_check_in/screens/upgrades/upgrades_state.dart';
 import 'package:online_check_in/screens/upgrades/widgets/entertainments.dart';
 import 'package:online_check_in/screens/upgrades/widgets/upgrade_items_widget.dart';
-import '../../core/classes/extra.dart';
+import '../../core/constants/ui.dart';
 import '../../core/dependency_injection.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/StepsScreenTitle.dart';
 
-class UpgradesViewTablet extends StatelessWidget {
-  UpgradesViewTablet({Key? key}) : super(key: key);
+class UpgradesView extends StatelessWidget {
+  UpgradesView({Key? key}) : super(key: key);
   final UpgradesController upgradesController = getIt<UpgradesController>();
 
   @override
@@ -27,12 +27,12 @@ class UpgradesViewTablet extends StatelessWidget {
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
-                StepsScreenTitle(title: "Upgrades", description: "", fontSize: 45),
-                SizedBox(height: 20),
-                Text("All upgrades are non-refundable", style: MyTextTheme.black25W300),
-                SizedBox(height: 20),
+                StepsScreenTitle(title: "Upgrades", description: "", fontSize: 25),
+                SizedBox(height: 5),
+                Text("All upgrades are non-refundable", style: MyTextTheme.black17W300),
+                SizedBox(height: 5),
                 WinesAndDrinksList(),
-                SizedBox(height: 20),
+                SizedBox(height: 5),
                 Entertainment(),
               ],
             ),
@@ -57,19 +57,15 @@ class WinesAndDrinksList extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Wines & Drinks", style: MyTextTheme.darkGreyW70025),
-          const SizedBox(height: 15),
+          const Text("Wines & Drinks", style: MyTextTheme.darkGreyW70020),
+          const SizedBox(height: 5),
           Expanded(
             child: ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 itemCount: upgradesState.winesList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return UpgradeItemWidget(
-                    index: index,
-                    value: upgradesState.winesList[index],
-                    isPrinter: false
-                  );
+                  return UpgradeItemWidget(index: index, value: upgradesState.winesList[index], isPrinter: false);
                 }),
           ),
         ],

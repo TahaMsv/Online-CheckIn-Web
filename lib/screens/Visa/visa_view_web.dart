@@ -12,8 +12,8 @@ import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/StepsScreenTitle.dart';
 import '../../widgets/info_card.dart';
 
-class VisaView extends StatelessWidget {
-  VisaView({Key? key}) : super(key: key);
+class VisaViewWeb extends StatelessWidget {
+  VisaViewWeb({Key? key}) : super(key: key);
   final VisaController visaController = getIt<VisaController>();
 
   @override

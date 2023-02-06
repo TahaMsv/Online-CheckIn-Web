@@ -19,8 +19,8 @@ import '../../widgets/UserTextInput.dart';
 import '../../widgets/title_widget.dart';
 import '../addTraveler/add_traveler_controller.dart';
 
-class StepsView extends StatelessWidget {
-  StepsView({Key? key, required this.childWidget}) : super(key: key);
+class StepsViewWeb extends StatelessWidget {
+  StepsViewWeb({Key? key, required this.childWidget}) : super(key: key);
   final StepsController stepsController = getIt<StepsController>();
   final Widget childWidget;
 
@@ -39,12 +39,7 @@ class StepsView extends StatelessWidget {
           : ListView(
               shrinkWrap: true,
               children: [
-                TopOfPage(
-                  height: height,
-                  width: width,
-                  stepsController: stepsController,
-                  isTabletMode: false,
-                ),
+                TopOfPage(height: height, width: width),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -74,7 +69,6 @@ class StepsView extends StatelessWidget {
                                     .stepsToShowList()
                                     .map((i) => StepWidget(
                                           index: i,
-                                          isTabletMode: false,
                                         ))
                                     .toList() +
                                 [
@@ -89,7 +83,7 @@ class StepsView extends StatelessWidget {
                             padding: const EdgeInsets.only(top: 50, left: 30, right: 30),
                             child: childWidget,
                           ),
-                          BottomOfPage(height: height, stepsController: stepsController, isTabletMode: false),
+                          BottomOfPage(height: height, stepsController: stepsController),
                         ],
                       ),
                     ),
