@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/assets.dart';
 import '../../../core/platform/device_info.dart';
+import '../../../core/utils/MultiLanguages.dart';
 class PlaneTail extends StatelessWidget {
   const PlaneTail({
     Key? key,
@@ -14,7 +15,7 @@ class PlaneTail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String languageCode = "en";
+        String languageCode = MultiLanguages.of(context)!.locale.languageCode;
     DeviceType deviceType = DeviceInfo.deviceType(context);
     return Center(
       child: Container(
@@ -25,7 +26,7 @@ class PlaneTail extends StatelessWidget {
          AssetImages.airPlaneTail,
           fit: BoxFit.fill,
         ):RotationTransition(
-          turns: languageCode == "en" ? const AlwaysStoppedAnimation(90 / 360) : const AlwaysStoppedAnimation(180 / 360),
+          turns: languageCode == "en" || ((deviceType.isTablet || deviceType.isPhone)) ? const AlwaysStoppedAnimation(90 / 360) : const AlwaysStoppedAnimation(180 / 360),
           child: Image.asset(AssetImages.airPlaneTail, fit: BoxFit.fill),
         ),
       ),

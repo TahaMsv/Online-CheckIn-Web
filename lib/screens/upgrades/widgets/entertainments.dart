@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/upgrades/widgets/upgrade_items_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -20,14 +21,17 @@ class Entertainment extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Entertainment", style:deviceType.isPhone?MyTextTheme.darkGreyW70020: deviceType.isTablet ? MyTextTheme.darkGreyW70025 : MyTextTheme.darkGreyW80013),
+          Text("Entertainment".translate(context), style:deviceType.isPhone?MyTextTheme.darkGreyW70020: deviceType.isTablet ? MyTextTheme.darkGreyW70025 : MyTextTheme.darkGreyW80013),
           const SizedBox(height: 15),
           Expanded(
-              child: UpgradeItemWidget(
-            value: upgradesState.entertainmentsList[0],
-            index: 0,
-            isPrinter: true,
-          )),
+            child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: upgradesState.entertainmentsList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return UpgradeItemWidget(index: index, value: upgradesState.entertainmentsList[index], isPrinter: true);
+                }),
+          ),
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_check_in/core/constants/ui.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/Visa/visa_controller.dart';
 import 'package:online_check_in/screens/Visa/visa_state.dart';
 import '../../core/dependency_injection.dart';
@@ -20,16 +21,14 @@ class VisaViewTablet extends StatelessWidget {
     StepsState stepsState = context.watch<StepsState>();
     return Scaffold(
       backgroundColor: Colors.white,
-      body: visaState.loading
-          ? const Center(child: CircularProgressIndicator())
-          : !stepsState.isDocoNecessary
-              ? const Center(child: Text("No need to add visa"))
+      body:!stepsState.isDocoNecessary
+              ?  Center(child: Text("No need to add visa".translate(context)))
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const StepsScreenTitle(title: "Visa", description: "", fontSize: 45),
+                     StepsScreenTitle(title: "Visa".translate(context), description: "", fontSize: 45),
                     const SizedBox(height: 10),
-                    const Text("Enter visa data (DOCO) for all the passengers.", style: MyTextTheme.black25W300),
+                     Text("Enter visa data (DOCO) for all the passengers.".translate(context), style: MyTextTheme.black25W300),
                     const SizedBox(height: 30),
                     Expanded(
                       child: ListView(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/payment/payment_controller.dart';
 import 'package:online_check_in/screens/payment/payment_state.dart';
 import '../../core/constants/assets.dart';
@@ -23,7 +24,7 @@ class PaymentViewWeb extends StatelessWidget {
         backgroundColor: Colors.white,
         body: Column(
           children: [
-            StepsScreenTitle(title: "Payment".tr, description: "Pay with credit card, Visa or debit or Mastercard debit".tr),
+            StepsScreenTitle(title: "Payment".translate(context), description: "Pay with credit card, Visa or debit or Mastercard debit".translate(context)),
             const SizedBox(height: 30),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +66,7 @@ class TaxesAndFees extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Taxes & Fees".tr, style: MyTextTheme.darkGreyW50017),
+              Text("Taxes & Fees".translate(context), style: MyTextTheme.darkGreyW50017),
               const Text("\$ 0.00", style: MyTextTheme.darkGreyBold15),
             ],
           ),
@@ -89,7 +90,7 @@ class TaxesAndFees extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text((paymentState.taxes[index]["title"]! as String).tr, style: MyTextTheme.w300DarkGrey14),
+                    Text((paymentState.taxes[index]["title"]! as String).translate(context), style: MyTextTheme.w300DarkGrey14),
                     Text("\$ ${(paymentState.taxes[index]["price"]! as double).toStringAsFixed(2)}", style: MyTextTheme.w300DarkGrey14),
                   ],
                 ),
@@ -100,11 +101,11 @@ class TaxesAndFees extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Total".tr, style: MyTextTheme.darkGreyBold17),
+              Text("Total".translate(context), style: MyTextTheme.darkGreyBold17),
               Text("\$ ${paymentState.totalPrice.toStringAsFixed(2)}", style: MyTextTheme.darkGreyBold15),
             ],
           ),
-          Text("Including taxes and fees".tr, style: MyTextTheme.darkGrey12),
+          Text("Including taxes and fees".translate(context), style: MyTextTheme.darkGrey12),
         ],
       ),
     );
@@ -125,11 +126,11 @@ class BillingAddress extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Billing Address".tr, style: MyTextTheme.darkGreyBold15),
+          Text("Billing Address".translate(context), style: MyTextTheme.darkGreyBold15),
           const SizedBox(height: 10),
           UserTextInput(
             controller: paymentState.addressC,
-            hint: "Address".tr,
+            hint: "Address".translate(context),
             height: 90,
             errorText: "",
             isEmpty: false,
@@ -137,7 +138,7 @@ class BillingAddress extends StatelessWidget {
           const SizedBox(height: 20),
           UserTextInput(
             controller: paymentState.billingAddressCardNumberC,
-            hint: "Card Number".tr,
+            hint: "Card Number".translate(context),
             errorText: "",
             isEmpty: false,
           ),
@@ -147,7 +148,7 @@ class BillingAddress extends StatelessWidget {
               Expanded(
                   child: UserTextInput(
                 controller: paymentState.countryC,
-                hint: "Card Number".tr,
+                hint: "Card Number".translate(context),
                 errorText: "",
                 isEmpty: false,
               )),
@@ -155,7 +156,7 @@ class BillingAddress extends StatelessWidget {
               Expanded(
                   child: UserTextInput(
                 controller: paymentState.provinceC,
-                hint: "Province / State".tr,
+                hint: "Province / State".translate(context),
                 errorText: "",
                 isEmpty: false,
               )),
@@ -167,7 +168,7 @@ class BillingAddress extends StatelessWidget {
               Expanded(
                   child: UserTextInput(
                 controller: paymentState.cityC,
-                hint: "City".tr,
+                hint: "City".translate(context),
                 errorText: "",
                 isEmpty: false,
               )),
@@ -175,7 +176,7 @@ class BillingAddress extends StatelessWidget {
               Expanded(
                   child: UserTextInput(
                 controller: paymentState.postalC,
-                hint: "Postal / Zip Code".tr,
+                hint: "Postal / Zip Code".translate(context),
                 errorText: "",
                 isEmpty: false,
               )),
@@ -201,7 +202,7 @@ class CardInfo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Card Info".tr, style: MyTextTheme.darkGreyBold15),
+          Text("Card Info".translate(context), style: MyTextTheme.darkGreyBold15),
           const SizedBox(height: 10),
           Row(
             children: const [
@@ -214,7 +215,7 @@ class CardInfo extends StatelessWidget {
           const SizedBox(height: 20),
           UserTextInput(
             controller: paymentState.cardHolderNameC,
-            hint: "Cardholder Name".tr,
+            hint: "Cardholder Name".translate(context),
             errorText: "",
             isEmpty: false,
           ),

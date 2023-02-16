@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/login/login_view_web.dart';
 import 'package:online_check_in/screens/login/widgets/background_image.dart';
 import 'package:online_check_in/screens/login/widgets/copyright_widget.dart';
+import 'package:online_check_in/screens/steps/steps_state.dart';
 import '../../core/constants/route_names.dart';
 import '../../core/constants/ui.dart';
 import 'package:provider/provider.dart';
@@ -66,7 +68,9 @@ class Foreground extends StatelessWidget {
               textColor: MyColors.white,
               // mainController: loginController, // rodo
               width: double.infinity),
-          SizedBox(height: 40,),
+          SizedBox(
+            height: 40,
+          ),
           CheckInForm(),
         ],
       ),
@@ -79,13 +83,13 @@ class CheckInForm extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     final LoginController loginController = getIt<LoginController>();
 
     LoginState loginState = context.watch<LoginState>();
-    double height = 500 <= Get.height * 0.5 ? 500 : Get.height * 0.5;
+    StepsState stepsState = context.watch<StepsState>();
+    double height = 550 <= Get.height * 0.5 ? 550 : Get.height * 0.5;
     return Container(
       height: height,
       // width: 400,
@@ -105,16 +109,16 @@ class CheckInForm extends StatelessWidget {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children:  [
                         Text(
-                          "Online Check-in",
+                          "Online Check-in".translate(context),
                           style: MyTextTheme.boldDarkGray30,
                         ),
                         SizedBox(
                           height: 10,
                         ),
                         Text(
-                          "Input Requested info in order to continue",
+                          "Input Requested info in order to continue".translate(context),
                           style: MyTextTheme.boldDarkGray24,
                         ),
                       ],
@@ -129,8 +133,8 @@ class CheckInForm extends StatelessWidget {
                           height: 60,
                           fontSize: 25,
                           controller: loginState.lastNameC,
-                          hint: "Last Name",
-                          errorText: "Last Name can't be empty",
+                          hint: "Last Name".translate(context),
+                          errorText: "Last Name can't be empty".translate(context),
                           isEmpty: loginState.isLastNameEmpty,
                           width: Get.width,
                         ),
@@ -141,8 +145,8 @@ class CheckInForm extends StatelessWidget {
                           height: 60,
                           fontSize: 25,
                           controller: loginState.bookingRefNameC,
-                          hint: "Booking reference name",
-                          errorText: "Booking reference name can't be empty",
+                          hint: "Booking reference name".translate(context),
+                          errorText: "Booking reference name can't be empty".translate(context),
                           isEmpty: loginState.isBookingRefNameEmpty,
                           obscureText: true,
                           width: Get.width,
@@ -159,7 +163,7 @@ class CheckInForm extends StatelessWidget {
                       bgColor: MyColors.myBlue,
                       fgColor: MyColors.white,
                       fontSize: 20,
-                      isLoading: loginState.requesting,
+                      isLoading: loginState.requesting || stepsState.stepLoading,
                       function: () => loginController.login(username: "", password: ""),
                       textColor: MyColors.white,
                       borderRadius: const BorderRadius.all(

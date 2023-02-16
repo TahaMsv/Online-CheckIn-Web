@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_check_in/core/constants/assets.dart';
+import 'package:online_check_in/core/utils/MultiLanguages.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/login/widgets/background_image.dart';
 import 'package:online_check_in/screens/login/widgets/copyright_widget.dart';
 import 'package:online_check_in/widgets/MyElevatedButton.dart';
@@ -135,7 +137,6 @@ class CheckInForm extends StatelessWidget {
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const LanguagePicker(
-            // mainController: myEnterScreenController, // todo
             width: double.infinity,
           ),
           const MyDivider(),
@@ -156,14 +157,14 @@ class CheckInForm extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              "Online Check-in",
+                             Text(
+                              "Online Check-in".translate(context),
                               style: MyTextTheme.boldDarkGray18,
                             ),
                             Container(
                               margin: const EdgeInsets.only(top: 15),
-                              child: const Text(
-                                "Input Requested info in order to continue",
+                              child:  Text(
+                                "Input Requested info in order to continue".translate(context),
                                 style: TextStyle(
                                   color: MyColors.grey,
                                 ),
@@ -178,14 +179,14 @@ class CheckInForm extends StatelessWidget {
                             children: [
                               UserTextInput(
                                 controller: loginState.lastNameC,
-                                hint: "Last Name",
-                                errorText: "Last Name can't be empty",
+                                hint: "Last Name".translate(context),
+                                errorText: "Last Name can't be empty".translate(context),
                                 isEmpty: loginState.isLastNameEmpty,
                               ),
                               UserTextInput(
                                 controller: loginState.bookingRefNameC,
-                                hint: "Booking reference name",
-                                errorText: "Booking reference name can't be empty",
+                                hint: "Booking reference name".translate(context),
+                                errorText: "Booking reference name can't be empty".translate(context),
                                 isEmpty: loginState.isBookingRefNameEmpty,
                                 obscureText: true,
                               ),
@@ -239,11 +240,11 @@ class _Texts extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Ready to go?",
+                  "Ready to go?".translate(context),
                   style: MyTextTheme.boldWhite24,
                 ),
                 Text(
-                  "There are a few things to know before boarding.",
+                  "There are a few things to know before boarding.".translate(context),
                   style: MyTextTheme.boldWhite16,
                 ),
               ],
@@ -261,7 +262,7 @@ class _Texts extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "When can I check in?",
+                  "When can I check in?".translate(context),
                   style: MyTextTheme.white16,
                 ),
               ],
@@ -270,20 +271,20 @@ class _Texts extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(bottom: 42, left: 5),
             child: Text(
-              "You can check in on our website up to 24 hours before departure until one (1) hour before departure. Airport check-in opens three hours (3) prior to departure.".tr,
+              "You can check in on our website up to 24 hours before departure until one (1) hour before departure. Airport check-in opens three hours (3) prior to departure.".translate(context),
               style: MyTextTheme.white12,
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: const [
+            children:  [
               _NextPrevButton(
                 icon: MenuIcons.iconLeft,
-                text: "Previous",
+                text: "Previous".translate(context),
               ),
               _NextPrevButton(
                 icon: MenuIcons.iconRight,
-                text: "Next",
+                text: "Next".translate(context),
               ),
             ],
           ),
@@ -305,8 +306,7 @@ class _NextPrevButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // String languageCode = Get.locale!.languageCode; // todo
-    String languageCode = "en";
+    String languageCode = MultiLanguages.of(context)!.locale.languageCode;
     return Container(
       margin: languageCode == "en" ? const EdgeInsets.only(right: 85) : const EdgeInsets.only(left: 85),
       child: ElevatedButton(

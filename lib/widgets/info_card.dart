@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/Visa/visa_state.dart';
 import 'package:online_check_in/screens/steps/steps_state.dart';
 import 'package:provider/provider.dart';
@@ -120,7 +121,7 @@ class AddPassInfo extends StatelessWidget {
                       ? 30
                       : 18),
           SizedBox(width: deviceType.isTablet ? 10 : 5),
-          Text(isPassportStep ? "Add Passport Info" : "Add Visa Info",
+          Text(isPassportStep ? "Add Passport Info".translate(context) : "Add Visa Info".translate(context),
               style: deviceType.isPhone
                   ? MyTextTheme.myBlue15W500
                   : deviceType.isTablet

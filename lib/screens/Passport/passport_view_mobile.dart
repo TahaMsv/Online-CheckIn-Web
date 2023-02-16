@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/Passport/passport_controller.dart';
 import 'package:online_check_in/screens/Passport/passport_state.dart';
 import '../../core/constants/ui.dart';
@@ -19,19 +20,17 @@ class PassportView extends StatelessWidget {
     PassportState passportState = context.watch<PassportState>();
     return Scaffold(
       backgroundColor: theme.primaryColor,
-      body: passportState.loading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
+      body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const StepsScreenTitle(title: "Passport", description: "", fontSize: 25),
+           StepsScreenTitle(title: "Passport".translate(context), description: "", fontSize: 25),
           const SizedBox(height: 5),
-          const Text("Enter passport data (DOCS) for all the passengers.", style: MyTextTheme.black17W300),
+           Text("Enter passport data (DOCS) for all the passengers.".translate(context), style: MyTextTheme.black17W300),
           const SizedBox(height: 10),
           Expanded(
             child: ListView(
               children: passportState.travelers.asMap().entries.map(
-                    (entry) {
+                (entry) {
                   int idx = entry.key;
                   return InfoCard(
                     index: idx,

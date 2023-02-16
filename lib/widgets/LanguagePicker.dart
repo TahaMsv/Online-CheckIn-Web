@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import '../core/utils/MultiLanguages.dart';
 import '../core/utils/country_utils/country_utility.dart';
+import '../my_app.dart';
 import 'CountryListPicker/country.dart';
 import 'CountryListPicker/country_picker_dropdown.dart';
 
-class LanguagePicker extends StatelessWidget {
+class LanguagePicker extends StatefulWidget {
   const LanguagePicker({
     Key? key,
     // required this.mainController,
@@ -18,12 +20,17 @@ class LanguagePicker extends StatelessWidget {
   final Color textColor;
 
   @override
+  State<LanguagePicker> createState() => _LanguagePickerState();
+}
+
+class _LanguagePickerState extends State<LanguagePicker> {
+  @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
+      width: widget.width,
       child: CountryPickerDropdown(
-        textColor: textColor,
-        initialValue: initialValue,
+        textColor: widget.textColor,
+        initialValue: widget.initialValue,
         itemBuilder: _buildDropdownItem,
         // itemFilter:  ['AR', 'DE', 'GB', 'CN'].contains(c.isoCode),
         // priorityList: [
@@ -33,11 +40,26 @@ class LanguagePicker extends StatelessWidget {
         sortComparator: (Country a, Country b) => a.isoCode.compareTo(b.isoCode),
         onValuePicked: (Country country) {
           // print("${country.name}");
+          MultiLanguages multiLanguages = MultiLanguages();
           switch (country.languageCode) {
             case "en":
+              multiLanguages.setLocale(context, Locale('en', ''));
+              // setState(() {
+              //   LanguageTranslation.load(
+              //     Locale('en', ''),
+              //   );
+              // });
+
               // mainController.changeLanguage(Locale(country.languageCode, "US"));
               break;
             case "fa":
+              multiLanguages.setLocale(context, Locale.fromSubtags(languageCode: 'fa'));
+              // setState(() {
+              //   LanguageTranslation.load(
+              //     Locale('fa', ''),
+              //   );
+              // });
+
               // mainController.changeLanguage(Locale(country.languageCode, "IR"));
               break;
           }

@@ -14,6 +14,7 @@ import '../../core/utils/drop_down_utils.dart';
 import '../../core/utils/failure_handler.dart';
 import '../../core/utils/getTranslatedWord.dart';
 import '../../widgets/MyDropDown.dart';
+import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/SelectingDateWidget.dart';
 import '../../widgets/StepsScreenTitle.dart';
 import '../../widgets/UserTextInput.dart';
@@ -26,7 +27,7 @@ class VisaController extends MainController {
 
   late SelectVisaTypesUseCase selectVisaTypesUseCase = SelectVisaTypesUseCase(repository: visaRepository);
 
-  void init() async {
+  Future<bool> visaInit() async {
     visaState.setLoading(true);
     if (!visaState.visaInit) {
       final StepsState stepsState = getIt<StepsState>();
@@ -38,6 +39,7 @@ class VisaController extends MainController {
       }
     }
     visaState.setLoading(false);
+    return visaState.visaInit;
   }
 
   Future<void> getVisaTypes() async {
@@ -153,6 +155,7 @@ class VisaController extends MainController {
 
   void showBottomSheetForm(BuildContext context, double height, double width, int index) {
     // Locale locale = Get.locale!;
+    double fontSize = 16;
     DeviceType deviceType = DeviceInfo.deviceType(context);
     showMaterialModalBottomSheet(
       backgroundColor: Colors.white,
@@ -163,45 +166,63 @@ class VisaController extends MainController {
           child: SingleChildScrollView(
             controller: ModalScrollController.of(context),
             child: Container(
-              padding:  EdgeInsets.symmetric(horizontal:deviceType.isPhone?20: 50, vertical: deviceType.isPhone?5:20),
+              padding: EdgeInsets.symmetric(horizontal: deviceType.isPhone ? 20 : 50, vertical: deviceType.isPhone ? 5 : 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   StepsScreenTitle(title: "Passport / Visa Details", description: "", fontSize:deviceType.isPhone?17: 25),
-                   SizedBox(height:deviceType.isPhone?10: 20),
-                   Text("A valid visa is required for entry. please enter here the information about your visa you want to present at your final destination",
-                      overflow: TextOverflow.clip, style:deviceType.isPhone?MyTextTheme.lightGrey14: MyTextTheme.lightGrey22),
-                   SizedBox(height:deviceType.isPhone?10: 20),
-                  MyDropDown(index: index, hintText: DropDownUtils.visaType, width: width, height:deviceType.isPhone?40: 80, passOrVisa: DropDownUtils.visa),
-                   SizedBox(height: deviceType.isPhone?10:20),
-                  UserTextInput(controller: visaState.documentNoCs[index], hint: "Document No.", errorText: "", isEmpty: false, height:deviceType.isPhone?40: 80, width: width, fontSize:deviceType.isPhone?17: 23),
-                   SizedBox(height:deviceType.isPhone?10: 20),
-                  MyDropDown(index: index, hintText: DropDownUtils.placeOfIssue, width: width, height: deviceType.isPhone?40:80, passOrVisa: DropDownUtils.visa),
-                  SizedBox(height:deviceType.isPhone?10: 20),
+                  StepsScreenTitle(title: "Passport / Visa Details", description: "", fontSize: deviceType.isPhone ? 17 : 25),
+                  SizedBox(height: deviceType.isPhone ? 10 : 20),
+                  Text("A valid visa is required for entry. please enter here the information about your visa you want to present at your final destination",
+                      overflow: TextOverflow.clip, style: deviceType.isPhone ? MyTextTheme.lightGrey14 : MyTextTheme.lightGrey22),
+                  SizedBox(height: deviceType.isPhone ? 10 : 20),
+                  MyDropDown(index: index, hintText: DropDownUtils.visaType, width: width, height: deviceType.isPhone ? 40 : 80, passOrVisa: DropDownUtils.visa),
+                  SizedBox(height: deviceType.isPhone ? 10 : 20),
+                  UserTextInput(
+                      controller: visaState.documentNoCs[index],
+                      hint: "Document No.",
+                      errorText: "",
+                      isEmpty: false,
+                      height: deviceType.isPhone ? 40 : 80,
+                      width: width,
+                      fontSize: deviceType.isPhone ? 17 : 23),
+                  SizedBox(height: deviceType.isPhone ? 10 : 20),
+                  MyDropDown(index: index, hintText: DropDownUtils.placeOfIssue, width: width, height: deviceType.isPhone ? 40 : 80, passOrVisa: DropDownUtils.visa),
+                  SizedBox(height: deviceType.isPhone ? 10 : 20),
                   SelectingDateWidget(
-                    height:deviceType.isPhone?40: 80,
+                    height: deviceType.isPhone ? 40 : 80,
                     width: width,
-                    fontSize: deviceType.isPhone?17:23,
+                    fontSize: deviceType.isPhone ? 17 : 23,
                     hint: "Issue Date",
                     index: index,
                     updateDate: selectEntryDate,
                     currDateTime: visaState.travelers[index].visaInfo.issueDate == null ? DateTime.now() : visaState.travelers[index].visaInfo.issueDate!,
                     isCurrDateEmpty: visaState.travelers[index].visaInfo.issueDate == null ? true : false,
                   ),
-                   SizedBox(height:deviceType.isPhone?10: 20),
-                  UserTextInput(height: deviceType.isPhone?40:80, width: width, fontSize:deviceType.isPhone?17: 23, controller: visaState.destinationCs[index], hint: "Destination", errorText: "", isEmpty: false),
-                   SizedBox(height:deviceType.isPhone?10: 20),
+                  SizedBox(height: deviceType.isPhone ? 10 : 20),
+                  UserTextInput(
+                      height: deviceType.isPhone ? 40 : 80,
+                      width: width,
+                      fontSize: deviceType.isPhone ? 17 : 23,
+                      controller: visaState.destinationCs[index],
+                      hint: "Destination",
+                      errorText: "",
+                      isEmpty: false),
+                  SizedBox(height: deviceType.isPhone ? 10 : 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const SizedBox(width: 1),
-                      SubmitButton(
-                        height:deviceType.isPhone?40: 60,
-                        width:deviceType.isPhone?100: 200,
-                        fontSize:deviceType.isPhone?17: 20,
+                      MyElevatedButton(
+                        height: deviceType.isPhone ? 40 : 70,
+                        width: deviceType.isPhone ? 100 : 200,
+                        buttonText: "Submit",
+                        bgColor: MyColors.white,
+                        fgColor: MyColors.myBlue,
+                        fontSize: deviceType.isPhone ? fontSize : 23,
+                        borderColor: Colors.blue,
                         function: visaState.loading ? () {} : () => submitBtnFunction(index),
-                      )
+                      ),
                     ],
                   )
                 ],
@@ -263,15 +284,4 @@ class VisaController extends MainController {
     }
     return returnedValue;
   }
-
-  @override
-  void onInit() {
-    init();
-    super.onInit();
-  }
-// @override
-// void onCreate() {
-//
-//   super.onCreate();
-// }
 }

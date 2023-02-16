@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/assets.dart';
@@ -23,14 +24,14 @@ class CardInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Card Info",
+          "Card Info".translate(context),
           style: deviceType.isTablet ? MyTextTheme.darkGreyBold30 : MyTextTheme.darkGreyBold22,
         ),
         const SizedBox(
           height: 10,
         ),
         Row(
-          children: [
+          children: const [
             CardImage(
               imagePath: AssetImages.amexCard,
             ),
@@ -40,14 +41,14 @@ class CardInfo extends StatelessWidget {
           ],
         ),
         SizedBox(
-          height: deviceType.isTablet ? 20 : 10,
+          height: deviceType.isTablet ? 20 : 15,
         ),
         UserTextInput(
           height: deviceType.isTablet ? 60 : 30,
           width: width,
-          fontSize: deviceType.isTablet ? 25 : 17,
+          fontSize: deviceType.isTablet ? 25 : 15,
           controller: paymentState.cardHolderNameC,
-          hint: "Cardholder Name",
+          hint: "Cardholder Name".translate(context),
           errorText: "",
           isEmpty: false,
         ),
@@ -55,9 +56,9 @@ class CardInfo extends StatelessWidget {
         UserTextInput(
           height: deviceType.isTablet ? 60 : 30,
           width: width,
-          fontSize: deviceType.isTablet ? 25 : 17,
+          fontSize: deviceType.isTablet ? 25 : 15,
           controller: paymentState.cardNumberC,
-          hint: "Card Number",
+          hint: "Card Number".translate(context),
           errorText: "",
           isEmpty: false,
         ),
@@ -68,9 +69,9 @@ class CardInfo extends StatelessWidget {
                 child: UserTextInput(
               height: deviceType.isTablet ? 60 : 30,
               // width: Get.width,
-              fontSize: deviceType.isTablet ? 25 : 17,
+              fontSize: deviceType.isTablet ? 25 : 15,
               controller: paymentState.expiryMonthC,
-              hint: "Expiry Month",
+              hint: "Expiry Month".translate(context),
               errorText: "",
               isEmpty: false,
             )),
@@ -81,9 +82,9 @@ class CardInfo extends StatelessWidget {
                 child: UserTextInput(
               height: deviceType.isTablet ? 60 : 30,
               // width: Get.width,
-              fontSize: deviceType.isTablet ? 25 : 17,
+              fontSize: deviceType.isTablet ? 25 : 15,
               controller: paymentState.expiryYearC,
-              hint: "Expiry Year",
+              hint: "Expiry Year".translate(context),
               errorText: "",
               isEmpty: false,
             )),
@@ -98,7 +99,7 @@ class CardInfo extends StatelessWidget {
                 child: UserTextInput(
               height: deviceType.isTablet ? 60 : 30,
               // width: Get.width,
-              fontSize: deviceType.isTablet ? 25 : 17,
+              fontSize: deviceType.isTablet ? 25 : 15,
               controller: paymentState.cvv2C,
               hint: "CVV2",
               errorText: "",
@@ -109,7 +110,7 @@ class CardInfo extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                "3 or 4 digits usually found on the signature strip",
+                "3 or 4 digits usually found on the signature strip".translate(context),
                 style: TextStyle(
                   fontSize: deviceType.isTablet ? 20 : 15,
                   color: MyColors.grey,
@@ -119,9 +120,9 @@ class CardInfo extends StatelessWidget {
             )
           ],
         ),
-        // const SizedBox(
-        //   height: 20,
-        // ),
+        const SizedBox(
+          height: 20,
+        ),
         // SizedBox(
         //   height: 40,
         //   width: 375,

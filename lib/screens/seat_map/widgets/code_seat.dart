@@ -27,7 +27,7 @@ class CodeSeat extends StatelessWidget {
       margin: const EdgeInsets.all(2),
       width: width,
       height: height,
-      decoration: const BoxDecoration(color: MyColors.sonicSilver),
+      decoration: const BoxDecoration(color: MyColors.grey),
       child: Center(
         child: Text(
           cell.type == "Seat" ? cell.value! : "",

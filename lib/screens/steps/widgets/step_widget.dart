@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/my_list.dart';
 import '../../../core/constants/ui.dart';
@@ -77,7 +78,7 @@ class StepWidget extends StatelessWidget {
                       width: 3,
                     ),
                     Text(
-                      MyList.titlesList[index],
+                      MyList.titlesList[index].translate(context),
                       style: TextStyle(color: frColor),
                     ),
                   ],

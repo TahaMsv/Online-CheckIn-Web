@@ -18,6 +18,8 @@ import 'package:provider/provider.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+import '../../core/utils/MultiLanguages.dart';
+
 class SeatMapViewWeb extends StatelessWidget {
   SeatMapViewWeb({Key? key}) : super(key: key);
   final SeatMapController seatMapController = getIt<SeatMapController>();
@@ -67,7 +69,7 @@ class PlaneBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final SeatMapController seatMapController = getIt<SeatMapController>();
     SeatMapState seatMapState = context.watch<SeatMapState>();
-    String languageCode = "en";
+        String languageCode = MultiLanguages.of(context)!.locale.languageCode;
     return Center(
       child: SizedBox(
         height: seatMapController.calculatePlaneBodyHeight() + 20,

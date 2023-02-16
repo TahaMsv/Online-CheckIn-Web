@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 
 import '../core/constants/ui.dart';
 
@@ -38,6 +39,7 @@ class MyElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+
       height: height,
       width: width,
       decoration: BoxDecoration(
@@ -69,7 +71,7 @@ class MyElevatedButton extends StatelessWidget {
               )
             : child ??
                 Text(
-                  buttonText,
+                  buttonText.translate(context),
                   style: TextStyle(fontSize: fontSize),
                 ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/upgrades/upgrades_controller.dart';
 import 'package:online_check_in/screens/upgrades/upgrades_state.dart';
 import 'package:online_check_in/screens/upgrades/widgets/entertainments.dart';
@@ -9,6 +10,7 @@ import '../../core/constants/ui.dart';
 import '../../core/dependency_injection.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/utils/MultiLanguages.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/StepsScreenTitle.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -29,8 +31,8 @@ class UpgradesViewWeb extends StatelessWidget {
               )
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  StepsScreenTitle(title: "Upgrades", description: "All upgrades are non-refundable"),
+                children:  [
+                  StepsScreenTitle(title: "Upgrades".translate(context), description: "All upgrades are non-refundable".translate(context)),
                   SizedBox(height: 10),
                   WinesAndDrinksList(),
                   SizedBox(height: 10),
@@ -62,12 +64,12 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
   @override
   Widget build(BuildContext context) {
     UpgradesState upgradesState = context.watch<UpgradesState>();
-    String languageCode = "en";
+        String languageCode = MultiLanguages.of(context)!.locale.languageCode;
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Wines & Drinks", style: MyTextTheme.darkGreyW80013),
+           Text("Wines & Drinks".translate(context), style: MyTextTheme.darkGreyW80013),
           const SizedBox(height: 15),
           Expanded(
             child: Row(
@@ -147,7 +149,7 @@ class _WinesAndDrinksListState extends State<WinesAndDrinksList> {
 //   @override
 //   Widget build(BuildContext context) {
 //     UpgradesState upgradesState = context.watch<UpgradesState>();
-//     String languageCode = "en";
+//         String languageCode = MultiLanguages.of(context)!.locale.languageCode;
 //     return Expanded(
 //       child: Column(
 //         crossAxisAlignment: CrossAxisAlignment.start,

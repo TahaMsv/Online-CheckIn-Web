@@ -1,3 +1,4 @@
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/addTraveler/usecases/add_traveler_usecase.dart';
 
 import '../../core/constants/ui.dart';
@@ -25,63 +26,60 @@ class AddTravelerController extends MainController {
   void addTraveller(BuildContext context) async {
     String lastName = addTravelerState.lastNameC.text;
     String ticketNumber = addTravelerState.ticketNumberC.text;
-    if (ticketNumber == "") {
-      // isTicketNumberEmpty.value = true;
-      nav.snackbar(
-        const Text(
-          "Ticket Number can not be empty",
-          style: TextStyle(fontSize: 22),
-        ),
-        backgroundColor: MyColors.red,
-      );
-    } else {
-      addTravelerState.setIsTicketNumberEmpty(false);
-    }
-    if (lastName == "") {
-      // isLastNameEmpty.value = true;
-      nav.snackbar(
-          const Text(
-            "LastName can not be empty",
-            style: TextStyle(fontSize: 22),
+    if (!addTravelerState.loading) {
+      addTravelerState.setLoading(true);
+      if (ticketNumber == "") {
+        // isTicketNumberEmpty.value = true;
+        nav.snackbar(
+           Text(
+            "Ticket Number can not be empty".translate(context),
+            style: TextStyle(fontSize: 18),
           ),
-          backgroundColor: MyColors.red);
-    } else {
-      addTravelerState.setIsLastNameEmpty(false);
-    }
-    if (ticketNumber != "" && lastName != "") {
-      if (!addTravelerState.requesting) {
-        addTravelerState.setRequesting(true);
-
-        AddTravelerRequest addTravelerRequest = AddTravelerRequest(
-          ticketNumber: ticketNumber,
-          lastname: lastName,
+          backgroundColor: MyColors.red,
         );
+      } else {
+        addTravelerState.setIsTicketNumberEmpty(false);
+      }
+      if (lastName == "") {
+        // isLastNameEmpty.value = true;
+        nav.snackbar(
+             Text(
+              "LastName can not be empty".translate(context),
+              style: TextStyle(fontSize: 18),
+            ),
+            backgroundColor: MyColors.red);
+      } else {
+        addTravelerState.setIsLastNameEmpty(false);
+      }
+      if (ticketNumber != "" && lastName != "") {
+        if (!addTravelerState.requesting) {
+          addTravelerState.setRequesting(true);
 
-        String newToken = "";
-        final fOrToken = await addTravelerUseCase(request: addTravelerRequest);
-        fOrToken.fold((f) => FailureHandler.handle(f, retry: () => addTraveller(context)), (token) async {
-          newToken = token;
-        });
+          AddTravelerRequest addTravelerRequest = AddTravelerRequest(
+            ticketNumber: ticketNumber,
+            lastname: lastName,
+          );
 
-        if (newToken != "") {
-          final StepsController stepsController = getIt<StepsController>();
-          stepsController.addToTravelers(newToken, lastName, ticketNumber);
-          addTravelerState.lastNameC.text = "";
-          addTravelerState.ticketNumberC.text = "";
-          addTravelerState.setIsTicketNumberEmpty(false);
-          addTravelerState.setIsLastNameEmpty(false);
-        } else {
-          nav.snackbar(
-              const Text(
-                "Wrong LastName or Booking reference name",
-                style: TextStyle(fontSize: 22),
-              ),
-              backgroundColor: MyColors.red);
+          String newToken = "";
+          final fOrToken = await addTravelerUseCase(request: addTravelerRequest);
+          fOrToken.fold((f) => FailureHandler.handle(f, retry: () => addTraveller(context)), (token) async {
+            newToken = token;
+          });
+
+          if (newToken != "") {
+            final StepsController stepsController = getIt<StepsController>();
+            stepsController.addToTravelers(token: newToken, lastName: lastName, ticketNumber: ticketNumber, isLoginRequest: false);
+            addTravelerState.lastNameC.text = "";
+            addTravelerState.ticketNumberC.text = "";
+            addTravelerState.setIsTicketNumberEmpty(false);
+            addTravelerState.setIsLastNameEmpty(false);
+          }
+          addTravelerState.setRequesting(false);
         }
         addTravelerState.setRequesting(false);
       }
-      addTravelerState.setRequesting(false);
     }
+    addTravelerState.setLoading(false);
   }
 
 // @override

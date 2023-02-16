@@ -41,7 +41,6 @@ class PassportState with ChangeNotifier {
   List<Traveler> travelers = <Traveler>[];
   List<int> travelersIndexInMainList = [];
   List<TextEditingController> documentNoCs = [];
-  List<MyCountry> countriesList = [];
   List<PassPortType> listPassportType = [PassPortType.example()];
   List<MyCountry> countryOfIssueList = [MyCountry.example("Country of Issue")];
   List<String> listGender = ["Gender", "Male", "Female"];

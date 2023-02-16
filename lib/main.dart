@@ -17,13 +17,15 @@ import 'core/constants/apis.dart';
 import 'core/constants/ui.dart';
 import 'core/dependency_injection.dart';
 import 'core/navigation/navigation_service.dart';
+import 'core/navigation/router.dart';
 import 'core/utils/app_config.dart';
 import 'my_app.dart';
 import 'screens/login/login_state.dart';
 import 'screens/login/login_view_web.dart';
 
+
 void main() async {
-  initializeDateFormatting();
+  // initializeDateFormatting();
   AppConfig(
     flavor: Flavor.abomis,
     baseUrl: Apis.baseUrl,
@@ -32,9 +34,9 @@ void main() async {
     // logoAddress: AssetImages.artemis
   );
   WidgetsFlutterBinding.ensureInitialized();
-
+   // MyRouter.initialize();
   await init();
-
+  //
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => getIt<LoginState>()),
@@ -49,6 +51,8 @@ void main() async {
       ChangeNotifierProvider(create: (_) => getIt<PaymentState>()),
       ChangeNotifierProvider(create: (_) => getIt<ReceiptState>()),
     ],
-    child: const MyApp(),
+    child:  MyApp(),
   ));
+
+  // runApp(MyApp(),);
 }

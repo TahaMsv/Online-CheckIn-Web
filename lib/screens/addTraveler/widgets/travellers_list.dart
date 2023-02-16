@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/ui.dart';
 import '../../../core/dependency_injection.dart';
 import '../../../core/platform/device_info.dart';
+import '../../../core/utils/MultiLanguages.dart';
 import '../../../widgets/MyDivider.dart';
 import '../../../widgets/MyElevatedButton.dart';
 import '../../../widgets/UserTextInput.dart';
@@ -25,7 +27,7 @@ class TravellersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     StepsState stepsState = context.watch<StepsState>();
+    StepsState stepsState = context.watch<StepsState>();
     DeviceType deviceType = DeviceInfo.deviceType(context);
     double height = MediaQuery.of(context).size.height;
     return Container(
@@ -37,18 +39,18 @@ class TravellersList extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TitleWidget(
-                title: "Travellers",
+                title: "Travellers".translate(context),
                 width: width * 0.5,
-                height: deviceType.isPhone ? 40 : 100,
+                height: deviceType.isPhone ? 50 : 95,
                 fontSize: deviceType.isPhone ? 20 : 40,
               ),
               if (step == 6)
                 SizedBox(
                   width: 112,
                   child: Row(
-                    children: const [
+                    children: [
                       MyDivider(width: 2, height: 60),
-                      TitleWidget(title: "Seat", width: 100),
+                      TitleWidget(title: "Seat".translate(context), width: 100),
                     ],
                   ),
                 ),
@@ -56,7 +58,7 @@ class TravellersList extends StatelessWidget {
           ),
           Container(
             width: width,
-            height: height * 0.41 - 40,
+            height: height * 0.41 - (deviceType.isPhone ? 50 : 95),
             padding: EdgeInsets.symmetric(horizontal: deviceType.isPhone ? 10 : 20),
             child: ListView.builder(
               itemCount: stepsState.travelers.length + 1,
@@ -88,8 +90,8 @@ class AddNewTraveller extends StatelessWidget {
   Widget build(BuildContext context) {
     final StepsController stepsController = getIt<StepsController>();
     final AddTravelerController addTravelerController = getIt<AddTravelerController>();
-     StepsState stepsState = context.watch<StepsState>();
-    final AddTravelerState addTravelerState= context.watch<AddTravelerState>();
+    StepsState stepsState = context.watch<StepsState>();
+    final AddTravelerState addTravelerState = context.watch<AddTravelerState>();
     DeviceType deviceType = DeviceInfo.deviceType(context);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: deviceType.isPhone ? 5 : 20.0),
@@ -118,36 +120,36 @@ class AddNewTraveller extends StatelessWidget {
                           size: deviceType.isPhone ? 15 : 30,
                         ),
                   SizedBox(width: deviceType.isPhone ? 10 : 15),
-                  Text("Add Travellers", style: deviceType.isPhone ? MyTextTheme.w800MainColor15 : MyTextTheme.w800MainColor22),
+                  Text("Add Travellers".translate(context), style: deviceType.isPhone ? MyTextTheme.w800MainColor15 : MyTextTheme.w800MainColor22),
                 ],
               ),
             ),
           ),
           if (stepsState.isAddingBoxOpen)
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: deviceType.isPhone ? 5 : 15),
                 Text(
-                  "Add all passengers to the list on the left here",
+                  "Add all passengers to the list on the left here".translate(context),
                   style: deviceType.isPhone ? MyTextTheme.lightGrey14 : MyTextTheme.lightGrey20,
                 ),
                 SizedBox(height: deviceType.isPhone ? 10 : 15),
                 UserTextInput(
                   height: deviceType.isPhone ? 40 : 63,
-                  fontSize: deviceType.isPhone ? 19 : 22,
+                  fontSize: deviceType.isPhone ? 17 : 22,
                   controller: addTravelerState.lastNameC,
-                  hint: "Last Name",
-                  errorText: "Last Name can't be empty",
+                  hint: "Last Name".translate(context),
+                  errorText: "Last Name can't be empty".translate(context),
                   isEmpty: addTravelerState.isLastNameEmpty,
                 ),
                 SizedBox(height: deviceType.isPhone ? 5 : 10),
                 UserTextInput(
                   height: deviceType.isPhone ? 40 : 63,
-                  fontSize: deviceType.isPhone ? 19 : 22,
+                  fontSize: deviceType.isPhone ? 17 : 22,
                   controller: addTravelerState.ticketNumberC,
-                  hint: "Reservation ID / Ticket Number",
-                  errorText: "Reservation ID / Ticket Number can't be empty",
+                  hint: "Reservation ID / Ticket Number".translate(context),
+                  errorText: "Reservation ID / Ticket Number can't be empty".translate(context),
                   isEmpty: addTravelerState.isTicketNumberEmpty,
                   obscureText: true,
                 ),
@@ -160,7 +162,7 @@ class AddNewTraveller extends StatelessWidget {
                     bgColor: const Color(0xff00bfa2),
                     fgColor: Colors.white,
                     fontSize: deviceType.isPhone ? 17 : 22,
-                    isLoading: addTravelerState.requesting,
+                    isLoading: addTravelerState.requesting || stepsState.stepLoading,
                     function: () => addTravelerController.addTraveller(context),
                   ),
                 )
@@ -184,8 +186,8 @@ class TravellerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final StepsController stepsController = getIt<StepsController>();
-     StepsState stepsState = context.watch<StepsState>();
-    String languageCode = "en";
+    StepsState stepsState = context.watch<StepsState>();
+        String languageCode = MultiLanguages.of(context)!.locale.languageCode;
     bool isTravellerSelected = stepsState.travelers[index].seatId == "--" ? false : true;
     DeviceType deviceType = DeviceInfo.deviceType(context);
     return Container(

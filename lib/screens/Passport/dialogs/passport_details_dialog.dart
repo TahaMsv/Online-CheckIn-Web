@@ -34,6 +34,7 @@ class _PassportDialogState extends State<PassportDialog> {
   Widget build(BuildContext context) {
     final PassportState passportState = getIt<PassportState>();
     final PassportController passportController = getIt<PassportController>();
+    double fontSize = 16;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 150, horizontal: 200),
       child: Dialog(

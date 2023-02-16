@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/Passport/passport_repository.dart';
 import 'package:online_check_in/screens/Passport/passport_state.dart';
 import 'package:online_check_in/screens/Passport/usecases/select_countries_usecase.dart';
@@ -34,7 +35,7 @@ class PassportController extends MainController {
     passportState.travelers = stepsState.travelers;
   }
 
-  void init() async {
+  Future<bool> passportInit() async {
     passportState.setLoading(true);
     if (!passportState.passportTypeInit) {
       travellersList();
@@ -47,79 +48,14 @@ class PassportController extends MainController {
         passportState.documentNoCs.add(TextEditingController());
       }
     }
+
+
     print("done");
     passportState.setLoading(false);
+    return passportState.getCountriesInit && passportState.passportTypeInit;
   }
 
-  // void close() async {
-  //   await saveDocs();
-  // }
-  //
-  // Future<void> saveDocs() async {
-  //   final StepsState stepsState = getIt<StepsState>();
-  //   for (var i = 0; i < passportState.travelersIndexInMainList.length; ++i) {
-  //     int mainIndex = passportState.travelersIndexInMainList[i];
-  //     stepsState.travelers[mainIndex] = passportState.travelers[i];
-  //   }
-  // }
 
-  // Future<void> saveDocsDocoDoca(int index) async {
-  //   ///Docs Information
-  //   Traveller traveller = travellers[index];
-  //   String docsType = traveller.passportInfo.passportType == null ? "" : traveller.passportInfo.passportType!.split("-")[0].trim();
-  //   String docsCountry = traveller.passportInfo.countryOfIssue == null ? "" : traveller.passportInfo.countryOfIssue!.split("-")[0].trim();
-  //   String docsNationality = traveller.passportInfo.nationality == null ? "" : traveller.passportInfo.nationality!.split("-")[0].trim();
-  //   String docsDocumentNumber = traveller.passportInfo.documentNo ?? "";
-  //   final df = new DateFormat('yyyy-MM-dd');
-  //   String docsBirthDate = traveller.passportInfo.dateOfBirth == null ? df.format(traveller.passportInfo.dateOfBirth!) : "";
-  //   String docsExpiryDate = traveller.passportInfo.entryDate == null ? df.format(traveller.passportInfo.entryDate!) : "";
-  //
-  //   ///Doco Information
-  //   String docoDestination = traveller.visaInfo.destination ?? "";
-  //   String docoDocumentNumber = traveller.visaInfo.documentNo ?? "";
-  //   String docoType = traveller.visaInfo.type ?? "";
-  //   String docoPlaceOfIssue = traveller.visaInfo.placeOfIssueID ?? "";
-  //   String docoPlaceOfBirth = traveller.passportInfo.nationalityID ?? "";
-  //   String docoIssueDate = traveller.visaInfo.issueDate == null ? df.format(traveller.visaInfo.issueDate!) : "";
-  //   if (!model.requesting) {
-  //     model.setRequesting(true);
-  //     Response response = await DioClient.saveDocsDocoDoca(
-  //       execution: "[OnlineCheckin].[SaveDocsDocoDoca]",
-  //       token: traveller.token,
-  //       request: {
-  //         "PassengerId": traveller.welcome.body.passengers[0].id,
-  //         "DocaAddress": "",
-  //         "DocaCity": "",
-  //         "DocaCountry": "",
-  //         "DocaType": "",
-  //         "DocaZipCode": "",
-  //         "DocsCountry": docsCountry,
-  //         "DocsNationality": docsNationality,
-  //         "DocsBirthDate": docsBirthDate,
-  //         "DocsExpiryDate": docsExpiryDate, // todo  is Valid?
-  //         "DocsDocumentNumber": docsDocumentNumber,
-  //         "DocsType": docsType,
-  //         "DocsSecondName": traveller.welcome.body.passengers[0].lastName, // todo  is Valid?
-  //         "DocoDestination": docoDestination,
-  //         "DocoDocumentNumber": docoDocumentNumber,
-  //         "DocoType": docoType,
-  //         "DocoPlaceOfIssue": docoPlaceOfIssue,
-  //         "DocoPlaceOfBirth": docoPlaceOfBirth, //todo  is Valid? (Docs nationality)
-  //         "DocoIssueDate": docoIssueDate,
-  //         "DocsTitle": traveller.welcome.body.passengers[0].title
-  //       },
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       if (response.data["ResultCode"] == 1) {
-  //         final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
-  //         int mainIndex = travellersIndexInMainList[index];
-  //         stepsScreenController.travellers[mainIndex] = traveller;
-  //       }
-  //     }
-  //   }
-  //   model.setRequesting(false);
-  // }
 
   Future<void> getSelectCountries() async {
     SelectCountriesRequest selectCountriesRequest = SelectCountriesRequest();
@@ -139,9 +75,15 @@ class PassportController extends MainController {
     SelectPassportTypesRequest selectPassportTypesRequest = SelectPassportTypesRequest();
     final fOrList = await selectPassportTypesUseCase(request: selectPassportTypesRequest);
 
-    fOrList.fold((f) => FailureHandler.handle(f, retry: () => getSelectCountries()), (passportTypesList) async {
+    fOrList.fold((f) => FailureHandler.handle(f, retry: () => getPassportTypes()), (passportTypesList) async {
       passportState.listPassportType.addAll(passportTypesList);
       passportState.setPassportTypeInit(true);
+      // if (!passportState.getCountriesInit) {
+      //   await getSelectCountries();
+      //   for (var i = 0; i < passportState.travelers.length; ++i) {
+      //     passportState.documentNoCs.add(TextEditingController());
+      //   }
+      // }
       print("Done with get passport");
     });
   }
@@ -167,169 +109,13 @@ class PassportController extends MainController {
     passportState.setState();
   }
 
-  // void showDOCSPopup(BuildContext context, int index) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) => Dialog(
-  //             backgroundColor: MyColors.white,
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.start,
-  //               children: [
-  //                 StepsScreenTitle(title: "Passport / Visa Details".tr, description: ""),
-  //                 const SizedBox(height: 20),
-  //                 Row(
-  //                   children: [
-  //                     DropDown(index: index, hintText: passportState.passportType),
-  //                     const SizedBox(width: 20),
-  //                     Expanded(
-  //                       child: UserTextInput(controller: passportState.documentNoCs[index], hint: "Document No.".tr, errorText: "", isEmpty: false),
-  //                     )
-  //                   ],
-  //                 ),
-  //                 const SizedBox(height: 20),
-  //                 Row(
-  //                   children: [
-  //                     DropDown(index: index, hintText: passportState.gender),
-  //                     const SizedBox(width: 20),
-  //                     DropDown(index: index, hintText: passportState.countryOfIssueType),
-  //                     const SizedBox(width: 20),
-  //                     SelectingDateWidget(
-  //                       hint: "Entry Date".tr,
-  //                       index: index,
-  //                       updateDate: selectEntryDate,
-  //                       currDateTime: passportState.travelers[index].passportInfo.entryDate == null ? DateTime.now() : passportState.travelers[index].passportInfo.entryDate!,
-  //                       isCurrDateEmpty: passportState.travelers[index].passportInfo.entryDate == null ? true : false,
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 const SizedBox(height: 20),
-  //                 Row(
-  //                   children: [
-  //                     DropDown(index: index, hintText: passportState.nationalityType),
-  //                     const SizedBox(width: 20),
-  //                     SelectingDateWidget(
-  //                       hint: "Date of Birth".tr,
-  //                       index: index,
-  //                       updateDate: selectDateOfBirth,
-  //                       currDateTime: passportState.travelers[index].passportInfo.dateOfBirth == null ? DateTime.now() : passportState.travelers[index].passportInfo.dateOfBirth!,
-  //                       isCurrDateEmpty: passportState.travelers[index].passportInfo.dateOfBirth == null ? true : false,
-  //                     ),
-  //                   ],
-  //                 ),
-  //                 const SizedBox(height: 20),
-  //                 Row(
-  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                   children: [
-  //                     const SizedBox(width: 1),
-  //                     MyElevatedButton(
-  //                       height: 50,
-  //                       width: 175,
-  //                       buttonText: "Submit".tr,
-  //                       bgColor: MyColors.white,
-  //                       fgColor: MyColors.myBlue,
-  //                       function: passportState.requesting
-  //                           ? () {}
-  //                           : () {
-  //                               // VisaStepController visaStepController = Get.put(VisaStepController(model));
-  //                               passportState.refreshTravelers();
-  //                               updateDocuments();
-  //
-  //                               // saveDocsDocoDoca(index);
-  //                               // visaStepController.checkDocoNecessity(passportState.travelers[index]); //todo
-  //                               Get.back();
-  //                             },
-  //                     ),
-  //                   ],
-  //                 )
-  //               ],
-  //             ),
-  //           ));
-  //   // print("In get dialog. index: " + index.toString());
-  //   // Get.defaultDialog(
-  //   //   title: "",
-  //   //   backgroundColor: MyColors.white,
-  //   //   buttonColor: MyColors.red,
-  //   //   barrierDismissible: true,
-  //   //   radius: 10,
-  //   //   content: Column(
-  //   //     crossAxisAlignment: CrossAxisAlignment.start,
-  //   //     children: [
-  //   //       StepsScreenTitle(title: "Passport / Visa Details".tr, description: ""),
-  //   //       const SizedBox(height: 20),
-  //   //       Row(
-  //   //         children: [
-  //   //           DropDown(index: index, hintText: passportState.passportType),
-  //   //           const SizedBox(width: 20),
-  //   //           Expanded(
-  //   //             child: UserTextInput(controller: passportState.documentNoCs[index], hint: "Document No.".tr, errorText: "", isEmpty: false),
-  //   //           )
-  //   //         ],
-  //   //       ),
-  //   //       const SizedBox(height: 20),
-  //   //       Row(
-  //   //         children: [
-  //   //           DropDown(index: index, hintText: passportState.gender),
-  //   //           const SizedBox(width: 20),
-  //   //           DropDown(index: index, hintText: passportState.countryOfIssueType),
-  //   //           const SizedBox(width: 20),
-  //   //           SelectingDateWidget(
-  //   //             hint: "Entry Date".tr,
-  //   //             index: index,
-  //   //             updateDate: selectEntryDate,
-  //   //             currDateTime: passportState.travelers[index].passportInfo.entryDate == null ? DateTime.now() : passportState.travelers[index].passportInfo.entryDate!,
-  //   //             isCurrDateEmpty: passportState.travelers[index].passportInfo.entryDate == null ? true : false,
-  //   //           ),
-  //   //         ],
-  //   //       ),
-  //   //       const SizedBox(height: 20),
-  //   //       Row(
-  //   //         children: [
-  //   //           DropDown(index: index, hintText: passportState.nationalityType),
-  //   //           const SizedBox(width: 20),
-  //   //           SelectingDateWidget(
-  //   //             hint: "Date of Birth".tr,
-  //   //             index: index,
-  //   //             updateDate: selectDateOfBirth,
-  //   //             currDateTime: passportState.travelers[index].passportInfo.dateOfBirth == null ? DateTime.now() : passportState.travelers[index].passportInfo.dateOfBirth!,
-  //   //             isCurrDateEmpty: passportState.travelers[index].passportInfo.dateOfBirth == null ? true : false,
-  //   //           ),
-  //   //         ],
-  //   //       ),
-  //   //       const SizedBox(height: 20),
-  //   //       Row(
-  //   //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //   //         children: [
-  //   //           const SizedBox(width: 1),
-  //   //           MyElevatedButton(
-  //   //             height: 50,
-  //   //             width: 175,
-  //   //             buttonText: "Submit".tr,
-  //   //             bgColor: MyColors.white,
-  //   //             fgColor: MyColors.myBlue,
-  //   //             function: passportState.requesting
-  //   //                 ? () {}
-  //   //                 : () {
-  //   //                     // VisaStepController visaStepController = Get.put(VisaStepController(model));
-  //   //                     passportState.refreshTravelers();
-  //   //                     updateDocuments();
-  //   //
-  //   //                     // saveDocsDocoDoca(index);
-  //   //                     // visaStepController.checkDocoNecessity(passportState.travelers[index]); //todo
-  //   //                     Get.back();
-  //   //                   },
-  //   //           ),
-  //   //         ],
-  //   //       )
-  //   //     ],
-  //   //   ),
-  //   // );
-  // }
 
   void showPassportDialog(int index) {
     nav.dialog(PassportDialog(index: index));
   }
 
   void showBottomSheetForm(BuildContext context, double height, double width, int index) {
+    double fontSize = 16;
     DeviceType deviceType = DeviceInfo.deviceType(context);
     showMaterialModalBottomSheet(
       context: context,
@@ -340,87 +126,94 @@ class PassportController extends MainController {
           child: SingleChildScrollView(
             controller: ModalScrollController.of(context),
             child: Container(
-              padding:  EdgeInsets.symmetric(horizontal:deviceType.isPhone?10: 50, vertical:deviceType.isPhone?5: 20),
+              padding: EdgeInsets.symmetric(horizontal: deviceType.isPhone ? 10 : 50, vertical: deviceType.isPhone ? 5 : 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   StepsScreenTitle(title: "Passport / Visa Details", description: "", fontSize: deviceType.isPhone?17:25),
-                   SizedBox(height: deviceType.isPhone?10:20),
-                  MyDropDown(
-                    index: index,
-                    hintText: DropDownUtils.passportType,
-                    width: width,
-                    height:deviceType.isPhone?40: 80,
-                    passOrVisa: DropDownUtils.passport,
-                  ),
-                   SizedBox(height:deviceType.isPhone?10: 20),
-                  UserTextInput(controller: passportState.documentNoCs[index], hint: "Document No.", errorText: "", isEmpty: false, height:deviceType.isPhone?40: 80, width: width, fontSize:deviceType.isPhone?17: 25),
-                   SizedBox(height: deviceType.isPhone?10:20),
+                  StepsScreenTitle(title: "Passport / Visa Details".translate(context), description: "", fontSize: deviceType.isPhone ? fontSize : 25),
+                  SizedBox(height: deviceType.isPhone ? 10 : 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      MyDropDown(
-                        index: index,
-                        hintText: DropDownUtils.gender,
-                        width:deviceType.isPhone?120: width * 0.2,
-                        height:deviceType.isPhone?40: 80,
-                        passOrVisa: DropDownUtils.passport,
-                      ),
-                       SizedBox(width: deviceType.isPhone?5:20),
                       Expanded(
                         child: MyDropDown(
                           index: index,
-                          hintText: DropDownUtils.countryOfIssueType,
-                          // width: width * 0.5,
-                          height: deviceType.isPhone?40:80,
+                          hintText: DropDownUtils.passportType,
+                          // width: width,
+                          height: deviceType.isPhone ? 40 : 80,
                           passOrVisa: DropDownUtils.passport,
                         ),
                       ),
+                      SizedBox(width: deviceType.isPhone ? 5 : 20),
+                      MyDropDown(
+                        index: index,
+                        hintText: DropDownUtils.gender,
+                        width: deviceType.isPhone ? 120 : width * 0.2,
+                        height: deviceType.isPhone ? 40 : 80,
+                        passOrVisa: DropDownUtils.passport,
+                      ),
                     ],
                   ),
-                   SizedBox(height:deviceType.isPhone?10: 20),
-                  SelectingDateWidget(
-                    height: deviceType.isPhone?40:80,
+                  SizedBox(height: deviceType.isPhone ? 10 : 20),
+                  UserTextInput(
+                      controller: passportState.documentNoCs[index],
+                      hint: "Document No.",
+                      errorText: "",
+                      isEmpty: false,
+                      height: deviceType.isPhone ? 40 : 80,
+                      width: width,
+                      fontSize: deviceType.isPhone ? fontSize : 25),
+                  SizedBox(height: deviceType.isPhone ? 10 : 20),
+                  MyDropDown(
+                    index: index,
+                    hintText: DropDownUtils.countryOfIssueType,
                     width: width,
-                    fontSize: deviceType.isPhone?17:22,
+                    height: deviceType.isPhone ? 40 : 80,
+                    passOrVisa: DropDownUtils.passport,
+                  ),
+                  SizedBox(height: deviceType.isPhone ? 10 : 20),
+                  SelectingDateWidget(
+                    height: deviceType.isPhone ? 40 : 80,
+                    width: width,
+                    fontSize: deviceType.isPhone ? fontSize : 22,
                     hint: "Entry Date",
                     index: index,
                     updateDate: selectEntryDate,
                     currDateTime: passportState.travelers[index].passportInfo.entryDate == null ? DateTime.now() : passportState.travelers[index].passportInfo.entryDate!,
                     isCurrDateEmpty: passportState.travelers[index].passportInfo.entryDate == null ? true : false,
                   ),
-                   SizedBox(height:deviceType.isPhone?10: 20),
+                  SizedBox(height: deviceType.isPhone ? 10 : 20),
                   MyDropDown(
                     index: index,
                     hintText: DropDownUtils.nationalityType,
                     width: width,
-                    height:deviceType.isPhone?40: 80,
+                    height: deviceType.isPhone ? 40 : 80,
                     passOrVisa: DropDownUtils.passport,
                   ),
-                   SizedBox(height:deviceType.isPhone?10: 20),
+                  SizedBox(height: deviceType.isPhone ? 10 : 20),
                   SelectingDateWidget(
-                    height:deviceType.isPhone?40: 80,
+                    height: deviceType.isPhone ? 40 : 80,
                     width: width,
-                    fontSize:deviceType.isPhone?15: 22,
+                    fontSize: deviceType.isPhone ? fontSize : 22,
                     hint: "Date of Birth",
                     index: index,
                     updateDate: selectDateOfBirth,
                     currDateTime: passportState.travelers[index].passportInfo.dateOfBirth == null ? DateTime.now() : passportState.travelers[index].passportInfo.dateOfBirth!,
                     isCurrDateEmpty: passportState.travelers[index].passportInfo.dateOfBirth == null ? true : false,
                   ),
-                   SizedBox(height:deviceType.isPhone?10: 20),
+                  SizedBox(height: deviceType.isPhone ? 10 : 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const SizedBox(width: 1),
                       MyElevatedButton(
-                        height:deviceType.isPhone?40: 70,
-                        width:deviceType.isPhone?100: 200,
+                        height: deviceType.isPhone ? 40 : 70,
+                        width: deviceType.isPhone ? 100 : 200,
                         buttonText: "Submit",
                         bgColor: MyColors.white,
                         fgColor: MyColors.myBlue,
-                        fontSize:deviceType.isPhone?17: 23,
+                        fontSize: deviceType.isPhone ? fontSize : 23,
                         borderColor: Colors.blue,
                         function: passportState.loading
                             ? () {}
@@ -469,21 +262,13 @@ class PassportController extends MainController {
   void getOnChangedValueByType({required String type, required dynamic newValue, required int index}) {
     String translatedWord = getKeyFromLanguageWords(newValue.toString());
     if (type == DropDownUtils.passportType) {
-      print(passportState.travelers[index].passportInfo.passportType);
       passportState.travelers[index].passportInfo.passportType = translatedWord;
-      print(passportState.travelers[index].passportInfo.passportType);
     } else if (type == DropDownUtils.nationalityType) {
-      print(passportState.travelers[index].passportInfo.nationality);
       passportState.travelers[index].passportInfo.nationality = translatedWord;
-      print(passportState.travelers[index].passportInfo.nationality);
     } else if (type == DropDownUtils.countryOfIssueType) {
-      print(passportState.travelers[index].passportInfo.countryOfIssue);
       passportState.travelers[index].passportInfo.countryOfIssue = translatedWord;
-      print(passportState.travelers[index].passportInfo.countryOfIssue);
     } else if (type == DropDownUtils.gender) {
-      print(passportState.travelers[index].passportInfo.gender);
       passportState.travelers[index].passportInfo.gender = translatedWord;
-      print(passportState.travelers[index].passportInfo.gender);
     }
     passportState.setState();
   }
@@ -517,16 +302,235 @@ class PassportController extends MainController {
     }
     return returnedValue;
   }
-
-  // @override
-  // void onCreate() {
-  //   // init();
-  //   super.onCreate();
-  // }
-
-  @override
-  void onInit() {
-    init();
-    super.onInit();
-  }
 }
+
+
+
+// void close() async {
+//   await saveDocs();
+// }
+//
+// Future<void> saveDocs() async {
+//   final StepsState stepsState = getIt<StepsState>();
+//   for (var i = 0; i < passportState.travelersIndexInMainList.length; ++i) {
+//     int mainIndex = passportState.travelersIndexInMainList[i];
+//     stepsState.travelers[mainIndex] = passportState.travelers[i];
+//   }
+// }
+
+// Future<void> saveDocsDocoDoca(int index) async {
+//   ///Docs Information
+//   Traveller traveller = travellers[index];
+//   String docsType = traveller.passportInfo.passportType == null ? "" : traveller.passportInfo.passportType!.split("-")[0].trim();
+//   String docsCountry = traveller.passportInfo.countryOfIssue == null ? "" : traveller.passportInfo.countryOfIssue!.split("-")[0].trim();
+//   String docsNationality = traveller.passportInfo.nationality == null ? "" : traveller.passportInfo.nationality!.split("-")[0].trim();
+//   String docsDocumentNumber = traveller.passportInfo.documentNo ?? "";
+//   final df = new DateFormat('yyyy-MM-dd');
+//   String docsBirthDate = traveller.passportInfo.dateOfBirth == null ? df.format(traveller.passportInfo.dateOfBirth!) : "";
+//   String docsExpiryDate = traveller.passportInfo.entryDate == null ? df.format(traveller.passportInfo.entryDate!) : "";
+//
+//   ///Doco Information
+//   String docoDestination = traveller.visaInfo.destination ?? "";
+//   String docoDocumentNumber = traveller.visaInfo.documentNo ?? "";
+//   String docoType = traveller.visaInfo.type ?? "";
+//   String docoPlaceOfIssue = traveller.visaInfo.placeOfIssueID ?? "";
+//   String docoPlaceOfBirth = traveller.passportInfo.nationalityID ?? "";
+//   String docoIssueDate = traveller.visaInfo.issueDate == null ? df.format(traveller.visaInfo.issueDate!) : "";
+//   if (!model.requesting) {
+//     model.setRequesting(true);
+//     Response response = await DioClient.saveDocsDocoDoca(
+//       execution: "[OnlineCheckin].[SaveDocsDocoDoca]",
+//       token: traveller.token,
+//       request: {
+//         "PassengerId": traveller.welcome.body.passengers[0].id,
+//         "DocaAddress": "",
+//         "DocaCity": "",
+//         "DocaCountry": "",
+//         "DocaType": "",
+//         "DocaZipCode": "",
+//         "DocsCountry": docsCountry,
+//         "DocsNationality": docsNationality,
+//         "DocsBirthDate": docsBirthDate,
+//         "DocsExpiryDate": docsExpiryDate, // todo  is Valid?
+//         "DocsDocumentNumber": docsDocumentNumber,
+//         "DocsType": docsType,
+//         "DocsSecondName": traveller.welcome.body.passengers[0].lastName, // todo  is Valid?
+//         "DocoDestination": docoDestination,
+//         "DocoDocumentNumber": docoDocumentNumber,
+//         "DocoType": docoType,
+//         "DocoPlaceOfIssue": docoPlaceOfIssue,
+//         "DocoPlaceOfBirth": docoPlaceOfBirth, //todo  is Valid? (Docs nationality)
+//         "DocoIssueDate": docoIssueDate,
+//         "DocsTitle": traveller.welcome.body.passengers[0].title
+//       },
+//     );
+//
+//     if (response.statusCode == 200) {
+//       if (response.data["ResultCode"] == 1) {
+//         final StepsScreenController stepsScreenController = Get.put(StepsScreenController(model));
+//         int mainIndex = travellersIndexInMainList[index];
+//         stepsScreenController.travellers[mainIndex] = traveller;
+//       }
+//     }
+//   }
+//   model.setRequesting(false);
+// }
+
+
+// void showDOCSPopup(BuildContext context, int index) {
+//   showDialog(
+//       context: context,
+//       builder: (BuildContext context) => Dialog(
+//             backgroundColor: MyColors.white,
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 StepsScreenTitle(title: "Passport / Visa Details".tr, description: ""),
+//                 const SizedBox(height: 20),
+//                 Row(
+//                   children: [
+//                     DropDown(index: index, hintText: passportState.passportType),
+//                     const SizedBox(width: 20),
+//                     Expanded(
+//                       child: UserTextInput(controller: passportState.documentNoCs[index], hint: "Document No.".tr, errorText: "", isEmpty: false),
+//                     )
+//                   ],
+//                 ),
+//                 const SizedBox(height: 20),
+//                 Row(
+//                   children: [
+//                     DropDown(index: index, hintText: passportState.gender),
+//                     const SizedBox(width: 20),
+//                     DropDown(index: index, hintText: passportState.countryOfIssueType),
+//                     const SizedBox(width: 20),
+//                     SelectingDateWidget(
+//                       hint: "Entry Date".tr,
+//                       index: index,
+//                       updateDate: selectEntryDate,
+//                       currDateTime: passportState.travelers[index].passportInfo.entryDate == null ? DateTime.now() : passportState.travelers[index].passportInfo.entryDate!,
+//                       isCurrDateEmpty: passportState.travelers[index].passportInfo.entryDate == null ? true : false,
+//                     ),
+//                   ],
+//                 ),
+//                 const SizedBox(height: 20),
+//                 Row(
+//                   children: [
+//                     DropDown(index: index, hintText: passportState.nationalityType),
+//                     const SizedBox(width: 20),
+//                     SelectingDateWidget(
+//                       hint: "Date of Birth".tr,
+//                       index: index,
+//                       updateDate: selectDateOfBirth,
+//                       currDateTime: passportState.travelers[index].passportInfo.dateOfBirth == null ? DateTime.now() : passportState.travelers[index].passportInfo.dateOfBirth!,
+//                       isCurrDateEmpty: passportState.travelers[index].passportInfo.dateOfBirth == null ? true : false,
+//                     ),
+//                   ],
+//                 ),
+//                 const SizedBox(height: 20),
+//                 Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   children: [
+//                     const SizedBox(width: 1),
+//                     MyElevatedButton(
+//                       height: 50,
+//                       width: 175,
+//                       buttonText: "Submit".tr,
+//                       bgColor: MyColors.white,
+//                       fgColor: MyColors.myBlue,
+//                       function: passportState.requesting
+//                           ? () {}
+//                           : () {
+//                               // VisaStepController visaStepController = Get.put(VisaStepController(model));
+//                               passportState.refreshTravelers();
+//                               updateDocuments();
+//
+//                               // saveDocsDocoDoca(index);
+//                               // visaStepController.checkDocoNecessity(passportState.travelers[index]); //todo
+//                               Get.back();
+//                             },
+//                     ),
+//                   ],
+//                 )
+//               ],
+//             ),
+//           ));
+//   // print("In get dialog. index: " + index.toString());
+//   // Get.defaultDialog(
+//   //   title: "",
+//   //   backgroundColor: MyColors.white,
+//   //   buttonColor: MyColors.red,
+//   //   barrierDismissible: true,
+//   //   radius: 10,
+//   //   content: Column(
+//   //     crossAxisAlignment: CrossAxisAlignment.start,
+//   //     children: [
+//   //       StepsScreenTitle(title: "Passport / Visa Details".tr, description: ""),
+//   //       const SizedBox(height: 20),
+//   //       Row(
+//   //         children: [
+//   //           DropDown(index: index, hintText: passportState.passportType),
+//   //           const SizedBox(width: 20),
+//   //           Expanded(
+//   //             child: UserTextInput(controller: passportState.documentNoCs[index], hint: "Document No.".tr, errorText: "", isEmpty: false),
+//   //           )
+//   //         ],
+//   //       ),
+//   //       const SizedBox(height: 20),
+//   //       Row(
+//   //         children: [
+//   //           DropDown(index: index, hintText: passportState.gender),
+//   //           const SizedBox(width: 20),
+//   //           DropDown(index: index, hintText: passportState.countryOfIssueType),
+//   //           const SizedBox(width: 20),
+//   //           SelectingDateWidget(
+//   //             hint: "Entry Date".tr,
+//   //             index: index,
+//   //             updateDate: selectEntryDate,
+//   //             currDateTime: passportState.travelers[index].passportInfo.entryDate == null ? DateTime.now() : passportState.travelers[index].passportInfo.entryDate!,
+//   //             isCurrDateEmpty: passportState.travelers[index].passportInfo.entryDate == null ? true : false,
+//   //           ),
+//   //         ],
+//   //       ),
+//   //       const SizedBox(height: 20),
+//   //       Row(
+//   //         children: [
+//   //           DropDown(index: index, hintText: passportState.nationalityType),
+//   //           const SizedBox(width: 20),
+//   //           SelectingDateWidget(
+//   //             hint: "Date of Birth".tr,
+//   //             index: index,
+//   //             updateDate: selectDateOfBirth,
+//   //             currDateTime: passportState.travelers[index].passportInfo.dateOfBirth == null ? DateTime.now() : passportState.travelers[index].passportInfo.dateOfBirth!,
+//   //             isCurrDateEmpty: passportState.travelers[index].passportInfo.dateOfBirth == null ? true : false,
+//   //           ),
+//   //         ],
+//   //       ),
+//   //       const SizedBox(height: 20),
+//   //       Row(
+//   //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//   //         children: [
+//   //           const SizedBox(width: 1),
+//   //           MyElevatedButton(
+//   //             height: 50,
+//   //             width: 175,
+//   //             buttonText: "Submit".tr,
+//   //             bgColor: MyColors.white,
+//   //             fgColor: MyColors.myBlue,
+//   //             function: passportState.requesting
+//   //                 ? () {}
+//   //                 : () {
+//   //                     // VisaStepController visaStepController = Get.put(VisaStepController(model));
+//   //                     passportState.refreshTravelers();
+//   //                     updateDocuments();
+//   //
+//   //                     // saveDocsDocoDoca(index);
+//   //                     // visaStepController.checkDocoNecessity(passportState.travelers[index]); //todo
+//   //                     Get.back();
+//   //                   },
+//   //           ),
+//   //         ],
+//   //       )
+//   //     ],
+//   //   ),
+//   // );
+// }

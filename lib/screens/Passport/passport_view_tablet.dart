@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_check_in/core/constants/ui.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/Passport/passport_controller.dart';
 import 'package:online_check_in/screens/Passport/passport_state.dart';
 import 'package:online_check_in/widgets/info_card.dart';
@@ -23,9 +24,9 @@ class PassportViewTablet extends StatelessWidget {
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const StepsScreenTitle(title: "Passport", description: "", fontSize: 45),
+                 StepsScreenTitle(title: "Passport".translate(context), description: "", fontSize: 45),
                 const SizedBox(height: 10),
-                const Text("Enter passport data (DOCS) for all the passengers.", style: MyTextTheme.black25W300),
+                 Text("Enter passport data (DOCS) for all the passengers.".translate(context), style: MyTextTheme.black25W300),
                 const SizedBox(height: 30),
                 Expanded(
                   child: ListView(

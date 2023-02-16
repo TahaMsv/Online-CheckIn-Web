@@ -11,6 +11,7 @@ import '../../../core/classes/seat_map.dart';
 import '../../../core/constants/ui.dart';
 import '../../../core/dependency_injection.dart';
 import '../../../core/platform/device_info.dart';
+import '../../../core/utils/MultiLanguages.dart';
 import '../../steps/steps_state.dart';
 import '../seat_map_controller.dart';
 import '../seat_map_state.dart';
@@ -133,7 +134,7 @@ class PlaneBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String languageCode = "en";
+        String languageCode = MultiLanguages.of(context)!.locale.languageCode;
     final SeatMapController seatMapController = getIt<SeatMapController>();
     SeatMapState seatMapState = context.watch<SeatMapState>();
     DeviceType deviceType = DeviceInfo.deviceType(context);

@@ -13,24 +13,26 @@ class UpgradesController extends MainController {
   late GetExtrasUseCase getExtrasUseCase = GetExtrasUseCase(repository: upgradesRepository);
 
   void init() async {
-    upgradesState.setLoading(true);
-    GetExtrasRequest getExtrasRequest = GetExtrasRequest();
-    final fOrList = await getExtrasUseCase(request: getExtrasRequest);
+    if (!upgradesState.isInitBefore) {
+      upgradesState.setLoading(true);
+      GetExtrasRequest getExtrasRequest = GetExtrasRequest();
+      final fOrList = await getExtrasUseCase(request: getExtrasRequest);
 
-    fOrList.fold((f) => FailureHandler.handle(f, retry: () => init()), (extras) async {
-      for (var i = 0; i < extras.length - 1; ++i) {
-        upgradesState.winesNumberOfSelected.add(0);
-      }
-      upgradesState.entertainmentsNumberOfSelected.add(0);
-      for (var i = 0; i < extras.length; ++i) {
-        if (i == extras.length - 1) {
-          upgradesState.entertainmentsList.add(extras[i]);
-        } else {
-          upgradesState.winesList.add(extras[i]);
+      fOrList.fold((f) => FailureHandler.handle(f, retry: () => init()), (extras) async {
+        for (var i = 0; i < extras.length; ++i) {
+          if (extras[i].title.toLowerCase().contains("print")) {
+            upgradesState.entertainmentsNumberOfSelected.add(0);
+            upgradesState.entertainmentsList.add(extras[i]);
+          } else {
+            upgradesState.winesNumberOfSelected.add(0);
+            upgradesState.winesList.add(extras[i]);
+          }
         }
-      }
-    });
-    print("WInes list: ${upgradesState.winesList.length}");
+        print(upgradesState.entertainmentsList);
+        print(upgradesState.winesList);
+        upgradesState.setIsInitBefore(true);
+      });
+    }
     upgradesState.setLoading(false);
   }
 
@@ -57,7 +59,6 @@ class UpgradesController extends MainController {
       upgradesState.setState();
     }
   }
-
 
   @override
   void onInit() {

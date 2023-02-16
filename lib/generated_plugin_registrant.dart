@@ -7,7 +7,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:shared_preferences_web/shared_preferences_web.dart';
-import 'package:syncfusion_flutter_pdfviewer_web/pdfviewer_web.dart';
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
@@ -15,6 +14,5 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 void registerPlugins(Registrar registrar) {
   // WebStripe.registerWith(registrar);
   SharedPreferencesPlugin.registerWith(registrar);
-  SyncfusionFlutterPdfViewerPlugin.registerWith(registrar);
   registrar.registerMessageHandler();
 }

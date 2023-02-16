@@ -24,55 +24,52 @@ class StepsView extends StatelessWidget {
     StepsState stepsState = context.watch<StepsState>();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    kBottomNavigationBarHeight;
     DeviceType deviceType = DeviceInfo.deviceType(context);
     return Scaffold(
       backgroundColor: theme.primaryColor,
-      body: stepsState.stepLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView(
-              shrinkWrap: true,
+      body: ListView(
+        shrinkWrap: true,
+        children: [
+          TopOfPage(height: height, width: width),
+          SizedBox(
+            width: width,
+            height: height * 0.82,
+            // color: Colors.green,
+            child: ListView(
               children: [
-                TopOfPage(height: height, width: width),
-                SizedBox(
-                  width: width,
-                  height: height * 0.8,
-                  // color: Colors.green,
-                  child: ListView(
-                    children: [
-                      Row(
-                        children: <Widget>[
-                              Expanded(
-                                child: stepsState.step == 0
-                                    ? const MyDottedLine(
-                                        lineLength: double.infinity,
-                                        color: MyColors.oceanGreen,
-                                      )
-                                    : Container(
-                                        height: 1,
-                                        color: MyColors.oceanGreen,
-                                      ),
-                              ),
-                            ] +
-                            stepsController.stepsToShowList().map((i) => StepWidget(index: i)).toList() +
-                            [
-                              const Expanded(
-                                child: MyDivider(),
-                              ),
-                            ],
-                      ),
-                      Container(
-                          color: Colors.white,
-                          height: height * 0.80 - 30,
-                          padding: EdgeInsets.only(top: deviceType.isPhone ? 10 : 30, left: deviceType.isPhone ? 10 : 30, right: deviceType.isPhone ? 10 : 30),
-                          child: childWidget),
-                    ],
-                  ),
+                Row(
+                  children: <Widget>[
+                        Expanded(
+                          child: stepsState.step == 0
+                              ? const MyDottedLine(
+                                  lineLength: double.infinity,
+                                  color: MyColors.oceanGreen,
+                                )
+                              : Container(
+                                  height: 1,
+                                  color: MyColors.oceanGreen,
+                                ),
+                        ),
+                      ] +
+                      stepsController.stepsToShowList().map((i) => StepWidget(index: i)).toList() +
+                      [
+                        const Expanded(
+                          child: MyDivider(),
+                        ),
+                      ],
                 ),
-                BottomOfPage(height: height, stepsController: stepsController),
+                Container(
+                    color: Colors.white,
+                    height: height * 0.80 - 30,
+                    padding: EdgeInsets.only(top: deviceType.isPhone ? 10 : 30, left: deviceType.isPhone ? 10 : 30, right: deviceType.isPhone ? 10 : 30),
+                    child: childWidget),
               ],
             ),
+          ),
+          BottomOfPage(height: height, stepsController: stepsController),
+        ],
+      ),
     );
   }
 }

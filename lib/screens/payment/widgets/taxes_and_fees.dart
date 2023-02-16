@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_check_in/core/constants/ui.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/payment/payment_state.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +25,7 @@ class TaxesAndFees extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Taxes & Fees",
+                "Taxes & Fees".translate(context),
                 style: deviceType.isTablet ? MyTextTheme.darkGreyW50030 : MyTextTheme.darkGreyW50022,
               ),
               Text(
@@ -71,7 +72,7 @@ class TaxesAndFees extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Total",
+                "Total".translate(context),
                 style: deviceType.isTablet ? MyTextTheme.darkGreyBold30 : MyTextTheme.darkGreyBold22,
               ),
               Text(
@@ -81,7 +82,7 @@ class TaxesAndFees extends StatelessWidget {
             ],
           ),
           Text(
-            "Including taxes and fees",
+            "Including taxes and fees".translate(context),
                        style: deviceType.isTablet ? MyTextTheme.darkGreyW50025 : MyTextTheme.darkGreyW50017,
           ),
         ],

@@ -16,7 +16,7 @@ class SelectingDateWidget extends StatefulWidget {
     required this.isCurrDateEmpty,
     this.height = 40,
     this.width = 200,
-     this.fontSize = 18,
+    this.fontSize = 18,
   }) : super(key: key);
 
   final String hint;
@@ -34,6 +34,7 @@ class SelectingDateWidget extends StatefulWidget {
 
 class _SelectingDateWidgetState extends State<SelectingDateWidget> {
   late DateTime currentDate;
+  late bool isCurrDateEmpty;
 
   Future<void> _selectDate(BuildContext context) async {
     // final DateTime? pickedDate = await showDatePicker(context: context, initialDate: currentDate, firstDate: DateTime(1900), lastDate: DateTime(2050));
@@ -51,17 +52,18 @@ class _SelectingDateWidgetState extends State<SelectingDateWidget> {
       dateFormat: "dd-M-yyyy",
       locale: DateTimePickerLocale.en_us,
       looping: true,
-
     );
     currentDate = datePicked!;
     widget.updateDate(widget.index, currentDate);
     setState(() {
+      isCurrDateEmpty = false;
     });
   }
 
   @override
   void initState() {
     currentDate = widget.currDateTime;
+    isCurrDateEmpty = widget.isCurrDateEmpty;
     super.initState();
   }
 
@@ -83,7 +85,7 @@ class _SelectingDateWidgetState extends State<SelectingDateWidget> {
           children: [
             Container(
               width: 140,
-              child: widget.isCurrDateEmpty
+              child:isCurrDateEmpty
                   ? Text(
                       widget.hint,
                       style: TextStyle(fontSize: widget.fontSize),
@@ -101,7 +103,7 @@ class _SelectingDateWidgetState extends State<SelectingDateWidget> {
                 icon: Icon(
                   MenuIcons.iconCalendar,
                   color: MyColors.myBlue,
-                  size: widget.fontSize ,
+                  size: widget.fontSize,
                 ),
               ),
             )

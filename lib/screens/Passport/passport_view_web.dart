@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/Passport/passport_controller.dart';
 import 'package:online_check_in/screens/Passport/passport_state.dart';
 import 'package:online_check_in/widgets/info_card.dart';
@@ -28,7 +29,7 @@ class PassportViewWeb extends StatelessWidget {
           ? const Center(child: CircularProgressIndicator())
           :  Column(
         children: [
-          const StepsScreenTitle(title: "Passport", description: "Enter passport data (DOCS) for all the passengers."),
+           StepsScreenTitle(title: "Passport".translate(context), description: "Enter passport data (DOCS) for all the passengers.".translate(context)),
           const SizedBox(height: 10),
           Expanded(
             child: GridView.count(

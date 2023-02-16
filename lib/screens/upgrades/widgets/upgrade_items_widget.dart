@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/classes/extra.dart';
@@ -51,7 +52,7 @@ class UpgradeItemWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(value.title, style: deviceType.isTablet ? MyTextTheme.darkGreyBold25 : MyTextTheme.boldDarkGray12),
-                        Text("${"Starts from"} \$ ${value.price}", style: deviceType.isTablet ? MyTextTheme.darkGrey25W300 : MyTextTheme.darkGreyW30012),
+                        Text("${"Starts from".translate(context)} \$ ${value.price}", style: deviceType.isTablet ? MyTextTheme.darkGrey25W300 : MyTextTheme.darkGreyW30012),
                       ],
                     ),
                     Text(value.description, overflow: TextOverflow.clip, style: deviceType.isTablet ? MyTextTheme.darkGrey25W300 : MyTextTheme.boldDarkGray12),

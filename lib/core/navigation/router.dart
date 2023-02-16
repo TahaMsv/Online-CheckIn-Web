@@ -264,7 +264,7 @@ class MyRouter {
       refreshListenable: getIt<LoginState>(),
       routes: _routes,
       redirect: (state) {
-        LoginState loginState = getIt<LoginState>();
+        // LoginState loginState = getIt<LoginState>();
         // // if the user is not logged in, they need to login
         // final loggedIn = loginState.user != null;
         // final loggingIn = state.subloc == '/login';

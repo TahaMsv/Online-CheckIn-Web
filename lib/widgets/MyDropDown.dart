@@ -26,6 +26,7 @@ class MyDropDown extends StatelessWidget {
     PassportController passportController = getIt<PassportController>();
     VisaController visaController = getIt<VisaController>();
     DeviceType deviceType = DeviceInfo.deviceType(context);
+    double fontSize = 12;
     return Container(
       height: height,
       width: width,
@@ -42,7 +43,7 @@ class MyDropDown extends StatelessWidget {
             dropdownColor: Colors.white,
             hint: Text(
               hintText,
-              style:  TextStyle(fontSize:deviceType.isPhone?17: 23),
+              style:  TextStyle(fontSize:deviceType.isPhone?fontSize: 23),
             ),
             onChanged: (newValue) => passOrVisa == DropDownUtils.passport
                 ? passportController.getOnChangedValueByType(type: hintText, newValue: newValue, index: index)
@@ -70,7 +71,7 @@ class MyDropDown extends StatelessWidget {
                     passOrVisa == DropDownUtils.passport
                         ? passportController.getDropdownMenuItemText(type: hintText, selectedType: selectedType, index: index,)!
                         : visaController.getDropdownMenuItemText(type: hintText, selectedType: selectedType, index: index,)!,
-                    style:  TextStyle(fontSize:deviceType.isPhone?17: 23),
+                    style:  TextStyle(fontSize:deviceType.isPhone?fontSize: 23),
                     overflow: TextOverflow.ellipsis,
                   ),
                 );

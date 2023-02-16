@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import '../../core/classes/extra.dart';
@@ -16,24 +15,32 @@ class UpgradesState with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isInitBefore = false;
+
+  bool get isInitBefore => _isInitBefore;
+
+  void setIsInitBefore(bool val) {
+    _isInitBefore = val;
+    notifyListeners();
+  }
+
   int _leftIndex = 0;
 
   int get leftIndex => _leftIndex;
 
-    void setleftIndex(int val) {
-      _leftIndex = val;
-      notifyListeners();
-    }
+  void setleftIndex(int val) {
+    _leftIndex = val;
+    notifyListeners();
+  }
 
-    int _rightIndex = 2;
+  int _rightIndex = 2;
 
-    int get rightIndex => _rightIndex;
+  int get rightIndex => _rightIndex;
 
-      void setrightIndex(int val) {
-        _rightIndex = val;
-        notifyListeners();
-      }
-
+  void setrightIndex(int val) {
+    _rightIndex = val;
+    notifyListeners();
+  }
 
   List<Color> colors = [MyColors.myBlue, MyColors.brightYellow, MyColors.red, MyColors.brightYellow, MyColors.darkGrey];
   List<String> imagesPath = [];
@@ -42,5 +49,4 @@ class UpgradesState with ChangeNotifier {
   List<int> entertainmentsNumberOfSelected = [];
   List<Extra> winesList = [];
   List<Extra> entertainmentsList = [];
-
 }

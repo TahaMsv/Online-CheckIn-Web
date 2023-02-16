@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 
 import '../../../core/constants/ui.dart';
 import '../../../core/platform/device_info.dart';
+import '../../../core/utils/MultiLanguages.dart';
 import '../../../widgets/MyElevatedButton.dart';
 import '../steps_controller.dart';
 
@@ -16,7 +18,7 @@ class PreviousButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String languageCode = "en";
+    String languageCode = MultiLanguages.of(context)!.locale.languageCode;
     double height = MediaQuery.of(context).size.height;
     DeviceType deviceType = DeviceInfo.deviceType(context);
     return SizedBox(
@@ -43,7 +45,7 @@ class PreviousButton extends StatelessWidget {
             Container(
               margin: languageCode == "en" ? const EdgeInsets.only(left: 4) : const EdgeInsets.only(right: 4),
               child: Text(
-                "Previous",
+                "Previous".translate(context),
                 style: TextStyle(
                   fontSize:deviceType.isPhone ? 15: deviceType.isTablet ? 20 : 12,
                   color: isDisable ? MyColors.sonicSilver.withOpacity(0.5) : MyColors.sonicSilver,

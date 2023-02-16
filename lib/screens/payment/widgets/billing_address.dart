@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_check_in/core/constants/ui.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/platform/device_info.dart';
@@ -21,16 +22,16 @@ class BillingAddress extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Billing Address", style: deviceType.isTablet ? MyTextTheme.darkGreyBold30 : MyTextTheme.darkGreyBold22),
+        Text("Billing Address".translate(context), style: deviceType.isTablet ? MyTextTheme.darkGreyBold30 : MyTextTheme.darkGreyBold22),
          SizedBox(
           height:deviceType.isTablet ? 20:10
         ),
         UserTextInput(
           controller: paymentState.addressC,
-          hint: "Address",
+          hint: "Address".translate(context),
           height:deviceType.isTablet ? 200:100,
           width: width,
-          fontSize:deviceType.isTablet ? 25:17,
+          fontSize:deviceType.isTablet ? 25:15,
           errorText: "",
           isEmpty: false,
         ),
@@ -40,9 +41,9 @@ class BillingAddress extends StatelessWidget {
         UserTextInput(
           height:deviceType.isTablet ? 60:30,
           width: width,
-          fontSize:deviceType.isTablet ? 25:17,
+          fontSize:deviceType.isTablet ? 25:15,
           controller: paymentState.billingAddressCardNumberC,
-          hint: "Card Number",
+          hint: "Card Number".translate(context),
           errorText: "",
           isEmpty: false,
         ),
@@ -55,9 +56,9 @@ class BillingAddress extends StatelessWidget {
                 child: UserTextInput(
               height:deviceType.isTablet ? 60:30,
               // width: Get.width,
-              fontSize:deviceType.isTablet ? 25:17,
+              fontSize:deviceType.isTablet ? 25:15,
               controller: paymentState.countryC,
-              hint: "Card Number",
+              hint: "Card Number".translate(context),
               errorText: "",
               isEmpty: false,
             )),
@@ -68,9 +69,9 @@ class BillingAddress extends StatelessWidget {
                 child: UserTextInput(
               height: deviceType.isTablet ?60:30,
               // width: Get.width,
-              fontSize: deviceType.isTablet ?25:17,
+              fontSize: deviceType.isTablet ?25:15,
               controller: paymentState.provinceC,
-              hint: "Province / State",
+              hint: "Province / State".translate(context),
               errorText: "",
               isEmpty: false,
             )),
@@ -85,9 +86,9 @@ class BillingAddress extends StatelessWidget {
                 child: UserTextInput(
               height:deviceType.isTablet ? 60:30,
               // width: Get.width,
-              fontSize:deviceType.isTablet ? 25:17,
+              fontSize:deviceType.isTablet ? 25:15,
               controller: paymentState.cityC,
-              hint: "City",
+              hint: "City".translate(context),
               errorText: "",
               isEmpty: false,
             )),
@@ -98,9 +99,9 @@ class BillingAddress extends StatelessWidget {
                 child: UserTextInput(
               height:deviceType.isTablet ? 60:30,
               // width: Get.width,
-              fontSize:deviceType.isTablet ? 25:17,
+              fontSize:deviceType.isTablet ? 25:15,
               controller: paymentState.postalC,
-              hint: "Postal / Zip Code",
+              hint: "Postal / Zip Code".translate(context),
               errorText: "",
               isEmpty: false,
             )),

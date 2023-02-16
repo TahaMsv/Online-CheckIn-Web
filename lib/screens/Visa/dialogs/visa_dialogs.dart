@@ -90,11 +90,11 @@ class _VisaDetailsDialogState extends State<VisaDetailsDialog> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                SubmitButton(function: () {
-                  if (!visaState.loading) {
-                    visaController.submitBtnFunction(index);
-                  }
-                })
+                // SubmitButton(function: () {
+                //   if (!visaState.loading) {
+                //     visaController.submitBtnFunction(index);
+                //   }
+                // })
               ],
             ),
           ),

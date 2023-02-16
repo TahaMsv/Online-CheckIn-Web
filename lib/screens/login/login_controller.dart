@@ -16,15 +16,12 @@ class LoginController extends MainController {
 
   late LoginUseCase loginUseCase = LoginUseCase(repository: loginRepository);
 
-
-
   void login({required String username, required String password}) async {
     if (!loginState.requesting) {
       loginState.setRequesting(true);
       final StepsState stepsState = getIt<StepsState>();
       username = "test"; //lastNameC.text.trim();
       password = "9999999999"; // bookingRefNameC.text.trim();
-      stepsState.setLoading(true);
       LoginRequest loginRequest = LoginRequest(
         password: password,
         username: username,
@@ -33,13 +30,14 @@ class LoginController extends MainController {
 
       fOrToken.fold((f) => FailureHandler.handle(f, retry: () => login(username: username, password: password)), (token) async {
         loginState.setToken(token);
-        print("Token: " + token);
         final StepsController stepsController = getIt<StepsController>();
-        stepsController.addToTravelers(token, username, password);
-        nav.goToName(RouteNames.addTraveler);
+        print("at login 35");
+        await stepsController.addToTravelers(token : token,lastName:  username, ticketNumber: password, isLoginRequest: true);
+        print("at login 37");
       });
+      loginState.setRequesting(false);
     }
-    loginState.setRequesting(false);
+
   }
 
   checkBoxesValidation() {}

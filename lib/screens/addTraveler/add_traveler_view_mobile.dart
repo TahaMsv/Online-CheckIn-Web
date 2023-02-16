@@ -36,7 +36,7 @@ class AddTravelerView extends StatelessWidget {
           SizedBox(height: deviceType.isPhone ? 10 : 20),
           Container(
             width: deviceType.isPhone ? width : width * 0.8,
-            height: deviceType.isPhone ? 200 : 350,
+            height: deviceType.isPhone ? 250 : 350,
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xffECECEC), width: 2),
               borderRadius: BorderRadius.circular(20.0),

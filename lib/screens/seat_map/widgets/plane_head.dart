@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/assets.dart';
 import '../../../core/platform/device_info.dart';
+import '../../../core/utils/MultiLanguages.dart';
 
 class PlaneHead extends StatelessWidget {
   const PlaneHead({
@@ -15,7 +16,7 @@ class PlaneHead extends StatelessWidget {
   Widget build(BuildContext context) {
     DeviceType deviceType = DeviceInfo.deviceType(context);
 
-    String languageCode = "en";
+        String languageCode = MultiLanguages.of(context)!.locale.languageCode;
     return Center(
       child: Container(
         height: height,
@@ -26,7 +27,7 @@ class PlaneHead extends StatelessWidget {
           fit: BoxFit.fill,
           // height: 350,
         ): RotationTransition(
-          turns: languageCode == "en" ? const AlwaysStoppedAnimation(90 / 360) : const AlwaysStoppedAnimation(180 / 360),
+          turns: languageCode == "en" || ((deviceType.isTablet || deviceType.isPhone)) ? const AlwaysStoppedAnimation(90 / 360) : const AlwaysStoppedAnimation(180 / 360),
           child: Image.asset(AssetImages.airPlaneHead, fit: BoxFit.fill),
         ),
         // width: 400,

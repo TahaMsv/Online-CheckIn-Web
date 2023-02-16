@@ -15,6 +15,9 @@ import '../../core/dependency_injection.dart';
 import '../../core/interfaces/controller.dart';
 import '../../core/utils/failure_handler.dart';
 import '../steps/steps_state.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ReceiptController extends MainController {
   final ReceiptState receiptState = getIt<ReceiptState>();
@@ -23,26 +26,9 @@ class ReceiptController extends MainController {
   late GetBoardingPassPdfUseCase getBoardingPassPdfUseCase = GetBoardingPassPdfUseCase(repository: receiptRepository);
   late ReserveSeatUseCase reserveSeatUseCase = ReserveSeatUseCase(repository: receiptRepository);
 
-  void init() async {
+  Future<bool> getBoardingPassPDF() async {
+    print("30 at boardinpass");
     receiptState.setLoading(true);
-    // model.setLoading(true);
-    print("27 at receipt");
-    // await finalReserve();
-    print("29 at receipt");
-    // final StepsState stepsState = getIt<StepsState>();
-    //
-    // GetBoardingPassPdfRequest getBoardingPassPdfRequest = GetBoardingPassPdfRequest(passengerToken: stepsState.travelers[0].token, fligthId: stepsState.travelers[0].flightInformation.flight[0].id);
-    // final fOrBP = await getBoardingPassPdfUseCase(request: getBoardingPassPdfRequest);
-    // print("35 at receipt");
-    // fOrBP.fold((f) => FailureHandler.handle(f, retry: () => init()), (boardingPass) async {
-    //   print("37 at receipt");
-    //   receiptState.setBoardingPassPDF(boardingPass);
-    //   print("39 at receipt");
-    //   convertToPDF();
-    //   print("341 at receipt");
-    //   receiptState.setLoading(false);
-    //   receiptState.setSuccessfulResponse(false);
-    // });
     final StepsState stepsState = getIt<StepsState>();
     var req = {
       "Format": 1, //1->pdf    32->Html
@@ -51,23 +37,44 @@ class ReceiptController extends MainController {
     };
 
     Response response;
-    var dio = Dio();
-    dio.options.headers['Content-Type'] = 'application/json';
-    response = await dio.post('https://onlinecheckinapi.abomis.com/api/MemoStrm', data: {
-      "Body": {
-        "MrtName": "OnlineCheckinBoardingPass-AB",
-        "Token": stepsState.travelers[0].token,
-        "Request": req,
-      },
-    });
-
-    if (response.statusCode == 200) {
-      receiptState.setBoardingPassPDF(BoardingPassPDF.fromJson(response.data));
-      convertToPDF();
+    try {
+      print("41 at boardinpass");
+      var dio = Dio();
+      dio.options.headers['Content-Type'] = 'application/json';
+      response = await dio.post('https://onlinecheckinapi.abomis.com/api/MemoStrm', data: {
+        "Body": {
+          "MrtName": "OnlineCheckinBoardingPass-AB",
+          "Token": stepsState.travelers[0].token,
+          "Request": req,
+        },
+      });
+      print("51 at boardinpass");
+      if (response.statusCode == 200) {
+        print("53 at boardinpass");
+        receiptState.setBoardingPassPDF(BoardingPassPDF.fromJson(response.data));
+        convertToPDF();
+        print("56 at receipt");
+        receiptState.setLoading(false);
+        print("58 at receipt");
+        receiptState.setSuccessfulResponse(true);
+        print("60 at receipt");
+        receiptState.setLoading(false);
+        stepsState.setLoading(false);
+        return true;
+      }
+      print("65 at boardinpass");
       receiptState.setLoading(false);
-      receiptState.setSuccessfulResponse(true);
-      return;
+      stepsState.setLoading(false);
+    } catch (err) {
+      print("69 at boardinpass");
+      receiptState.setLoading(false);
+      stepsState.setLoading(false);
+      return false;
     }
+    print("73 at boardinpass");
+    receiptState.setLoading(false);
+    stepsState.setLoading(false);
+    return false;
   }
 
   void convertToPDF() async {
@@ -78,8 +85,10 @@ class ReceiptController extends MainController {
   }
 
   Future<bool> finalReserve() async {
+    if (receiptState.isReserved) return true;
     final StepsState stepsState = getIt<StepsState>();
     final SeatMapState seatMapState = getIt<SeatMapState>();
+    stepsState.setLoading(true);
     List<Traveler> travellers = stepsState.travelers;
     List<SeatData> seatsData = [];
     travellers.where((t) => !seatMapState.reservedSeats.containsKey(t.seatId)).toList().forEach((traveler) {
@@ -90,7 +99,7 @@ class ReceiptController extends MainController {
     final fOrRS = await reserveSeatUseCase(request: reserveSeatRequest);
     print("65 at receipt");
     bool returnedValue = false;
-    fOrRS.fold((f) => FailureHandler.handle(f, retry: () => init()), (successful) async {
+    fOrRS.fold((f) => FailureHandler.handle(f, retry: () => getBoardingPassPDF()), (successful) async {
       print("68 at receipt");
       if (successful) {
         print("69 at receipt");
@@ -99,18 +108,43 @@ class ReceiptController extends MainController {
         for (Traveler traveller in travellers) {
           seatMapState.reservedSeats[traveller.seatId] = traveller.getNickName();
           seatMapState.clickedOnSeats.remove(traveller.seatId);
+          receiptState.setIsReserved(true);
         }
       }
       print("77 at receipt");
       returnedValue = successful;
     });
     print("80 at receipt");
+    stepsState.setLoading(false);
     return returnedValue;
+  }
+
+  void saveBoardingPassPDF() async {
+    var file = File('');
+    if (Platform.isAndroid) {
+      var status = await Permission.storage.status;
+      if (status != PermissionStatus.granted) {
+        status = await Permission.storage.request();
+      }
+      if (status.isGranted) {
+        const downloadsFolderPath = '/storage/emulated/0/Download/';
+        Directory dir = Directory(downloadsFolderPath);
+        file = File('${dir.path}boardingpassPDF.pdf');
+      }
+    }
+
+    final byteData = receiptState.bytes;
+    try {
+      await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+      print("File saved in: ${file.path}");
+    } on FileSystemException catch (err) {
+      // handle error
+      print(err.message);
+    }
   }
 
   @override
   void onInit() {
-    init();
     super.onInit();
   }
 }

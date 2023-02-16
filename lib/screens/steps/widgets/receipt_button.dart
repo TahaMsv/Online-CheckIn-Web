@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:online_check_in/core/dependency_injection.dart';
+import 'package:online_check_in/screens/receipt/receipt_controller.dart';
 
 import '../../../core/constants/ui.dart';
 import '../../../core/platform/device_info.dart';
@@ -8,7 +10,6 @@ class ReceiptStepButtons extends StatelessWidget {
   const ReceiptStepButtons({
     Key? key,
   }) : super(key: key);
-  
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +24,13 @@ class ReceiptStepButtons extends StatelessWidget {
           buttonText: "Download",
           bgColor: MyColors.darkGrey,
           fgColor: MyColors.white,
-          function: () {},
+          function: () {
+            final ReceiptController receiptController = getIt<ReceiptController>();
+            receiptController.saveBoardingPassPDF();
+          },
         ),
-         SizedBox(
-          width:deviceType.isTablet ? 15:5,
+        SizedBox(
+          width: deviceType.isTablet ? 15 : 5,
         ),
         MyElevatedButton(
           height: deviceType.isTablet ? height * 0.06 : 40,
@@ -37,13 +41,13 @@ class ReceiptStepButtons extends StatelessWidget {
           fgColor: MyColors.white,
           function: () {},
         ),
-         SizedBox(
-          width: deviceType.isTablet ?15:5,
+        SizedBox(
+          width: deviceType.isTablet ? 15 : 5,
         ),
         if (!deviceType.isTablet)
           MyElevatedButton(
             height: deviceType.isTablet ? height * 0.06 : 40,
-            width: deviceType.isTablet ?200:140,
+            width: deviceType.isTablet ? 200 : 150,
             fontSize: deviceType.isTablet ? 20 : 15,
             buttonText: "Sent to Mobile",
             bgColor: const Color(0xff4c6ef6),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_check_in/core/constants/my_list.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/rules/rules_controller.dart';
 import 'package:online_check_in/screens/rules/rules_state.dart';
 import '../../core/constants/assets.dart';
@@ -27,9 +28,9 @@ class RulesViewWeb extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const StepsScreenTitle(
-              title: "Dangerous Goods" ,
-              description: "Every items can become dangerous when transported by air. Example of dangerous goods are:" ,
+             StepsScreenTitle(
+              title: "Dangerous Goods" .translate(context),
+              description: "Every items can become dangerous when transported by air. Example of dangerous goods are:".translate(context) ,
             ),
             const SizedBox(
               height: 20,
@@ -88,7 +89,7 @@ class DangerousItem extends StatelessWidget {
             height: 10,
           ),
           Text(
-            value["title"]! ,
+            value["title"]! .translate(context),
             style: MyTextTheme.darkGreyBold15,
             textAlign: TextAlign.center,
           ),
@@ -96,7 +97,7 @@ class DangerousItem extends StatelessWidget {
             height: 10,
           ),
           Text(
-            value["content"]! ,
+            value["content"]! .translate(context),
             overflow: TextOverflow.clip,
             style: MyTextTheme.darkGreyW40015,
             textAlign: TextAlign.center,

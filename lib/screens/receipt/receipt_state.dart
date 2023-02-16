@@ -39,4 +39,13 @@ class ReceiptState with ChangeNotifier {
     _successfulResponse = val;
     notifyListeners();
   }
+
+  bool _isReserved = false;
+
+  bool get isReserved => _isReserved;
+
+    void setIsReserved(bool val) {
+      _isReserved = val;
+      notifyListeners();
+    }
 }

@@ -3,10 +3,10 @@ import 'package:online_check_in/screens/login/usecases/login_usecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginLocalDataSource implements LoginDataSourceInterface {
-  final SharedPreferences sharedPreferences;
+  final SharedPreferences? sharedPreferences;
 
   LoginLocalDataSource({
-    required this.sharedPreferences,
+    this.sharedPreferences,
   });
 
   @override

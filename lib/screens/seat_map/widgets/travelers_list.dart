@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/ui.dart';
 import '../../../core/dependency_injection.dart';
 import '../../../core/platform/device_info.dart';
+import '../../../core/utils/MultiLanguages.dart';
 import '../../../widgets/MyDivider.dart';
 import '../../../widgets/title_widget.dart';
 import '../../steps/steps_state.dart';
@@ -29,13 +31,13 @@ class TravellersList extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TitleWidget(title: "Travellers", width: width * 0.5, height: deviceType.isPhone ? 60 : 100, fontSize: deviceType.isPhone ? 25 : 40),
+              TitleWidget(title: "Travellers".translate(context), width: width * 0.5, height: deviceType.isPhone ? 60 : 100, fontSize: deviceType.isPhone ? 22 : 40),
               SizedBox(
                 width: width * 0.3,
                 child: Row(
                   children: [
                     MyDivider(width: 2, height: deviceType.isPhone ? 40 : 60, color: MyColors.white1),
-                    TitleWidget(title: "Seat", width: width * 0.2, height: deviceType.isPhone ? 60 : 100, fontSize: deviceType.isPhone ? 25 : 40),
+                    TitleWidget(title: "Seat".translate(context), width: width * 0.2, height: deviceType.isPhone ? 60 : 100, fontSize: deviceType.isPhone ? 22 : 40),
                   ],
                 ),
               ),
@@ -70,7 +72,7 @@ class TravellerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String languageCode = "en";
+        String languageCode = MultiLanguages.of(context)!.locale.languageCode;
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     final SeatMapController seatMapController = getIt<SeatMapController>();
@@ -121,8 +123,8 @@ class TravellerItem extends StatelessWidget {
                                         TitleWidget(
                                             title: stepsState.travelers[index].seatId,
                                             width: deviceType.isPhone ? 80 : 100,
-                                            height: deviceType.isPhone ? 60 : 80,
-                                            fontSize: deviceType.isPhone ? 20 : 35,
+                                            height: deviceType.isPhone ? 40 : 80,
+                                            fontSize: deviceType.isPhone ? 17 : 35,
                                             textColor: isTravellerSelected ? MyColors.oceanGreen : MyColors.darkGrey),
                                         SizedBox(
                                           width: deviceType.isPhone ? 40 : 80,
@@ -162,7 +164,7 @@ class SelectSeatFor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String languageCode = "en";
+        String languageCode = MultiLanguages.of(context)!.locale.languageCode;
     StepsState stepsState = context.watch<StepsState>();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -171,7 +173,7 @@ class SelectSeatFor extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: MyColors.grey),
-        borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)),
+        borderRadius:languageCode == 'en' ? const BorderRadius.only(topLeft: Radius.circular(20), bottomLeft: Radius.circular(20)) : const BorderRadius.only(topRight: Radius.circular(20), bottomRight: Radius.circular(20)),
         color: isTravellerSelected ? MyColors.white1 : MyColors.brightYellow.withOpacity(0.4),
       ),
       height: deviceType.isTablet? 200 : 125,
@@ -187,7 +189,7 @@ class SelectSeatFor extends StatelessWidget {
                   padding: languageCode == 'en' ?  EdgeInsets.only(left:deviceType.isTablet? 20.0:5) :  EdgeInsets.only(right:deviceType.isTablet? 20.0:5),
                   child: Text(
                     stepsState.travelers[index].getFullNameWithGender(),
-                    style:deviceType.isTablet? MyTextTheme.darkGreyW40030 : MyTextTheme.darkGreyW40020,
+                    style:deviceType.isTablet? MyTextTheme.darkGreyW40030 : MyTextTheme.darkGreyW50017,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/receipt/receipt_controller.dart';
 import 'package:online_check_in/screens/receipt/receipt_state.dart';
 import '../../core/dependency_injection.dart';
@@ -22,13 +23,13 @@ class ReceiptViewWeb extends StatelessWidget {
       body: receiptState.loading
           ? const Center(child: CircularProgressIndicator())
           : !receiptState.successfulResponse
-              ? const Center(child: Text("Unable to load boarding pass"))
+              ?  Center(child: Text("Unable to load boarding pass".translate(context)))
               : SizedBox(
                   height: height,
                   width: width,
                   child: Column(
                     children: [
-                      const StepsScreenTitle(title: "Finished!", description: "You can see your check-in below, print it or download it or send it to your mobile"),
+                       StepsScreenTitle(title: "Finished!".translate(context), description: "You can see your check-in below, print it or download it or send it to your mobile".translate(context)),
                       const SizedBox(height: 20),
                       Expanded(child: SfPdfViewer.memory(receiptState.bytes))
                     ],

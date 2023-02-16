@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/payment/payment_controller.dart';
 import 'package:online_check_in/screens/payment/payment_state.dart';
 import 'package:online_check_in/screens/payment/widgets/billing_address.dart';
@@ -29,7 +30,7 @@ class PaymentViewTablet extends StatelessWidget {
               child: ListView(
                 children: [
                   StepsScreenTitle(
-                    title: "Payment".tr,
+                    title: "Payment".translate(context),
                     fontSize: 45,
                     description: "",
                   ),
@@ -37,7 +38,7 @@ class PaymentViewTablet extends StatelessWidget {
                     height: 30,
                   ),
                   Text(
-                    "Pay with credit card, Visa or debit or Mastercard debit".tr,
+                    "Pay with credit card, Visa or debit or Mastercard debit".translate(context),
                     style: const TextStyle(fontSize: 30),
                   ),
                   const SizedBox(height: 30),

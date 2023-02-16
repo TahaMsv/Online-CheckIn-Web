@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/safety/safety_controller.dart';
 import 'package:online_check_in/screens/safety/safety_state.dart';
 import 'package:online_check_in/screens/safety/widgets/commitment_segment.dart';
@@ -42,8 +43,8 @@ class AdviseSegment extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const StepsScreenTitle(
-          title: "The Standard For Safer Travel",
+         StepsScreenTitle(
+          title: "The Standard For Safer Travel".translate(context),
           description: "",
           fontSize: 25,
         ),
@@ -58,13 +59,13 @@ class AdviseSegment extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Delta’s Commitment to You", style: MyTextTheme.darkGreyW70020),
+               Text("Delta’s Commitment to You".translate(context), style: MyTextTheme.darkGreyW70020),
               Container(
-                height: 80,
+                // height: 80,
                 // width: 650,
                 margin: const EdgeInsets.only(top: 5),
-                child: const Text(
-                    "The Delta CareStandard℠ focuses on creating a safer experience for everyone. We are complying with Federal regulations that require face masks to be worn at all times and your aircraft will be cleaned before every flight.",
+                child:  Text(
+                    "The Delta CareStandard℠ focuses on creating a safer experience for everyone. We are complying with Federal regulations that require face masks to be worn at all times and your aircraft will be cleaned before every flight.".translate(context),
                     overflow: TextOverflow.clip,
                     style: MyTextTheme.darkGreyW40015),
               )

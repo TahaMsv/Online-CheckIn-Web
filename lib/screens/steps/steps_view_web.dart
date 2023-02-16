@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_check_in/core/constants/assets.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/addTraveler/add_traveler_state.dart';
 import 'package:online_check_in/screens/steps/steps_controller.dart';
 import 'package:online_check_in/screens/steps/steps_state.dart';
@@ -13,6 +14,7 @@ import 'package:online_check_in/widgets/MyDivider.dart';
 import '../../core/constants/ui.dart';
 import '../../core/dependency_injection.dart';
 import 'package:provider/provider.dart';
+import '../../core/utils/MultiLanguages.dart';
 import '../../widgets/MtDottedLine.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/UserTextInput.dart';
@@ -126,21 +128,21 @@ class LeftSideOFPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const TitleWidget(
-                  title: "Travellers",
+                 TitleWidget(
+                  title: "Travellers".translate(context),
                   width: 190,
                 ),
                 if (step == 6)
                   SizedBox(
                     width: 112,
                     child: Row(
-                      children: const [
-                        MyDivider(
+                      children:  [
+                        const MyDivider(
                           width: 2,
                           height: 60,
                         ),
                         TitleWidget(
-                          title: "Seat",
+                          title: "Seat".translate(context),
                           width: 100,
                         ),
                       ],
@@ -220,8 +222,8 @@ class AddNewTraveller extends StatelessWidget {
                   const SizedBox(
                     width: 15,
                   ),
-                  const Text(
-                    "Add Travellers",
+                   Text(
+                    "Add Travellers".translate(context),
                     style: MyTextTheme.w800MainColor15,
                   ),
                 ],
@@ -234,8 +236,8 @@ class AddNewTraveller extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                const Text(
-                  "Add all passengers to the list on the left here",
+                 Text(
+                  "Add all passengers to the list on the left here".translate(context),
                   style: MyTextTheme.lightGrey14,
                 ),
                 const SizedBox(
@@ -243,8 +245,8 @@ class AddNewTraveller extends StatelessWidget {
                 ),
                 UserTextInput(
                   controller: addTravelerState.lastNameC,
-                  hint: "Last Name",
-                  errorText: "Last Name can't be empty",
+                  hint: "Last Name".translate(context),
+                  errorText: "Last Name can't be empty".translate(context),
                   isEmpty: addTravelerState.isLastNameEmpty,
                 ),
                 const SizedBox(
@@ -252,8 +254,8 @@ class AddNewTraveller extends StatelessWidget {
                 ),
                 UserTextInput(
                   controller: addTravelerState.ticketNumberC,
-                  hint: "Reservation ID / Ticket Number",
-                  errorText: "Reservation ID / Ticket Number can't be empty",
+                  hint: "Reservation ID / Ticket Number".translate(context),
+                  errorText: "Reservation ID / Ticket Number can't be empty".translate(context),
                   isEmpty: addTravelerState.isTicketNumberEmpty,
                   obscureText: true,
                 ),
@@ -263,7 +265,7 @@ class AddNewTraveller extends StatelessWidget {
                 MyElevatedButton(
                   height: 40,
                   width: double.infinity,
-                  buttonText: "Add to Travellers",
+                  buttonText: "Add to Travellers".translate(context),
                   bgColor: const Color(0xff00bfa2),
                   fgColor: MyColors.white,
                   function: () {
@@ -291,7 +293,7 @@ class TravellerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String languageCode = "en";
+        String languageCode = MultiLanguages.of(context)!.locale.languageCode;
     StepsState stepsState = context.watch<StepsState>();
     bool isTravellerSelected = stepsState.travelers[index].seatId == "--" ? false : true;
     return Container(

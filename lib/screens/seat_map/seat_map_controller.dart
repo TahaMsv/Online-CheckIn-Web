@@ -109,6 +109,7 @@ class SeatMapController extends MainController {
 
   Future<bool> clickOnSeat() async {
     final StepsState stepsState = getIt<StepsState>();
+    stepsState.setLoading(true);
     List<Traveler> travellers = stepsState.travelers;
     List<SeatData> seatsData = [];
     travellers.where((t) => !seatMapState.reservedSeats.containsKey(t.seatId)).toList().forEach((traveller) {
@@ -131,6 +132,7 @@ class SeatMapController extends MainController {
       }
       returnValue = successful;
     });
+    stepsState.setLoading(false);
     return returnValue;
   }
 
@@ -140,9 +142,9 @@ class SeatMapController extends MainController {
       seatMapState.airCraftBodySize.setSeatWidth(50);
       seatMapState.airCraftBodySize.setEachLineWidth(50);
     } else if (mode == RunningMode.phone) {
-      seatMapState.airCraftBodySize.setSeatHeight(25);
-      seatMapState.airCraftBodySize.setSeatWidth(25);
-      seatMapState.airCraftBodySize.setEachLineWidth(25);
+      seatMapState.airCraftBodySize.setSeatHeight(30);
+      seatMapState.airCraftBodySize.setSeatWidth(30);
+      seatMapState.airCraftBodySize.setEachLineWidth(30);
     }
     double length = 0;
     for (var i = 0; i < seatMapState.cabins.length; ++i) {
@@ -176,9 +178,9 @@ class SeatMapController extends MainController {
       seatMapState.airCraftBodySize.setSeatWidth(50);
       seatMapState.airCraftBodySize.setEachLineWidth(50);
     } else if (mode == RunningMode.phone) {
-      seatMapState.airCraftBodySize.setSeatHeight(25);
-      seatMapState.airCraftBodySize.setSeatWidth(25);
-      seatMapState.airCraftBodySize.setEachLineWidth(25);
+      seatMapState.airCraftBodySize.setSeatHeight(30);
+      seatMapState.airCraftBodySize.setSeatWidth(30);
+      seatMapState.airCraftBodySize.setEachLineWidth(30);
     }
     double maxHeight = 0;
     for (var i = 0; i < seatMapState.cabins.length; ++i) {
@@ -428,8 +430,8 @@ class SeatMapController extends MainController {
         break;
       case 11:
         seatText = cell.value!;
-        width +=5;
-        height +=5;
+        width += 5;
+        height += 5;
         break;
       case 13:
         isSeatClickable = false;

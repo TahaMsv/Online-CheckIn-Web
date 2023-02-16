@@ -77,9 +77,15 @@ class NavigationService {
               children: [Icon(icon), const SizedBox(width: 8), Expanded(child: content)],
             ),
       backgroundColor: backgroundColor,
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context!).size.height - 100,
+          ),
       action: action,
       duration: duration ?? const Duration(seconds: 3),
     ));
+
+
   }
 
   registerController(String name, MainController controller) {

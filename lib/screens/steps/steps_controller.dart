@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:online_check_in/core/classes/flight_information.dart';
 import 'package:online_check_in/core/constants/route_names.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/Visa/visa_controller.dart';
 import 'package:online_check_in/screens/payment/payment_controller.dart';
 import 'package:online_check_in/screens/seat_map/seat_map_controller.dart';
@@ -30,16 +31,14 @@ class StepsController extends MainController {
 
   // Future<void> getFlightInformation(String token) async {}
 
-  Future<void> addToTravelers(String token, String lastName, String ticketNumber) async {
+  Future<void> addToTravelers({context,token, lastName, ticketNumber, isLoginRequest}) async {
+    final LoginState loginState = getIt<LoginState>();
     stepsState.setLoading(true);
-    // await getFlightInformation(token);
-
     GetFlightInformationRequest getFlightInformationRequest = GetFlightInformationRequest();
 
     final fOrFlightInfo = await getFlightInformationUseCase(request: getFlightInformationRequest);
-    print("30 at stepcontroller");
-    fOrFlightInfo.fold((f) => FailureHandler.handle(f, retry: () => addToTravelers(token, lastName, ticketNumber)), (flightInformation) async {
-      print("32 at stepcontroller");
+    fOrFlightInfo.fold((f) => FailureHandler.handle(f, retry: () => addToTravelers(context: context,token: token, lastName: lastName, ticketNumber: ticketNumber, isLoginRequest: isLoginRequest)),
+        (flightInformation) async {
       stepsState.setFlightInformation(flightInformation);
       if (stepsState.flightInformation != null) {
         print(stepsState.flightInformation!.passengers.last.id);
@@ -48,7 +47,7 @@ class StepsController extends MainController {
           print(stepsState.travelers[i].flightInformation.passengers.last.id);
           print(stepsState.travelers[i].flightInformation.passengers.last.name);
           if (stepsState.travelers[i].flightInformation.passengers.last.id == stepsState.flightInformation!.passengers.last.id) {
-            nav.snackbar(const Text("This passenger was added before", style: TextStyle(fontSize: 22)), backgroundColor: MyColors.red);
+            nav.snackbar( Text("This passenger was added before".translate(context), style: TextStyle(fontSize: 18)), backgroundColor: MyColors.red);
             stepsState.setLoading(false);
             return;
           }
@@ -61,15 +60,21 @@ class StepsController extends MainController {
         stepsState.travelers.add(traveler);
         updateIsNextButtonDisable();
         changeTurnToSelect();
+        if (isLoginRequest) {
+          nav.goToName(RouteNames.addTraveler);
+        }
         nav.snackbar(
-            const Text(
-              "Traveller added successfuly",
-              style: TextStyle(fontSize: 22),
+             Text(
+              "Traveler added successfully".translate(context),
+              style: TextStyle(fontSize: 18),
             ),
             backgroundColor: MyColors.green);
         stepsState.setLoading(false);
       }
+      stepsState.setLoading(false);
     });
+    stepsState.setLoading(false);
+    loginState.setRequesting(false);
   }
 
   void removeFromTravelers(int index) {
@@ -191,7 +196,6 @@ class StepsController extends MainController {
   }
 
   void increaseStep() async {
-    prepareNextButtonText();
     bool isSuccessful = true;
     if (kDebugMode) {
       print("here at setstep");
@@ -204,6 +208,9 @@ class StepsController extends MainController {
       } else if (step == 7) {
         final ReceiptController receiptController = getIt<ReceiptController>();
         isSuccessful = await receiptController.finalReserve();
+        if (isSuccessful) {
+          isSuccessful = await receiptController.getBoardingPassPDF();
+        }
       }
       if (isSuccessful) {
         if (step == 2 && stepsState.flightType == "d") {
@@ -212,16 +219,31 @@ class StepsController extends MainController {
         } else if (step == 2 && !stepsState.isDocsNecessary) {
           stepsState.setStep(step + 3);
           stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
+        } else if (step == 2 && stepsState.isDocsNecessary) {
+          final PassportController passportController = getIt<PassportController>();
+          isSuccessful = await passportController.passportInit();
+          if (!isSuccessful) return;
+          stepsState.setStep(step + 1);
         } else if (step == 3) {
           if (!stepsState.isDocoNecessary) {
             stepsState.setStep(step + 2);
             stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
           } else {
+            print("231 at increase");
+            final VisaController visaController = getIt<VisaController>();
+            isSuccessful = await visaController.visaInit();
+            print(isSuccessful);
+            if (!isSuccessful) return;
+            print("236 at increase");
             stepsState.setStep(step + 1);
           }
         } else {
+          print("240 at increase");
           stepsState.setStep(step + 1);
         }
+        print("243 at increase");
+        print(stepsState.step);
+        prepareNextButtonText();
         navigateToStep(stepsState.step);
         updateIsNextButtonDisable();
         stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
@@ -267,35 +289,25 @@ class StepsController extends MainController {
   }
 
   void decreaseStep() async {
-    print("264 at decrease step");
     int step = stepsState.step;
     if (step > 0) {
-      print("269 at decrease step");
       preparePreviousButtonText();
       if (step == 5) {
-        print("272 at decrease step");
         if (!stepsState.isDocsNecessary) {
-          print("274 at decrease step");
           stepsState.setStep(step - 3);
         } else if (!stepsState.isDocoNecessary) {
-          print("277 at decrease step");
           stepsState.setStep(step - 2);
         } else {
-          print("280 at decrease step");
           stepsState.setStep(step - 1);
         }
-        print("283 at decrease step");
         stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
       } else if (step == 6 && stepsState.flightType == "d") {
-        print("286 at decrease step");
         stepsState.setStep(step - 4);
         stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
       } else {
-        print("290 at decrease step");
         stepsState.setStep(step - 1);
         stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
       }
-      print("294 at decrease step");
       print("step: ${stepsState.step}");
       updateIsNextButtonDisable();
       nav.pop();

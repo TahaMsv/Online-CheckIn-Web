@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/Visa/visa_controller.dart';
 import 'package:online_check_in/screens/Visa/visa_state.dart';
 import 'package:online_check_in/screens/steps/steps_state.dart';
@@ -28,14 +29,14 @@ class VisaViewWeb extends StatelessWidget {
               child: CircularProgressIndicator(),
             )
           : !stepsState.isDocoNecessary
-              ? const Center(
-                  child: Text("No need to add visa"),
+              ?  Center(
+                  child: Text("No need to add visa".translate(context)),
                 )
               : Column(
                   children: [
-                    const StepsScreenTitle(
-                      title: "Visa",
-                      description: "Enter visa data (DOCO) for all the passengers.",
+                     StepsScreenTitle(
+                      title: "Visa".translate(context),
+                      description: "Enter visa data (DOCO) for all the passengers.".translate(context),
                     ),
                     const SizedBox(
                       height: 10,
@@ -65,40 +66,3 @@ class VisaViewWeb extends StatelessWidget {
   }
 }
 
-class SubmitButton extends StatelessWidget {
-  const SubmitButton({
-    Key? key,
-    required this.function,
-    this.height = 40,
-    this.width = 130,
-    this.fontSize = 15,
-  }) : super(key: key);
-  final Function function;
-  final double height;
-  final double width;
-  final double fontSize;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const SizedBox(width: 1),
-        Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(border: Border.all(color: MyColors.blueAccent), borderRadius: BorderRadius.circular(5), color: MyColors.myBlue),
-          child: MyElevatedButton(
-            height: 50,
-            width: 175,
-            buttonText: "Submit".tr,
-            fontSize: fontSize,
-            bgColor: MyColors.white,
-            fgColor: MyColors.myBlue,
-            function: () => function(),
-          ),
-        ),
-      ],
-    );
-  }
-}

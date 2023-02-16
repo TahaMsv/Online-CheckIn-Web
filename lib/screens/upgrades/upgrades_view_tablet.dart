@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_check_in/core/constants/ui.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/upgrades/upgrades_controller.dart';
 import 'package:online_check_in/screens/upgrades/upgrades_state.dart';
 import 'package:online_check_in/screens/upgrades/widgets/entertainments.dart';
@@ -26,10 +27,10 @@ class UpgradesViewTablet extends StatelessWidget {
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                StepsScreenTitle(title: "Upgrades", description: "", fontSize: 45),
+              children:  [
+                StepsScreenTitle(title: "Upgrades".translate(context), description: "", fontSize: 45),
                 SizedBox(height: 20),
-                Text("All upgrades are non-refundable", style: MyTextTheme.black25W300),
+                Text("All upgrades are non-refundable".translate(context), style: MyTextTheme.black25W300),
                 SizedBox(height: 20),
                 WinesAndDrinksList(),
                 SizedBox(height: 20),
@@ -57,7 +58,7 @@ class WinesAndDrinksList extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Wines & Drinks", style: MyTextTheme.darkGreyW70025),
+           Text("Wines & Drinks".translate(context), style: MyTextTheme.darkGreyW70025),
           const SizedBox(height: 15),
           Expanded(
             child: ListView.builder(

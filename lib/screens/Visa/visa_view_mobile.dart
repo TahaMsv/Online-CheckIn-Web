@@ -21,35 +21,33 @@ class VisaView extends StatelessWidget {
     StepsState stepsState = context.watch<StepsState>();
     return Scaffold(
       backgroundColor: Colors.white,
-      body: visaState.loading
-          ? const Center(child: CircularProgressIndicator())
-          : !stepsState.isDocoNecessary
+      body: !stepsState.isDocoNecessary
           ? const Center(child: Text("No need to add visa"))
           : Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const StepsScreenTitle(title: "Visa", description: "", fontSize: 25),
-          const SizedBox(height: 5),
-          const Text("Enter visa data (DOCO) for all the passengers.", style: MyTextTheme.black17W300),
-          const SizedBox(height: 15),
-          Expanded(
-            child: ListView(
-              children: visaState.travelers.asMap().entries.map(
-                    (entry) {
-                  int idx = entry.key;
-                  return InfoCard(
-                    index: idx,
-                    fontSize: 17,
-                    isTabletMode: true,
-                    isPassportStep: false,
-                    isCompleted: visaState.travelers[idx].visaInfo.isVisaInfoCompleted,
-                  );
-                },
-              ).toList(),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const StepsScreenTitle(title: "Visa", description: "", fontSize: 25),
+                const SizedBox(height: 5),
+                const Text("Enter visa data (DOCO) for all the passengers.", style: MyTextTheme.black17W300),
+                const SizedBox(height: 15),
+                Expanded(
+                  child: ListView(
+                    children: visaState.travelers.asMap().entries.map(
+                      (entry) {
+                        int idx = entry.key;
+                        return InfoCard(
+                          index: idx,
+                          fontSize: 17,
+                          isTabletMode: true,
+                          isPassportStep: false,
+                          isCompleted: visaState.travelers[idx].visaInfo.isVisaInfoCompleted,
+                        );
+                      },
+                    ).toList(),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

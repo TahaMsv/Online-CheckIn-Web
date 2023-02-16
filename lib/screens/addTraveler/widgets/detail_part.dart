@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 
 import '../../../core/constants/ui.dart';
 import '../../../core/platform/device_info.dart';

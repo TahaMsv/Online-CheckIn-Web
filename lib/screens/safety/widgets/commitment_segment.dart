@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:online_check_in/core/constants/my_list.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/ui.dart';
 import '../../../core/dependency_injection.dart';
@@ -28,7 +29,7 @@ class CommitmentSegment extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "Your Commitment to Safety",
+                    "Your Commitment to Safety".translate(context),
                     style: deviceType.isTablet ? MyTextTheme.darkGreyBold25 : MyTextTheme.darkGreyBold15,
                   ),
                   const SizedBox(
@@ -47,7 +48,7 @@ class CommitmentSegment extends StatelessWidget {
               (entry) {
                 int i = entry.key;
                 // Traveller traveller = entry.value;
-                return PolicyWidget( index: i, normalText: MyList.policyWidgetText[i]);
+                return PolicyWidget( index: i, normalText: MyList.policyWidgetText[i].translate(context));
               },
             ).toList() +
             [
@@ -58,16 +59,16 @@ class CommitmentSegment extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: "Please read our",
+                        text: "Please read our".translate(context),
                         style: deviceType.isTablet ? MyTextTheme.darkGreyW40023 : MyTextTheme.darkGreyW40015,
                       ),
                       TextSpan(
-                        text: "travel policy",
+                        text: "travel policy".translate(context),
                         style: deviceType.isTablet ? const TextStyle(color: MyColors.myBlue, fontSize: 23) : const TextStyle(color: MyColors.myBlue),
                         recognizer: TapGestureRecognizer()..onTap = () {},
                       ),
                       TextSpan(
-                        text: "to delay or cancel your trip if you are unable to accept the above commitments.",
+                        text: "to delay or cancel your trip if you are unable to accept the above commitments.".translate(context),
                         style: deviceType.isTablet ? MyTextTheme.darkGreyW40023 : MyTextTheme.darkGreyW40015,
                       ),
                     ],
@@ -132,7 +133,7 @@ class PolicyWidget extends StatelessWidget {
                     style: deviceType.isTablet ? MyTextTheme.darkGreyW40020 : MyTextTheme.darkGreyW40015,
                   ),
                   TextSpan(
-                    text: "Full Policy",
+                    text: " ${"Full Policy".translate(context)}",
                     style: const TextStyle(color: Colors.blue),
                     recognizer: TapGestureRecognizer()..onTap = () {},
                   ),

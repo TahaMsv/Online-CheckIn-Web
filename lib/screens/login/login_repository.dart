@@ -10,13 +10,15 @@ import 'usecases/login_usecase.dart';
 class LoginRepository implements LoginRepositoryInterface {
   final LoginRemoteDataSource loginRemoteDataSource;
   final LoginLocalDataSource loginLocalDataSource;
-  final NetworkInfo networkInfo;
+  final NetworkInfo? networkInfo;
 
-  LoginRepository({required this.loginRemoteDataSource, required this.loginLocalDataSource, required this.networkInfo});
+  LoginRepository({required this.loginRemoteDataSource, required this.loginLocalDataSource,
+     this.networkInfo
+  });
 
   @override
   Future<Either<Failure, String>> login(LoginRequest loginRequest) async {
-    if (await networkInfo.isConnected) {
+    if (await networkInfo!.isConnected) {
       try {
         String token = await loginRemoteDataSource.login(loginRequest);
         return Right(token);
