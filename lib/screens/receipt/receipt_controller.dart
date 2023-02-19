@@ -1,16 +1,20 @@
 import 'dart:convert';
-
+import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/receipt/receipt_repository.dart';
 import 'package:online_check_in/screens/receipt/receipt_state.dart';
 import 'package:online_check_in/screens/receipt/usecases/get_boadingpass_pdf_usecase.dart';
 import 'package:online_check_in/screens/receipt/usecases/reserve_seat_usecase.dart';
 import 'package:online_check_in/screens/seat_map/seat_map_state.dart';
 import 'package:online_check_in/screens/steps/steps_controller.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 import '../../core/classes/Traveler.dart';
 import '../../core/classes/boarding_pass_pdf.dart';
 import '../../core/classes/seat_data.dart';
+import '../../core/constants/ui.dart';
 import '../../core/dependency_injection.dart';
 import '../../core/interfaces/controller.dart';
 import '../../core/utils/failure_handler.dart';
@@ -79,8 +83,6 @@ class ReceiptController extends MainController {
 
   void convertToPDF() async {
     String base64String = receiptState.boardingPassPDF.buffer;
-    print(base64String);
-    print("49 at receipt");
     receiptState.setBytes(base64Decode(base64String));
   }
 
@@ -119,7 +121,7 @@ class ReceiptController extends MainController {
     return returnedValue;
   }
 
-  void saveBoardingPassPDF() async {
+  void saveBoardingPassPDF(BuildContext context) async {
     var file = File('');
     if (Platform.isAndroid) {
       var status = await Permission.storage.status;
@@ -129,14 +131,18 @@ class ReceiptController extends MainController {
       if (status.isGranted) {
         const downloadsFolderPath = '/storage/emulated/0/Download/';
         Directory dir = Directory(downloadsFolderPath);
-        file = File('${dir.path}boardingpassPDF.pdf');
+        file = File('${dir.path}BoardingpassPDF.pdf');
       }
     }
 
     final byteData = receiptState.bytes;
     try {
-      await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-      print("File saved in: ${file.path}");
+      PdfDocument document = PdfDocument(inputBytes: receiptState.bytes);
+      List<int> bytes = await document.save();
+      await file.writeAsBytes(bytes);
+      String message = "File saved in: ";
+      if (context.mounted) message = message.translate(context);
+      nav.snackbar(Text(message + file.path, style: TextStyle(fontSize: 17)), backgroundColor: MyColors.green);
     } on FileSystemException catch (err) {
       // handle error
       print(err.message);

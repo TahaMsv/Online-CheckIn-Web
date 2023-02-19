@@ -26,7 +26,7 @@ class ReceiptStepButtons extends StatelessWidget {
           fgColor: MyColors.white,
           function: () {
             final ReceiptController receiptController = getIt<ReceiptController>();
-            receiptController.saveBoardingPassPDF();
+            receiptController.saveBoardingPassPDF(context);
           },
         ),
         SizedBox(
@@ -44,7 +44,7 @@ class ReceiptStepButtons extends StatelessWidget {
         SizedBox(
           width: deviceType.isTablet ? 15 : 5,
         ),
-        if (!deviceType.isTablet)
+        if (deviceType.isWeb)
           MyElevatedButton(
             height: deviceType.isTablet ? height * 0.06 : 40,
             width: deviceType.isTablet ? 200 : 150,
