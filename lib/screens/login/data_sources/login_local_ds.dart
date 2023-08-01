@@ -3,14 +3,11 @@ import 'package:online_check_in/screens/login/usecases/login_usecase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginLocalDataSource implements LoginDataSourceInterface {
-  final SharedPreferences? sharedPreferences;
 
-  LoginLocalDataSource({
-    this.sharedPreferences,
-  });
+  LoginLocalDataSource();
 
   @override
-  Future<String> login(LoginRequest request) {
+  Future<LoginResponse> login(LoginRequest request) {
     throw UnimplementedError();
   }
 }

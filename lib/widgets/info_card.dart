@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/Visa/visa_state.dart';
 import 'package:online_check_in/screens/steps/steps_state.dart';
 import 'package:provider/provider.dart';
 
 import '../core/constants/ui.dart';
-import '../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import '../core/platform/device_info.dart';
 import '../screens/Visa/visa_controller.dart';
 import '../screens/Passport/passport_controller.dart';
 import '../screens/Passport/passport_state.dart';
 
-class InfoCard extends StatelessWidget {
+class InfoCard extends ConsumerWidget {
   const InfoCard({
     Key? key,
     required this.index,
@@ -28,10 +29,9 @@ class InfoCard extends StatelessWidget {
   final double fontSize;
 
   @override
-  Widget build(BuildContext context) {
-    PassportState passportState = context.watch<PassportState>();
-    VisaState visaState = context.watch<VisaState>();
-    StepsState stepsState = context.watch<StepsState>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    PassportState passportState = ref.watch(passportProvider);
+    VisaState visaState = ref.watch(visaProvider);
 
     Color textColor = isCompleted ? MyColors.white : MyColors.darkGrey;
 
@@ -100,7 +100,7 @@ class AddPassInfo extends StatelessWidget {
       onTap: () {
         if (isPassportStep) {
           deviceType.isTablet || deviceType.isPhone
-              ? passportController.showBottomSheetForm(
+              ? passportController.showPassportDialogForm(
                   context,
                   height,
                   width,
@@ -108,7 +108,7 @@ class AddPassInfo extends StatelessWidget {
                 )
               : passportController.showPassportDialog(index);
         } else {
-          deviceType.isTablet || deviceType.isPhone ? visaController.showBottomSheetForm(context, height, width, index) : visaController.showVisaDialog(index);
+          deviceType.isTablet || deviceType.isPhone ? visaController.showVisaDialogForm(context, height, width, index) : visaController.showVisaDialogForm(context, height, width, index);
         }
       },
       child: Row(
@@ -168,9 +168,9 @@ class EditIPassInfo extends StatelessWidget {
         InkWell(
           onTap: () {
             if (isPassportStep) {
-              deviceType.isTablet || deviceType.isPhone ? passportController.showBottomSheetForm(context, height, width, index) : passportController.showPassportDialog(index);
+              deviceType.isTablet || deviceType.isPhone ? passportController.showPassportDialogForm(context, height, width, index) : passportController.showPassportDialog(index);
             } else {
-              deviceType.isTablet || deviceType.isPhone ? visaController.showBottomSheetForm(context, height, width, index) : visaController.showVisaDialog(index);
+              deviceType.isTablet || deviceType.isPhone ? visaController.showVisaDialogForm(context, height, width, index) : visaController.showVisaDialogForm(context, height, width, index);
             }
           },
           child: Icon(MenuIcons.iconEdit,

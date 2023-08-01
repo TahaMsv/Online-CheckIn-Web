@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_check_in/screens/seat_map/seat_map_controller.dart';
 import 'package:online_check_in/screens/seat_map/seat_map_state.dart';
+import 'package:online_check_in/screens/seat_map/widgets/plane.dart';
 import 'package:online_check_in/screens/seat_map/widgets/travelers_list.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import 'package:provider/provider.dart';
 
 class SeatMapView extends StatelessWidget {
@@ -13,7 +14,6 @@ class SeatMapView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    SeatMapState seatMapState = context.watch<SeatMapState>();
-    return Scaffold(backgroundColor: theme.primaryColor, body: const TravellersList());
+    return Scaffold(backgroundColor: theme.primaryColor, body: const Plane());
   }
 }

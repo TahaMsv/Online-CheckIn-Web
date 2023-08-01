@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/constants/assets.dart';
 import 'package:online_check_in/screens/seat_map/seat_map_state.dart';
 import 'package:online_check_in/screens/seat_map/seat_map_controller.dart';
@@ -13,12 +14,12 @@ import 'package:online_check_in/screens/seat_map/widgets/plane_wing.dart';
 import 'package:online_check_in/screens/seat_map/widgets/seat_widget.dart';
 import '../../core/classes/seat_map.dart';
 import '../../core/constants/ui.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-import '../../core/utils/MultiLanguages.dart';
+import '../../core/utils/multi_languages.dart';
 
 class SeatMapViewWeb extends StatelessWidget {
   SeatMapViewWeb({Key? key}) : super(key: key);
@@ -27,7 +28,6 @@ class SeatMapViewWeb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    SeatMapState seatMapState = context.watch<SeatMapState>();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     double planeBodyHeight = seatMapController.calculatePlaneBodyHeight();
@@ -60,16 +60,17 @@ class SeatMapViewWeb extends StatelessWidget {
   }
 }
 
-class PlaneBody extends StatelessWidget {
+class PlaneBody extends ConsumerWidget {
   const PlaneBody({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final SeatMapController seatMapController = getIt<SeatMapController>();
-    SeatMapState seatMapState = context.watch<SeatMapState>();
-        String languageCode = MultiLanguages.of(context)!.locale.languageCode;
+    SeatMapState seatMapState = ref.watch(seatMapProvider);
+    // String languageCode = MultiLanguages.of(context)!.locale.languageCode;  //todo
+    String languageCode = 'en';
     return Center(
       child: SizedBox(
         height: seatMapController.calculatePlaneBodyHeight() + 20,
@@ -92,9 +93,9 @@ class PlaneBody extends StatelessWidget {
               child: ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.horizontal,
-                itemCount: seatMapState.cabins.length,
+                itemCount: ref.watch(cabinsProvider)!.length,
                 itemBuilder: (_, i) {
-                  return CabinWidget(width: seatMapController.calculateCabinLength(i), cabin: seatMapState.cabins[i], index: i);
+                  return CabinWidget(width: seatMapController.calculateCabinLength(i), cabin: ref.watch(cabinsProvider)![i], index: i);
                 },
               ),
             ),
@@ -105,7 +106,7 @@ class PlaneBody extends StatelessWidget {
   }
 }
 
-class CabinWidget extends StatelessWidget {
+class CabinWidget extends ConsumerWidget {
   const CabinWidget({
     Key? key,
     required this.cabin,
@@ -118,9 +119,9 @@ class CabinWidget extends StatelessWidget {
   final Cabin cabin;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final SeatMapController seatMapController = getIt<SeatMapController>();
-    SeatMapState seatMapState = context.watch<SeatMapState>();
+    SeatMapState seatMapState = ref.watch(seatMapProvider);
     double height = (seatMapController.calculatePlaneBodyHeight()) + 85;
     return Center(
       child: SizedBox(
@@ -158,22 +159,14 @@ class CabinWidget extends StatelessWidget {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ExitDoor(
-                          width: seatMapState.airCraftBodySize.seatWidth,
-                          height: 20,
-                          isEnable: upDoorEnable
-                        ),
+                        ExitDoor(width: seatMapState.airCraftBodySize.seatWidth, height: 20, isEnable: upDoorEnable),
                         LineWidget(
                           line: cabin.lines[i],
                           width: cabinRatio * seatMapState.airCraftBodySize.seatWidth,
                           height: seatMapController.calculateCabinHeight(index),
                           cabinRatio: cabinRatio,
                         ),
-                        ExitDoor(
-                          width: seatMapState.airCraftBodySize.seatWidth,
-                          height: 20,
-                          isEnable: downDoorEnable
-                        ),
+                        ExitDoor(width: seatMapState.airCraftBodySize.seatWidth, height: 20, isEnable: downDoorEnable),
                       ],
                     );
                   },
@@ -187,13 +180,12 @@ class CabinWidget extends StatelessWidget {
   }
 }
 
-
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
   @override
   Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-    // etc.
-  };
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        // etc.
+      };
 }

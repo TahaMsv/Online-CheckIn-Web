@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/my_list.dart';
@@ -8,7 +9,7 @@ import '../../../core/platform/device_info.dart';
 import '../../../widgets/MtDottedLine.dart';
 import '../steps_state.dart';
 
-class StepWidget extends StatelessWidget {
+class StepWidget extends ConsumerWidget {
   const StepWidget({
     Key? key,
     required this.index,
@@ -17,9 +18,9 @@ class StepWidget extends StatelessWidget {
   final int index;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     DeviceType deviceType = DeviceInfo.deviceType(context);
-    StepsState stepsState = context.watch<StepsState>();
+    StepsState stepsState = ref.watch(stepsProvider);
     int step = stepsState.step;
     Color bgColor;
     Color frColor;

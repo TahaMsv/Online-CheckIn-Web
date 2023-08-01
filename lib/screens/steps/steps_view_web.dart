@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/constants/assets.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/addTraveler/add_traveler_state.dart';
@@ -12,24 +13,24 @@ import 'package:online_check_in/screens/steps/widgets/step_widget.dart';
 import 'package:online_check_in/screens/steps/widgets/top_of_page.dart';
 import 'package:online_check_in/widgets/MyDivider.dart';
 import '../../core/constants/ui.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import 'package:provider/provider.dart';
-import '../../core/utils/MultiLanguages.dart';
+import '../../core/utils/multi_languages.dart';
 import '../../widgets/MtDottedLine.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/UserTextInput.dart';
 import '../../widgets/title_widget.dart';
 import '../addTraveler/add_traveler_controller.dart';
 
-class StepsViewWeb extends StatelessWidget {
+class StepsViewWeb extends ConsumerWidget {
   StepsViewWeb({Key? key, required this.childWidget}) : super(key: key);
   final StepsController stepsController = getIt<StepsController>();
   final Widget childWidget;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     ThemeData theme = Theme.of(context);
-    StepsState stepsState = context.watch<StepsState>();
+    StepsState stepsState = ref.watch(stepsProvider);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -41,7 +42,11 @@ class StepsViewWeb extends StatelessWidget {
           : ListView(
               shrinkWrap: true,
               children: [
-                TopOfPage(height: height, width: width),
+                TopOfPage(
+                  height: height,
+                  width: width,
+                  scaffoldState: null,
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -97,7 +102,7 @@ class StepsViewWeb extends StatelessWidget {
   }
 }
 
-class LeftSideOFPage extends StatelessWidget {
+class LeftSideOFPage extends ConsumerWidget {
   const LeftSideOFPage({
     Key? key,
     required this.height,
@@ -112,8 +117,8 @@ class LeftSideOFPage extends StatelessWidget {
   final StepsController stepsController;
 
   @override
-  Widget build(BuildContext context) {
-    StepsState stepsState = context.watch<StepsState>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    StepsState stepsState = ref.watch(stepsProvider);
     return Expanded(
       child: Container(
         // width: width,
@@ -128,7 +133,7 @@ class LeftSideOFPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                 TitleWidget(
+                TitleWidget(
                   title: "Travellers".translate(context),
                   width: 190,
                 ),
@@ -136,7 +141,7 @@ class LeftSideOFPage extends StatelessWidget {
                   SizedBox(
                     width: 112,
                     child: Row(
-                      children:  [
+                      children: [
                         const MyDivider(
                           width: 2,
                           height: 60,
@@ -181,7 +186,7 @@ class LeftSideOFPage extends StatelessWidget {
   }
 }
 
-class AddNewTraveller extends StatelessWidget {
+class AddNewTraveller extends ConsumerWidget {
   AddNewTraveller({
     Key? key,
     required this.stepsController,
@@ -190,9 +195,9 @@ class AddNewTraveller extends StatelessWidget {
   final AddTravelerController addTravelerController = getIt<AddTravelerController>();
 
   @override
-  Widget build(BuildContext context) {
-    StepsState stepsState = context.watch<StepsState>();
-    AddTravelerState addTravelerState = context.watch<AddTravelerState>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    StepsState stepsState = ref.watch(stepsProvider);
+    AddTravelerState addTravelerState = ref.watch(addTravelerStateProvider);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
@@ -222,7 +227,7 @@ class AddNewTraveller extends StatelessWidget {
                   const SizedBox(
                     width: 15,
                   ),
-                   Text(
+                  Text(
                     "Add Travellers".translate(context),
                     style: MyTextTheme.w800MainColor15,
                   ),
@@ -236,7 +241,7 @@ class AddNewTraveller extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                 Text(
+                Text(
                   "Add all passengers to the list on the left here".translate(context),
                   style: MyTextTheme.lightGrey14,
                 ),
@@ -280,7 +285,7 @@ class AddNewTraveller extends StatelessWidget {
   }
 }
 
-class TravellerItem extends StatelessWidget {
+class TravellerItem extends ConsumerWidget {
   const TravellerItem({
     Key? key,
     required this.step,
@@ -292,9 +297,10 @@ class TravellerItem extends StatelessWidget {
   final StepsController stepsController;
 
   @override
-  Widget build(BuildContext context) {
-        String languageCode = MultiLanguages.of(context)!.locale.languageCode;
-    StepsState stepsState = context.watch<StepsState>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    // String languageCode = MultiLanguages.of(context)!.locale.languageCode;  //todo
+    String languageCode = 'en';
+    StepsState stepsState = ref.watch(stepsProvider);
     bool isTravellerSelected = stepsState.travelers[index].seatId == "--" ? false : true;
     return Container(
       color: stepsState.whoseTurnToSelect == index && step == 6 ? MyColors.brightYellow.withOpacity(0.5) : MyColors.white,

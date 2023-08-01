@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/Visa/visa_controller.dart';
 import 'package:online_check_in/screens/Visa/visa_state.dart';
 import 'package:online_check_in/screens/steps/steps_state.dart';
 import '../../core/constants/ui.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/utils/getTranslatedWord.dart';
+import '../../core/utils/get_translated_word.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/StepsScreenTitle.dart';
 import '../../widgets/info_card.dart';
 
-class VisaViewWeb extends StatelessWidget {
+class VisaViewWeb extends ConsumerWidget {
   VisaViewWeb({Key? key}) : super(key: key);
   final VisaController visaController = getIt<VisaController>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     ThemeData theme = Theme.of(context);
-    VisaState visaState = context.watch<VisaState>();
-    StepsState stepsState = context.watch<StepsState>();
+    VisaState visaState = ref.watch(visaProvider);
+    StepsState stepsState = ref.watch(stepsProvider);
     return Scaffold(
       backgroundColor: theme.primaryColor,
       body: visaState.loading
@@ -29,12 +30,12 @@ class VisaViewWeb extends StatelessWidget {
               child: CircularProgressIndicator(),
             )
           : !stepsState.isDocoNecessary
-              ?  Center(
+              ? Center(
                   child: Text("No need to add visa".translate(context)),
                 )
               : Column(
                   children: [
-                     StepsScreenTitle(
+                    StepsScreenTitle(
                       title: "Visa".translate(context),
                       description: "Enter visa data (DOCO) for all the passengers.".translate(context),
                     ),
@@ -65,4 +66,3 @@ class VisaViewWeb extends StatelessWidget {
     );
   }
 }
-

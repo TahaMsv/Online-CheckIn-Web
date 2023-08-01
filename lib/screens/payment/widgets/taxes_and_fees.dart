@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/constants/ui.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/payment/payment_state.dart';
@@ -7,14 +8,14 @@ import 'package:provider/provider.dart';
 import '../../../core/platform/device_info.dart';
 import '../../../widgets/MtDottedLine.dart';
 
-class TaxesAndFees extends StatelessWidget {
+class TaxesAndFees extends ConsumerWidget {
   const TaxesAndFees({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    PaymentState paymentState = context.watch<PaymentState>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    PaymentState paymentState = ref.watch(paymentProvider);
     DeviceType deviceType = DeviceInfo.deviceType(context);
     return SizedBox(
       width: 250,
@@ -38,7 +39,7 @@ class TaxesAndFees extends StatelessWidget {
           const MyDottedLine(color: MyColors.white1, lineLength: double.infinity),
           SizedBox(height: deviceType.isTablet ? 10 : 5),
           Container(
-            height:deviceType.isTablet? 200: 100,
+            height: deviceType.isTablet ? 200 : 100,
             decoration: const BoxDecoration(
               border: BorderDirectional(
                 bottom: BorderSide(
@@ -83,7 +84,7 @@ class TaxesAndFees extends StatelessWidget {
           ),
           Text(
             "Including taxes and fees".translate(context),
-                       style: deviceType.isTablet ? MyTextTheme.darkGreyW50025 : MyTextTheme.darkGreyW50017,
+            style: deviceType.isTablet ? MyTextTheme.darkGreyW50025 : MyTextTheme.darkGreyW50017,
           ),
         ],
       ),

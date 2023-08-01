@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class SafetyState with ChangeNotifier {
-  setState() => notifyListeners();
+final checkBoxesProvider = StateNotifierProvider<CheckBoxesNotifier, List<bool>>((ref) {
+  return CheckBoxesNotifier();
+});
 
-  List<bool> _checkBoxesValue = <bool>[false, false, false];
-
-  List<bool> get checkBoxesValue => _checkBoxesValue;
+class CheckBoxesNotifier extends StateNotifier<List<bool>> {
+  CheckBoxesNotifier() : super([false, false, false]);
 
   void toggleCheckBoxesValue(int index) {
-    _checkBoxesValue[index] = !_checkBoxesValue[index];
-    notifyListeners();
+    state[index] = !state[index];
   }
 }

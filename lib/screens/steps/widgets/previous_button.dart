@@ -3,7 +3,7 @@ import 'package:online_check_in/core/utils/String_utilites.dart';
 
 import '../../../core/constants/ui.dart';
 import '../../../core/platform/device_info.dart';
-import '../../../core/utils/MultiLanguages.dart';
+import '../../../core/utils/multi_languages.dart';
 import '../../../widgets/MyElevatedButton.dart';
 import '../steps_controller.dart';
 
@@ -18,7 +18,8 @@ class PreviousButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String languageCode = MultiLanguages.of(context)!.locale.languageCode;
+    // String languageCode = MultiLanguages.of(context)!.locale.languageCode;  //todo
+    String languageCode = 'en';
     double height = MediaQuery.of(context).size.height;
     DeviceType deviceType = DeviceInfo.deviceType(context);
     return SizedBox(

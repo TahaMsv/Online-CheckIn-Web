@@ -1,15 +1,17 @@
 import 'dart:developer';
 
-import '../dependency_injection.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:online_check_in/initialize.dart';
 import '../navigation/navigation_service.dart';
 import '../navigation/router.dart';
 
 abstract class MainController {
   late NavigationService nav;
-  final MyRouter router = MyRouter();
+  late WidgetRef ref;
   bool initialized =false;
   MainController() {
     nav = getIt<NavigationService>();
+    ref = getIt<WidgetRef>();
     if(!initialized) {
       onCreate();
     }

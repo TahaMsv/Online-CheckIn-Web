@@ -2,16 +2,14 @@ import 'package:online_check_in/screens/payment/payment_repository.dart';
 import 'package:online_check_in/screens/payment/payment_state.dart';
 import 'package:online_check_in/screens/seat_map/seat_map_state.dart';
 
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import '../../core/interfaces/controller.dart';
 
 class PaymentController extends MainController {
-  final PaymentState paymentState = getIt<PaymentState>();
-  final PaymentRepository paymentRepository = getIt<PaymentRepository>();
-
+  late PaymentState paymentState = ref.read(paymentProvider);
   void calculatePrices() {
     // final myUpgradesStepController = Get.put(UpgradesStepController(model));
-    final SeatMapState seatMapState = getIt<SeatMapState>();
+    final SeatMapState seatMapState = ref.read(seatMapProvider);
     paymentState.setTotalPrice(0);
     paymentState.setSeatPrices(seatMapState.seatPrices);
     paymentState.setTotalPrice(paymentState.totalPrice + paymentState.seatPrices);

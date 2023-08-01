@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import '../../../core/constants/assets.dart';
-import '../../../core/utils/MultiLanguages.dart';
+import '../../../core/utils/multi_languages.dart';
 class PlaneWings extends StatelessWidget {
   const PlaneWings({
     Key? key,
@@ -13,7 +13,8 @@ class PlaneWings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        String languageCode = MultiLanguages.of(context)!.locale.languageCode;
+        // String languageCode = MultiLanguages.of(context)!.locale.languageCode;  //todo
+    String languageCode = 'en';
     return Container(
       margin:isTabletMode?(languageCode == "en" ? EdgeInsets.only(left: 400 + planeBodyLength / 2) : EdgeInsets.only(right: 400 + planeBodyLength / 2)):( languageCode == "en" ? EdgeInsets.only(left: 400 + planeBodyLength / 2) : EdgeInsets.only(right: 400 + planeBodyLength / 2)),
       child: Column(

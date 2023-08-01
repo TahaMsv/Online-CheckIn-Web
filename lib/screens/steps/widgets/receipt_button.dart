@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:online_check_in/core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import 'package:online_check_in/screens/receipt/receipt_controller.dart';
 
 import '../../../core/constants/ui.dart';

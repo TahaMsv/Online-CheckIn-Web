@@ -10,31 +10,31 @@ import 'package:online_check_in/screens/seat_map/usecases/click_on_seat_usecase.
 import 'package:online_check_in/screens/steps/steps_controller.dart';
 import 'package:online_check_in/screens/steps/steps_state.dart';
 
-import '../../core/classes/Traveler.dart';
+import '../../core/classes/flight_information.dart';
+import '../../core/classes/traveler.dart';
 import '../../core/classes/seat.dart';
 import '../../core/classes/seat_map.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import '../../core/interfaces/controller.dart';
+import '../../core/navigation/route_names.dart';
 import '../../core/utils/failure_handler.dart';
 
 class SeatMapController extends MainController {
-  final SeatMapState seatMapState = getIt<SeatMapState>();
-  final SeatMapRepository seatMapRepository = getIt<SeatMapRepository>();
+  late SeatMapState seatMapState = ref.read(seatMapProvider.notifier);
 
-  late ClickOnSeatUseCase clickOnSeatUseCase = ClickOnSeatUseCase(repository: seatMapRepository);
-
-  void init() {
+  Future<bool> init() {
     print("seat map init");
     if (!seatMapState.seatMapInit) {
-      final StepsState stepsState = getIt<StepsState>();
-      seatMapState.cabins = stepsState.flightInformation!.seatmap.cabins;
-      List<Seat> seats = stepsState.flightInformation!.seats;
+      FlightInformation currFI = ref.read(flightInformationProvider)!;
+      ref.read(cabinsProvider.notifier).state = currFI.seatmap.cabins;
+      List<Seat> seats = currFI.seats;
       for (int i = 0; i < seats.length; i++) {
         Seat seat = seats[i];
         String key = seat.letter + seat.line;
         seatMapState.seatsStatus[key] = seat.isUsedDescription;
-        seatMapState.seatsPrice[key] = seat.price;
+        seatMapState.seatsPrice[key] = seat.price ?? 0;
       }
+
       int numOfBusinessCabinCells = numberOfCabinCellsInLine(CabinClass.business);
       int numOfFirstClassCabinCells = numberOfCabinCellsInLine(CabinClass.firstClass);
       int numOfEconomyCabinCells = numberOfCabinCellsInLine(CabinClass.economy);
@@ -48,16 +48,21 @@ class SeatMapController extends MainController {
       seatMapState.setSeatMapInit(true);
       seatMapState.setState();
     }
+    return Future.value(seatMapState.seatMapInit);
   }
 
   void setTravelerToSelectIndexTablet(int index) {
     seatMapState.setTravelerToSelectIndexTablet(index);
-    final StepsState stepsState = getIt<StepsState>();
+    final StepsState stepsState = ref.read(stepsProvider);
+    ;
+    ;
     stepsState.setWhoseTurnToSelect(index);
   }
 
   void increaseTravelerToSelectIndexTablet() {
-    final StepsState stepsState = getIt<StepsState>();
+    final StepsState stepsState = ref.read(stepsProvider);
+    ;
+    ;
     if (seatMapState.travelerToSelectIndexTablet + 1 < stepsState.travelers.length) {
       seatMapState.setTravelerToSelectIndexTablet(seatMapState.travelerToSelectIndexTablet + 1);
     }
@@ -69,27 +74,27 @@ class SeatMapController extends MainController {
     }
   }
 
-  String convertMapToFormattedString(Map<String, String> map) {
-    List<String> keyValues = [];
-    map.forEach((k, v) => keyValues.add("$k=>$v"));
-    String result = keyValues.join(",");
-    return result;
-  }
+  // String convertMapToFormattedString(Map<String, String> map) {
+  //   List<String> keyValues = [];
+  //   map.forEach((k, v) => keyValues.add("$k=>$v"));
+  //   String result = keyValues.join(",");
+  //   return result;
+  // }
 
-  void convertFormattedStringToMap(Map<String, String> map, String? str) {
-    if (str != null) {
-      List<String> keyValues = str.split(",");
-      for (var i = 0; i < keyValues.length; ++i) {
-        String key = keyValues[i].split("=>")[0];
-        String value = keyValues[i].split("=>")[1];
-        map[key] = value;
-      }
-      seatMapState.setState();
-    }
-  }
+  // void convertFormattedStringToMap(Map<String, String> map, String? str) {
+  //   if (str != null) {
+  //     List<String> keyValues = str.split(",");
+  //     for (var i = 0; i < keyValues.length; ++i) {
+  //       String key = keyValues[i].split("=>")[0];
+  //       String value = keyValues[i].split("=>")[1];
+  //       map[key] = value;
+  //     }
+  //     seatMapState.setState();
+  //   }
+  // }
 
   int numberOfCabinCellsInLine(CabinClass cabinClass) {
-    Iterable<Cabin> targetCabins = seatMapState.cabins.where((element) => element.cabinTitle == cabinClass.name);
+    Iterable<Cabin> targetCabins = ref.read(cabinsProvider.notifier).state!.where((element) => element.cabinTitle == cabinClass.name);
     if (targetCabins.isNotEmpty) {
       return targetCabins.first.lines.where((line) => line.type == "HorizontalCode").first.cells.length;
     }
@@ -97,8 +102,9 @@ class SeatMapController extends MainController {
   }
 
   void updateSeatMap() {
-    final StepsState stepsState = getIt<StepsState>();
-    List<Seat> seats = stepsState.flightInformation!.seats;
+    FlightInformation currFI = ref.read(flightInformationProvider)!;
+
+    List<Seat> seats = currFI.seats;
     for (var seat in seats) {
       String key = seat.letter + seat.line;
       seatMapState.seatsStatus[key] = seat.isUsedDescription;
@@ -108,29 +114,32 @@ class SeatMapController extends MainController {
   }
 
   Future<bool> clickOnSeat() async {
-    final StepsState stepsState = getIt<StepsState>();
+    FlightInformation currFI = ref.read(flightInformationProvider)!;
+    final StepsState stepsState = ref.read(stepsProvider);
     stepsState.setLoading(true);
     List<Traveler> travellers = stepsState.travelers;
     List<SeatData> seatsData = [];
     travellers.where((t) => !seatMapState.reservedSeats.containsKey(t.seatId)).toList().forEach((traveller) {
       seatsData.add(SeatData(
-        passengerId: stepsState.flightInformation!.passengers[0].id,
+        passengerId: currFI.passengers[0].id,
         letter: traveller.seatId.substring(0, 1),
         line: int.parse(traveller.seatId.substring(1)),
       ));
     });
     ClickOnSeatRequest clickOnSeatRequest = ClickOnSeatRequest(seatsData: seatsData);
+    ClickOnSeatUseCase clickOnSeatUseCase = ClickOnSeatUseCase(repository: SeatMapRepository());
+
     final fOrS = await clickOnSeatUseCase(request: clickOnSeatRequest);
 
     bool returnValue = false;
-    fOrS.fold((f) => FailureHandler.handle(f, retry: () => clickOnSeat()), (successful) async {
+    fOrS.fold((f) => FailureHandler.handle(f, retry: () => clickOnSeat()), (r) async {
       print(travellers);
-      if (successful) {
+      if (r.successful) {
         for (var traveller in travellers) {
           seatMapState.clickedOnSeats[traveller.seatId] = traveller.getNickName();
         }
       }
-      returnValue = successful;
+      returnValue = r.successful;
     });
     stepsState.setLoading(false);
     return returnValue;
@@ -147,7 +156,7 @@ class SeatMapController extends MainController {
       seatMapState.airCraftBodySize.setEachLineWidth(30);
     }
     double length = 0;
-    for (var i = 0; i < seatMapState.cabins.length; ++i) {
+    for (var i = 0; i < ref.read(cabinsProvider.notifier).state!.length; ++i) {
       length += calculateCabinLength(i);
       length += 5; // Left margin
     }
@@ -163,13 +172,13 @@ class SeatMapController extends MainController {
   }
 
   double calculateCabinLinesLength(int index, {RunningMode mode = RunningMode.web}) {
-    String cabinTitle = seatMapState.cabins[index].cabinTitle;
+    String cabinTitle = ref.read(cabinsProvider.notifier).state![index].cabinTitle;
     double ratio = (cabinTitle == CabinClass.firstClass.name
         ? seatMapState.airCraftBodySize.firstClassCabinsRatio
         : cabinTitle == CabinClass.business.name
             ? seatMapState.airCraftBodySize.businessCabinsRatio
             : 1.0);
-    return ratio * (seatMapState.cabins[index].linesCount * (seatMapState.airCraftBodySize.eachLineWidth + seatMapState.airCraftBodySize.linesMargin * 2 + 2));
+    return ratio * (ref.read(cabinsProvider.notifier).state![index].linesCount * (seatMapState.airCraftBodySize.eachLineWidth + seatMapState.airCraftBodySize.linesMargin * 2 + 2));
   }
 
   double calculatePlaneBodyHeight({RunningMode mode = RunningMode.web}) {
@@ -183,7 +192,7 @@ class SeatMapController extends MainController {
       seatMapState.airCraftBodySize.setEachLineWidth(30);
     }
     double maxHeight = 0;
-    for (var i = 0; i < seatMapState.cabins.length; ++i) {
+    for (var i = 0; i < ref.read(cabinsProvider.notifier).state!.length; ++i) {
       double height = calculateCabinHeight(i, mode: mode);
       if (height > maxHeight) {
         maxHeight = height;
@@ -195,13 +204,13 @@ class SeatMapController extends MainController {
 
   double calculateCabinHeight(int index, {RunningMode mode = RunningMode.web}) {
     double heightSum = 0;
-    String cabinTitle = seatMapState.cabins[index].cabinTitle;
+    String cabinTitle = ref.read(cabinsProvider.notifier).state![index].cabinTitle;
     double ratio = (cabinTitle == CabinClass.firstClass.name
         ? seatMapState.airCraftBodySize.firstClassCabinsRatio
         : cabinTitle == CabinClass.business.name
             ? seatMapState.airCraftBodySize.businessCabinsRatio
             : 1.0);
-    for (var cell in seatMapState.cabins[index].lines[1].cells) {
+    for (var cell in ref.read(cabinsProvider.notifier).state![index].lines[1].cells) {
       int seatType = seatViewType(cell.value, cell.type, cell.code);
       double height = ratio * getSeatHeight(seatType);
       heightSum += height;
@@ -245,20 +254,21 @@ class SeatMapController extends MainController {
 
   void goToSeatMapTablet(int index) {
     setTravelerToSelectIndexTablet(index);
-    final StepsState stepsState = getIt<StepsState>();
+    final StepsState stepsState = ref.read(stepsProvider);
+
     stepsState.setShowSeatMap(true);
     nav.pushNamed(RouteNames.seatMapPlane);
   }
 
   void getBackFromPlane() {
-    final StepsState stepsState = getIt<StepsState>();
+    final StepsState stepsState = ref.read(stepsProvider);
     stepsState.setShowSeatMap(false);
     nav.pop();
   }
 
   void changeSeatStatus(String seatId) {
     print("Change status 250");
-    final StepsState stepsState = getIt<StepsState>();
+    final StepsState stepsState = ref.read(stepsProvider);
     final StepsController stepsController = getIt<StepsController>();
     int price = seatMapState.seatsPrice[seatId]!;
     int whoseTurn = stepsState.whoseTurnToSelect;
@@ -309,7 +319,7 @@ class SeatMapController extends MainController {
   }
 
   void changeSeatStatusTablet(String seatId) {
-    final StepsState stepsState = getIt<StepsState>();
+    final StepsState stepsState = ref.read(stepsProvider.notifier);
     final StepsController stepsController = getIt<StepsController>();
     int newPrice = seatMapState.seatsPrice[seatId]!;
     int whoseTurn = seatMapState.travelerToSelectIndexTablet;
@@ -367,6 +377,8 @@ class SeatMapController extends MainController {
           return 6;
         } else if (seatMapState.seatsStatus[code] == SeatType.checkInOtherFlight.name) {
           return 15;
+        } else if (seatMapState.seatsStatus[code] == SeatType.reserved.name) {
+          return 16;
         } else {
           return 7;
         } // selected seat
@@ -446,6 +458,12 @@ class SeatMapController extends MainController {
       case 15:
         isSeatClickable = false;
         seatText = "";
+        hasShadow = true;
+        break;
+      case 16:
+        isSeatClickable = false;
+        seatText = "";
+        color = MyColors.lightGrey;
         hasShadow = true;
         break;
     }

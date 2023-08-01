@@ -5,5 +5,5 @@ import 'package:online_check_in/screens/upgrades/usecases/get_extras_usecase.dar
 import '../../../core/classes/extra.dart';
 
 abstract class UpgradesDataSourceInterface{
-  Future< List<Extra>> getExtras(GetExtrasRequest request);
+  Future< GetExtrasResponse> getExtras(GetExtrasRequest request);
 }

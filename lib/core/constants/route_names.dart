@@ -1,3 +1,4 @@
+/*
 class RouteNames {
 
   RouteNames._();
@@ -17,4 +18,4 @@ class RouteNames {
   static const receipt = '/receipt';
   static const seatMap = '/seatMap';
   static const seatMapPlane = '/seatMapPlane';
-}
+}*/

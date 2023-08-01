@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/classes/flight.dart';
 import '../../../core/constants/ui.dart';
 import '../../../core/platform/device_info.dart';
 import 'country_and_date.dart';
 
 class DatesAndFromToCities extends StatelessWidget {
-  const DatesAndFromToCities({Key? key, required this.fromCity, required this.fromTime, required this.toCity, required this.toTime}) : super(key: key);
-  final String fromCity;
-  final String fromTime;
-  final String toCity;
-  final String toTime;
+  const DatesAndFromToCities({Key? key, required this.flight}) : super(key: key);
+  final Flight flight;
 
   @override
   Widget build(BuildContext context) {
     DeviceType deviceType = DeviceInfo.deviceType(context);
     return Expanded(
-      flex: 2,
+      flex: 1,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(topRight: Radius.circular(16), topLeft: Radius.circular(16)),
@@ -28,8 +26,9 @@ class DatesAndFromToCities extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               CountryAndDate(
-                city: fromCity,
-                time: fromTime,
+                city: flight.fromCity,
+                time: flight.fromTime,
+                dateTime: flight.flightDateString,
               ),
               const Icon(
                 MenuIcons.iconRightArrow,
@@ -37,8 +36,9 @@ class DatesAndFromToCities extends StatelessWidget {
                 size: 20,
               ),
               CountryAndDate(
-                city: toCity,
-                time: toTime,
+                city: flight.toCity,
+                time: flight.toTime,
+                dateTime: flight.flightDateString,
               ),
             ],
           ),

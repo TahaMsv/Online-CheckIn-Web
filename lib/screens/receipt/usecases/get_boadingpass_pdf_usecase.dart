@@ -1,18 +1,19 @@
 import 'package:online_check_in/core/classes/boarding_pass_pdf.dart';
 import 'package:dartz/dartz.dart';
+import '../../../core/abstract/request_abs.dart';
+import '../../../core/abstract/response_abs.dart';
 import '../../../core/error/failures.dart';
-import '../../../core/interfaces/request.dart';
 import '../../../core/interfaces/usecase.dart';
 import '../receipt_repository.dart';
 import '../receipt_repository.dart';
 
-class GetBoardingPassPdfUseCase extends UseCase<BoardingPassPDF, GetBoardingPassPdfRequest> {
+class GetBoardingPassPdfUseCase extends UseCase<GetBoardingPassPdfResponse, GetBoardingPassPdfRequest> {
   final ReceiptRepository repository;
 
   GetBoardingPassPdfUseCase({required this.repository});
 
   @override
-  Future<Either<Failure, BoardingPassPDF>> call({required GetBoardingPassPdfRequest request}) {
+  Future<Either<Failure, GetBoardingPassPdfResponse>> call({required GetBoardingPassPdfRequest request}) {
     return repository.getBoardingPassPdf(request);
   }
 }
@@ -35,4 +36,16 @@ class GetBoardingPassPdfRequest extends Request {
           },
         },
       };
+}
+
+class GetBoardingPassPdfResponse {
+  final BoardingPassPDF boardingPassPDF;
+
+  GetBoardingPassPdfResponse({
+    required this.boardingPassPDF,
+  });
+
+  factory GetBoardingPassPdfResponse.fromResponse(Response res) {
+    return GetBoardingPassPdfResponse(boardingPassPDF: BoardingPassPDF.fromJson(res.body));
+  }
 }

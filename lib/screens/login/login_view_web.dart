@@ -1,15 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/constants/assets.dart';
-import 'package:online_check_in/core/utils/MultiLanguages.dart';
+import 'package:online_check_in/core/utils/multi_languages.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/login/widgets/background_image.dart';
 import 'package:online_check_in/screens/login/widgets/copyright_widget.dart';
 import 'package:online_check_in/widgets/MyElevatedButton.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/ui.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import '../../widgets/LanguagePicker.dart';
 import '../../widgets/MyDivider.dart';
 import '../../widgets/UserTextInput.dart';
@@ -23,7 +24,6 @@ class LoginViewWeb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    LoginState loginState = context.watch<LoginState>();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -118,7 +118,7 @@ class Foreground extends StatelessWidget {
   }
 }
 
-class CheckInForm extends StatelessWidget {
+class CheckInForm extends ConsumerWidget {
   const CheckInForm({
     Key? key,
     required this.loginController,
@@ -127,8 +127,9 @@ class CheckInForm extends StatelessWidget {
   final LoginController loginController;
 
   @override
-  Widget build(BuildContext context) {
-    LoginState loginState = context.watch<LoginState>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    LoginState loginState = ref.watch(loginProvider);
+    
     return Container(
       height: 710,
       width: 400,
@@ -157,13 +158,13 @@ class CheckInForm extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                             Text(
+                            Text(
                               "Online Check-in".translate(context),
                               style: MyTextTheme.boldDarkGray18,
                             ),
                             Container(
                               margin: const EdgeInsets.only(top: 15),
-                              child:  Text(
+                              child: Text(
                                 "Input Requested info in order to continue".translate(context),
                                 style: TextStyle(
                                   color: MyColors.grey,
@@ -277,7 +278,7 @@ class _Texts extends StatelessWidget {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            children:  [
+            children: [
               _NextPrevButton(
                 icon: MenuIcons.iconLeft,
                 text: "Previous".translate(context),
@@ -306,7 +307,8 @@ class _NextPrevButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String languageCode = MultiLanguages.of(context)!.locale.languageCode;
+    // String languageCode = MultiLanguages.of(context)!.locale.languageCode;  //todo
+    String languageCode = 'en';
     return Container(
       margin: languageCode == "en" ? const EdgeInsets.only(right: 85) : const EdgeInsets.only(left: 85),
       child: ElevatedButton(

@@ -1,32 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/safety/safety_controller.dart';
 import 'package:online_check_in/screens/safety/safety_state.dart';
 import 'package:online_check_in/screens/safety/widgets/commitment_segment.dart';
 import '../../core/constants/assets.dart';
 import '../../core/constants/ui.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/StepsScreenTitle.dart';
 
-class SafetyView extends StatelessWidget {
+class SafetyView extends ConsumerWidget {
   SafetyView({Key? key}) : super(key: key);
   final SafetyController safetyController = getIt<SafetyController>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     ThemeData theme = Theme.of(context);
-    SafetyState safetyState = context.watch<SafetyState>();
     return Scaffold(
       backgroundColor: theme.primaryColor,
       body: ListView(
         children: [
           const AdviseSegment(),
-          CommitmentSegment(
-            safetyState: safetyState
-          ),
+          CommitmentSegment(),
         ],
       ),
     );

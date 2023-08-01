@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../core/utils/MultiLanguages.dart';
+import '../core/utils/multi_languages.dart';
 import '../core/utils/country_utils/country_utility.dart';
 import '../my_app.dart';
 import 'CountryListPicker/country.dart';
@@ -70,15 +70,16 @@ class _LanguagePickerState extends State<LanguagePicker> {
 }
 
 Widget _buildDropdownItem(Country country, Color textColor) => Container(
+
       child: Row(
         children: <Widget>[
-          CountryPickerUtils.getDefaultFlagImage(country),
-          SizedBox(
-            width: 8.0,
-          ),
+          // CountryPickerUtils.getDefaultFlagImage(country),
+          // SizedBox(
+          //   width: 8.0,
+          // ),
           Text(
-            "+${country.phoneCode}(${country.isoCode})",
-            style: TextStyle(color: textColor),
+            "${country.languageCode}".toUpperCase(),
+            style: TextStyle(color: textColor, fontSize: 17),
           ),
         ],
       ),

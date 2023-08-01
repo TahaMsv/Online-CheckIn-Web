@@ -4,14 +4,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../interfaces/seat_map_data_source_interface.dart';
 
 class SeatMapLocalDataSource implements SeatMapDataSourceInterface {
-  final SharedPreferences sharedPreferences;
 
-  SeatMapLocalDataSource({
-    required this.sharedPreferences,
-  });
+  SeatMapLocalDataSource();
 
   @override
-  Future<bool> clickOnSeat(ClickOnSeatRequest request) {
+  Future<ClickOnSeatResponse> clickOnSeat(ClickOnSeatRequest request) {
     throw UnimplementedError();
   }
 }

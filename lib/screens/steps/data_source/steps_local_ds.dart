@@ -5,14 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../interfaces/steps_data_source_interface.dart';
 
 class StepsLocalDataSource implements StepsDataSourceInterface {
-  final SharedPreferences sharedPreferences;
 
-  StepsLocalDataSource({
-    required this.sharedPreferences,
-  });
+  StepsLocalDataSource();
 
   @override
-  Future<FlightInformation> getFlightInformation(GetFlightInformationRequest request) {
+  Future<GetFlightInformationResponse> getFlightInformation(GetFlightInformationRequest request) {
     throw UnimplementedError();
   }
 

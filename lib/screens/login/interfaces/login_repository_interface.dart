@@ -3,5 +3,5 @@ import '../../../../core/error/failures.dart';
 import '../usecases/login_usecase.dart';
 
 abstract class LoginRepositoryInterface {
-  Future<Either<Failure, String>> login(LoginRequest request);
+  Future<Either<Failure, LoginResponse>> login(LoginRequest request);
 }

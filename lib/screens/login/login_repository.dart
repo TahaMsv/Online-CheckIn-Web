@@ -1,40 +1,33 @@
 import 'package:dartz/dartz.dart';
 import 'package:online_check_in/screens/login/data_sources/login_local_ds.dart';
+import 'package:online_check_in/initialize.dart';
 import '../../core/error/exception.dart';
 import '../../core/error/failures.dart';
 import '../../core/platform/network_info.dart';
+import '../../core/platform/running_mode_info.dart';
 import '../../screens/login/interfaces/login_repository_interface.dart';
 import 'data_sources/login_remote_ds.dart';
 import 'usecases/login_usecase.dart';
 
 class LoginRepository implements LoginRepositoryInterface {
-  final LoginRemoteDataSource loginRemoteDataSource;
-  final LoginLocalDataSource loginLocalDataSource;
-  final NetworkInfo? networkInfo;
+  final LoginRemoteDataSource loginRemoteDataSource = LoginRemoteDataSource();
+  final LoginLocalDataSource loginLocalDataSource = LoginLocalDataSource();
+  final NetworkInfo networkInfo = getIt<NetworkInfo>();
 
-  LoginRepository({required this.loginRemoteDataSource, required this.loginLocalDataSource,
-     this.networkInfo
-  });
+  LoginRepository();
 
   @override
-  Future<Either<Failure, String>> login(LoginRequest loginRequest) async {
-    if (await networkInfo!.isConnected) {
-      try {
-        String token = await loginRemoteDataSource.login(loginRequest);
-        return Right(token);
-      } on AppException catch (e) {
-        return Left(ServerFailure.fromAppException(e));
+  Future<Either<Failure, LoginResponse>> login(LoginRequest request) async {
+    try {
+      LoginResponse res;
+      if (RunningModeInfo.runningType().isTest || await networkInfo.isConnected) {
+        res = await loginRemoteDataSource.login(request);
+      } else {
+        res = await loginLocalDataSource.login(request);
       }
-    } else {
-      return Left(
-        ConnectionFailure.fromAppException(
-          ConnectionException(
-            message: "You are not connected to internet!",
-            trace: StackTrace.fromString("Login repository: login"),
-          ),
-        ),
-      );
-      // }
+      return Right(res);
+    } on AppException catch (e) {
+      return Left(ServerFailure.fromAppException(e));
     }
   }
 }

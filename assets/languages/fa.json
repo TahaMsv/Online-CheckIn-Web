@@ -137,5 +137,6 @@
   "LastName can not be empty": "نام خانوادگی نمی تواند خالی باشد",
   "This passenger was added before": "این مسافر قبلا اضافه شده بود",
   "Traveler added successfully": "مسافر با موفقیت اضافه شد",
-  "File saved in: ": "فایل ذخیره شد در: "
+  "File saved in: ": "فایل ذخیره شد در: ",
+  "Scan doc": "اسکن داکیومنت"
 }

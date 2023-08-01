@@ -6,19 +6,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../interface/receipt_data_source_interface.dart';
 
 class ReceiptLocalDataSource implements ReceiptDataSourceInterface {
-  final SharedPreferences sharedPreferences;
 
-  ReceiptLocalDataSource({
-    required this.sharedPreferences,
-  });
+  ReceiptLocalDataSource();
 
   @override
-  Future<BoardingPassPDF> getBoardingPassPdf(GetBoardingPassPdfRequest request) {
+  Future<GetBoardingPassPdfResponse> getBoardingPassPdf(GetBoardingPassPdfRequest request) {
     throw UnimplementedError();
   }
 
   @override
-  Future<bool> reserveSeat(ReserveSeatRequest request) {
+  Future<ReserveSeatResponse> reserveSeat(ReserveSeatRequest request) {
     throw UnimplementedError();
   }
 }

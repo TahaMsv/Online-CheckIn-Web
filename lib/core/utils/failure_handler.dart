@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import '../../core/error/failures.dart';
 import '../../core/navigation/navigation_service.dart';
 import '../constants/ui.dart';

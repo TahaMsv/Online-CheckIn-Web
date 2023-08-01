@@ -1,7 +1,7 @@
 class Apis {
   Apis._();
 
-  static const baseUrl = 'https://onlinecheckinapi.abomis.com/';
+  static const baseUrl = 'https://onlinecheckinapi.abomis.com/api/Execute';
 
   // static const baseUrl = 'https://onlinecheckinapi-test.abomis.com/';
   static const login = 'api/Execute';
@@ -15,7 +15,7 @@ class Apis {
   static const addTransaction = 'api/Execute';
   static const updateTransaction = 'api/Execute';
   static const boardingPassPDF = 'api/MemoStrm';
-  static const boardingPassSendEmail = 'http://localhost:64328/api/SendEmail';
+  // static const boardingPassSendEmail = 'http://localhost:64328/api/SendEmail';
   static const getCheckDocoNecessity = 'api/Execute';
   static const selectSeatExtras = 'api/Execute';
 }

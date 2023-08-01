@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../core/utils/MultiLanguages.dart';
+import '../core/utils/multi_languages.dart';
 
 class UserTextInput extends StatelessWidget {
   const UserTextInput({
@@ -26,7 +26,8 @@ class UserTextInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String languageCode = MultiLanguages.of(context)!.locale.languageCode;
+    // // String languageCode = MultiLanguages.of(context)!.locale.languageCode;  //todo
+    String languageCode = 'en';
     return Container(
       height: height,
       width: width,

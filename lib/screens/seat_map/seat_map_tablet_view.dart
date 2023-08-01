@@ -7,6 +7,7 @@ import 'package:online_check_in/screens/seat_map/seat_map_controller.dart';
 import 'package:online_check_in/screens/seat_map/seat_map_state.dart';
 import 'package:online_check_in/screens/seat_map/widgets/line_widget.dart';
 import 'package:online_check_in/screens/seat_map/widgets/my_custom-scroll_behavior.dart';
+import 'package:online_check_in/screens/seat_map/widgets/plane.dart';
 import 'package:online_check_in/screens/seat_map/widgets/plane_head.dart';
 import 'package:online_check_in/screens/seat_map/widgets/plane_tail.dart';
 import 'package:online_check_in/screens/seat_map/widgets/seat_widget.dart';
@@ -14,7 +15,7 @@ import 'package:online_check_in/screens/seat_map/widgets/travelers_list.dart';
 import 'package:online_check_in/screens/steps/steps_state.dart';
 import 'package:online_check_in/widgets/MyDivider.dart';
 import '../../core/classes/seat_map.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/MyElevatedButton.dart';
@@ -28,7 +29,6 @@ class SeatMapViewTablet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    SeatMapState seatMapState = context.watch<SeatMapState>();
-    return Scaffold(backgroundColor: theme.primaryColor, body: const TravellersList());
+    return Scaffold(backgroundColor: theme.primaryColor, body: const Plane());
   }
 }

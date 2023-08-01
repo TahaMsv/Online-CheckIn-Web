@@ -7,9 +7,11 @@ class CountryAndDate extends StatelessWidget {
     Key? key,
     required this.city,
     required this.time,
+    required this.dateTime,
   }) : super(key: key);
   final String city;
   final String time;
+  final String dateTime;
 
   @override
   Widget build(BuildContext context) {
@@ -21,22 +23,27 @@ class CountryAndDate extends StatelessWidget {
             ? 30
             : 22;
     return SizedBox(
-      height: deviceType.isPhone
-          ? 55
-          : deviceType.isTablet
-              ? 100
-              : 60,
+      // height: deviceType.isPhone
+      //     ? 55
+      //     : deviceType.isTablet
+      //         ? 100
+      //         : 60,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(
             city,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize),
           ),
-          SizedBox(height: deviceType.isPhone ? 0 : 15),
+          // SizedBox(height: deviceType.isPhone ? 0 : 10),
           Text(
             time,
-            style: deviceType.isTablet ?  TextStyle(fontWeight: FontWeight.bold, fontSize:deviceType.isPhone? 20 : 25) : null,
+            style: deviceType.isTablet ? TextStyle(fontWeight: FontWeight.bold, fontSize: deviceType.isPhone ? 20 : 25) : null,
+          ),
+          // SizedBox(height: deviceType.isPhone ? 0 : 10),
+          Text(
+            dateTime,
+            style: deviceType.isTablet ? TextStyle(fontWeight: FontWeight.bold, fontSize: deviceType.isPhone ? 15 : 20) : null,
           )
         ],
       ),

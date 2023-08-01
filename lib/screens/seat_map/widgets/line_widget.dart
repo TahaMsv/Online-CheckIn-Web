@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart';
 import '../../../core/classes/seat_map.dart';
 import '../../../core/platform/device_info.dart';
@@ -6,7 +7,7 @@ import '../seat_map_state.dart';
 import 'body_line.dart';
 import 'horizontal_code_line.dart';
 
-class LineWidget extends StatelessWidget {
+class LineWidget extends ConsumerWidget {
   const LineWidget({
     Key? key,
     required this.line,
@@ -21,8 +22,8 @@ class LineWidget extends StatelessWidget {
   final double cabinRatio;
 
   @override
-  Widget build(BuildContext context) {
-    SeatMapState seatMapState = context.watch<SeatMapState>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    SeatMapState seatMapState = ref.watch(seatMapProvider);
     DeviceType deviceType = DeviceInfo.deviceType(context);
     return Container(
       padding: deviceType.isTablet || deviceType.isPhone? const EdgeInsets.symmetric(horizontal: 20) : null,

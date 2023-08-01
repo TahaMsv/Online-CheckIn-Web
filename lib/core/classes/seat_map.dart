@@ -191,7 +191,7 @@ extension CabinClassExtension on CabinClass {
   }
 }
 
-enum SeatType { block, temporaryBlock, checkedIn, wBTemporaryBlock, click, open, checkInOtherFlight }
+enum SeatType { block, temporaryBlock, checkedIn, wBTemporaryBlock, click, open, checkInOtherFlight, reserved }
 
 extension SeatTypeExtension on SeatType {
   String get name {
@@ -210,6 +210,8 @@ extension SeatTypeExtension on SeatType {
         return "Open";
       case SeatType.open:
         return "Check in other Flight";
+        case SeatType.reserved:
+        return "Reserved";
       default:
         return "Checked-in";
     }

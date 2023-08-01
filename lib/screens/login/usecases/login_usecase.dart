@@ -1,17 +1,19 @@
 import 'package:dartz/dartz.dart';
+import '../../../core/abstract/request_abs.dart';
+import '../../../core/abstract/response_abs.dart';
 import '../../../core/error/failures.dart';
 
 import '../../../core/interfaces/request.dart';
 import '../../../core/interfaces/usecase.dart';
 import '../login_repository.dart';
 
-class LoginUseCase extends UseCase<String, LoginRequest> {
+class LoginUseCase extends UseCase<LoginResponse, LoginRequest> {
   final LoginRepository repository;
 
   LoginUseCase({required this.repository});
 
   @override
-  Future<Either<Failure, String>> call({required LoginRequest request}) {
+  Future<Either<Failure, LoginResponse>> call({required LoginRequest request}) {
     return repository.login(request);
   }
 }
@@ -37,4 +39,22 @@ class LoginRequest extends Request {
           },
         },
       };
+}
+
+class LoginResponse extends Response {
+  final String token;
+
+  LoginResponse({
+    required this.token,
+    required int status,
+    required String message,
+  }) : super(message: message, status: status, body: {});
+
+  factory LoginResponse.fromResponse(Response res) {
+    return LoginResponse(
+      status: res.status,
+      message: res.message,
+      token: res.body["Token"],
+    );
+  }
 }

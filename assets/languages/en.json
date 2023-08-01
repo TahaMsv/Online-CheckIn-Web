@@ -138,5 +138,6 @@
   "LastName can not be empty": "LastName can not be empty",
   "This passenger was added before": "This passenger was added before",
   "Traveler added successfully": "Traveler added successfully",
-  "File saved in: ": "File saved in: "
+  "File saved in: ": "File saved in: ",
+  "Scan doc": "Scan doc"
 }

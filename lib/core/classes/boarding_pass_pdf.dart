@@ -14,15 +14,6 @@ class BoardingPassPDF {
 
   String buffer;
 
-  // int origin;
-  // int position;
-  // int length;
-  // int capacity;
-  // bool expandable;
-  // bool writable;
-  // bool exposable;
-  // bool isOpen;
-  // dynamic identity;
 
   factory BoardingPassPDF.fromJson(Map<String, dynamic> json) => BoardingPassPDF(
     buffer: json["_buffer"],

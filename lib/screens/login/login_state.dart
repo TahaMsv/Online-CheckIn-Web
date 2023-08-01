@@ -3,6 +3,9 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final loginProvider = ChangeNotifierProvider<LoginState>((_) => LoginState());
 
 class LoginState with ChangeNotifier {
   setState() => notifyListeners();
@@ -29,14 +32,13 @@ class LoginState with ChangeNotifier {
 
   String get token => _token!;
 
-  void setToken(String val) {
+  void setToken(String? val) {
     _token = val;
     notifyListeners();
   }
 
   final TextEditingController bookingRefNameC = TextEditingController();
   final TextEditingController lastNameC = TextEditingController();
-
 
   bool _isLastNameEmpty = false;
 
@@ -54,5 +56,15 @@ class LoginState with ChangeNotifier {
   void setIsBookingRefNameEmpty(bool val) {
     _isBookingRefNameEmpty = val;
     notifyListeners();
+  }
+
+  void resetLoginState() {
+    setLoginLoading(false);
+    setRequesting(false);
+    setToken(null);
+    bookingRefNameC.clear();
+    lastNameC.clear();
+    setIsLastNameEmpty(false);
+    setIsBookingRefNameEmpty(false);
   }
 }

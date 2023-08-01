@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/constants/ui.dart';
-import '../../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import '../../../core/utils/drop_down_utils.dart';
 import '../../../widgets/MyDropDown.dart';
 import '../../../widgets/MyElevatedButton.dart';
@@ -12,16 +13,16 @@ import '../passport_controller.dart';
 import '../passport_state.dart';
 import '../passport_view_web.dart';
 
-class PassportDialog extends StatefulWidget {
+class PassportDialog extends  ConsumerStatefulWidget {
   const PassportDialog({Key? key, required this.index}) : super(key: key);
 
   final int index;
 
   @override
-  State<PassportDialog> createState() => _PassportDialogState();
+  ConsumerState<PassportDialog> createState() => _PassportDialogState();
 }
 
-class _PassportDialogState extends State<PassportDialog> {
+class _PassportDialogState extends ConsumerState<PassportDialog> {
   late int index;
 
   @override
@@ -32,7 +33,7 @@ class _PassportDialogState extends State<PassportDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final PassportState passportState = getIt<PassportState>();
+    final PassportState passportState = ref.watch(passportProvider);
     final PassportController passportController = getIt<PassportController>();
     double fontSize = 16;
     return Padding(

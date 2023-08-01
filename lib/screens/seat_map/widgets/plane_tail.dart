@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/assets.dart';
 import '../../../core/platform/device_info.dart';
-import '../../../core/utils/MultiLanguages.dart';
+import '../../../core/utils/multi_languages.dart';
 class PlaneTail extends StatelessWidget {
   const PlaneTail({
     Key? key,
@@ -15,7 +15,8 @@ class PlaneTail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        String languageCode = MultiLanguages.of(context)!.locale.languageCode;
+        // String languageCode = MultiLanguages.of(context)!.locale.languageCode;  //todo
+    String languageCode = 'en';
     DeviceType deviceType = DeviceInfo.deviceType(context);
     return Center(
       child: Container(

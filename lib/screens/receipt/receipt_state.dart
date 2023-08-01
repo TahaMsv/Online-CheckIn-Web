@@ -2,22 +2,28 @@ import 'dart:developer';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../core/classes/boarding_pass_pdf.dart';
+import '../../initialize.dart';
+
+final receiptProvider = ChangeNotifierProvider<ReceiptState>((_) => ReceiptState());
+
+final boardingPassPDFProvider = StateProvider<BoardingPassPDF?>((ref) => null);
 
 class ReceiptState with ChangeNotifier {
   setState() => notifyListeners();
 
-  late BoardingPassPDF boardingPassPDF;
+  // late BoardingPassPDF? boardingPassPDF;
+  //
+  // void setBoardingPassPDF(BoardingPassPDF? bp) {
+  //   boardingPassPDF = bp;
+  //   notifyListeners();
+  // }
 
-  void setBoardingPassPDF(BoardingPassPDF bp) {
-    boardingPassPDF = bp;
-    notifyListeners();
-  }
+  late Uint8List? bytes;
 
-  late Uint8List bytes;
-
-  void setBytes(Uint8List b) {
+  void setBytes(Uint8List? b) {
     bytes = b;
     notifyListeners();
   }
@@ -44,8 +50,17 @@ class ReceiptState with ChangeNotifier {
 
   bool get isReserved => _isReserved;
 
-    void setIsReserved(bool val) {
-      _isReserved = val;
-      notifyListeners();
-    }
+  void setIsReserved(bool val) {
+    _isReserved = val;
+    notifyListeners();
+  }
+
+  void resetReceiptState() {
+    final ref = getIt<WidgetRef>();
+    ref.read(boardingPassPDFProvider.notifier).state = null;
+    setBytes(null);
+    setLoading(false);
+    setSuccessfulResponse(false);
+    setIsReserved(false);
+  }
 }

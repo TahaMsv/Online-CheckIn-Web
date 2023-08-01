@@ -2,11 +2,14 @@ import 'dart:developer';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../core/classes/PassportType.dart';
-import '../../core/classes/Traveler.dart';
-import '../../core/classes/MyCountry.dart';
+import '../../core/classes/passport_type.dart';
+import '../../core/classes/traveler.dart';
+import '../../core/classes/my_country.dart';
 import '../../widgets/CountryListPicker/country.dart';
+
+final passportProvider = ChangeNotifierProvider<PassportState>((_) => PassportState());
 
 class PassportState with ChangeNotifier {
   setState() => notifyListeners();
@@ -45,4 +48,16 @@ class PassportState with ChangeNotifier {
   List<MyCountry> countryOfIssueList = [MyCountry.example("Country of Issue")];
   List<String> listGender = ["Gender", "Male", "Female"];
   List<MyCountry> nationalitiesList = [MyCountry.example("Nationality")];
+
+  void resetPassportState() {
+    setLoading(false);
+    setGetCountriesInit(false);
+    setPassportTypeInit(false);
+    travelers = <Traveler>[];
+    travelersIndexInMainList = [];
+    documentNoCs = [];
+    listPassportType = [PassPortType.example()];
+    countryOfIssueList = [MyCountry.example("Country of Issue")];
+    nationalitiesList = [MyCountry.example("Nationality")];
+  }
 }

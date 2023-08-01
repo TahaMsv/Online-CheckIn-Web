@@ -5,5 +5,5 @@ import '../../../core/classes/extra.dart';
 import '../../../core/error/failures.dart';
 
 abstract class UpgradesRepositoryInterface{
-  Future<Either<Failure, List<Extra>>> getExtras(GetExtrasRequest request);
+  Future<Either<Failure, GetExtrasResponse>> getExtras(GetExtrasRequest request);
 }

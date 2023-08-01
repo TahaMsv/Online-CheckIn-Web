@@ -23,6 +23,8 @@ class FlightInformation {
   List<Seat> seats;
   SeatMap seatmap;
 
+
+
   factory FlightInformation.fromJson(Map<String, dynamic> json) => FlightInformation(
     flight: List<Flight>.from(json["Flight"].map((x) => Flight.fromJson(x))),
     passengers: List<Passenger>.from(json["Passengers"].map((x) => Passenger.fromJson(x))),

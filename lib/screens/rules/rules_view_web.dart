@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/constants/my_list.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/rules/rules_controller.dart';
 import 'package:online_check_in/screens/rules/rules_state.dart';
 import '../../core/constants/assets.dart';
 import '../../core/constants/ui.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/StepsScreenTitle.dart';
 
-class RulesViewWeb extends StatelessWidget {
+class RulesViewWeb extends ConsumerWidget {
   RulesViewWeb({Key? key}) : super(key: key);
   final RulesController rulesController = getIt<RulesController>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     ThemeData theme = Theme.of(context);
-    RulesState rulesState = context.watch<RulesState>();
+    RulesState rulesState = ref.read(rulesProvider);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(

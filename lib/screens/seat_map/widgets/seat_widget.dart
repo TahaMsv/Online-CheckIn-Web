@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:provider/provider.dart';
 import '../../../core/classes/seat_map.dart';
 import '../../../core/constants/ui.dart';
-import '../../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import '../../../core/platform/device_info.dart';
 import '../seat_map_controller.dart';
 import '../seat_map_state.dart';
 
-class SeatWidget extends StatefulWidget {
+class SeatWidget extends ConsumerStatefulWidget {
   const SeatWidget({
     Key? key,
     required this.cell,
@@ -19,14 +20,14 @@ class SeatWidget extends StatefulWidget {
   final double cabinRatio;
 
   @override
-  State<SeatWidget> createState() => _SeatWidgetState();
+  ConsumerState<SeatWidget> createState() => _SeatWidgetState();
 }
 
-class _SeatWidgetState extends State<SeatWidget> {
+class _SeatWidgetState extends ConsumerState<SeatWidget> {
   @override
   Widget build(BuildContext context) {
     final SeatMapController seatMapController = getIt<SeatMapController>();
-    SeatMapState seatMapState = context.watch<SeatMapState>();
+    SeatMapState seatMapState = ref.watch(seatMapProvider);
     DeviceType deviceType = DeviceInfo.deviceType(context);
     List<dynamic> seatView = seatMapController.seatView(widget.cell, widget.cabinRatio, deviceType.isTablet || deviceType.isPhone);
     double width = seatView[0];

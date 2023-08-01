@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/assets.dart';
 import '../../../core/platform/device_info.dart';
-import '../../../core/utils/MultiLanguages.dart';
+import '../../../core/utils/multi_languages.dart';
 
 class PlaneHead extends StatelessWidget {
   const PlaneHead({
@@ -16,7 +16,8 @@ class PlaneHead extends StatelessWidget {
   Widget build(BuildContext context) {
     DeviceType deviceType = DeviceInfo.deviceType(context);
 
-        String languageCode = MultiLanguages.of(context)!.locale.languageCode;
+        // String languageCode = MultiLanguages.of(context)!.locale.languageCode;  //todo
+    String languageCode = 'en';
     return Center(
       child: Container(
         height: height,

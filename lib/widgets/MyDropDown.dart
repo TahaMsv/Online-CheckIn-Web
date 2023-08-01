@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/screens/Visa/visa_controller.dart';
 import 'package:online_check_in/screens/Visa/visa_state.dart';
 import 'package:provider/provider.dart';
 import '../core/constants/ui.dart';
-import '../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import '../core/platform/device_info.dart';
 import '../core/utils/drop_down_utils.dart';
 import '../screens/Passport/passport_controller.dart';
 import '../screens/Passport/passport_state.dart';
 
-class MyDropDown extends StatelessWidget {
+class MyDropDown extends ConsumerWidget {
   const MyDropDown({Key? key, required this.index, required this.hintText, this.width = 350, this.height = 40, required this.passOrVisa}) : super(key: key);
 
   final double width;
@@ -20,9 +21,9 @@ class MyDropDown extends StatelessWidget {
   final String passOrVisa;
 
   @override
-  Widget build(BuildContext context) {
-    PassportState passportState = context.watch<PassportState>();
-    VisaState visaState = context.watch<VisaState>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    PassportState passportState = ref.watch(passportProvider);
+    VisaState visaState = ref.watch(visaProvider);
     PassportController passportController = getIt<PassportController>();
     VisaController visaController = getIt<VisaController>();
     DeviceType deviceType = DeviceInfo.deviceType(context);

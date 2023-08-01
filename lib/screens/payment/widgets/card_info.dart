@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:provider/provider.dart';
 
@@ -8,15 +9,14 @@ import '../../../core/platform/device_info.dart';
 import '../../../widgets/UserTextInput.dart';
 import '../payment_state.dart';
 
-class CardInfo extends StatelessWidget {
+class CardInfo extends ConsumerWidget {
   const CardInfo({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // MainModel model = context.watch<MainModel>();
-    PaymentState paymentState = context.watch<PaymentState>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    PaymentState paymentState = ref.watch(paymentProvider);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     DeviceType deviceType = DeviceInfo.deviceType(context);

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/classes/extra.dart';
 import '../../../core/constants/ui.dart';
-import '../../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import '../../../core/platform/device_info.dart';
 import '../../../widgets/MyElevatedButton.dart';
 import '../upgrades_controller.dart';
 import '../upgrades_state.dart';
 
-class UpgradeItemWidget extends StatelessWidget {
+class UpgradeItemWidget extends ConsumerWidget {
   const UpgradeItemWidget({
     Key? key,
     required this.value,
@@ -23,9 +24,9 @@ class UpgradeItemWidget extends StatelessWidget {
   final int index;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final UpgradesController upgradesController = getIt<UpgradesController>();
-    UpgradesState upgradesState = context.watch<UpgradesState>();
+    UpgradesState upgradesState = ref.watch(upgradesProvider);
     DeviceType deviceType = DeviceInfo.deviceType(context);
 
     Color color;

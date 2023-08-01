@@ -5,14 +5,15 @@ import 'package:online_check_in/screens/Visa/usecases/select_visa_types_usecase.
 import 'package:online_check_in/screens/Visa/visa_repository.dart';
 import 'package:online_check_in/screens/Visa/visa_state.dart';
 import 'package:online_check_in/screens/Visa/visa_view_web.dart';
+import 'package:provider/provider.dart';
 
-import '../../core/classes/VisaType.dart';
-import '../../core/dependency_injection.dart';
+import '../../core/classes/visa_type.dart';
+import 'package:online_check_in/initialize.dart';
 import '../../core/interfaces/controller.dart';
 import '../../core/platform/device_info.dart';
 import '../../core/utils/drop_down_utils.dart';
 import '../../core/utils/failure_handler.dart';
-import '../../core/utils/getTranslatedWord.dart';
+import '../../core/utils/get_translated_word.dart';
 import '../../widgets/MyDropDown.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/SelectingDateWidget.dart';
@@ -22,15 +23,12 @@ import '../steps/steps_state.dart';
 import 'dialogs/visa_dialogs.dart';
 
 class VisaController extends MainController {
-  final VisaState visaState = getIt<VisaState>();
-  final VisaRepository visaRepository = getIt<VisaRepository>();
-
-  late SelectVisaTypesUseCase selectVisaTypesUseCase = SelectVisaTypesUseCase(repository: visaRepository);
+  late VisaState visaState = ref.read(visaProvider);
 
   Future<bool> visaInit() async {
     visaState.setLoading(true);
     if (!visaState.visaInit) {
-      final StepsState stepsState = getIt<StepsState>();
+      final StepsState stepsState = ref.read(stepsProvider);;;
       visaState.travelers = stepsState.travelers;
       await getVisaTypes();
       for (var i = 0; i < visaState.travelers.length; ++i) {
@@ -44,10 +42,12 @@ class VisaController extends MainController {
 
   Future<void> getVisaTypes() async {
     SelectVisaTypesRequest selectVisaTypesRequest = SelectVisaTypesRequest();
+    SelectVisaTypesUseCase selectVisaTypesUseCase = SelectVisaTypesUseCase(repository: VisaRepository());
+
     final fOrList = await selectVisaTypesUseCase(request: selectVisaTypesRequest);
 
-    fOrList.fold((f) => FailureHandler.handle(f, retry: () => getVisaTypes()), (visaTypesList) async {
-      visaState.visaListType.addAll(visaTypesList);
+    fOrList.fold((f) => FailureHandler.handle(f, retry: () => getVisaTypes()), (r) async {
+      visaState.visaListType.addAll(r.visaTypesList);
       visaState.setVisaInit(true);
     });
   }
@@ -234,14 +234,99 @@ class VisaController extends MainController {
     );
   }
 
-  void showVisaDialog(int index) {
-    nav.dialog(VisaDetailsDialog(index: index));
+  void showVisaDialogForm(BuildContext context, double height, double width, int index) {
+    double fontSize = 16;
+    DeviceType deviceType = DeviceInfo.deviceType(context);
+    showDialog(
+        context: context,
+        // backgroundColor: Colors.white,
+        // isScrollControlled: true,
+        // constraints: BoxConstraints(
+        //   maxWidth: width * 0.9,
+        // ),
+        // shape: const RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        // ),
+        builder: (context) {
+          StepsState stepsState = ref.read(stepsProvider);
+          return AlertDialog(
+            content: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: deviceType.isPhone ? 10 : 40, vertical: deviceType.isPhone ? 5 : 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    StepsScreenTitle(title: "Passport / Visa Details", description: "", fontSize: deviceType.isPhone ? 17 : 25),
+                    SizedBox(height: deviceType.isPhone ? 10 : 20),
+                    Text("A valid visa is required for entry. please enter here the information about your visa you want to present at your final destination",
+                        overflow: TextOverflow.clip, style: deviceType.isPhone ? MyTextTheme.lightGrey14 : MyTextTheme.lightGrey22),
+                    SizedBox(height: deviceType.isPhone ? 10 : 20),
+                    MyDropDown(index: index, hintText: DropDownUtils.visaType, width: width, height: deviceType.isPhone ? 40 : 80, passOrVisa: DropDownUtils.visa),
+                    SizedBox(height: deviceType.isPhone ? 10 : 20),
+                    UserTextInput(
+                        controller: visaState.documentNoCs[index],
+                        hint: "Document No.",
+                        errorText: "",
+                        isEmpty: false,
+                        height: deviceType.isPhone ? 40 : 80,
+                        width: width,
+                        fontSize: deviceType.isPhone ? 17 : 23),
+                    SizedBox(height: deviceType.isPhone ? 10 : 20),
+                    MyDropDown(index: index, width: width, hintText: DropDownUtils.placeOfIssue, height: deviceType.isPhone ? 40 : 80, passOrVisa: DropDownUtils.visa),
+                    SizedBox(height: deviceType.isPhone ? 10 : 20),
+                    SelectingDateWidget(
+                      height: deviceType.isPhone ? 40 : 80,
+                      width: width,
+                      fontSize: deviceType.isPhone ? 17 : 23,
+                      hint: "Issue Date",
+                      index: index,
+                      updateDate: selectEntryDate,
+                      currDateTime: visaState.travelers[index].visaInfo.issueDate == null ? DateTime.now() : visaState.travelers[index].visaInfo.issueDate!,
+                      isCurrDateEmpty: visaState.travelers[index].visaInfo.issueDate == null ? true : false,
+                    ),
+                    SizedBox(height: deviceType.isPhone ? 10 : 20),
+                    UserTextInput(
+                        height: deviceType.isPhone ? 40 : 80,
+                        width: width,
+                        fontSize: deviceType.isPhone ? 17 : 23,
+                        controller: visaState.destinationCs[index],
+                        hint: "Destination",
+                        errorText: "",
+                        isEmpty: false),
+                    SizedBox(height: deviceType.isPhone ? 10 : 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const SizedBox(width: 1),
+                        MyElevatedButton(
+                          height: deviceType.isPhone ? 40 : 70,
+                          width: deviceType.isPhone ? 100 : 200,
+                          buttonText: "Submit",
+                          bgColor: MyColors.white,
+                          fgColor: MyColors.myBlue,
+                          fontSize: deviceType.isPhone ? fontSize : 23,
+                          borderColor: Colors.blue,
+                          function: visaState.loading ? () {} : () => submitBtnFunction(index),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
+
+  // void showVisaDialog(int index) {
+  //   nav.dialog(VisaDetailsDialog(index: index));
+  // }
 
   String? getValueByType({required String type, required int index}) {
     String? returnValue;
     if (type == DropDownUtils.placeOfIssue) {
-      visaState.travelers[index].visaInfo.placeOfIssue == null || visaState.travelers[index].visaInfo.placeOfIssue == DropDownUtils.placeOfIssue
+      returnValue = visaState.travelers[index].visaInfo.placeOfIssue == null || visaState.travelers[index].visaInfo.placeOfIssue == DropDownUtils.placeOfIssue
           ? DropDownUtils.placeOfIssue
           : visaState.travelers[index].visaInfo.placeOfIssue;
     } else if (type == DropDownUtils.visaType) {

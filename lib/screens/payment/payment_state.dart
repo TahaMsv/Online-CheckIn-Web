@@ -2,6 +2,10 @@ import 'dart:developer';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final paymentProvider = ChangeNotifierProvider<PaymentState>((_) => PaymentState());
+
 
 class PaymentState with ChangeNotifier {
   setState() => notifyListeners();
@@ -49,4 +53,10 @@ class PaymentState with ChangeNotifier {
   TextEditingController provinceC = TextEditingController();
   TextEditingController cityC = TextEditingController();
   TextEditingController postalC = TextEditingController();
+
+  void resetPaymentState(){
+    setTotalPrice(0);
+    setSeatPrices(0);
+    setNumberOfReserved(0);
+  }
 }

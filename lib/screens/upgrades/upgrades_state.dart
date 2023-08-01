@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import '../../core/classes/extra.dart';
 import '../../core/constants/ui.dart';
+import '../../initialize.dart';
+
+final upgradesProvider = ChangeNotifierProvider<UpgradesState>((_) => UpgradesState());
+
+final winesListProvider = StateProvider<List<Extra>?>((ref) => []);
+
+final entertainmentsListProvider = StateProvider<List<Extra>?>((ref) => []);
 
 class UpgradesState with ChangeNotifier {
   setState() => notifyListeners();
@@ -43,10 +51,21 @@ class UpgradesState with ChangeNotifier {
   }
 
   List<Color> colors = [MyColors.myBlue, MyColors.brightYellow, MyColors.red, MyColors.brightYellow, MyColors.darkGrey];
-  List<String> imagesPath = [];
-  List<Extra> extras = [];
+
   List<int> winesNumberOfSelected = [];
   List<int> entertainmentsNumberOfSelected = [];
-  List<Extra> winesList = [];
-  List<Extra> entertainmentsList = [];
+
+  void resetUpgradesState() {
+    final ref = getIt<WidgetRef>();
+    colors = [MyColors.myBlue, MyColors.brightYellow, MyColors.red, MyColors.brightYellow, MyColors.darkGrey];
+    winesNumberOfSelected = [];
+    entertainmentsNumberOfSelected = [];
+    // winesList = [];
+    ref.watch(winesListProvider.notifier).state = [];
+    ref.watch(entertainmentsListProvider.notifier).state = [];
+    setLoading(false);
+    setIsInitBefore(false);
+    setrightIndex(2);
+    setleftIndex(0);
+  }
 }

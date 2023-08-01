@@ -1,10 +1,10 @@
-import 'package:online_check_in/core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import 'package:online_check_in/screens/Passport/passport_controller.dart';
 import 'package:online_check_in/screens/Visa/visa_controller.dart';
 
 import '../../screens/Passport/passport_state.dart';
 import '../../screens/Visa/visa_state.dart';
-import 'getTranslatedWord.dart';
+import 'get_translated_word.dart';
 
 class DropDownUtils {
   DropDownUtils._();

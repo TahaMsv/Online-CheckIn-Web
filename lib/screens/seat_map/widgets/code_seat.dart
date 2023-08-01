@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/classes/seat_map.dart';
 import '../../../core/constants/ui.dart';
-import '../../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import '../../../core/platform/device_info.dart';
 import '../seat_map_controller.dart';
 

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:online_check_in/core/classes/flight_information.dart';
+import 'package:online_check_in/core/classes/seat_map.dart';
 import 'package:online_check_in/core/constants/route_names.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/Visa/visa_controller.dart';
@@ -10,12 +11,16 @@ import 'package:online_check_in/screens/steps/steps_repository.dart';
 import 'package:online_check_in/screens/steps/steps_state.dart';
 import 'package:online_check_in/screens/steps/usecases/get_flight_information_usecase.dart';
 import 'package:flash/flash.dart';
-import '../../core/classes/PassportInfo.dart';
-import '../../core/classes/Traveler.dart';
-import '../../core/classes/VisaInfo.dart';
+import 'package:online_check_in/screens/upgrades/upgrades_controller.dart';
+import '../../core/classes/passport_Info.dart';
+import '../../core/classes/traveler.dart';
+import '../../core/classes/visa_Info.dart';
 import '../../core/constants/ui.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import '../../core/interfaces/controller.dart';
+import '../../core/navigation/route_names.dart';
+import '../../core/platform/device_info.dart';
+import '../../core/platform/running_mode_info.dart';
 import '../../core/utils/failure_handler.dart';
 import '../../widgets/CustomFlutterWidget.dart';
 import '../Passport/passport_controller.dart';
@@ -24,35 +29,32 @@ import '../receipt/receipt_controller.dart';
 import '../safety/safety_controller.dart';
 
 class StepsController extends MainController {
-  final StepsState stepsState = getIt<StepsState>();
-  final StepsRepository stepsRepository = getIt<StepsRepository>();
-
-  late GetFlightInformationUseCase getFlightInformationUseCase = GetFlightInformationUseCase(repository: stepsRepository);
+  late StepsState stepsState = ref.read(stepsProvider);
 
   // Future<void> getFlightInformation(String token) async {}
 
-  Future<void> addToTravelers({context,token, lastName, ticketNumber, isLoginRequest}) async {
-    final LoginState loginState = getIt<LoginState>();
+  Future<void> addToTravelers({context, token, lastName, ticketNumber, isLoginRequest}) async {
+    final LoginState loginState = ref.read(loginProvider);
     stepsState.setLoading(true);
+
     GetFlightInformationRequest getFlightInformationRequest = GetFlightInformationRequest();
+    GetFlightInformationUseCase getFlightInformationUseCase = GetFlightInformationUseCase(repository: StepsRepository());
 
     final fOrFlightInfo = await getFlightInformationUseCase(request: getFlightInformationRequest);
-    fOrFlightInfo.fold((f) => FailureHandler.handle(f, retry: () => addToTravelers(context: context,token: token, lastName: lastName, ticketNumber: ticketNumber, isLoginRequest: isLoginRequest)),
-        (flightInformation) async {
-      stepsState.setFlightInformation(flightInformation);
-      if (stepsState.flightInformation != null) {
-        print(stepsState.flightInformation!.passengers.last.id);
-        print(stepsState.flightInformation!.passengers.last.name);
+    fOrFlightInfo.fold((f) => FailureHandler.handle(f, retry: () => addToTravelers(context: context, token: token, lastName: lastName, ticketNumber: ticketNumber, isLoginRequest: isLoginRequest)),
+        (r) async {
+      ref.read(flightInformationProvider.notifier).state = r.flightInformation;
+      // stepsState.setFlightInformation(r.flightInformation);
+      FlightInformation currFI = ref.read(flightInformationProvider)!;
+      if (currFI != null) {
         for (int i = 0; i < stepsState.travelers.length; i++) {
-          print(stepsState.travelers[i].flightInformation.passengers.last.id);
-          print(stepsState.travelers[i].flightInformation.passengers.last.name);
-          if (stepsState.travelers[i].flightInformation.passengers.last.id == stepsState.flightInformation!.passengers.last.id) {
-            nav.snackbar( Text("This passenger was added before".translate(context), style: TextStyle(fontSize: 18)), backgroundColor: MyColors.red);
+          if (!RunningModeInfo.runningType().isTest && stepsState.travelers[i].flightInformation.passengers.last.id == currFI!.passengers.last.id) {
+            nav.snackbar(Text("This passenger was added before".translate(context), style: TextStyle(fontSize: 18)), backgroundColor: MyColors.red);
             stepsState.setLoading(false);
             return;
           }
         }
-        Traveler traveler = Traveler(token: token, ticketNumber: ticketNumber, seatId: "--", flightInformation: stepsState.flightInformation!);
+        Traveler traveler = Traveler(token: token, ticketNumber: ticketNumber, seatId: "--", flightInformation: currFI!);
         traveler.setPassportInfo(PassportInfo());
         traveler.setVisaInfo(VisaInfo());
         stepsState.setIsDocsNecessary(true);
@@ -60,11 +62,17 @@ class StepsController extends MainController {
         stepsState.travelers.add(traveler);
         updateIsNextButtonDisable();
         changeTurnToSelect();
+        print("steps c 66");
+        if (RunningModeInfo.runningType().isTest) return;
+        print("steps c 68");
         if (isLoginRequest) {
-          nav.goToName(RouteNames.addTraveler);
+          print("steps c 70");
+          nav.goNamed(RouteNames.addTraveler);
+        } else {
+          nav.popDialog();
         }
         nav.snackbar(
-             Text(
+            Text(
               "Traveler added successfully".translate(context),
               style: TextStyle(fontSize: 18),
             ),
@@ -130,6 +138,7 @@ class StepsController extends MainController {
   }
 
   bool isStepNeeded(int index) {
+    if (index == 1) return false;
     if (index == 3 && !stepsState.isDocsNecessary) return false;
     if (index == 4 && !stepsState.isDocsNecessary) return false;
     if (index == 4 && !stepsState.isDocoNecessary) return false;
@@ -237,6 +246,18 @@ class StepsController extends MainController {
             print("236 at increase");
             stepsState.setStep(step + 1);
           }
+        } else if (step == 4) {
+          final UpgradesController upgradesController = getIt<UpgradesController>();
+          isSuccessful = await upgradesController.init();
+          if (!isSuccessful) return;
+          stepsState.setStep(step + 1);
+        } else if (step == 5) {
+          final SeatMapController seatMapController = getIt<SeatMapController>();
+          isSuccessful = await seatMapController.init();
+          if (!isSuccessful) return;
+          stepsState.setStep(step + 1);
+        } else if (step == 0) {
+          stepsState.setStep(step + 2);
         } else {
           print("240 at increase");
           stepsState.setStep(step + 1);
@@ -304,6 +325,9 @@ class StepsController extends MainController {
       } else if (step == 6 && stepsState.flightType == "d") {
         stepsState.setStep(step - 4);
         stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
+      } else if (step == 2) {
+        stepsState.setStep(step - 2);
+        stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
       } else {
         stepsState.setStep(step - 1);
         stepsState.setCurrButtonTextIndex(stepsState.nextButtonTextIndex);
@@ -317,10 +341,5 @@ class StepsController extends MainController {
   void changeStateOFAddingBox() {
     bool currState = stepsState.isAddingBoxOpen;
     stepsState.setIsAddingBoxOpen(!currState);
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
   }
 }

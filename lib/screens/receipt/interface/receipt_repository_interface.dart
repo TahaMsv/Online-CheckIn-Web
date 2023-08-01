@@ -6,7 +6,7 @@ import '../usecases/get_boadingpass_pdf_usecase.dart';
 import '../usecases/reserve_seat_usecase.dart';
 
 abstract class ReceiptRepositoryInterface {
-  Future<Either<Failure, BoardingPassPDF>> getBoardingPassPdf(GetBoardingPassPdfRequest request);
+  Future<Either<Failure, GetBoardingPassPdfResponse>> getBoardingPassPdf(GetBoardingPassPdfRequest request);
 
-  Future<Either<Failure, bool>> reserveSeat(ReserveSeatRequest request);
+  Future<Either<Failure, ReserveSeatResponse>> reserveSeat(ReserveSeatRequest request);
 }

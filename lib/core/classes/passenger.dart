@@ -5,7 +5,7 @@ class Passenger {
     required this.name,
     // required this.nationalId,
     // required this.passengerType,
-    // required this.classType,
+    required this.classType,
     required this.firstName,
     required this.lastName,
     // required this.passengerClass,
@@ -21,7 +21,7 @@ class Passenger {
 
   // String nationalId;
   // String passengerType;
-  // String classType;
+  String classType;
   String firstName;
   String lastName;
 
@@ -32,32 +32,40 @@ class Passenger {
   // int flightScheduleId;
 
   factory Passenger.fromJson(Map<String, dynamic> json) => Passenger(
-    id: json["ID"],
-    // reference: json["Reference"],
-    name: json["Name"],
-    // nationalId: json["NationalID"],
-    // passengerType: json["PassengerType"],
-    // classType: json["ClassType"],
-    firstName: json["FirstName"],
-    lastName: json["LastName"],
-    // passengerClass: json["Class"],
-    title: json["Title"],
-    docsTitle: json["DocsTitle"],
-    // flightScheduleId: json["FlightScheduleID"],
-  );
+        id: json["ID"],
+        // reference: json["Reference"],
+        name: json["Name"],
+        // nationalId: json["NationalID"],
+        // passengerType: json["PassengerType"],
+        classType: json["ClassType"],
+        firstName: json["FirstName"],
+        lastName: json["LastName"],
+        // passengerClass: json["Class"],
+        title: json["Title"],
+        docsTitle: json["DocsTitle"],
+        // flightScheduleId: json["FlightScheduleID"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "ID": id,
-    // "Reference": reference,
-    "Name": name,
-    // "NationalID": nationalId,
-    // "PassengerType": passengerType,
-    // "ClassType": classType,
-    "FirstName": firstName,
-    "LastName": lastName,
-    // "Class": passengerClass,
-    "Title": title,
-    "DocsTitle": docsTitle,
-    // "FlightScheduleID": flightScheduleId,
-  };
+        "ID": id,
+        // "Reference": reference,
+        "Name": name,
+        // "NationalID": nationalId,
+        // "PassengerType": passengerType,
+        "ClassType": classType,
+        "FirstName": firstName,
+        "LastName": lastName,
+        // "Class": passengerClass,
+        "Title": title,
+        "DocsTitle": docsTitle,
+        // "FlightScheduleID": flightScheduleId,
+      };
+
+  String get cabin => classType == "E"
+      ? "Economy"
+      : classType == "F"
+          ? "First Class"
+          : classType == "B"
+              ? "Business"
+              : classType;
 }

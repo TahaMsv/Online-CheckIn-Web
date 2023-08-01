@@ -2,6 +2,9 @@ import 'dart:developer';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final rulesProvider = ChangeNotifierProvider<RulesState>((_) => RulesState());
 
 class RulesState with ChangeNotifier {
   setState() => notifyListeners();

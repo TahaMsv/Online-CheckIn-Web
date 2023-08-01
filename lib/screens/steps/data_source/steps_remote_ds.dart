@@ -2,34 +2,25 @@ import 'dart:convert';
 
 import 'package:online_check_in/core/classes/flight_information.dart';
 import 'package:online_check_in/screens/steps/usecases/get_flight_information_usecase.dart';
+import '../../../core/abstract/response_abs.dart';
 import '../../../core/constants/apis.dart';
+import '../../../core/constants/my_json.dart';
 import '../../../core/error/exception.dart';
-import 'package:network_manager/network_manager.dart';
-
+import '../../../core/platform/network_manager.dart';
+import '../../../core/platform/running_mode_info.dart';
 import '../interfaces/steps_data_source_interface.dart';
 
 class StepsRemoteDataSource implements StepsDataSourceInterface {
-  // final LoginLocalDataSource localDataSource;
-
-  // LoginRemoteDataSource(this.localDataSource);
+  final NetworkManager networkManager = NetworkManager();
 
   @override
-  Future<FlightInformation> getFlightInformation(GetFlightInformationRequest request) async {
-    NetworkRequest getFlightInfoNR = NetworkRequest(api: Apis.baseUrl + Apis.getInformation, data: request.toJson(), timeOut: const Duration(seconds: 30));
-    NetworkResponse getFlightInfoResponse = await getFlightInfoNR.post();
-    if (getFlightInfoResponse.responseStatus) {
-      try {
-        FlightInformation flightInformation = flightInformationFromJson(jsonEncode(getFlightInfoResponse.responseBody["Body"]));
-        return flightInformation;
-      } catch (e, trace) {
-        throw ParseException(message: e.toString(), trace: trace);
-      }
+  Future<GetFlightInformationResponse> getFlightInformation(GetFlightInformationRequest request) async {
+    Response res;
+    if (RunningModeInfo.runningType().isTest) {
+      res = Response.fromJson(MyJson.flightInformationResJson);
     } else {
-      throw ServerException(
-        code: getFlightInfoResponse.responseCode,
-        message: getFlightInfoResponse.extractedMessage!,
-        trace: StackTrace.fromString("StepsRemoteDataSource.getFlightInformation"),
-      );
+      res = await networkManager.post(request);
     }
+    return GetFlightInformationResponse.fromResponse(res);
   }
 }

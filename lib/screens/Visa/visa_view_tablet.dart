@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/constants/ui.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/Visa/visa_controller.dart';
 import 'package:online_check_in/screens/Visa/visa_state.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/StepsScreenTitle.dart';
 import '../../widgets/info_card.dart';
 import '../steps/steps_state.dart';
 
-class VisaViewTablet extends StatelessWidget {
+class VisaViewTablet extends ConsumerWidget {
   VisaViewTablet({Key? key}) : super(key: key);
   final VisaController visaController = getIt<VisaController>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     ThemeData theme = Theme.of(context);
-    VisaState visaState = context.watch<VisaState>();
-    StepsState stepsState = context.watch<StepsState>();
+    VisaState visaState = ref.watch(visaProvider);
+    StepsState stepsState = ref.watch(stepsProvider);
     return Scaffold(
       backgroundColor: Colors.white,
       body:!stepsState.isDocoNecessary

@@ -11,11 +11,11 @@ import 'package:online_check_in/screens/seat_map/seat_map_state.dart';
 import 'package:online_check_in/screens/steps/steps_controller.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
-import '../../core/classes/Traveler.dart';
+import '../../core/classes/traveler.dart';
 import '../../core/classes/boarding_pass_pdf.dart';
 import '../../core/classes/seat_data.dart';
 import '../../core/constants/ui.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import '../../core/interfaces/controller.dart';
 import '../../core/utils/failure_handler.dart';
 import '../steps/steps_state.dart';
@@ -24,19 +24,15 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ReceiptController extends MainController {
-  final ReceiptState receiptState = getIt<ReceiptState>();
-  final ReceiptRepository receiptRepository = getIt<ReceiptRepository>();
-
-  late GetBoardingPassPdfUseCase getBoardingPassPdfUseCase = GetBoardingPassPdfUseCase(repository: receiptRepository);
-  late ReserveSeatUseCase reserveSeatUseCase = ReserveSeatUseCase(repository: receiptRepository);
+  late ReceiptState receiptState = ref.read(receiptProvider);
 
   Future<bool> getBoardingPassPDF() async {
     print("30 at boardinpass");
     receiptState.setLoading(true);
-    final StepsState stepsState = getIt<StepsState>();
+    final StepsState stepsState = ref.read(stepsProvider);
     var req = {
       "Format": 1, //1->pdf    32->Html
-      "PassengersId": "<MyTable><MyRow><FlightPax_ID>${stepsState.travelers[0].flightInformation.passengers[0].id}</FlightPax_ID></MyRow></MyTable>",
+      "PassengersId": "<MyTable><MyRow><FlightPax_ID>${stepsState.travelers[0].flightInformation.flight[0].id}</FlightPax_ID></MyRow></MyTable>",
       "IsDarkMode": false,
     };
 
@@ -52,44 +48,39 @@ class ReceiptController extends MainController {
           "Request": req,
         },
       });
-      print("51 at boardinpass");
       if (response.statusCode == 200) {
-        print("53 at boardinpass");
-        receiptState.setBoardingPassPDF(BoardingPassPDF.fromJson(response.data));
+        // receiptState.setBoardingPassPDF(BoardingPassPDF.fromJson(response.data));
+        ref.read(boardingPassPDFProvider.notifier).state = BoardingPassPDF.fromJson(response.data);
+
         convertToPDF();
-        print("56 at receipt");
         receiptState.setLoading(false);
-        print("58 at receipt");
         receiptState.setSuccessfulResponse(true);
-        print("60 at receipt");
         receiptState.setLoading(false);
         stepsState.setLoading(false);
         return true;
       }
-      print("65 at boardinpass");
       receiptState.setLoading(false);
       stepsState.setLoading(false);
     } catch (err) {
-      print("69 at boardinpass");
       receiptState.setLoading(false);
       stepsState.setLoading(false);
+      print(err);
       return false;
     }
-    print("73 at boardinpass");
     receiptState.setLoading(false);
     stepsState.setLoading(false);
     return false;
   }
 
   void convertToPDF() async {
-    String base64String = receiptState.boardingPassPDF.buffer;
+    String base64String = ref.read(boardingPassPDFProvider.notifier).state!.buffer;
     receiptState.setBytes(base64Decode(base64String));
   }
 
   Future<bool> finalReserve() async {
     if (receiptState.isReserved) return true;
-    final StepsState stepsState = getIt<StepsState>();
-    final SeatMapState seatMapState = getIt<SeatMapState>();
+    final StepsState stepsState = ref.read(stepsProvider);
+    final SeatMapState seatMapState = ref.read(seatMapProvider);
     stepsState.setLoading(true);
     List<Traveler> travellers = stepsState.travelers;
     List<SeatData> seatsData = [];
@@ -98,14 +89,16 @@ class ReceiptController extends MainController {
     });
 
     ReserveSeatRequest reserveSeatRequest = ReserveSeatRequest(seatsData: seatsData);
+    ReserveSeatUseCase reserveSeatUseCase = ReserveSeatUseCase(repository: ReceiptRepository());
+
     final fOrRS = await reserveSeatUseCase(request: reserveSeatRequest);
     print("65 at receipt");
     bool returnedValue = false;
-    fOrRS.fold((f) => FailureHandler.handle(f, retry: () => getBoardingPassPDF()), (successful) async {
+    fOrRS.fold((f) => FailureHandler.handle(f, retry: () => getBoardingPassPDF()), (r) async {
       print("68 at receipt");
-      if (successful) {
+      if (r.successful) {
         print("69 at receipt");
-        final SeatMapState seatMapState = getIt<SeatMapState>();
+        final SeatMapState seatMapState = ref.read(seatMapProvider);
         print(travellers);
         for (Traveler traveller in travellers) {
           seatMapState.reservedSeats[traveller.seatId] = traveller.getNickName();
@@ -114,7 +107,7 @@ class ReceiptController extends MainController {
         }
       }
       print("77 at receipt");
-      returnedValue = successful;
+      returnedValue = r.successful;
     });
     print("80 at receipt");
     stepsState.setLoading(false);

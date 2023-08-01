@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/rules/rules_controller.dart';
 import 'package:online_check_in/screens/rules/rules_state.dart';
 import '../../core/constants/assets.dart';
 import '../../core/constants/ui.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/StepsScreenTitle.dart';
 
-class RulesView extends StatelessWidget {
+class RulesView extends ConsumerWidget {
   RulesView({Key? key}) : super(key: key);
   final RulesController rulesController = getIt<RulesController>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     ThemeData theme = Theme.of(context);
-    RulesState rulesState = context.watch<RulesState>();
+    RulesState rulesState = ref.watch(rulesProvider);
     return Scaffold(
       backgroundColor: theme.primaryColor,
       body: SizedBox(
@@ -25,7 +26,7 @@ class RulesView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             StepsScreenTitle(title: "Dangerous Goods".translate(context), fontSize: 25, description: ""),
+            StepsScreenTitle(title: "Dangerous Goods".translate(context), fontSize: 25, description: ""),
             const SizedBox(height: 10),
             Expanded(
               child: ListView(
@@ -46,8 +47,6 @@ class RulesView extends StatelessWidget {
     );
   }
 }
-
-
 
 class DangerousItem extends StatelessWidget {
   const DangerousItem({
@@ -78,25 +77,21 @@ class DangerousItem extends StatelessWidget {
               fit: BoxFit.fill,
             ),
           ),
-          const SizedBox(
-              width: 10
-          ),
+          const SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                value["title"]!.translate(context) ,
+                value["title"]!.translate(context),
                 style: MyTextTheme.darkGreyBold17,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(
-                  height: 5
-              ),
+              const SizedBox(height: 5),
               SizedBox(
                 // height: 40,
                 width: Get.width * 0.7,
                 child: Text(
-                  value["content"]!.translate(context) ,
+                  value["content"]!.translate(context),
                   // overflow: TextOverflow.,
                   style: MyTextTheme.darkGreyW40015,
                   // textAlign: TextAlign.center,

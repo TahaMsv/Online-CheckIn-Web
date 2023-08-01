@@ -30,7 +30,7 @@ class MyList {
   ];
 
   static const List buttonsText = [
-    "Check Pandemic Safety",
+    // "Check Pandemic Safety",
     "Check Rules",
     "Add Passports",
     "Add Visa",

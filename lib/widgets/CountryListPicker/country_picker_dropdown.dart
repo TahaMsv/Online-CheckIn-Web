@@ -139,17 +139,19 @@ class _CountryPickerDropdownState extends State<CountryPickerDropdown> {
   @override
   Widget build(BuildContext context) {
     Color tempColor;
-    if(widget.textColor == Colors.black){
+    if (widget.textColor == Colors.black) {
       tempColor = MyColors.white;
-    }else{
+    } else {
       tempColor = Colors.black;
     }
-    List<DropdownMenuItem<Country>> items =
-        _countries.map((country) => DropdownMenuItem<Country>(value: country, child: widget.itemBuilder != null ? widget.itemBuilder!(country, widget.textColor!) : _buildDefaultMenuItem(country, tempColor))).toList();
+    List<DropdownMenuItem<Country>> items = _countries
+        .map((country) => DropdownMenuItem<Country>(value: country, child: widget.itemBuilder != null ? widget.itemBuilder!(country, widget.textColor!) : _buildDefaultMenuItem(country,  widget.textColor!)))
+        .toList();
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      // color: Colors.red,
+      padding: EdgeInsets.symmetric(horizontal: 10, ),
       child: DropdownButton<Country>(
         hint: widget.hint,
         disabledHint: widget.disabledHint,
@@ -158,7 +160,8 @@ class _CountryPickerDropdownState extends State<CountryPickerDropdown> {
         iconSize: widget.iconSize,
         iconDisabledColor: widget.iconDisabledColor,
         iconEnabledColor: widget.iconEnabledColor,
-        dropdownColor: widget.dropdownColor,
+        dropdownColor: widget.textColor == Colors.white ? Colors.black87 : Colors.white,
+        // dropdownColor:  Colors.white,
         underline: widget.underline ?? SizedBox(),
         isDense: widget.isDense,
         isExpanded: widget.isExpanded,
@@ -175,7 +178,7 @@ class _CountryPickerDropdownState extends State<CountryPickerDropdown> {
         itemHeight: widget.itemHeight,
         selectedItemBuilder: widget.selectedItemBuilder != null
             ? (context) {
-                return _countries.map((c) => widget.selectedItemBuilder!(c, widget.textColor!)).toList();
+                return _countries.map((c) => widget.selectedItemBuilder!(c, tempColor)).toList();
               }
             : null,
       ),

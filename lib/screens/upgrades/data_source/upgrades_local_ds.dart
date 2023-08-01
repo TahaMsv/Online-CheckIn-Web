@@ -5,14 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../interfaces/upgrades_data_source_interface.dart';
 
 class UpgradesLocalDataSource implements UpgradesDataSourceInterface {
-  final SharedPreferences sharedPreferences;
 
-  UpgradesLocalDataSource({
-    required this.sharedPreferences,
-  });
+  UpgradesLocalDataSource();
 
   @override
-  Future<List<Extra>> getExtras(GetExtrasRequest request) {
+  Future<GetExtrasResponse> getExtras(GetExtrasRequest request) {
     throw UnimplementedError();
   }
 

@@ -2,38 +2,40 @@ import 'package:online_check_in/screens/upgrades/upgrades_repository.dart';
 import 'package:online_check_in/screens/upgrades/upgrades_state.dart';
 import 'package:online_check_in/screens/upgrades/usecases/get_extras_usecase.dart';
 
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import '../../core/interfaces/controller.dart';
 import '../../core/utils/failure_handler.dart';
 
 class UpgradesController extends MainController {
-  final UpgradesState upgradesState = getIt<UpgradesState>();
-  final UpgradesRepository upgradesRepository = getIt<UpgradesRepository>();
+  late UpgradesState upgradesState = ref.read(upgradesProvider);
 
-  late GetExtrasUseCase getExtrasUseCase = GetExtrasUseCase(repository: upgradesRepository);
-
-  void init() async {
+  Future<bool> init() async {
+    print(upgradesState.isInitBefore);
     if (!upgradesState.isInitBefore) {
       upgradesState.setLoading(true);
       GetExtrasRequest getExtrasRequest = GetExtrasRequest();
-      final fOrList = await getExtrasUseCase(request: getExtrasRequest);
+      GetExtrasUseCase getExtrasUseCase = GetExtrasUseCase(repository: UpgradesRepository());
 
-      fOrList.fold((f) => FailureHandler.handle(f, retry: () => init()), (extras) async {
-        for (var i = 0; i < extras.length; ++i) {
-          if (extras[i].title.toLowerCase().contains("print")) {
+      final fOrList = await getExtrasUseCase(request: getExtrasRequest);
+      fOrList.fold((f) => FailureHandler.handle(f, retry: () => init()), (r) async {
+        // print(r.extras);
+        for (var i = 0; i < r.extras.length; ++i) {
+          print(r.extras[i].title);
+          if (r.extras[i].title.toLowerCase().contains("print")) {
             upgradesState.entertainmentsNumberOfSelected.add(0);
-            upgradesState.entertainmentsList.add(extras[i]);
+            ref.read(entertainmentsListProvider.notifier).state!.add(r.extras[i]);
           } else {
             upgradesState.winesNumberOfSelected.add(0);
-            upgradesState.winesList.add(extras[i]);
+
+            // upgradesState.winesList.add(r.extras[i]);
+            ref.read(winesListProvider.notifier).state!.add(r.extras[i]);
           }
         }
-        print(upgradesState.entertainmentsList);
-        print(upgradesState.winesList);
         upgradesState.setIsInitBefore(true);
       });
     }
     upgradesState.setLoading(false);
+    return upgradesState.isInitBefore;
   }
 
   void addWine(int index) {
@@ -62,6 +64,7 @@ class UpgradesController extends MainController {
 
   @override
   void onInit() {
+    // TODO: implement onInit
     init();
     super.onInit();
   }

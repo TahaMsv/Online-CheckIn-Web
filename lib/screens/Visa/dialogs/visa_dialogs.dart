@@ -3,7 +3,7 @@ import 'package:online_check_in/screens/Visa/visa_state.dart';
 import 'package:flutter/material.dart';
 import 'package:online_check_in/widgets/MyDropDown.dart';
 import '../../../core/constants/ui.dart';
-import '../../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import '../../../widgets/SelectingDateWidget.dart';
 import '../../../widgets/StepsScreenTitle.dart';
 import '../../../widgets/UserTextInput.dart';

@@ -10,7 +10,7 @@ class Seat {
     // required this.seatProperty,
     // required this.mainIndex,
     // required this.isSelectable,
-    required this.price,
+    this.price,
   });
 
   String line;
@@ -25,33 +25,33 @@ class Seat {
   // String seatProperty;
   // double mainIndex;
   // int isSelectable;
-  int price;
+  int? price;
 
   factory Seat.fromJson(Map<String, dynamic> json) => Seat(
-    line: json["Line"],
-    letter: json["Letter"],
-    // seatPart: json["Part"],
-    // isExitDoor: json["IsExitDoor"],
-    // classType: json["ClassType"],
-    // isUsed: json["IsUsed"],
-    isUsedDescription: json["IsUsedDescription"],
-    // seatProperty: json["SeatProperty"],
-    // mainIndex: json["MainIndex"].toDouble(),
-    // isSelectable: json["IsSelectable"],
-    price: json["Price"],
-  );
+        line: json["Line"],
+        letter: json["Letter"],
+        // seatPart: json["Part"],
+        // isExitDoor: json["IsExitDoor"],
+        // classType: json["ClassType"],
+        // isUsed: json["IsUsed"],
+        isUsedDescription: json["IsUsedDescription"],
+        // seatProperty: json["SeatProperty"],
+        // mainIndex: json["MainIndex"].toDouble(),
+        // isSelectable: json["IsSelectable"],
+        price: json["Price"] ?? json["Price"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "Line": line,
-    "Letter": letter,
-    // "Part": seatPart,
-    // "IsExitDoor": isExitDoor,
-    // "ClassType": classType,
-    // "IsUsed": isUsed,
-    "IsUsedDescription": isUsedDescription,
-    // "SeatProperty": seatProperty,
-    // "MainIndex": mainIndex,
-    // "IsSelectable": isSelectable,
-    "Price": price,
-  };
+        "Line": line,
+        "Letter": letter,
+        // "Part": seatPart,
+        // "IsExitDoor": isExitDoor,
+        // "ClassType": classType,
+        // "IsUsed": isUsed,
+        "IsUsedDescription": isUsedDescription,
+        // "SeatProperty": seatProperty,
+        // "MainIndex": mainIndex,
+        // "IsSelectable": isSelectable,
+        "Price": price,
+      };
 }

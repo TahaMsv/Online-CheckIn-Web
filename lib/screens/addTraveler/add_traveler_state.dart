@@ -2,6 +2,9 @@ import 'dart:developer';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final addTravelerStateProvider = ChangeNotifierProvider<AddTravelerState>((_) => AddTravelerState());
 
 class AddTravelerState with ChangeNotifier {
   setState() => notifyListeners();
@@ -43,5 +46,14 @@ class AddTravelerState with ChangeNotifier {
   void setIsTicketNumberEmpty(bool val) {
     _isTicketNumberEmpty = val;
     notifyListeners();
+  }
+
+  void resetAddTravelerState() {
+    setLoading(false);
+    setRequesting(false);
+    setIsLastNameEmpty(false);
+    setIsTicketNumberEmpty(false);
+    ticketNumberC.clear();
+    lastNameC.clear();
   }
 }

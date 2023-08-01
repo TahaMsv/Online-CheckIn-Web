@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/payment/payment_controller.dart';
 import 'package:online_check_in/screens/payment/payment_state.dart';
 import '../../core/constants/assets.dart';
 import '../../core/constants/ui.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/MtDottedLine.dart';
 import '../../widgets/StepsScreenTitle.dart';
 import '../../widgets/UserTextInput.dart';
 
-class PaymentViewWeb extends StatelessWidget {
+class PaymentViewWeb extends ConsumerWidget {
   PaymentViewWeb({Key? key}) : super(key: key);
   final PaymentController paymentController = getIt<PaymentController>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     ThemeData theme = Theme.of(context);
-    PaymentState paymentState = context.watch<PaymentState>();
     return Scaffold(
         backgroundColor: Colors.white,
         body: Column(
@@ -48,15 +48,15 @@ class PaymentViewWeb extends StatelessWidget {
   }
 }
 
-class TaxesAndFees extends StatelessWidget {
+class TaxesAndFees extends ConsumerWidget {
   const TaxesAndFees({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final PaymentController paymentController = getIt<PaymentController>();
-    PaymentState paymentState = context.watch<PaymentState>();
+    PaymentState paymentState = ref.watch(paymentProvider);
 
     return SizedBox(
       width: 250,
@@ -112,15 +112,15 @@ class TaxesAndFees extends StatelessWidget {
   }
 }
 
-class BillingAddress extends StatelessWidget {
+class BillingAddress extends ConsumerWidget {
   const BillingAddress({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final PaymentController paymentController = getIt<PaymentController>();
-    PaymentState paymentState = context.watch<PaymentState>();
+    PaymentState paymentState = ref.watch(paymentProvider);
     return SizedBox(
       width: 380,
       child: Column(
@@ -188,15 +188,15 @@ class BillingAddress extends StatelessWidget {
   }
 }
 
-class CardInfo extends StatelessWidget {
+class CardInfo extends ConsumerWidget {
   const CardInfo({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final PaymentController paymentController = getIt<PaymentController>();
-    PaymentState paymentState = context.watch<PaymentState>();
+    PaymentState paymentState = ref.watch(paymentProvider);
     return SizedBox(
       width: 380,
       child: Column(

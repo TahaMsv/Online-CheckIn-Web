@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/receipt/receipt_controller.dart';
 import 'package:online_check_in/screens/receipt/receipt_state.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/StepsScreenTitle.dart';
 
-class ReceiptViewTablet extends StatelessWidget {
+class ReceiptViewTablet extends ConsumerWidget {
   ReceiptViewTablet({Key? key}) : super(key: key);
   final ReceiptController receiptController = getIt<ReceiptController>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,  WidgetRef ref) {
     ThemeData theme = Theme.of(context);
-    ReceiptState receiptState = context.watch<ReceiptState>();
+    ReceiptState receiptState = ref.watch(receiptProvider);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -37,7 +38,7 @@ class ReceiptViewTablet extends StatelessWidget {
                         style: TextStyle(fontSize: 30),
                       ),
                       const SizedBox(height: 20),
-                      Expanded(child: SfPdfViewer.memory(receiptState.bytes))
+                      Expanded(child: SfPdfViewer.memory(receiptState.bytes!))
                     ],
                   ),
                 ),

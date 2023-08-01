@@ -1,34 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/core/utils/String_utilites.dart';
 import 'package:online_check_in/screens/login/widgets/background_image.dart';
 import 'package:online_check_in/screens/login/widgets/copyright_widget.dart';
 import 'package:online_check_in/screens/steps/steps_controller.dart';
 import 'package:online_check_in/screens/steps/steps_state.dart';
 import '../../core/constants/ui.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/utils/MultiLanguages.dart';
+import '../../core/utils/multi_languages.dart';
 import '../../my_app.dart';
 import '../../widgets/LanguagePicker.dart';
 import '../../widgets/MyElevatedButton.dart';
 import '../../widgets/UserTextInput.dart';
+import '../../widgets/my_drawer.dart';
 import 'login_controller.dart';
 import 'login_state.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
   LoginView({Key? key}) : super(key: key);
+
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
   final LoginController loginController = getIt<LoginController>();
+   late GlobalKey<ScaffoldState> _scaffoldState;
+
+  @override
+  void initState() {
+    super.initState();
+    _scaffoldState = GlobalKey<ScaffoldState>();
+  }
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    LoginState loginState = context.watch<LoginState>();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      key: _scaffoldState,
+      drawer: MyDrawer(),
       body: SizedBox(
         width: width,
         height: height,
@@ -38,7 +54,7 @@ class LoginView extends StatelessWidget {
             Positioned(
               left: 0,
               top: 0,
-              child: Foreground(width: width, height: height),
+              child: Foreground(width: width, height: height, scaffoldState: _scaffoldState),
             ),
           ],
         ),
@@ -52,44 +68,58 @@ class Foreground extends StatelessWidget {
     Key? key,
     required this.width,
     required this.height,
+    required this.scaffoldState,
   }) : super(key: key);
   final double width;
   final double height;
+  final GlobalKey<ScaffoldState>? scaffoldState;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width,
       height: height,
-      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 5),
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          LanguagePicker(
-              textColor: MyColors.white,
-              // mainController: loginController, // rodo
-              width: double.infinity),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.menu,
+                  color: Colors.white,
+                ),
+                onPressed: () {scaffoldState?.currentState?.openDrawer();},
+              ),
+              LanguagePicker(
+                  textColor: MyColors.white,
+                  // mainController: loginController, // rodo
+                  width: 70),
+            ],
+          ),
           SizedBox(
             height: 40,
           ),
-          CheckInForm(),
+          Center(child: CheckInForm()),
         ],
       ),
     );
   }
 }
 
-class CheckInForm extends StatelessWidget {
+class CheckInForm extends ConsumerWidget {
   const CheckInForm({
     Key? key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final LoginController loginController = getIt<LoginController>();
 
-    LoginState loginState = context.watch<LoginState>();
-    StepsState stepsState = context.watch<StepsState>();
+    LoginState loginState = ref.watch(loginProvider);
+    StepsState stepsState = ref.watch(stepsProvider);
     double height = 360 <= Get.height * 0.5 ? 360 : Get.height * 0.5;
     return Container(
       height: height,

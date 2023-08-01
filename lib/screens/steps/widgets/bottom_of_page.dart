@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:online_check_in/screens/Passport/passport_state.dart';
 import 'package:online_check_in/screens/Visa/visa_state.dart';
 import 'package:online_check_in/screens/receipt/receipt_state.dart';
@@ -6,14 +7,14 @@ import 'package:online_check_in/screens/steps/widgets/previous_button.dart';
 import 'package:online_check_in/screens/steps/widgets/receipt_button.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/ui.dart';
-import '../../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import '../../../core/platform/device_info.dart';
 import '../../../widgets/MyElevatedButton.dart';
 import '../../seat_map/seat_map_controller.dart';
 import '../steps_controller.dart';
 import '../steps_state.dart';
 
-class BottomOfPage extends StatelessWidget {
+class BottomOfPage extends ConsumerWidget {
   const BottomOfPage({
     Key? key,
     required this.height,
@@ -24,11 +25,11 @@ class BottomOfPage extends StatelessWidget {
   final StepsController stepsController;
 
   @override
-  Widget build(BuildContext context) {
-    StepsState stepsState = context.watch<StepsState>();
-    PassportState passportState = context.watch<PassportState>();
-    VisaState visaState = context.watch<VisaState>();
-    ReceiptState receiptState = context.watch<ReceiptState>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    StepsState stepsState = ref.watch(stepsProvider);
+    PassportState passportState = ref.watch(passportProvider);
+    VisaState visaState = ref.watch(visaProvider);
+    ReceiptState receiptState = ref.watch(receiptProvider);
     final SeatMapController seatMapController = getIt<SeatMapController>();
     DeviceType deviceType = DeviceInfo.deviceType(context);
 

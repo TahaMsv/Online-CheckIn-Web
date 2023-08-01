@@ -7,7 +7,7 @@ import 'package:online_check_in/screens/payment/widgets/billing_address.dart';
 import 'package:online_check_in/screens/payment/widgets/card_info.dart';
 import 'package:online_check_in/screens/payment/widgets/taxes_and_fees.dart';
 import '../../core/constants/ui.dart';
-import '../../core/dependency_injection.dart';
+import 'package:online_check_in/initialize.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/StepsScreenTitle.dart';
@@ -19,7 +19,6 @@ class PaymentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    PaymentState paymentState = context.watch<PaymentState>();
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
