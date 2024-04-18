@@ -1,16 +1,3 @@
 # onlinecheckin
 
-A new Flutter application.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Online check-in is a process through which passengers confirm their presence on a flight via the internet prior to arriving at the airport. This typically involves accessing the airline's website or mobile app, entering booking details, and selecting seats. Online check-in can often be done within a specific timeframe before the flight departure and allows passengers to print their boarding passes or receive electronic ones on their mobile devices, enabling smoother and faster airport procedures.
